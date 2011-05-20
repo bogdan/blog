@@ -3,6 +3,10 @@ require 'jekyll'
 require "fileutils"
 require "sass/plugin"
 
+def f(name)
+  File.dirname(__FILE__) + "/" + name
+end
+
 task :dev => :build do
   c = Thread.new do
     `compass watch --sass-dir css --css-dir css`
@@ -16,9 +20,6 @@ task :dev => :build do
 end
 
 task :build => [:tags, :cloud, :sass] do
-  def f(name)
-    File.dirname(__FILE__) + "/" + name
-  end
   unless File.exists? f("build")
     FileUtils.mkdir_p(f("build"))
     `git clone gh:bogdan/bogdan.github.com build`
@@ -26,10 +27,16 @@ task :build => [:tags, :cloud, :sass] do
   begin
     FileUtils.mkdir_p(f("tmp"))
     FileUtils.mv(f("build/.git"), f("tmp"))
-    puts `jekyll --no-auto build`
+    puts `ejekyll --no-auto build`
   ensure
     FileUtils.mv(f("tmp/.git"), f("build"))
   end
+end
+
+task :upload => [:build] do
+  puts `git --work-tree=#{f "build"} --git-dir=#{f "build/.git"} add .`
+  puts `git --work-tree=#{f "build"} --git-dir=#{f "build/.git"} commit -m "Build #{DateTime.now.to_s}"`
+  puts `git --work-tree=#{f "build"} --git-dir=#{f "build/.git"} push`
 end
 
 desc 'Generate tags page'

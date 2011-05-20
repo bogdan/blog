@@ -1,178 +1,110 @@
-/* line 6, css/default.sass */
 body {
   width: 100%;
   font-family: "Times New Roman";
-  font-size: 16px;
-}
+  font-size: 16px; }
 
-/* line 10, css/default.sass */
 .clear {
-  clear: both;
-}
+  clear: both; }
 
-/* line 13, css/default.sass */
 h1, h4, p, ul, ol, h5, pre, code {
-  margin: 10px 0px;
-}
+  margin: 10px 0px; }
 
-/* line 16, css/default.sass */
 pre, code {
   white-space: pre-wrap;
   display: block;
   font-family: monospace;
-  margin-left: 20px;
-}
-/* line 21, css/default.sass */
-pre code, code code {
-  margin: 0;
-}
+  margin-left: 20px; }
+  pre code, code code {
+    margin: 0; }
 
-/* line 24, css/default.sass */
 h2 a {
-  font-size: 26px;
-}
+  font-size: 26px; }
 
-/* line 27, css/default.sass */
 h5 {
   font-size: 18px;
-  margin-top: 15px;
-}
+  margin-top: 15px; }
 
-/* line 31, css/default.sass */
 hr {
   border-style: inset;
   border-width: 1px;
-  border-color: #dddddd;
-}
+  border-color: white; }
 
-/* line 35, css/default.sass */
 h1 a, h2 a, h3 a, h4 a, h5 a {
-  text-decoration: none;
-}
+  text-decoration: none; }
 
-/* line 38, css/default.sass */
 .date {
-  font-size: 16px;
-}
+  font-size: 16px; }
 
-/* line 42, css/default.sass */
 #wrapper {
   width: 920px;
-  margin: 0 auto;
-}
-/* line 46, css/default.sass */
-#wrapper #content {
-  width: 600px;
-  float: left;
-}
-/* line 50, css/default.sass */
-#wrapper #sidebar {
-  width: 280px;
-  float: right;
-}
-/* line 54, css/default.sass */
-#wrapper .vsplit {
-  float: left;
-  height: 800px;
-  margin: 0 15px;
-  border-style: inset;
-  border-width: 1px;
-  border-color: #dddddd;
-}
+  margin: 0 auto; }
+  #wrapper #content {
+    width: 600px;
+    float: left; }
+  #wrapper #sidebar {
+    width: 280px;
+    float: right; }
+  #wrapper .vsplit {
+    float: left;
+    height: 800px;
+    margin: 0 15px;
+    border-style: inset;
+    border-width: 1px;
+    border-color: white; }
 
-/* line 64, css/default.sass */
 ul li {
-  list-style: disc;
-}
-/* line 66, css/default.sass */
-ul li ul li {
-  list-style: circle;
-}
+  list-style: disc; }
+  ul li ul li {
+    list-style: circle; }
 
-/* line 70, css/default.sass */
 .recent-posts {
-  width: 100%;
-}
-/* line 72, css/default.sass */
-.recent-posts ul {
-  padding-left: 25px;
-}
-/* line 74, css/default.sass */
-.recent-posts ul li {
-  margin-left: 0px;
-}
-/* line 76, css/default.sass */
-.recent-posts h2 {
-  display: inline-block;
-  float: left;
-}
-/* line 79, css/default.sass */
-.recent-posts .rss {
-  margin-top: 10px;
-  display: inline-block;
-  float: right;
-}
+  width: 100%; }
+  .recent-posts ul {
+    padding-left: 25px; }
+    .recent-posts ul li {
+      margin-left: 0px; }
+  .recent-posts h2 {
+    display: inline-block;
+    float: left; }
+  .recent-posts .rss {
+    margin-top: 10px;
+    display: inline-block;
+    float: right; }
 
-/* line 87, css/default.sass */
 .tags {
   margin: 10px 0;
-  float: right;
-}
-/* line 90, css/default.sass */
-.tags a {
-  margin: 0 10px;
-}
+  float: right; }
+  .tags a {
+    margin: 0 10px; }
 
-/* line 94, css/default.sass */
 .header .title {
-  float: left;
-}
-/* line 96, css/default.sass */
+  float: left; }
 .header .pages {
   margin: 35px 0 35px 120px;
-  float: left;
-}
-/* line 99, css/default.sass */
-.header .pages a {
-  padding: 0 20px;
-}
-/* line 101, css/default.sass */
+  float: left; }
+  .header .pages a {
+    padding: 0 20px; }
 .header .avatar {
   margin-top: 15px;
-  float: right;
-}
-/* line 102, css/default.sass */
-.header .avatar img {
-  width: 64px;
-  height: 64px;
-}
-/* line 107, css/default.sass */
+  float: right; }
+  .header .avatar img {
+    width: 64px;
+    height: 64px; }
 .header hr {
-  margin: 5px 0 10px 0;
-}
+  margin: 5px 0 10px 0; }
 
-/* line 112, css/default.sass */
 .tag-cloud a {
-  margin: 0 2px;
-}
+  margin: 0 2px; }
 
-/* line 115, css/default.sass */
 .footer {
   padding: 10px 0;
   margin: 0 auto;
-  width: 100%;
-}
+  width: 100%; }
 
-/* line 121, css/default.sass */
 .post hr {
-  margin: 15px 0 25px 0;
-}
+  margin: 15px 0 25px 0; }
 
-/* line 125, css/default.sass */
 .paginator .next {
-  float: right;
-}
-/* line 127, css/default.sass */
+  float: right; }
 .paginator .prev {
-  float: left;
-}
+  float: left; }
