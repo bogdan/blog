@@ -7,9 +7,19 @@ def f(name)
   File.dirname(__FILE__) + "/" + name
 end
 
+def sass
+  directory = File.dirname(__FILE__) + "/css"
+  Sass::Plugin.options[:template_location] = directory
+  Sass::Plugin.options[:css_location] = directory
+  Sass::Plugin.check_for_updates
+end
+
 task :dev => :build do
   c = Thread.new do
-    `compass watch --sass-dir css --css-dir css`
+    while true do
+      sass
+      sleep(1)
+    end
   end
   j = Thread.new do
     `ejekyll --server --auto`
@@ -103,10 +113,7 @@ task :cloud do
 end
 
 task :sass do
-  directory = File.dirname(__FILE__) + "/css"
-  Sass::Plugin.options[:template_location] = directory
-  Sass::Plugin.options[:css_location] = directory
-  Sass::Plugin.check_for_updates
+  sass
 end
 
 
