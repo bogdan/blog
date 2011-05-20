@@ -37,6 +37,7 @@ My current approach for this looks like this:
 
 Jekyll looks not very extensible. Some methods are not available in the API. Example: integrate SASS require more pain the ass than it should be. I am planning to fix that in a few days. Another problem I ran into is that github native support don't allow you any extension. My suggestion is to generate static content locally with your own code on top of jekyll and upload static content to git repository.
 
+Currently I build site locally from [source code](http://github.com/bogdan/blog) and push static content into [separated repository](http://github.com/bogdan/bogdan.github.com).
 
 ### Result
 

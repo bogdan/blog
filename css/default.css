@@ -29,7 +29,8 @@ hr {
   border-width: 1px;
   border-color: white; }
 
-h1 a, h2 a, h3 a, h4 a, h5 a {
+h1 a, h2 a, h3 a {
+  color: #ff4444;
   text-decoration: none; }
 
 .date {
@@ -71,11 +72,12 @@ ul li {
     display: inline-block;
     float: right; }
 
-.tags {
+h4.tags {
   margin: 10px 0;
   float: right; }
-  .tags a {
-    margin: 0 10px; }
+  h4.tags a {
+    margin: 0 10px;
+    color: black; }
 
 .header .title {
   float: left; }
@@ -94,7 +96,8 @@ ul li {
   margin: 5px 0 10px 0; }
 
 .tag-cloud a {
-  margin: 0 2px; }
+  margin: 0 2px;
+  color: black; }
 
 .footer {
   padding: 10px 0;
