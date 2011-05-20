@@ -1,0 +1,147 @@
+--- 
+layout: post
+title: Advanced non-flat controllers hierarchy with rails
+tags: 
+- ruby
+- rails
+- controller
+- route
+- architecture
+---
+REST became the best practice for organizing CRUD server side interface. 
+But what to do when we have something more than hello-world application that 
+goes forward from data CRUD and provides many presentations 
+of the same data with different filters and different layouts?
+<!--more-->
+<br/>
+
+<h3>How the flat controller architecture goes to hell</h3>
+
+Starting from REST-full controller people use to stick to them and add more and more actions to the same class. And that is how the controller code goes to hell:
+
+<pre><code>class UsersController &lt; ApplicationController
+#
+# Filters
+#
+skip_before_filter :check_user_is_valid, :only =&gt; [:edit, :update]
+before_filter :require_user, :only =&gt; [
+:update, :edit, :settings, :disconnect_twitter, :connect_facebook_account, :google_contacts
+]
+
+before_filter :load_user, :except =&gt; [
+:index, :new, :create, :remote_validate_email, :autocomplete_for_user_full_name,
+:remote_validate_facebook_uid, :google_contacts
+]
+
+before_filter :check_permissions, :only =&gt; [ :edit, :update, :settings, :update_photo, :connect_facebook_account ]
+
+before_filter :load_invitation, :only =&gt; [:new, :create]
+before_filter :ensure_authenticated_to_facebook, :only =&gt; :connect_facebook_account
+before_filter :initialize_form, :only =&gt; [:edit]
+
+#
+# And 20 almost independent actions goes here
+# And the twice longer tests file for this controller
+#
+
+end
+</code></pre>
+
+<h3> Namespaces and nesting </h3>
+The root of the problem is in ignoring the following simple rule:
+<strong>The default choice for implementing new feature is do it in other controller</strong>
+It's always better to have 20 controllers with one action then one controller with 20 actions.
+Usually there is no compromise variant. And 20 controllers with one action ain't as bad as you imagine.<br/>
+<br/>
+
+In order to handle the large number of controller we are actively using the namespaces and nested resources features. Let me give an example: User has many projects, Project belongs to category. We need to list projects per user and per category. In the flat hierarchy you would be confused but namespaces and nesting solves the problem.<br/>
+
+<pre><code>map.resources :categories do |c|
+  c.namespace :categories do |categories|
+    categories.resouces :projects
+  end
+end
+map.resources :users do |u|
+  c.namespace :users do |users|
+    users.resouces :projects
+  end
+end
+
+class Categories::ProjectsController
+
+  def index
+    @projects = ....
+  end
+end
+
+class Users::ProjectsController
+
+  def index
+    @projects = ....
+  end
+end</code></pre>
+
+
+Everyone heard about restful authentication but not so many people applied this idea to other not so restful from the first sight things. Like TwitterConnectionController:
+
+<pre><code>class Users::TwitterConnectionController < ApplicationController
+
+  def create
+  end
+
+  def destroy
+  end
+end</code></pre>
+
+Many people will be pushing all such staff to UsersController until their editors would run out of memory.
+
+<h3>Out of scope</h3>
+
+State control actions are not in REST but should be one day. Placing them in the same controller with CRUD is generally a good idea:
+
+<pre><code>class ArticlesController 
+
+  def {new, create, update, edit, destroy}
+  end
+
+  def publish
+    @article.publish!
+    redirect_to articles_path
+  end
+
+end</code></pre>
+
+<h3>Some sugar from generators</h3>
+
+Rails <em>generate</em> script supports namespaces very well:
+<pre><code>$ ./script/generate <del>rspec_</del>controller users/categories
+      create  app/controllers/users
+      create  app/helpers/users
+      create  app/views/users/categories
+      create  spec/controllers/users
+      create  spec/helpers/users
+      create  spec/views/users/categories
+      create  spec/controllers/users/categories_controller_spec.rb
+      create  spec/helpers/users/categories_helper_spec.rb
+      create  app/controllers/users/categories_controller.rb
+      create  app/helpers/users/categories_helper.rb</code></pre>
+
+And classes created in appropriate namespace and folder as well as specs for them.
+The only one thing you should do manually is add routes. 
+
+<h3>Drawbacks</h3>
+
+Every engeneering solution has it's drawbacks. While you have different controllers that operates on the same classes you might need to reuse functionality among them.
+I preffer to solve it by mixing in a module:
+<pre><code>class Users::ProjectController
+
+ include UserNestedResource
+
+end</code></pre>
+
+Some people use inheritance instead. Both ways are almost the same. Nothing hard here as well.
+
+<h3>Summary</h3>
+
+At the end I 'll just repeat it again:<br/> 
+Default policy for placing two actions that has some kind of connection is <strong>SPLIT</strong>.

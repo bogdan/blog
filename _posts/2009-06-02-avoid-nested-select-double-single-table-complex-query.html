@@ -1,0 +1,44 @@
+--- 
+layout: post
+title: Double select from a single table in complex SQL query.
+tags: 
+- sql
+- nesting
+- query
+- select
+---
+When I start learning SQL I have to write a lot of nested queries when working on complex select statements from a single table. Now, I feel more comfortable with it and show how to avoid nesting. There are cases when you have to compare one row of the table with all others to get the result:
+<ul>
+	<li>Select next  element to current by the value of some field</li>
+	<li>Select records that are unique by some complex expression</li>
+	<li>Select all records that have the same parameter as given record.</li>
+</ul>
+You can get rid of nesting in all above cases. Let's review the example.
+<!--more-->
+
+<hr />Let's say we have the list of elements in `elements` table and we have the id of some element in this table. Now we have to get the next element from the list ordered by `sort_field`.
+That could be easily done with the nested select statement:
+<pre>
+<code>select * from elements e 
+where e.sort_field >= 
+            (select * from elements where element_id = #value#) and
+         e.element_id != #value#
+order by e.sort_field limit 1;
+</code>
+</pre>
+Looks not very cool.
+Let's do the select statement from `element` table twice to avoid nesting:
+<pre><code>-- The e1 is the result row and e2 is a helper row 
+--that was picked up using nested select previously.
+select e1.* from elements e1, elements e2
+--conditional statement will look like
+where e1.sort_field &gt;= e2.sort_field and 
+     e1.element_id != e2.element_id and 
+     e2.element_id = #value#
+-- and the end of the query remains almost the same
+order by e1.sort_field limit 1
+</code></pre>
+
+Do not scare of double select from single table. That is the same technique as if they were different tables.
+
+

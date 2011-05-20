@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+    <head>
+        <title>Bogdan Gusiev's blog</title>
+        <meta name="robots" content="follow, all" />
+        <link rel="stylesheet" href="/css/default.css" type="text/css" media="screen" />
+        <link rel="alternate" type="application/rss+xml" title="Bogdan Gusiev's blog RSS Feed" href="/atom.xml" />
+        <link rel="shortcut icon" href="/images/favicon.ico"/>
+        <title>{{ page.title }}</title>
+        <link rel="icon" href="/images/favicon.ico"/>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+    </head>
+
+    <body>
+        
+        <div id="wrapper">
+
+            <div class="header">
+                <div class="title">
+                    <h1><a href="/">Bogdan Gusiev's blog</a></h1>
+                    <h4>How to make your Ruby on Rails application</h4>
+                </div>
+
+                <div class="pages">
+                    <a href="/">Home</a>
+                    <a href="/pages/about.html">About me</a>
+                    <a href="/pages/contacts.html">Contacts</a>
+                </div>
+                <a href="/pages/about.html" class="avatar">
+                    <img src="/images/me.jpg"/>
+                </a>
+            <div class="clear"></div>
+            <hr/>
+            </div> <!-- Closes header -->
+
+
+            <div id="main">
+
+                <div id="content">
+                    {{ content }}
+                </div>
+                <div class="vsplit">
+                </div>
+                <div id="sidebar">
+                    <div class="recent-posts">
+                        <h2>Recent Posts</h2>
+                        <a class="rss" href="/atom.xml">
+                            <img src="/images/rss.png" alt="Bogdan Gusiev&#8217;s blog" />
+                        </a>
+                        <div class="clear"></div>
+                        <ul>
+                            {% for post in site.posts limit:5 %}
+                            <li>
+                                <a href='{{ post.url }}'>{{ post.title }}</a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="sidebarbox">
+                        <h2>Search</h2>
+                        <p>Use the form below to search the site:</p>
+                        <form method="get" id="searchform" action="">
+                            <input type="text" placeholder="Search keywords" name="s" id="searchbox"/>
+                            <input type="submit" class="submitbutton" value="Find it" />
+                        </form>	
+                        <script>
+                            $('#searchform').submit(function(event) {
+                                event.preventDefault();
+                                window.location.href = "http://google.com/search?q=site:gusiev.com " + $('#searchbox').val();
+                            });
+                        </script>
+                        </div>
+                    <div class="sidebarbox tag-cloud">
+                        <h2>Browse by tags</h2>
+                        {% include cloud.html %}
+                    </div>
+                </div><!-- Closes Sidebar_full -->
+                <div class="clear"></div>
+            </div> <!-- Closes Sidebar -->
+            <div class="clear"></div>
+
+        </div><!-- Closes Main -->
+
+
+        <div class="footer">
+            <hr/>
+            <!--LiveInternet counter-->
+            <script type="text/javascript">
+                document.write("<a href='http://www.liveinternet.ru/click' "+
+                        "target=_blank><img src='http://counter.yadro.ru/hit?t40.6;r"+
+                        escape(document.referrer)+((typeof(screen)=="undefined")?"":
+                            ";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+                                screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+                        ";"+Math.random()+
+                        "' alt='' title='LiveInternet' "+
+                        "border='0' width='31' height='31'><\/a>");
+                </script><!--/LiveInternet-->
+                <!--SpyLOG-->
+                <span id="spylog2009244"></span><script type="text/javascript"> var spylog = { counter: 2009244, image: 26, next: spylog }; document.write(unescape('%3Cscript src%3D"http' + (('https:' == document.location.protocol) ? 's' : '') + '://counter.spylog.com/cnt.js" defer="defer"%3E%3C/script%3E')); </script>
+                <!--SpyLOG-->
+                <script type="text/javascript">
+                    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+                    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+                    </script>
+                    <script type="text/javascript">
+                        try {
+                            var pageTracker = _gat._getTracker("UA-12663165-1");
+                            pageTracker._trackPageview();
+                        } catch(err) {}</script>
+                    The Content of this blog can be published anywhere with the link to original source.
+                </div><!-- Closes morefoot -->
+
+
+
+
+            </body>
+        </html>
+
+
+

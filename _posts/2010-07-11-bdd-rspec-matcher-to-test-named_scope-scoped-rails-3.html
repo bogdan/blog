@@ -1,0 +1,80 @@
+--- 
+layout: post
+title: Ultimate rspec matcher to test named_scope or scoped
+tags: 
+- bdd
+- rspec
+- activerecord
+- named_scope
+- matcher
+---
+After having a good practice on using <a href="http://gusiev.com/2010/06/ultimate-rspec-matcher-to-test-validation/">Ultimate rspec matcher to test validation</a> I think it's time to implement one for testing named scopes - custom finders. Testing these finders is daily task. Here is how it can be done with minimum amount of code and maximum readability.
+<!--more-->
+<h3>Discovery <del>(Animal Planet)</del></h3>
+
+What do we expect from the custom finder?
+We expect that it should find assets A, B, C and should not find assets D, E, F.
+And sometimes the order is important: it should find A, B C with exact order.
+
+With respect to <em>let</em> rspec feature let's take an example: Product has and belongs to many categories. We need to have a scope to filter products within the specified category:
+
+<pre><code>describe "#by_category_id" do
+      let(:given_category) do 
+        Factory.create(:given_category)
+      end
+ 
+
+      let(:product_in_given_category) do
+        Factory.create(
+          :product,
+          :categories => [category]
+        )
+      end
+
+      let(:product_not_in_given_category) do
+        Factory.create(
+          :product,
+          :categories => [Factory.create(:category)]
+        )
+      end
+
+      # This might be tricky to redefine subject as the finder result
+      # but in this way we can delegate the matcher to subject and 
+      # avoid writing test descriptions.
+      subject { Product.by_category_id(given_category.id) }
+
+      it { should discover(product_in_given_category) }
+      it { should_not discover(product_not_in_given_category) }
+
+    end
+</code></pre> 
+
+Factory girl was used in this example because factories kickass when we test finders. As you can see the example has a perfect readability with no one line of plain English text. I didn't include the description in my examples but you can easily make them if they make sense for you.<br/>
+Note: Be aware of the lazy loading of your finder. <em>let</em> is initialized lazy too. You should make sure it is called before the actual query to the database.
+If you don't want to care about lazy loading their is <em>let!</em> method that could be easily copy-pasted from Rspec 2.0. Unlike <em>let</em> it doesn't have lazy initialization:
+<pre><code>def let!(name, &block)
+  let(name, &block)
+  before { __send__(name) } 
+end
+</code></pre>
+
+<h3>Testing sort order</h3>
+
+If the ordering is done in non-trivial way let's <em>discover.with_exact_order</em>. 
+<pre><code>describe "#most_commented named scope" do
+  let(:uncommented_post) { Factory.create(:post)}
+  let!(:less_commented_post) { Factory.create(:post, :comments => [Factory.build(:comment)])}
+  let!(:more_commented_post) { 
+    Factory.create(:post, :comments => [Factory.build(:comment), Factory.build(:comment)])}
+  }
+
+  subject { described_class.most_commented }
+ it {should discover(more_commented_post, less_commented_post).with_exact_order }
+ it {should_not discover(uncommented_post) }
+end</code></pre>
+
+Be careful with default order. MySQL and Postgres sort objects as they were created by default.
+That is why generate objects in reverse order e.g. <em>less_commented_post</em> before <em>more_commented_post</em> is important to make sure that ordering is your code behavior rather than default db behavior.
+ 
+<h3> Summary </h3>
+I 've add this matcher to the <a href="http://gusiev.com/2010/06/ultimate-rspec-matcher-to-test-validation/">previous one</a>. Both matchers are available here <a href="http://github.com/bogdan/accept_values_for">accept_values_for</a>. Let's start thinking of what else we can do.

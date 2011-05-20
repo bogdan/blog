@@ -1,0 +1,69 @@
+--- 
+layout: post
+title: "Ruby1.8: 'private' doesn't give expected level of privacy"
+tags: 
+- criticism
+- ruby
+- encapsulation
+- privacy
+- method
+---
+The classic OOP pattern usually called encapsulation implemented in ruby with <em>private</em> and <em>protected</em> <del>keywords</del> methods. The distinction between API and implementation works great with both. The problem is that <em>private</em> doesn't hide method for inherited classes. 
+<!--more-->
+<hr/>
+See the simple example below:
+
+<pre><code>
+class A
+  private
+  def implementation
+    puts 'private A'
+  end
+end
+
+class B < A
+  def api
+    implementation
+  end
+end
+
+B.new.api
+</code></pre>
+
+And we won't get exception at the last line.<br/>
+The real difference between protected and private methods is more specific.<br/>
+At first: <em>implementation</em> method can not be called like <em>self.implementation</em> even from class A.
+<pre><code>class A
+  def api
+    self.implementation #exception here
+  end
+  private
+  def implementation
+    puts 'private A'
+  end
+end
+
+A.new.api
+</code></pre>
+Seamless pure gap. You can do such call if the method would be protected. Can't imagine the case when this limitation is useful. <br/>
+<br/>
+The second difference is a bit esoteric. Two instances of the same class can access protected methods of each other but not private methods.
+
+<pre><code>class A
+  def api(another) #suppose to receive an instance of a
+    implementation == another.implementation
+  end
+  protected
+  def implementation
+    puts 'private A'
+  end
+end
+A.new.api(A.new)
+</code></pre>
+Fine for <em>protected</em> but fail for <em>private</em>. Well, this kind of protection do not make a real because of it's rareness.
+<br/><br/>
+
+You might do any decision on the points above.<br/>
+My conclusion is to not use <em>private</em> at all, because it doesn't give the level of privacy that I expect. <em>private</em> is not suitable for such an extremely dynamic language as Ruby. 
+
+

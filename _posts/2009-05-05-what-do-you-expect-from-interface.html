@@ -1,0 +1,29 @@
+--- 
+layout: post
+title: What do you expect from the interface?
+tags: 
+- java
+- programming
+- interface
+- idea
+- lsp
+---
+Read a great article today - <a href="http://www.google.com.ua/url?sa=t&source=web&ct=res&cd=3&url=http%3A%2F%2Fwww.objectmentor.com%2Fresources%2Farticles%2Flsp.pdf&ei=xjb_Sbi-EJbItge-ocmSDA&usg=AFQjCNFnNI0DmzofjWDQEGILAT-W1L8Mtw&sig2=okCh8NuqsQslKMTSWOlaTw"> Liskov Substitution Principle (LSP)</a>. It let me understand that Interface is not just a list of methods.<br/>
+<!--more-->
+<hr/>
+Let's review the following utility function:
+<div class="bordered">
+<code>public static void processList(List list) {
+          list.clear();
+          list.add(new Object());
+}</code>
+</div>
+It accepts the object that implements <em>java.utils.List</em> interface as the parameter.
+What do you expect to receive in result? The list with one element, right?<br/>
+But does the result really meet your expectation? Who knows, the object that implements list interface do not guarantee you 'Act as container' behavior. It just implements all the methods of the interface and nothing else.<br/>
+Actually all methods of the interface <strike>should have</strike> have a notation of their usage. If you do not follow these notations - you should not inherit your object from the interface even if the object has all the methods of the interface.<br/>
+<br/>
+<strong>Idea:</strong> Maybe one day programming languages will have unit tests as part of interface and validate each instance that implements this interface with them.
+
+
+

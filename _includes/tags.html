@@ -1,0 +1,9 @@
+<h4 class="tags">
+    {% for category in post.tags %}
+    <a href="/tags/{{ category }}.html">{{ category }}</a>
+    {% endfor %}
+    {% for category in page.tags %}
+    <a href="/tags/{{ category }}.html">{{ category }}</a>
+    {% endfor %}
+</h4>
+<div class="clear"></div>

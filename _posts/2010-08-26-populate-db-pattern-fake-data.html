@@ -1,0 +1,45 @@
+--- 
+layout: post
+title: Populate database pattern - why is it so cool?
+tags: 
+- database
+- ruby
+- pattern
+- populate
+- fake
+- data
+---
+Once my co-worker propose an idea to fill database with some fake data because we didn't have a  gui forms yet and we have to show something that works to customer. That was a start for great pattern - <strong>populator</strong>.
+<!--more-->
+
+<h3>Advantages</h3>
+Later we didn't drop that functionality because it was helpful for everyone to always see what's new appear in application. And we find more and more useful aspects of having populator. It was so easy to attach new people to project because we deliver a short set of data within a source code that demonstrates everything we have in our app. Now whole team has a full data set and see if any page doesn't work because of a side effect. Frontend people feel more comfortable with populator because they don't care of how to create many assets in order to see pagination and things like that . Also UI issues became easier to detect because every element present on a screen for every person letting him detect browser specific bugs. 
+
+<h3> Implementation</h3>
+
+I won't recommend any specific library to populate the db except the one to generate fake(Lorem ipsum) content. We prefer <a href="http://github.com/stympy/faker">Faker</a> but that is up to personal choice.
+Important note is that inserting data directly into db is bad idea because all application logic is ignored in this case: validation will be ignored and counters cache might be broken. That is why Populate gem is not recommended.<br/><br/>
+One nice improvement we made is pass _SCALE_ parameter to populator in order to control how many objects should be generated. Use minimal amount if you need to test that populator works and regular amount to get working system.<br/>
+Another good idea is soft save(ignore if not valid) and output the number of created objects after at the end. This letting you if something went wrong during populate process.<br/>
+<br/>
+Here is an example of how it may look like:
+<pre><code>User.transaction do
+  # apply the SCALE parameter to the argument. 
+  # Default SCALE is 10 so 10 * 1 = 10. 
+  # Generate 10 users by default
+  scale(1).times do 
+    user = User.new
+    user.email = Faker::Internet.email
+    user.first_name = Faker::Name.first_name
+    user.last_name = Faker::Name.last_name
+    user.password = user.password_confirmation = 'monkey'
+    user.save # this may be false in case of uniqueness restriction or other problems
+  end
+end
+
+
+users = User.all
+puts "Users: #{users.count}" # make sure we actually made some users </code></pre>
+
+<h3>At the end</h3>
+I beleive that Populator should be a part of the build of every project. Yes, it needs some support but in fact it saves lots and lots of time.

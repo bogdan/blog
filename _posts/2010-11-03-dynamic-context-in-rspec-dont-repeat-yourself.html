@@ -1,0 +1,62 @@
+--- 
+layout: post
+title: Dynamic context in Rspec - don't repeat yourself
+tags: 
+- behavior
+- rspec
+- context
+- testing
+---
+Advanced rspec features allow to use very effective technique to organize tests. You are able to construct and define context in more flexible way than before.
+We use to have less problems with subject and behavior. And <strong>context</strong> is what testing is all about. Just because web apps manage data, behavior seriously depends on current state of the database. 
+<!--more-->
+<br/><br/>
+
+Well organized contexts makes a real problem of testing. Unlike TestUnit, Rspec examples may have nested contexts and even dynamic contexts with the <em>let</em> feature. <br/>
+In spite of lazy initialization let blocks they are defined before <em>before each</em> hook. Understand by example. <br/> <br/>
+In this example orders should be delivered to confirmed customer account just after creation and should not be delivered if the account is not confirmed yet.
+<pre><code>describe Order do
+  context "after create" do #defining a partial context
+    before(:each) do
+      subject.customer.confirmed = confirmed
+      subject.save!
+    end
+
+    context "when customer is confirmed" do 
+      let(:confirmed) { true }
+      it { should be_delivered }
+    end
+    
+    context "when customer is not confirmed" do 
+      let(:confirmed) { false }
+      it { should_not be_delivered }
+    end
+  end
+end</code></pre>
+
+Here you can see the partial context definition and custom behavior in two nested context.
+We can call not yet declared function and define it later and differently in different contexts.<br/> <br/>
+
+Another example that is kind of pattern matching(erlang term), designed to test utility functions.<br/>
+Suppose we have a boolean expression evaluation function:
+<pre><code>describe Expression
+  describe ".run" do
+
+    subject { Expression.run(arg) }
+
+    context "with '&' where both true" do
+      let(:arg) { "true & true" }
+      it {should be_true}
+    end
+
+    context "with '&' where one false" do
+      let(:arg) { "false & true" }
+      it {should be_false}
+    end
+    ........
+  end
+end</code></pre>
+
+Very good strategy to run same function with different arguments.
+<br/> <br/>
+Rspec is far ahead of all unit testing frameworks. Unlike most of Rspec clones (e.g. for other programming languages), Rspec authors got in deep to the testing problems and invent flexible and elegant syntax.

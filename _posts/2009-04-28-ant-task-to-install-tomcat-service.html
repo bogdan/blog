@@ -1,0 +1,61 @@
+--- 
+layout: post
+title: Ant task to install tomcat service26px
+tags: 
+- java
+- howto
+- ant
+- tomcat26px
+- windows
+- service
+---
+If you are familiar to run Apache Tomcat as Windows service, you can install it with the ant task. <i>build.xml</i> file sample under the cut line.
+<!--more-->
+<hr/>
+First of all let's do some properties setup:
+
+<pre><code>catalina.home=d:/java/tomcat-6.0.18
+tomcat.executable=${catalina.home}/bin/tomcat6.exe
+tomcat.service.executable=\
+${catalina.home}/bin/service.bat
+tomcat.service.name=myproject
+# parameters that will be used in the jvm
+tomcat.service.jvm.ms=128
+tomcat.service.jvm.mx=256
+</code></pre>
+Service startup task consists of 5 exec commands:
+<ul>
+	<li>Stop service if currently running</li>
+	<li>Delete service if installed</li>
+	<li>Install service with bat script</li>
+	<li>Update service with some parameters</li>
+	<li>Start service</li>
+</ul>
+
+Here is the implementation:
+<pre><code>
+    &lt;target name="tomcat.service.install" description="Install tomcat service"&gt;
+        
+        &lt;exec command="net stop ${tomcat.service.name}"
+              failifexecutionfails="false"
+              failonerror="false"/&gt;
+
+        &lt;exec command="${tomcat.executable} //DS//${tomcat.service.name}"
+              failifexecutionfails="false"
+              failonerror="false"/&gt;
+        &lt;exec executable="${tomcat.service.executable}" 
+                  failifexecutionfails="true" failonerror="true"&gt;
+            &lt;env key="CATALINA_HOME" value="${catalina.home}"/&gt;
+            &lt;arg value="install"/&gt;
+            &lt;arg value="${tomcat.service.name}"/&gt;
+        &lt;/exec&gt;
+       &lt;exec executable="${tomcat.executable}"&gt;
+            &lt;arg value="//US//${tomcat.service.name}"/&gt;
+            &lt;arg value="--JvmMs=${jvm.ms}"/&gt;
+            &lt;arg value="--JvmMx=${jvm.mx}"/&gt;
+            &lt;arg value="--Startup=auto"/&gt;
+        &lt;/exec&gt;
+        &lt;exec command="net start ${tomcat.service.name}" 
+                  failifexecutionfails="true" failonerror="true"/&gt;
+    &lt;/target&gt;
+</code></pre>

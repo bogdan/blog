@@ -1,0 +1,129 @@
+=borderer
+  border-style: inset
+  border-width: 1px
+  border-color: #DDD
+
+body
+  width: 100%
+  font-family: 'Times New Roman'
+  font-size: 16px
+.clear
+  clear: both
+
+h1, h4, p, ul, ol, h5, pre, code
+  margin: 10px 0px
+  
+pre, code
+  white-space: pre-wrap
+  display: block
+  font-family: monospace
+  margin-left: 20px
+  code
+    margin: 0
+
+h2 a
+  font-size: 26px
+
+h5
+  font-size: 18px
+  margin-top: 15px
+
+hr
+  +borderer
+
+h1, h2, h3, h4, h5
+  a
+    text-decoration: none
+
+.date
+  font-size: 16px
+
+
+#wrapper
+  width: 920px
+  margin: 0 auto
+
+  #content
+    width: 600px
+    float: left
+
+  #sidebar
+    width: 280px
+    float: right
+
+  .vsplit
+    float: left
+    height: 800px
+    margin: 0 15px
+    +borderer
+
+
+
+ul
+  //margin-left: 10px
+  li
+    list-style: disc
+    ul li
+      list-style: circle
+
+
+.recent-posts
+  width: 100%
+  ul
+    padding-left: 25px
+    li
+      margin-left: 0px
+  h2
+    display: inline-block
+    float: left
+  .rss
+    margin-top: 10px
+    display: inline-block
+    float: right
+
+
+
+
+.tags
+  margin: 10px 0
+  float: right
+  a
+    margin: 0 10px
+
+.header
+  .title
+    float: left
+  .pages
+    margin: 35px 0 35px 120px
+    float: left
+    a
+      padding: 0 20px
+  .avatar
+    img
+      width: 64px
+      height: 64px
+    margin-top: 15px
+    float: right
+  hr
+    margin: 5px 0 10px 0
+
+
+.tag-cloud
+  a
+    margin: 0 2px
+
+.footer
+  padding: 10px 0
+  margin: 0 auto
+  width: 100%
+
+.post
+  hr
+    margin: 15px 0 25px 0
+
+.paginator
+  .next
+    float: right
+  .prev
+    float: left
+

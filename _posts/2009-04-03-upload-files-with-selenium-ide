@@ -1,0 +1,74 @@
+--- 
+layout: post
+title: Upload files with Selenium IDE
+tags: 
+- selenium
+- java
+---
+I started using selenium about 2 weeks ago. Find it as a very good QA tool.
+But after a few successfully written tests I met the problem: Selenium is not able to use file input field. JavaScript permission restriction doesn't allow it.<br/><br/>
+
+Here is my solution written with <a target="_blank" href="http://jinvoke.com">JInvoke library</a>: Jinvoke provides the classes to simulate the input to file chooser form.<br/>
+
+<!--more-->
+<hr/>
+The problem I meat is selenium is stuck when simulate the click on upload file input. I have to launch the concurent thread that do the file name input. Thread code(Note file name should be given in Java format like 'c:/boot.ini):
+
+<div class="bordered">
+<code>import javax.swing.*;
+import java.awt.event.KeyEvent;
+import java.awt.*;
+
+/**
+ * @author Bogdan Gusiev
+ *         Date 29.03.2009
+ */
+public class FileChooserThread extends Thread {
+
+    public FileChooserThread(String file) {
+        super(new FileRunner(file));
+    }
+}
+
+class FileRunner implements Runnable {
+
+    private String fullName;
+
+    public FileRunner(String fileName) {
+        this.fullName = fileName;
+    }
+
+    public void run() {
+        try {
+            Thread.sleep(1000);
+            Robot robot = new Robot(); //input simulation class
+            for (char c : fullName.toCharArray()) {
+                if (c == ':') {
+                    robot.keyPress(KeyEvent.VK_SHIFT);
+                    robot.keyPress(KeyEvent.VK_SEMICOLON);
+                    robot.keyRelease(KeyEvent.VK_SHIFT);
+                } else if (c == '/') {
+                    robot.keyPress(KeyEvent.VK_BACK_SLASH);
+                } else {
+                    robot.keyPress(KeyStroke.getKeyStroke(
+                                   Character.toUpperCase(c), 0).getKeyCode());
+                }
+            }
+            robot.keyPress(KeyEvent.VK_ENTER);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+}</code>
+</div>
+Here is selenium call method:
+
+<div class="bordered">
+<code >protected void chooseFile(String element, String fileName) {
+           Number positionLeft = selenium.getElementPositionLeft(element);
+           Number positionTop = selenium.getElementPositionTop(element);
+           new FileChooserThread(fileName).start(); //launch input thread.
+           //this method will held current thread while FileChooser gives the file name
+           selenium.clickAt("file", positionLeft + "," + positionTop); 
+}</code></div>

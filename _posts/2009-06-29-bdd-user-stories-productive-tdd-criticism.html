@@ -1,0 +1,40 @@
+--- 
+layout: post
+title: When BDD user stories is productive
+tags: 
+- criticism
+- bdd
+- tdd
+- test
+- behavior
+- application
+- user story
+---
+When you are skilled Unit tests writer it is not very easy to estimate the potential of BDD. Moreover in most cases BDD is used as a human-readable wrapper for unit tests. Do you really think that programmers need such abstract layer? Of course not... Users needs them.<br/>
+<!--more-->
+<hr/>
+
+Saying Users I mean every non technical person who will treat to application quality some how.
+Featured innovation of BDD is <strong>User Stories</strong> - a human-readable bit of specification with technical test implementation behind it. <br/>
+Let's review the following example from the blog specification:
+<pre><code>
+  Given I signed up as Author
+    When I write article "TDD and BDD"
+    And text of article is "BDD is ...."
+    And I post article
+    Then I should see "Article is created"
+    And I should see article title "TDD and BDD"
+</code></pre>
+As you can see unlike TDD human readability is the term that was brought to the high priority in BDD. But that is not yet a BDD story.<br/>
+We need the programming implementation for each phrase in the story, like this:
+<pre><code>
+"I signed up as Author":
+     signInAsAuthor();
+</code></pre>
+
+Programmer's task is to chose the implementation that will validate described behavior. User doesn't know about any programming back end of the story. When the test failed he just knows that some behavior of the application is not working properly any more. <br/>
+From this point of view the key principle of user story implementation is that it should <strong>guarantee</strong> with the most high probability that the user can complete described actions.<br/> 
+
+Therefore user stories are the most productive when the implementation is done using <strong>GUI Robots</strong> like SWT bot, Selenium.
+
+

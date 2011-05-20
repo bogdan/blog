@@ -1,0 +1,39 @@
+---
+layout: default
+title: Move along, nothing to see here
+---
+{% for post in paginator.posts %}
+    <div class="post">
+        <h2>
+            <a href='{{ post.url }}'>{{ post.title }}</a>
+            <div class="date">{{ post.date | date_to_string }}</div>
+        </h2>
+        {{ post.content | replace_first:'<!--more-->','<!--' | append:'-->' }}
+        {% include tags.html %}
+        <hr/>
+    </div>
+{% endfor %}
+
+<div class='paginator'>
+    {% if paginator.next_page %}
+        <div class='next'>
+            <a href='/page{{paginator.next_page}}'>
+                Earlier posts &rarr;
+            </a>
+        </div>
+    {% endif %}
+    {% if paginator.previous_page %}
+        <div class='prev'>
+            {% if paginator.previous_page==1 %}
+                <a href='/page{{paginator.previous_page}}'>
+                    &larr; Later posts
+                </a>
+            {% else %}
+                <a href='/'>
+                    &larr; Later posts
+                </a>
+            {% endif %}
+        </div>
+    {% endif %}
+    <div class='clear'></div>
+</div>

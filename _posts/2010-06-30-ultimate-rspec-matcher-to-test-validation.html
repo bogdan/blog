@@ -1,0 +1,41 @@
+--- 
+layout: post
+title: Ultimate rspec matcher to test validation
+tags: 
+- rspec
+- rails
+- activerecord
+- validation
+- pattern
+---
+After a first thousand of tests using Rspec I fount it very annoying to repeat my self testing the standard code as spec code is usually twice longer than code it test. I've started to look for a way to simplify the patterns and make it reusable. Among other nice rspec tricks there is possibility to write custom Rspec matchers. Spec the validation is just two lines of code for each attribute now.
+<!--more-->
+
+
+<h3> Existing solutions </h3>
+After doing some search around I found Shoulda and remarkable gems that provide a way of doing this. Here is one of remarkable variant (others are just ugly): 
+<pre><code>it { should validate_numericality_of(:age, :greater_than => 18, :only_integer => true) }</code></pre>
+But that is huge contradiction with BDD methodology because it doesn't make you think about behavior. People use to copy-paste code from model to spec and all possible bugs within. As the result <strong>nothing is tested</strong>... I don't even say about "test first".
+
+<h3> Easy DSL and Implementation </h3>
+When I implement validation everything I care about is: what values should be accepted and what values should not. An easy DSL that realize this pattern would be:
+<pre><code>describe User do
+  it { should accept_values_for(:email, "john@example.com", "lambda@gusiev.com") }
+  it { should_not accept_values_for(:email, "invalid", nil, "a@b", "john@.com") }
+end</code></pre> 
+That's it! Two lines of code per attribute. And that is perfectly fine for "test first" principle.<br/>
+Rspec authors take care about custom Rspec matcher. So the implementation is very easy.
+Fork me on github: <a href="http://github.com/bogdan/accept_values_for">accept_values_for rpec matcher</a>. The <strong>accept_values_for</strong> pattern is a true BDD way and unlike Remarkable it really do testing.
+
+<h3> validates_uniqueness_of </h3> 
+This is very special validation because you always need more then one record to test it. So, the pattern for uniqueness validation is:
+<pre><code>describe User do
+  context "if user with email 'aa@bb.com' exists" do
+    before do
+      User.create!(@valid_attributes.merge(:email =&gt; 'aa@bb.com')
+    end
+    it { should_not accept_values_for(:email, "aa@bb.com") }
+  end
+end</code></pre>
+<h3> Summary </h3>
+Custom matcher is just 50 lines of code that make your life much easier. Do not scare to write your own. Custom matcher to test ActiveRecord#named_scope coming soon.

@@ -1,0 +1,35 @@
+--- 
+layout: post
+title: DOM element class - css reference or javascript reference?
+tags: 
+- javascript
+- html
+- dom
+- css
+- class
+- element
+---
+Designer have used element class attribute for CSS styling for ages. Nowadays classes are also used in javascript selectors. This overlapping cause additional problems: Changes in js may cause broken design and changes in design may cause broken js. The last one may be hard to detect especially when design and css are handled by different person.
+<!--more-->
+<hr/>
+Element class seems the best way to query the element from DOM in js code. Other variants like it's relative possition to other elements are very fragile. Let's say that we have the following DOM:
+<pre><code>&lt;a&gt; Delete&lt;/a&gt;
+&lt;a&gt; Edit&lt;/a&gt;</code></pre>
+And both links are handled with javascript. How would you separate them? 
+<ul>
+	<li><strong>By order</strong>(first, second) will cause problems if designer would like to change the order.</li>
+	<li><strong>By id</strong> will fail if you would have a list of elements where each has these links</li>
+	<li><strong>By label</strong> is just a fuck up and won't work for multi language application</li>
+</ul>
+The only one variant that provide the best stability is reference <strong>By class</strong>.
+But as stated above class also serves for another purpose - styling. 
+
+The thing that might help is a special prefix(for example "js") for all 'JavaScript classes'.
+Like:
+<pre><code>&lt;a class="js-new-comment big-blue-button"&gt; New Comment &lt;/a&gt;</code></pre>
+
+And the convention that classes with prefix should only be used in javascript selectors and classes without prefix in CSS.
+<br/><br/>
+Yes, sometimes it may look like:
+<pre><code>&lt;input type='button' class="js-follow-button follow-button"&gt; Follow this person &lt;/input&gt;</code></pre>
+But that makes sense to eliminate maintenance problem described above.

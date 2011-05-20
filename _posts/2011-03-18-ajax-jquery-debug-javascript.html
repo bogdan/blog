@@ -1,0 +1,31 @@
+--- 
+layout: post
+title: Debug ajax requests in more easy way
+tags: 
+- javascript
+- jquery
+- debug
+- ajax
+---
+When I have to debug ajax requests, I always feel pain in the ass accessing the exception message and backtrace. It require at least 3 clicks to get them and only in the plain html format, that web framework use to generate. Is it better to see it at once in the browser popup?  
+<!--more-->
+<br/><br/>
+This can be done with Ajax callbacks offered by javascript framework(if yours doesn't - get rid of it). We can catch errors there and display popup. JQuery example with #ajaxError callback that fires on every unsuccessful ajax call:
+<pre><code>(function() {
+      var popup = null;
+      $(document).ajaxError(function(event, xhr, settings, exception) {
+        if (popup) {
+          popup.close();
+          popup = null;
+        }
+        popup = window.open(null, "error", "width=800,height=600");
+        $(popup.document.documentElement).html(xhr.responseText);
+        return true;
+      });
+    }());</code></pre>
+
+Checked in FF and Chrome(IE is not a browser).
+<a href="http://img6.imagebanana.com/img/drl8wpd9/screenshot_014.png">Screenshot</a> with the result. Be aware of browser popup blocker. <br/>
+You always have a control when popup the error. I like it to be "in any case". But You can customize it with <em>xhr.status</em> and <em>if</em> statement on the server side.
+<br/><br/>
+In some cases it might be useful not only in the development but in production as well. But it should be an iframe inside of pretty html layout, so that designers won't blame programmers too much.

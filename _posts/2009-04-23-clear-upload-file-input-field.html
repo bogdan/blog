@@ -1,0 +1,33 @@
+--- 
+layout: post
+title: "Clear upload file input field "
+tags: 
+- javascript
+- howto
+- input
+- file
+- html
+---
+Many web developers came to the problem that they are not able to change value of file input field from Java Script in the web application. There is no access to value field of file input tag because of security restriction. However there is a trick how to erase this field if you need it in your application. <br/>
+<!--more-->
+<hr/>
+You can simply redraw the html block where your input tag is located. In this case all data will remain the same except the selected file value.
+
+<pre><code>
+&lt;div id="uploadFile_div"&gt;
+&lt;input type="file" class="fieldMoz" id="uploadFile" 
+            onkeydown="return false;" size="40" name="uploadFile"/&gt;
+&lt;/div&gt;
+&lt;a onclick="clearFileInputField('uploadFile_div')" 
+                         href="javascript:noAction();"&gt;Clear&lt;/a&gt;
+</code></pre>
+Java Script function below looks strange but acts exactly in the way we want:
+<pre><code> 
+&lt;script&gt;
+function clearFileInputField(tagId) {
+    document.getElementById(tagId).innerHTML = 
+                    document.getElementById(tagId).innerHTML;
+}
+&lt;/script&gt;
+            
+</code></pre>

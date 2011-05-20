@@ -1,0 +1,58 @@
+--- 
+layout: post
+title: Do git commits associated to hoptoad errors
+tags: 
+- ruby
+- git
+- hoptoad
+
+- commit
+---
+We are trying to build a better development workflow by connecting all our tools together.
+So, this time we tried to connect HopToad Application with git commits because sometimes it's better to just paste the link to hoptoad error rather than describe all steps to reproduce. This idea was resulted in the command line interface for hoptoad api with a little git integration - <a target="_blank" href="http://github.com/railsware/shelltoad">Shelltoad</a>.
+<!--more-->
+<br/><br/>
+Currently, in order to resolve hoptoad error we do the following.<br/>
+Check the list of errors:
+<pre><code>$ shelltoad
+[#3374331] production ActionController::MethodNotAllowed: Only put requests are allowed
+[#4023713] production ActiveRecord::StatementInvalid: PGError: ERROR:
+       duplicate key value violates unique constraint "index_companies_on_slug" :
+       INSERT INTO "companies" .....
+</code></pre>
+View the information on the required error.
+ '713' is automatically guess for 4023713
+<pre><code>
+$ shelltoad 713
+ActiveRecord::StatementInvalid: PGError: ERROR: duplicate key value violates unique constraint
+ "index_companies_on_slug" : INSERT INTO "companies"
+("slug", "created_at", "title", "updated_at", "external_url", "logo_id", "custom") VALUES('abbott-associates
+/var/data/www/apps/startwire/shared/bundle/ruby/1.8/gems/activerecord-
+2.3.8/lib/active_record/connection_adapters/abstract_adapter.rb:221
+/var/data/www/apps/startwire/releases/20110218113457/app/models/company.rb:50
+/var/data/www/apps/startwire/releases/20110218113457/app/utils/network_map/populate.rb:9
+/var/data/www/apps/startwire/releases/20110218113457/app/utils/network_map/populate.rb:74
+/var/data/www/apps/startwire/releases/20110218113457/app/utils/network_map/populate.rb:70
+....
+</code></pre>
+Fix the error in the code ...
+Prepare git commit:
+<pre><code>
+$ git add .
+</code></pre>
+Commit the fix to git with connection to hoptoad issue id
+<pre><code>
+$ shelltoad commit 713
+[dev 47f09ec]     http://xxx.hoptoadapp.com//errors/4023713
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+</code></pre>
+
+Commit message will look like this:
+<code><pre>http://startdatelabs.hoptoadapp.com//errors/4023713
+
+ActiveRecord::StatementInvalid: PGError: ERROR: duplicate key value violates unique constraint
+ "index_companies_on_slug" : INSERT INTO "companies"
+("slug", "created_at", "title", "updated_at", "external_url", "logo_id", "custom") VALUES('abbott-associates</pre></code>
+
+
+This help us maintain the links between git and hoptoad automatically.

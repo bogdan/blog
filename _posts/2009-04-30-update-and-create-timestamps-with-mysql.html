@@ -1,0 +1,43 @@
+--- 
+layout: post
+title: Update and create timestamps with MySQL
+tags: 
+- howto
+- mysql
+- timestamp
+- database
+---
+A lot of relational tables need created and update timestamps columns. I prefer having them for all tables with no exception. However, most of applications I am working on are running MySQL. MySQL has minor limitation on timestamps. Unfortunately you can create only one time stamp column that has <em> DEFAULT NOW()</em> value. Read more to see how to avoid this limitation. <!--more-->
+<hr/>
+The simplest way to do this is create the following columns in the table:
+<div class="bordered"><code>stamp_created timestamp default now(), 
+stamp_updated timestamp default now() on update now()) </code></div>
+But MySQL will return the following error: <br/> 
+<em>ERROR 1293 (HY000): Incorrect table definition; there can be only one TIMESTAMP column with CURRENT_ in DEFAULT or ON UPDATE clause</em> <br/>
+You can use only one of the definitions in one table. However here is the way how to create both timestamps columns:
+<pre><code> create table test_table( 
+id integer not null auto_increment primary key, 
+stamp_created timestamp default '0000-00-00 00:00:00', 
+stamp_updated timestamp default now() on update now() 
+); </code></pre>
+Note that it is necessary to enter nulls into both columns during "insert":
+<pre><code> mysql&gt; insert into test_table(stamp_created, stamp_updated) values(null, null); 
+Query OK, 1 row affected (0.06 sec)
+mysql&gt; select * from t5; 
++----+---------------------+---------------------+ 
+| id | stamp_created       | stamp_updated       |
++----+---------------------+---------------------+
+|  2 | 2009-04-30 09:44:35 | 2009-04-30 09:44:35 |
++----+---------------------+---------------------+
+2 rows in set (0.00 sec)  
+mysql&gt; update test_table set id = 3 where id = 2; 
+Query OK, 1 row affected (0.05 sec) Rows matched: 1  Changed: 1  Warnings: 0  
+mysql&gt; select * from test_table;
++----+---------------------+---------------------+
+| id | stamp_created       | stamp_updated       | 
++----+---------------------+---------------------+ 
+|  3 | 2009-04-30 09:44:35 | 2009-04-30 09:46:59 | 
++----+---------------------+---------------------+ 
+2 rows in set (0.00 sec)  
+mysql&gt;
+</code></pre>
