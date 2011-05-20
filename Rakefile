@@ -19,8 +19,11 @@ task :build => [:tags, :cloud, :sass] do
   def f(name)
     File.dirname(__FILE__) + "/" + name
   end
-  begin
+  unless File.exists? f("build")
     FileUtils.mkdir_p(f("build"))
+    `git clone gh:bogdan/bogdan.github.com build`
+  end
+  begin
     FileUtils.mkdir_p(f("tmp"))
     FileUtils.mv(f("build/.git"), f("tmp"))
     puts `jekyll --no-auto build`
