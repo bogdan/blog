@@ -17,8 +17,11 @@ pre, code {
   pre code, code code {
     margin: 0; }
 
+h1 a {
+  font-size: 30px; }
+
 h2 a {
-  font-size: 26px; }
+  font-size: 24px; }
 
 h5 {
   font-size: 18px;
