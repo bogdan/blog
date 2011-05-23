@@ -14,6 +14,7 @@ def sass
   Sass::Plugin.check_for_updates
 end
 
+desc "Start development mode"
 task :dev => :build do
   c = Thread.new do
     while true do
@@ -29,6 +30,7 @@ task :dev => :build do
   j.join
 end
 
+desc "Build static content"
 task :build => [:tags, :cloud, :sass] do
   unless File.exists? f("build")
     FileUtils.mkdir_p(f("build"))
@@ -43,6 +45,7 @@ task :build => [:tags, :cloud, :sass] do
   end
 end
 
+desc "Upload build to github"
 task :upload => [:build] do
   puts `git --work-tree=#{f "build"} --git-dir=#{f "build/.git"} add .`
   puts `git --work-tree=#{f "build"} --git-dir=#{f "build/.git"} commit -m "Build #{DateTime.now.to_s}"`
@@ -86,6 +89,7 @@ title: Posts tagged "#{tag}"
 end
 
 
+desc "Generate tag cloud"
 task :cloud do
   puts 'Generating tag cloud...'
   include Jekyll::Filters
@@ -112,6 +116,7 @@ task :cloud do
   puts 'Done.'
 end
 
+desc "Compile SASS"
 task :sass do
   sass
 end
