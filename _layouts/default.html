@@ -12,10 +12,24 @@
         <title>{{ page.title }}</title>
         <link rel="icon" href="/images/favicon.ico"/>
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+        <script>
+            $(document).ready(function() {
+                var params = decodeURI(window.location.search).replace(/^\?/, "").split("&");
+                $(params).each(function(index, param) {
+                    if (param.match(/^p=/)) {
+
+                        switch(parseInt(param.split("=")[1])) {
+                            case 11:
+                            window.location.href = "http://www.gusiev.com/2009/04/clear-upload-file-input-field/";
+                        }
+                    }
+                })
+            });
+        </script>
     </head>
 
     <body>
-        
+
         <div id="wrapper">
 
             <div class="header">
@@ -32,8 +46,8 @@
                 <a href="/pages/about.html" class="avatar">
                     <img src="/images/me.jpg"/>
                 </a>
-            <div class="clear"></div>
-            <hr/>
+                <div class="clear"></div>
+                <hr/>
             </div> <!-- Closes header -->
 
 
@@ -65,14 +79,14 @@
                         <form method="get" id="searchform" action="">
                             <input type="text" placeholder="Search keywords" name="s" id="searchbox"/>
                             <input type="submit" class="submitbutton" value="Find it" />
-                        </form>	
+                        </form>
                         <script>
                             $('#searchform').submit(function(event) {
                                 event.preventDefault();
                                 window.location.href = "http://google.com/search?q=site:gusiev.com " + $('#searchbox').val();
                             });
                         </script>
-                        </div>
+                    </div>
                     <div class="sidebarbox tag-cloud">
                         <h2>Browse by tags</h2>
                         {% include cloud.html %}
