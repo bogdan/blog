@@ -1,0 +1,37 @@
+--- 
+layout: post
+title: Logging HTTP api calls just like database queries
+<!--published: false-->
+tags: 
+- api
+- http
+- logging
+- ruby
+- rails
+- debug
+---
+
+Http api calls are pretty similar to SQL queries - they query data from external source to process them in ruby space. So I think it's a good idea to log them just like ActiveRecord does with SQL queries. 
+<pre><code>  Location Load (25.1ms)   SELECT * FROM "locations" WHERE ("locations"."id" = 2548) ORDER BY title</code></pre>
+
+<!--more-->
+This simple peace of code could be very helpful in case of 
+<a href="http://github.com/railsware/http_logger">
+    debugging HTTP api in ruby</a>.
+<a href="https://github.com/railsware/http_logger/blob/master/screenshots/solr.png">Screenshot</a> with the result
+
+
+Installation is simple:
+
+<pre><code>gem install http_logger</code></pre>
+
+And:
+
+<pre><code>require 'http_logger'
+
+Net::HTTP.logger = Logger.new(...) 
+    # Default: Rails.logger if defined?(Rails)
+
+Net::HTTP.colorize = true 
+    # Default: true</code></pre>
+
