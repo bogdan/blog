@@ -107,6 +107,8 @@
         <div class="footer">
             <hr/>
             <!--LiveInternet counter-->
+
+            {% if page.url contains 'gusiev.com' %}
             <script type="text/javascript">
                 document.write("<a href='http://www.liveinternet.ru/click' "+
                         "target=_blank><img src='http://counter.yadro.ru/hit?t40.6;r"+
@@ -117,9 +119,6 @@
                         "' alt='' title='LiveInternet' "+
                         "border='0' width='31' height='31'><\/a>");
                 </script><!--/LiveInternet-->
-                <!--SpyLOG-->
-                <span id="spylog2009244"></span><script type="text/javascript"> var spylog = { counter: 2009244, image: 26, next: spylog }; document.write(unescape('%3Cscript src%3D"http' + (('https:' == document.location.protocol) ? 's' : '') + '://counter.spylog.com/cnt.js" defer="defer"%3E%3C/script%3E')); </script>
-                <!--SpyLOG-->
                 <script type="text/javascript">
                     var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
                     document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
@@ -129,14 +128,18 @@
                             var pageTracker = _gat._getTracker("UA-12663165-1");
                             pageTracker._trackPageview();
                         } catch(err) {}</script>
-                    The Content of this blog can be published anywhere with the link to original source.
-                </div><!-- Closes morefoot -->
+
+            {% endif %}
+            <div style="text-align: center; padding-right: 350px">
+                The Content of this blog can be published anywhere with the link to original source.
+            </div>
+        </div><!-- Closes morefoot -->
 
 
 
 
-            </body>
-        </html>
+    </body>
+</html>
 
 
 
