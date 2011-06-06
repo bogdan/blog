@@ -14,6 +14,11 @@ def sass
   Sass::Plugin.check_for_updates
 end
 
+  def build_git(command)
+    puts  "git --work-tree=#{f "build"} --git-dir=#{f "build/.git"} #{command}"
+    puts `git --work-tree=#{f "build"} --git-dir=#{f "build/.git"} #{command}`
+  end
+
 desc "Start development mode"
 task :dev => :build do
   c = Thread.new do
@@ -45,11 +50,20 @@ task :build => [:tags, :cloud, :sass] do
   end
 end
 
+namespace :build do
+  desc "Clean build modifications"
+  task :clean do
+    build_git "checkout ."
+    build_git "fetch origin"
+    build_git "merge origin/master"
+  end
+end
+
 desc "Upload build to github"
-task :upload => [:build] do
-  puts `git --work-tree=#{f "build"} --git-dir=#{f "build/.git"} add .`
-  puts `git --work-tree=#{f "build"} --git-dir=#{f "build/.git"} commit -m "Build #{DateTime.now.to_s}"`
-  puts `git --work-tree=#{f "build"} --git-dir=#{f "build/.git"} push`
+task :upload => ["build:clean", :build] do
+  build_git "add ."
+  build_git "commit -m 'Build #{DateTime.now.to_s}'"
+  build_git "push"
 end
 
 desc 'Generate tags page'
