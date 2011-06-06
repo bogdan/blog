@@ -1,0 +1,10 @@
+<form method="get" id="searchform" action="">
+    <input type="text" placeholder="Search keywords" name="s" id="searchbox"/>
+    <input type="submit" class="submitbutton" value="Find" />
+</form>
+<script>
+    $('#searchform').submit(function(event) {
+    event.preventDefault();
+    window.location.href = "http://google.com/search?q=site:gusiev.com " + $('#searchbox').val();
+    });
+</script>

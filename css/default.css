@@ -61,6 +61,10 @@ ul li {
   ul li ul li {
     list-style: circle; }
 
+.not-found {
+  text-align: center;
+  margin: 100px 0; }
+
 .recent-posts {
   width: 100%; }
   .recent-posts ul {
