@@ -81,16 +81,7 @@
                     </div>
                     <div class="sidebarbox">
                         <h2>Search</h2>
-                        <form method="get" id="searchform" action="">
-                            <input type="text" placeholder="Search keywords" name="s" id="searchbox"/>
-                            <input type="submit" class="submitbutton" value="Find it" />
-                        </form>
-                        <script>
-                            $('#searchform').submit(function(event) {
-                                event.preventDefault();
-                                window.location.href = "http://google.com/search?q=site:gusiev.com " + $('#searchbox').val();
-                            });
-                        </script>
+                        {% include search.html %}
                     </div>
                     <div class="sidebarbox tag-cloud">
                         <h2>Browse by tags</h2>
