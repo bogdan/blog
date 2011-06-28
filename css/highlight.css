@@ -1,0 +1,100 @@
+.highlight {
+  background: white; }
+  .highlight .c {
+    color: #999988;
+    font-style: italic; }
+  .highlight .err {
+    color: #a61717;
+    background-color: #e3d2d2; }
+  .highlight .k, .highlight .o {
+    font-weight: bold; }
+  .highlight .cm {
+    color: #999988;
+    font-style: italic; }
+  .highlight .cp {
+    color: #999999;
+    font-weight: bold; }
+  .highlight .c1 {
+    color: #999988;
+    font-style: italic; }
+  .highlight .cs {
+    color: #999999;
+    font-weight: bold;
+    font-style: italic; }
+  .highlight .gd {
+    color: black;
+    background-color: #ffdddd; }
+    .highlight .gd .x {
+      color: black;
+      background-color: #ffaaaa; }
+  .highlight .ge {
+    font-style: italic; }
+  .highlight .gr {
+    color: #aa0000; }
+  .highlight .gh {
+    color: #999999; }
+  .highlight .gi {
+    color: black;
+    background-color: #ddffdd; }
+    .highlight .gi .x {
+      color: black;
+      background-color: #aaffaa; }
+  .highlight .go {
+    color: #888888; }
+  .highlight .gp {
+    color: #555555; }
+  .highlight .gs {
+    font-weight: bold; }
+  .highlight .gu {
+    color: #aaaaaa; }
+  .highlight .gt {
+    color: #aa0000; }
+  .highlight .kc, .highlight .kd, .highlight .kp, .highlight .kr {
+    font-weight: bold; }
+  .highlight .kt {
+    color: #445588;
+    font-weight: bold; }
+  .highlight .m {
+    color: #009999; }
+  .highlight .s {
+    color: #dd1144; }
+  .highlight .na {
+    color: teal; }
+  .highlight .nb {
+    color: #0086b3; }
+  .highlight .nc {
+    color: #445588;
+    font-weight: bold; }
+  .highlight .no {
+    color: teal; }
+  .highlight .ni {
+    color: purple; }
+  .highlight .ne, .highlight .nf {
+    color: #990000;
+    font-weight: bold; }
+  .highlight .nn {
+    color: #555555; }
+  .highlight .nt {
+    color: navy; }
+  .highlight .nv {
+    color: teal; }
+  .highlight .ow {
+    font-weight: bold; }
+  .highlight .w {
+    color: #bbbbbb; }
+  .highlight .mf, .highlight .mh, .highlight .mi, .highlight .mo {
+    color: #009999; }
+  .highlight .sb, .highlight .sc, .highlight .sd, .highlight .s2, .highlight .se, .highlight .sh, .highlight .si, .highlight .sx {
+    color: #dd1144; }
+  .highlight .sr {
+    color: #009926; }
+  .highlight .s1 {
+    color: #dd1144; }
+  .highlight .ss {
+    color: #990073; }
+  .highlight .bp {
+    color: #999999; }
+  .highlight .vc, .highlight .vg, .highlight .vi {
+    color: teal; }
+  .highlight .il {
+    color: #009999; }
