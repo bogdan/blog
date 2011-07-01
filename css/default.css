@@ -12,7 +12,7 @@ h1, h4, p, ul, ol, h5, pre, code {
 pre {
   white-space: pre-wrap;
   display: block;
-  font-family: monospace;
+  font: 14px "Inconsolata", "Bitstream Vera Sans Mono", "Courier", monospace;
   margin-left: 20px; }
   pre code {
     margin: 0; }
