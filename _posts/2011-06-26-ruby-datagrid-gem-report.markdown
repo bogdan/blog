@@ -9,7 +9,7 @@ tags:
 - report
 ---
 
-4 years ago I was working on some enterprise projects with a lot of reports. From that time I was thinking about [perfect report library](https://github.com/bogdan/datagrid) that would provide easy DSL to make filters and sortable columns to build reports and make it all reusable with standard OOP techniques. Since that time this idea never left my head for a long and now finally I have enough knowledge and opportunities to build such tool. 
+4 years ago I was working on some enterprise projects with a lot of reports. From that time I was thinking about [perfect report gem](https://github.com/bogdan/datagrid) that would provide easy DSL for making filters and sortable columns to build reports and make it all reusable with standard OOP techniques. Since that time this idea never left my head for a long and now finally I have enough knowledge and opportunities to build such tool. 
 
 <!--more-->
 
@@ -41,7 +41,7 @@ class SimpleReport
 
 
   column(:name)
-  column(:group, :order => "groups.name")
+  column(:group, :order => "groups.name") do
     self.group.name
   end
   column(:active, :header => "Activated", :order => false)
@@ -56,13 +56,11 @@ And now we can create and manipulate reports:
 
 {% highlight ruby %}
 report = SimpleReport.new(
-        :order => "group", 
-        :descending => true, 
-        :group_id => [1,2], 
-        :from_logins_count => 1, 
-        :category => "first",
-        :order => :group,
-        :descending => true
+        :group_id          => [1,2],
+        :from_logins_count => 1,
+        :category          => "first",
+        :order             => :group,
+        :descending        => true
 )
 
 report.assets # => Array of User instances: 
