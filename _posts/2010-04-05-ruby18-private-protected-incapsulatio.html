@@ -1,14 +1,15 @@
 --- 
 layout: post
-title: "Ruby1.8: 'private' doesn't give expected level of privacy"
+title: "Encapsulation in Ruby: 'private' doesn't give expected level of privacy"
 tags: 
 - criticism
 - ruby
 - encapsulation
 - privacy
 - method
+- api
 ---
-The classic OOP pattern usually called encapsulation implemented in ruby with <em>private</em> and <em>protected</em> <del>keywords</del> methods. The distinction between API and implementation works great with both. The problem is that <em>private</em> doesn't hide method for inherited classes. 
+The classic OOP pattern usually called encapsulation implemented in ruby with <code>private</code> and <code>protected</code> <del>keywords</del> methods. The distinction between API and implementation works great with both. The problem is that <code>private</code> doesn't hide method for inherited classes. 
 <!--more-->
 <hr/>
 See the simple example below:
@@ -31,8 +32,8 @@ B.new.api
 </code></pre>
 
 And we won't get exception at the last line.<br/>
-The real difference between protected and private methods is more specific.<br/>
-At first: <em>implementation</em> method can not be called like <em>self.implementation</em> even from class A.
+So, in fact <code>private</code> do not do what you expect it to do. Use cases that distinguish <code>private</code> and <code>protected</code> are more specific.
+At first: <code>implementation</code> method can not be called like <code>self.implementation</code> even from class A.
 <pre><code>class A
   def api
     self.implementation #exception here
@@ -60,10 +61,11 @@ The second difference is a bit esoteric. Two instances of the same class can acc
 end
 A.new.api(A.new)
 </code></pre>
-Fine for <em>protected</em> but fail for <em>private</em>. Well, this kind of protection do not make a real because of it's rareness.
-<br/><br/>
+
+Fine for <code>protected</code> but fail for <code>private</code>. Well, this kind of protection do not make a real because of it's rareness.
+<h3>My conclusion: don't use private at all</h3>
 
 You might do any decision on the points above.<br/>
-My conclusion is to not use <em>private</em> at all, because it doesn't give the level of privacy that I expect. <em>private</em> is not suitable for such an extremely dynamic language as Ruby. 
+My conclusion is to not use <code>private</code> at all, because it doesn't give the level of privacy that I expect. Difference form <code>protected</code> is so pure that it do not have any real benefits. 
 
 
