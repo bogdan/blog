@@ -9,7 +9,7 @@ tags:
 - report
 ---
 
-4 years ago I was working on some enterprise projects with a lot of reports. From that time I was thinking about [perfect report gem](https://github.com/bogdan/datagrid) that would provide easy DSL for making filters and sortable columns to build reports and make it all reusable with standard OOP techniques. Since that time this idea never left my head for a long and now finally I have enough knowledge and opportunities to build such tool. 
+4 years ago I was working on some enterprise projects with a lot of reports. From that time I was thinking about [perfect report gem](https://github.com/bogdan/datagrid) that would provide easy DSL for making filters and sortable columns to build reports and make it all reusable with standard OOP techniques. Since that time this idea never left my head and now finally I have enough knowledge and opportunities to build such tool. 
 
 <!--more-->
 
@@ -57,7 +57,6 @@ And now we can create and manipulate reports:
 {% highlight ruby %}
 report = SimpleReport.new(
         :group_id          => [1,2],
-        :from_logins_count => 1,
         :category          => "first",
         :order             => :group,
         :descending        => true
@@ -81,7 +80,7 @@ report.to_csv # => Yes, it is
 
 
 
-### What about flexibility?
+### Feel the Power and Flexibility by examples
 
 I love flexibility. That is why datagrid has a lot of things for non trivial use cases.
 In order to proof that I'll show you some examples of what you can do:

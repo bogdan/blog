@@ -14,10 +14,12 @@ def sass
   Sass::Plugin.check_for_updates
 end
 
-  def build_git(command)
-    puts  "git --work-tree=#{f "build"} --git-dir=#{f "build/.git"} #{command}"
-    puts `git --work-tree=#{f "build"} --git-dir=#{f "build/.git"} #{command}`
-  end
+def build_git(command)
+  git = "git --work-tree=#{f "build"} --git-dir=#{f "build/.git"} #{command}"
+  puts git
+  output = `#{git}`.strip
+  puts output.strip unless output == ""
+end
 
 desc "Start development mode"
 task :dev => :build do
@@ -36,7 +38,7 @@ task :dev => :build do
 end
 
 desc "Build static content"
-task :build => [:tags, :cloud, :sass] do
+task :build => [ "build:clean", :tags, :cloud, :sass] do
   unless File.exists? f("build")
     FileUtils.mkdir_p(f("build"))
     `git clone gh:bogdan/bogdan.github.com build`
@@ -53,6 +55,7 @@ end
 namespace :build do
   desc "Clean build modifications"
   task :clean do
+    build_git "clean -f ."
     build_git "checkout ."
     build_git "fetch origin"
     build_git "merge origin/master"
@@ -60,7 +63,7 @@ namespace :build do
 end
 
 desc "Upload build to github"
-task :upload => ["build:clean", :build] do
+task :upload => [:build] do
   build_git "add ."
   build_git "commit -m 'Build #{DateTime.now.to_s}'"
   build_git "push"
