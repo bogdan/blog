@@ -3,3 +3,4 @@ build
 _site/
 tags
 _includes/cloud.html
+_includes/keywords.html

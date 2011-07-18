@@ -21,6 +21,15 @@ def build_git(command)
   puts output.strip unless output == ""
 end
 
+def site
+  @site ||= (
+    include Jekyll::Filters
+    options = Jekyll.configuration({})
+    site = Jekyll::Site.new(options)
+    site.read_posts('')
+    site
+  )
+end
 desc "Start development mode"
 task :dev => :build do
   c = Thread.new do
@@ -71,14 +80,9 @@ end
 
 desc 'Generate tags page'
 task :tags do
-  puts "Generating tags..."
 
-  include Jekyll::Filters
 
   FileUtils.mkdir_p("tags")
-  options = Jekyll.configuration({})
-  site = Jekyll::Site.new(options)
-  site.read_posts('')
   site.tags.sort.each do |tag, posts|
     html = ''
     html << <<-HTML
@@ -102,25 +106,22 @@ title: Posts tagged "#{tag}"
       file.puts html
     end
   end
-  puts 'Done.'
+
 end
 
 
 desc "Generate tag cloud"
 task :cloud do
-  puts 'Generating tag cloud...'
-  include Jekyll::Filters
 
-  options = Jekyll.configuration({})
-  site = Jekyll::Site.new(options)
-  site.read_posts('')
-
+  FileUtils.mkdir_p("tags")
   html = ''
+  keywords = []
 
   site.tags.sort.each do |category, posts|
 
     s = posts.count
     if s > 1
+      keywords << category
       font_size = 14 + (s*1.8);
       html << "<a href=\"/tags/#{category}.html\" title=\"Pages tagged #{category}\" style=\"font-size: #{font_size}px; line-height:#{font_size}px\" rel=\"tag\">#{category}</a> \n"
     end
@@ -130,7 +131,10 @@ task :cloud do
     file.puts html
   end
 
-  puts 'Done.'
+  File.open("_includes/keywords.html", "w") do |file|
+    file.write keywords.join(", ")
+  end
+
 end
 
 desc "Compile SASS"
