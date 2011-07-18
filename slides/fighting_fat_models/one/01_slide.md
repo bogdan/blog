@@ -423,7 +423,7 @@ Event:
 
 ## Super advanced logic infrastructure
 
-![Architecture](architechture.png)
+![Architecture](./file/architechture.png)
 
 
 !SLIDE 
