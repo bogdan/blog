@@ -56,7 +56,7 @@ The problem is to **understand** which one *fit best* for you.
 * *Agile* process
 * *Reusability* of the code
 * Easy to *test*
-* Make the data safe **strict**
+* Make the data  **safe**
 
 
 !SLIDE 
@@ -105,11 +105,31 @@ Service is separated utility class.
 
 Nothing interesting
 
+!SLIDE 
+
+## Need of default behavior
+
+* Data Validation
+** Set of rules that model should fit at programming level
+* Business rules
+** Set of rules that model should fit to exist in real world
+ 
+
+(Circles here)
+
+
+
+* Reduce number of conventions in using Services
+* Reimplement existing API has more wisdom than create new one
+* Suites to common knowledge 
+** Nothing more than Rails
+
 
 
 !SLIDE 
 
-### Benefits of model and observer
+### Hooks in models
+
 
 
 We create default behavior and our data is safe.
@@ -123,7 +143,8 @@ Example: Comment can not be created without notification.
       end
     end
 
-Reimplement other person's API has more wisdom than invent new one.
+
+* Reimplement other person's API has more wisdom than invent new one.
 
 !SLIDE 
 
