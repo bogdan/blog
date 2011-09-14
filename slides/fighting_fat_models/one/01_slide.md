@@ -62,7 +62,9 @@ The problem is to **understand** which one *fit best* for you.
 !SLIDE 
 ### The need of Services
 
-When amount of utils that supports Model goes higher support model with service is good idea.
+#####When amount of utils that supports Model goes higher 
+
+#####extract them to service is good idea.
 
     @@@ ruby
 
@@ -92,9 +94,46 @@ Service is separated utility class.
 #### "Я знаю откуда что берется"
 
 
+
+!SLIDE 
+
+## Need of Default Behavior
+
+* Data Validation
+  * Set of rules that model should fit at programming level
+    * Comment should have author
+* Business rules
+  * Set of rules that model should fit to exist in real world
+    * Comment should have email notification
+ 
+
+(Circles here)
+
+!SLIDE 
+
+#### What is a model?
+
+###The model is an imitation of real object 
+###that reflects some it's behaviors
+###that we are focused on.
+
+
+!SLIDE 
+
+## Implementation
+
+Using builtin Rails hooks have the following benefits:
+
+* Reduce number of conventions
+* Reimplement existing API has more wisdom than create new one
+* Suites to common knowledge - nothing more than Rails
+
+
 !SLIDE 
 
 ## Observers
+
+Model sends it's events to observer automatically and observer is calling a hook.
 
     @@@ ruby
     class CommentObserver < AR::Observer
@@ -103,34 +142,10 @@ Service is separated utility class.
       end
     end
 
-Nothing interesting
 
 !SLIDE 
 
-## Need of default behavior
-
-* Data Validation
-** Set of rules that model should fit at programming level
-* Business rules
-** Set of rules that model should fit to exist in real world
- 
-
-(Circles here)
-
-
-
-* Reduce number of conventions in using Services
-* Reimplement existing API has more wisdom than create new one
-* Suites to common knowledge 
-** Nothing more than Rails
-
-
-
-!SLIDE 
-
-### Hooks in models
-
-
+##Hooks in models
 
 We create default behavior and our data is safe.
 
@@ -148,11 +163,11 @@ Example: Comment can not be created without notification.
 
 !SLIDE 
 
-## **Edge cases** of data creation
-
+## **Edge cases**
 
 ### In all cases data created in regular way
 ### In one edge cases special rules applied
+
 
 !SLIDE 
 
@@ -171,7 +186,7 @@ Plan A:
     end
 
 * Method will be a **mess** as number of options goes higher.
-* Don't look very functional stylish
+* Don't respect functional paradigm
 
 !SLIDE 
 
@@ -188,9 +203,21 @@ Plan B:
 Maintenance problems:
 
 * Hard to keep all team informed about all services in the App
-* Don't provide default behavior
 * Hard to support as number of contexts goes higher
 
+!SLIDE 
+
+## *Default behavior* and **edge cases**
+
+
+The property of default behavior in this example:
+
+* Hey model, create my comment.
+  * Ok
+* Hey model, why did you send the notification?
+  * Because you didn't say you don't need it
+* Create model without notification
+  * Ok
 
 !SLIDE 
 
@@ -220,7 +247,6 @@ Maintenance problems:
 !SLIDE 
 ### Support parameter in model
 
-Solved by not persisted attributes. 
 
     @@@ ruby
     class Comment < AR::Base
@@ -233,39 +259,32 @@ Solved by not persisted attributes.
     end
 
 
-The property of default behavior in this example:
-
-* Hey model, create my comment.
-  * Ok
-* Hey model, why did you send the notification?
-  * Because you didn't say you don't need it
-* Create model without notification
-  * Ok
-
 `#skip_comment_notification` is used only in edge cases.
 
 
 !SLIDE 
 
-## Priorities
 
-####Model stands for **should**
+###Model stands for *should*
 
-####Service stands for *could*
+###Service stands for *could*
 
-####Observer stands for *maybe*
+###Observer stands for **?**
 
 !SLIDE 
-### The model is still **fat**. What to do?
+## The model is still **fat**. 
+## What to do?
+
+!SLIDE 
 ## *Vertical slicing* with Traits
-##### Unlike MVC which is horizontal slicing.
+#### Unlike MVC which is horizontal slicing.
 
 !SLIDE 
 
 ### Vertical slicing
 
 
-Split model into chunks
+Split model into *Traits*
 
     @@@ ruby
     class User < AR::Base
@@ -297,11 +316,6 @@ Traits include all staff that can be defined in model
 * Callbacks
 
 
-!SLIDE 
-
-#### *ActiveRecord* uses Traits
-##### If it is *possible* for such a **complicated library** 
-##### then it is easy for regular projects
 
 
 
@@ -309,30 +323,56 @@ Traits include all staff that can be defined in model
 !SLIDE
 
 
-### Traits and associations
+### How to do it?
+
+Lets split Model code into groups by:
+
+* associations
+* attributes
+
+#### Dependency tree
+
+![Model dependency](./file/model_dependency.png)
+
+<!--<table>-->
+<!--<tr>-->
+<!--<td colspan="4">Model</td>-->
+<!--</tr>-->
+<!--<tr>-->
+<!--<td colspan="2">belongs_to :model1</td> -->
+<!--<td colspan="2">belongs_to :model2</td>-->
+<!--</tr>-->
+<!--<tr>-->
+<!--<td>attribute1</td>-->
+<!--<td>attribute2</td>-->
+<!--<td>attribute3</td>-->
+<!--<td>attribute4</td>-->
+<!--</tr>-->
+<!--<tr>-->
+<!--<td colspan="2">has_many :models3</td>-->
+<!--<td colspan="2">has_many :models4</td>-->
+<!--</tr>-->
+
+<!--</table>-->
+
+!SLIDE 
+
+## Associations and Traits
 
 Associations is a base for Traits technique.
 
-* *`belongs_to`* is a *core* of a model that usually used almost everywhere.
+* *`belongs_to`* is a *core* of a model 
   * This associations is used in almost all methods.
-* *`has_many`* is usually *better* to create a slice of functionality.
+* *`has_many`* is usually *better* to create a slice
   * Methods with this associations is usually independent from each other.
 
+!SLIDE 
 
-<table>
-<tr>
-<td>belongs_to :company</td>
-<td>belongs_to :location</td>
-</tr>
-<tr>
-<td colspan="2">Job</td>
-</tr>
-<tr>
-<td>has_many :candidates</td>
-<td>has_many :criterias</td>
-</tr>
+#### How to not get lost?
 
-</table>
+## If *A* depends on *B* 
+## then **B** should not depend on **A**
+
 !SLIDE 
 
 
@@ -358,6 +398,32 @@ Associations is a base for Traits technique.
 
 </table>
 
+
+!SLIDE 
+
+## Traits best practices
+
+* Apply pattern to *multifunctional models* only
+  * `User`
+* Traits name space with the same name as model
+  * `Traits::User::Facebook`
+
+* Use *OOP*:
+  * Abstract method
+  * `super` is super
+
+* Api *consistency*
+  * "name", "subject", "title" => select one
+  * "disabled", "inactive", "deleted" => select one
+
+
+  
+
+!SLIDE 
+
+#### *ActiveRecord* uses Traits
+##### If it is *possible* for such a **complicated library** 
+##### then it is easy for regular projects
 
 !SLIDE 
 
@@ -426,17 +492,18 @@ Parts of WorkFlow that should be *reused* are extracted to *services*.
 
 ## Flow nature and Event nature
 
-Flow :
+
+Service and Workflow:
 
 * goes step by step
-* can not be part of each other
+* can not call each other
 * more related on utils 
 
-Event:
+Observers and Callbacks:
 
-* less care about order
 * one can spawn more than one other events
 * can be parallelized 
+* can be backgrounded
 
 
 
@@ -450,7 +517,7 @@ Event:
 !SLIDE 
 
 ### There is only one 100% reason 
-### when this can be broken?
+### when this can be broken.
 
 
 
@@ -462,13 +529,10 @@ Event:
 
 !SLIDE 
 
-## Summary
+#### Summary
 
-Every technique has it's own use case:
-
-* Service for helpers
-* Traits for strict data model
-* Observers for external service notification
+### *Could?*  => **Service**
+### *Should?* => **Model**
 
 !SLIDE 
 
