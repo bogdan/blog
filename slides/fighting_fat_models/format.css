@@ -1,5 +1,6 @@
 body {
   overflow: auto;
+  font-size: 
 }
 
 h3, h4, h5, ol, ul, pre {
@@ -108,6 +109,9 @@ img {
   display: block;
   text-align: center;
 
+}
+.invisible {
+  display:none;
 }
 
 .left {

@@ -1,17 +1,20 @@
 !SLIDE 
 # Fighting fat models
+##### and many other problems
 ## Bogdan Gusiev
-### July 2011
+### September 2011
 
 !SLIDE 
 
-*Scope* of this presentation:
+## Scope of this presentation
+
+*Scope*:
 
 * Create
 * Update 
 * Delete
 
-**Not the scope** of this presentation:
+**Not the scope**:
 
 * Select
 
@@ -31,7 +34,7 @@
 
 ##### Why it should not be in **view**?
 
-#### Because your will be  **doom** forever.
+#### Many reasons
 
 
 !SLIDE 
@@ -99,12 +102,16 @@ Service is separated utility class.
 
 ## Need of Default Behavior
 
+Object should incapsulate behavior:
+
 * Data Validation
   * Set of rules that model should fit at programming level
     * Comment should have author
 * Business rules
   * Set of rules that model should fit to exist in real world
     * Comment should have email notification
+
+
  
 
 (Circles here)
@@ -113,19 +120,25 @@ Service is separated utility class.
 
 #### What is a model?
 
+
 ###The model is an imitation of real object 
 ###that reflects some it's behaviors
 ###that we are focused on.
 
+##### Wikipedia
 
 !SLIDE 
 
 ## Implementation
 
-Using builtin Rails hooks have the following benefits:
+Using builtin Rails code:
+
+* ActiveModel::Observer
+* ActiveRecord::Callbacks
+
+Have the following benefits:
 
 * Reduce number of conventions
-* Reimplement existing API has more wisdom than create new one
 * Suites to common knowledge - nothing more than Rails
 
 
@@ -158,8 +171,17 @@ Example: Comment can not be created without notification.
       end
     end
 
+!SLIDE 
 
-* Reimplement other person's API has more wisdom than invent new one.
+## Comparation with Service
+
+    @@@ ruby
+    Comment.create
+    # or
+    CommentService.create
+
+#### Reimplement other person's API 
+#### has more wisdom than invent new one.
 
 !SLIDE 
 
@@ -168,12 +190,28 @@ Example: Comment can not be created without notification.
 ### In all cases data created in regular way
 ### In one edge cases special rules applied
 
+!SLIDE 
+
+## Service with options
+
+Plan A:
+
+    @@@ ruby
+    module CommentService
+      def create_with_notification(attributes)
+      def create(attributes)
+    end
+
+Maintenance problems:
+
+* Hard to keep all team informed about all services in the App
+* Hard to support as number of options goes higher
 
 !SLIDE 
 
 ## Services with options
 
-Plan A:
+Plan B:
 
     @@@ ruby
     module CommentService
@@ -188,22 +226,6 @@ Plan A:
 * Method will be a **mess** as number of options goes higher.
 * Don't respect functional paradigm
 
-!SLIDE 
-
-## Service with options
-
-Plan B:
-
-    @@@ ruby
-    module CommentService
-      def create_with_notification(attributes)
-      def create(attributes)
-    end
-
-Maintenance problems:
-
-* Hard to keep all team informed about all services in the App
-* Hard to support as number of contexts goes higher
 
 !SLIDE 
 
@@ -261,6 +283,15 @@ The property of default behavior in this example:
 
 `#skip_comment_notification` is used only in edge cases.
 
+!SLIDE 
+
+### Observers are effective when
+
+##**no direct access** to *observed class*
+
+#### Example: when it is part of some library inside 
+#### a fat enterprise project
+
 
 !SLIDE 
 
@@ -269,11 +300,22 @@ The property of default behavior in this example:
 
 ###Service stands for *could*
 
-###Observer stands for **?**
+###Observer stands for **big fat enterprise**
 
 !SLIDE 
 ## The model is still **fat**. 
 ## What to do?
+
+!SLIDE 
+
+## Use traits
+
+    @@@ ruby
+    class Comment < AR::Base
+      include Traits::Comment::Notification
+    end
+
+`Notification` module encapsulates a feature
 
 !SLIDE 
 ## *Vertical slicing* with Traits
@@ -307,6 +349,8 @@ Split model into *Traits*
     end
 
 !SLIDE 
+
+## This is OOP
 
 Traits include all staff that can be defined in model
 
@@ -421,21 +465,17 @@ Associations is a base for Traits technique.
 
 !SLIDE 
 
-#### *ActiveRecord* uses Traits
+## Libraries using traits
+
+* ActiveRecord
+* Authlogic
+* Devise
+
 ##### If it is *possible* for such a **complicated library** 
-##### then it is easy for regular projects
-
-!SLIDE 
+##### then it is **easy** for *regular projects*
 
 
-
-### let's talk about 
-
-### **BIG FAT ENTERPRISE**
-
-
-
-!SLIDE 
+!SLIDE invisible
 
 ### Enterprise world
 
@@ -452,54 +492,16 @@ That is why:
 
 !SLIDE 
 
-### When services are getting fatter,
-##### there is a need to 
-## Extract *Workflow* from service.
-
-!SLIDE 
-
-## Workflow designed to handle huge updates for data
+## *Flow* nature and *Event* nature
 
 
-WorkFlow is logic layer controller, because of it's "gathering" role.
-
-Parts of WorkFlow that should be *reused* are extracted to *services*.
-
-
-    @@@ ruby
-    module BillingWorkFlow
-      def self.charge(cycle)
-        cycle.close!
-        cycle.items.each do |item|
-          item.charge!
-        end
-        UserMailer.cycle_charged(cycle).deliver!
-        ProjectService.close_stages(cycle.job)
-        ProjectService.generate_new_cycle(cycle.job)
-        .....
-      end
-    end
-
-
-!SLIDE 
-
-## Improve safety of Workflow
-
-* Workflow method designed to have only one usage.
-* Protect state attribute from mass assignment
-
-!SLIDE 
-
-## Flow nature and Event nature
-
-
-Service and Workflow:
+Service has flow nature:
 
 * goes step by step
 * can not call each other
 * more related on utils 
 
-Observers and Callbacks:
+Observers and Callbacks have event nature:
 
 * one can spawn more than one other events
 * can be parallelized 
@@ -529,10 +531,21 @@ Observers and Callbacks:
 
 !SLIDE 
 
-#### Summary
+# Summary
 
+
+!SLIDE 
 ### *Could?*  => **Service**
 ### *Should?* => **Model**
+!SLIDE 
+## **Fat** models => *Thin* Traits 
+!SLIDE 
+### *Reimplement* other person's API 
+### has more wisdom than **invent new** one.
+!SLIDE 
+### If *A* depends on *B* 
+### then **B** should not depend on **A**
+
 
 !SLIDE 
 
