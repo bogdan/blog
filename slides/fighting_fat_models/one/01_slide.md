@@ -6,6 +6,27 @@
 
 !SLIDE 
 
+
+## Bogdan G.
+
+* is 7 years in IT
+* is 3 years with Ruby and Rails
+* Contributed to:
+  * Rails 
+    * wait for my features in 3.2
+    * Deeply understands Rails internals
+    * In context of Rails moving direction
+  * Resque and about 5-7 plugins
+    * Knows something about high load
+  * Many others
+    * Write missing features
+    * Fixes all bugs along the way
+* Created
+  * datagrid - 180+ watchers
+  * js-routes - 100+ watcher
+
+!SLIDE 
+
 ## Scope of this presentation
 
 *Scope*:
@@ -17,6 +38,7 @@
 **Not the scope**:
 
 * Select
+
 
 !SLIDE 
 ##### Why the problem appear?
@@ -97,6 +119,10 @@ Service is separated utility class.
 #### "Я знаю откуда что берется"
 
 
+!SLIDE 
+
+#### The problem of services
+### Services **don't** provide *default behavior*
 
 !SLIDE 
 
@@ -109,7 +135,7 @@ Object should incapsulate behavior:
     * Comment should have author
 * Business rules
   * Set of rules that model should fit to exist in real world
-    * Comment should have email notification
+    * Comment should deliver email notification
 
 
  
@@ -155,6 +181,8 @@ Model sends it's events to observer automatically and observer is calling a hook
       end
     end
 
+* *+* Model doesn't depend on the notification code
+* **-** Some folks say: "Observers Not done well in Rails"
 
 !SLIDE 
 
@@ -166,9 +194,7 @@ Example: Comment can not be created without notification.
 
     @@@ ruby
     class Comment < AR::Base
-      def after_create
-        send_comment_notification
-      end
+      after_create :send_comment_notification
     end
 
 !SLIDE 
@@ -216,11 +242,6 @@ Plan B:
     @@@ ruby
     module CommentService
       def create(attributes, skip_notification = false)
-        comment = Comment.create!(attributes)
-        unless skip_comment_notification
-          deliver_notification(comment)
-        end
-      end
     end
 
 * Method will be a **mess** as number of options goes higher.
@@ -238,7 +259,7 @@ The property of default behavior in this example:
   * Ok
 * Hey model, why did you send the notification?
   * Because you didn't say you don't need it
-* Create model without notification
+* Hey model, create model without notification
   * Ok
 
 !SLIDE 
@@ -255,8 +276,7 @@ The property of default behavior in this example:
     class CommentObserver < AR::Observer
       def after_create(comment)
         unless comment.skip_comment_notification
-          send_comment_notification(comment)
-        end
+          ...
       end
     end
 
@@ -264,7 +284,6 @@ The property of default behavior in this example:
   * Some observer code stays in model
 * Have some problems with testing
 * Makes the app more fragmented
-* "Not done well in Rails"
 
 !SLIDE 
 ### Support parameter in model
@@ -318,8 +337,9 @@ The property of default behavior in this example:
 `Notification` module encapsulates a feature
 
 !SLIDE 
-## *Vertical slicing* with Traits
+## Traits is *Vertical slicing* 
 #### Unlike MVC which is horizontal slicing.
+
 
 !SLIDE 
 
@@ -347,6 +367,31 @@ Split model into *Traits*
       def disable!
       def disabled?
     end
+
+!SLIDE 
+
+
+### Basic application architecture
+
+
+<table>
+<tr>
+  <td colspan="3">View</td>
+</tr>
+<tr>
+  <td colspan="3">Controller</td>
+</tr>
+<tr>
+  <td colspan="3" style="padding-top: 0px; padding-bottom: 0px">Thin model</td>
+</tr>
+
+<tr>
+  <td style="padding-top: 40px; padding-bottom: 40px">Trait</td>
+  <td>Trait</td>
+  <td>Trait</td>
+</tr>
+
+</table>
 
 !SLIDE 
 
@@ -419,32 +464,6 @@ Associations is a base for Traits technique.
 
 !SLIDE 
 
-
-### Basic application architecture
-
-
-<table>
-<tr>
-  <td colspan="3">View</td>
-</tr>
-<tr>
-  <td colspan="3">Controller</td>
-</tr>
-<tr>
-  <td colspan="3" style="padding-top: 0px; padding-bottom: 0px">Thin model</td>
-</tr>
-
-<tr>
-  <td style="padding-top: 40px; padding-bottom: 40px">Trait</td>
-  <td>Trait</td>
-  <td>Trait</td>
-</tr>
-
-</table>
-
-
-!SLIDE 
-
 ## Traits best practices
 
 * Apply pattern to *multifunctional models* only
@@ -470,6 +489,7 @@ Associations is a base for Traits technique.
 * ActiveRecord
 * Authlogic
 * Devise
+* Datagrid
 
 ##### If it is *possible* for such a **complicated library** 
 ##### then it is **easy** for *regular projects*
@@ -498,14 +518,17 @@ That is why:
 Service has flow nature:
 
 * goes step by step
-* can not call each other
-* more related on utils 
+  * order can matter
+* call each other
+  * dependent
 
 Observers and Callbacks have event nature:
 
 * one can spawn more than one other events
-* can be parallelized 
-* can be backgrounded
+  * can be parallelized 
+* don't call each other
+  * can be backgrounded
+  
 
 
 
@@ -539,6 +562,7 @@ Observers and Callbacks have event nature:
 ### *Should?* => **Model**
 !SLIDE 
 ## **Fat** models => *Thin* Traits 
+#### and sometimes observers
 !SLIDE 
 ### *Reimplement* other person's API 
 ### has more wisdom than **invent new** one.

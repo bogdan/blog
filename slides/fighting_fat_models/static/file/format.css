@@ -1,9 +1,14 @@
 body {
   overflow: auto;
+  font-size: 
 }
 
-h1, h2, h3, h4, h5, ol, ul, pre {
+h3, h4, h5, ol, ul, pre {
   margin: 10px 0px 20px 0px; }
+
+h1, h2 {
+  margin: 10px 0px 35px 0px;
+} 
 
 p {
   padding: 10px 0px
@@ -58,6 +63,10 @@ ul ul {
   list-style: circle;
 }
 
+ul ul ul {
+  list-style: square;
+}
+
 ol, ul {
   padding-bottom: 10px; }
   ol li p, ul li p {
@@ -96,7 +105,13 @@ td {
 }
 
 img {
-  margin: 0 auto;
+  margin: 10px auto;
+  display: block;
+  text-align: center;
+
+}
+.invisible {
+  display:none;
 }
 
 .left {
