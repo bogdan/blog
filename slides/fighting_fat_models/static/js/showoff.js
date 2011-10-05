@@ -40,11 +40,6 @@ function setupPreso(load_slides, prefix) {
 	/* window.onresize	= resized; */
 	/* window.onscroll = scrolled; */
 	/* window.onunload = unloaded; */
-
-	$('body').addSwipeEvents().
-		bind('tap', swipeLeft).         // next
-		bind('swipeleft', swipeLeft).   // next
-		bind('swiperight', swipeRight); // prev
 }
 
 function loadSlides(load_slides, prefix) {
@@ -91,7 +86,7 @@ function initializePresentation(prefix) {
 	}
 	setupSlideParamsCheck();
 	sh_highlightDocument(prefix+'/js/sh_lang/', '.min.js')
-	$("#preso").trigger("showoff:loaded");
+	$(".preso").trigger("showoff:loaded");
 }
 
 function centerSlides(slides) {
@@ -209,11 +204,12 @@ function showSlide(back_step) {
 		incrSteps = 0
 	}
 	location.hash = slidenum + 1;
+	$('body').addSwipeEvents().
+		bind('swipeleft',	swipeLeft).
+		bind('swiperight', swipeRight)
+	removeResults()
 
-	removeResults();
-
-  var currentContent = $(currentSlide).find(".content")
-	currentContent.trigger("showoff:show");
+	$(currentSlide).find(".content").trigger("showoff:show");
 
 	return getCurrentNotes()
 }
@@ -227,7 +223,7 @@ function getCurrentNotes()
 {
   var notes = currentSlide.find("p.notes").text()
   $('#notesInfo').text(notes)
-	return notes
+	return notes 
 }
 
 function getSlidePercent()
@@ -248,7 +244,7 @@ function determineIncremental()
 		incrCode = true
 	}
 	incrElem.each(function(s, elem) {
-		$(elem).css('visibility', 'hidden');
+		$(elem).hide()
 	})
 }
 
@@ -279,9 +275,9 @@ function nextStep()
 	} else {
 		elem = incrElem.eq(incrCurr)
 		if (incrCode && elem.hasClass('command')) {
-			incrElem.eq(incrCurr).css('visibility', 'visible').jTypeWriter({duration:1.0})
+			incrElem.eq(incrCurr).show().jTypeWriter({duration:1.0})
 		} else {
-			incrElem.eq(incrCurr).css('visibility', 'visible')
+			incrElem.eq(incrCurr).show()
 		}
 		incrCurr++
 	}
@@ -309,22 +305,6 @@ function toggleNotes()
 	}
 }
 
-function executeAnyCode()
-{
-  var $jsCode = $('.execute .sh_javascript code:visible')
-  if ($jsCode.length > 0) {
-      executeCode.call($jsCode);
-  }
-  var $rubyCode = $('.execute .sh_ruby code:visible')
-  if ($rubyCode.length > 0) {
-      executeRuby.call($rubyCode);
-  }
-  var $coffeeCode = $('.execute .sh_coffeescript code:visible')
-  if ($coffeeCode.length > 0) {
-      executeCoffee.call($coffeeCode);
-  } 
-}
-
 function debug(data)
 {
 	$('#debugInfo').text(data)
@@ -346,7 +326,7 @@ function keyDown(event)
 		return true;
 	}
 
-	if (key == 13) {
+	if (key == 13){
 		if (gotoSlidenum > 0) {
 			debug('go to ' + gotoSlidenum);
 			slidenum = gotoSlidenum - 1;
@@ -354,8 +334,9 @@ function keyDown(event)
 			gotoSlidenum = 0;
 		} else {
 			debug('executeCode');
-			executeAnyCode();
+			executeCode.call($('.sh_javaScript code:visible'));
 		}
+
 	}
 
 
@@ -363,14 +344,10 @@ function keyDown(event)
 	{
 		shiftKeyActive = true;
 	}
-
 	if (key == 32) // space bar
 	{
-		if (shiftKeyActive) {
-			prevStep()
-		} else {
-			nextStep()
-		}
+		if (shiftKeyActive) { prevStep() }
+		else				{ nextStep() }
 	}
 	else if (key == 68) // 'd' for debug
 	{
@@ -396,7 +373,7 @@ function keyDown(event)
 	{
 		$('#navmenu').toggle().trigger('click')
 	}
-	else if (key == 90 || key == 191) // z or ? for help
+	else if (key == 90) // z for help
 	{
 		$('#help').toggle()
 	}
@@ -414,7 +391,7 @@ function keyDown(event)
 	}
 	else if (key == 80) // 'p' for preshow
 	{
-		togglePreShow();
+		runPreShow();
 	}
 	return true
 }
@@ -433,12 +410,13 @@ function keyUp(event) {
 	}
 }
 
+
 function swipeLeft() {
-  nextStep();
+	nextStep()
 }
 
 function swipeRight() {
-  prevStep();
+	prevStep()
 }
 
 function ListMenu(s)
@@ -505,29 +483,8 @@ function executeCode () {
 	setTimeout(function() { codeDiv.removeClass("executing");}, 250 );
 	if (result != null) print(result);
 }
-$('.execute .sh_javascript code').live("click", executeCode);
+$('.sh_javaScript code').live("click", executeCode);
 
-function executeRuby () {
-	var codeDiv = $(this);
-	codeDiv.addClass("executing");
-    $.get('/eval_ruby', {code: codeDiv.text()}, function(result) {
-        if (result != null) print(result);
-        codeDiv.removeClass("executing");
-    });
-}
-$('.execute .sh_ruby code').live("click", executeRuby);
-
-function executeCoffee() {
-	result = null;
-	var codeDiv = $(this);
-	codeDiv.addClass("executing");
-  // Coffeescript encapsulates everything, so result must be attached to window.
-  var code = codeDiv.text() + ';window.result=result;'
-	eval(CoffeeScript.compile(code));
-	setTimeout(function() { codeDiv.removeClass("executing");}, 250 );
-	if (result != null) print(result);
-}
-$('.execute .sh_coffeescript code').live("click", executeCoffee);
 
 /********************
  PreShow Code
@@ -541,9 +498,9 @@ var preshow_timerRunning = false;
 var preshow_current = 0;
 var preshow_images;
 var preshow_imagesTotal = 0;
-var preshow_des = null;
+var preshow_des;
 
-function togglePreShow() {
+function runPreShow() {
 	if(preshow_running) {
 		stopPreShow()
 	} else {
@@ -597,7 +554,7 @@ function startPreShow() {
 function addPreShowTips() {
 	time = secondsToTime(preshow_secondsLeft)
 	$('#preshow_timer').text(time + ' to go-time')
-	var des = preshow_des && preshow_des[tmpImg.attr("ref")]
+	var des = preshow_des[tmpImg.attr("ref")]
 	if(des) {
 		$('#tips').show()
 		$('#tips').text(des)

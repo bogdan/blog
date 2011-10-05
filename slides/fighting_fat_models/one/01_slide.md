@@ -9,8 +9,7 @@
 
 ## Bogdan G.
 
-* is 7 years in IT
-* is 3 years with Ruby and Rails
+* is 7 years in IT, 3 years with Ruby and Rails
 * Contributed to:
   * Rails 
     * wait for my features in 3.2
@@ -19,9 +18,8 @@
   * Resque and about 5-7 plugins
     * Knows something about high load
   * Many others
-    * Write missing features
-    * Fixes all bugs along the way
-* Created
+
+* Created:
   * datagrid - 180+ watchers
   * js-routes - 100+ watcher
 
@@ -167,6 +165,18 @@ Have the following benefits:
 * Reduce number of conventions
 * Suites to common knowledge - nothing more than Rails
 
+!SLIDE 
+
+##Hooks in models
+
+We create default behavior and our data is safe.
+
+Example: Comment can not be created without notification.
+
+    @@@ ruby
+    class Comment < AR::Base
+      after_create :send_comment_notification
+    end
 
 !SLIDE 
 
@@ -184,22 +194,10 @@ Model sends it's events to observer automatically and observer is calling a hook
 * *+* Model doesn't depend on the notification code
 * **-** Some folks say: "Observers Not done well in Rails"
 
-!SLIDE 
-
-##Hooks in models
-
-We create default behavior and our data is safe.
-
-Example: Comment can not be created without notification.
-
-    @@@ ruby
-    class Comment < AR::Base
-      after_create :send_comment_notification
-    end
 
 !SLIDE 
 
-## Comparation with Service
+## API comparation
 
     @@@ ruby
     Comment.create
