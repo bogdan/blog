@@ -1,5 +1,5 @@
 !SLIDE 
-# Fighting fat models
+# Fighting with fat models
 ##### and many other problems
 ## Bogdan Gusiev
 ### September 2011
