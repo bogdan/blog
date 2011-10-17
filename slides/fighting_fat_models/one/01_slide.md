@@ -197,7 +197,7 @@ Model sends it's events to observer automatically and observer is calling a hook
 
 !SLIDE 
 
-## API comparation
+## API comparision
 
     @@@ ruby
     Comment.create
