@@ -75,20 +75,20 @@
 
 <div id="slides" class="offscreen" style="display:none;">
 <div class="slide" data-transition="none"><div class="content" ref="one/01_slide/1">
-<h1>Fighting fat models</h1>
+<h1>Fighting with fat models</h1>
 
 <h5>and many other problems</h5>
 
 <h2>Bogdan Gusiev</h2>
 
-<h3>September 2011</h3></div>
+<h3>September 2011</h3>
+</div>
 </div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/2">
 <h2>Bogdan G.</h2>
 
 <ul>
-<li>is 7 years in IT</li>
-<li>is 3 years with Ruby and Rails</li>
-<li>Contributed to:
+<li>is 7 years in IT, 3 years with Ruby and Rails</li>
+<li><p>Contributed to:</p>
 
 <ul>
 <li>Rails
@@ -105,43 +105,20 @@
 <li>Knows something about high load</li>
 </ul>
 </li>
-<li>Many others
+<li>Many others</li>
+</ul>
+</li>
+<li><p>Created:</p>
 
 <ul>
-<li>Write missing features</li>
-<li>Fixes all bugs along the way</li>
+<li><a href="http://github.com/bogdan/datagrid">datagrid</a> - 180+ watchers</li>
+<li><a href="http://github.com/railsware/js-routes">js-routes</a> - 100+ watchers</li>
 </ul>
 </li>
 </ul>
-</li>
-<li>Created
 
-<ul>
-<li>datagrid - 180+ watchers</li>
-<li>js-routes - 100+ watcher</li>
-</ul>
-</li>
-</ul>
 </div>
 </div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/3">
-<h2>Scope of this presentation</h2>
-
-<p><em>Scope</em>:</p>
-
-<ul>
-<li>Create</li>
-<li>Update</li>
-<li>Delete</li>
-</ul>
-
-
-<p><strong>Not the scope</strong>:</p>
-
-<ul>
-<li>Select</li>
-</ul>
-</div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/4">
 <h5>Why the problem appear?</h5>
 
 <h4>All business logic code goes to <em>model by default</em>.</h4>
@@ -158,8 +135,21 @@
 
 <h5>Why it should not be in <strong>view</strong>?</h5>
 
-<h4>Many reasons</h4></div>
+<h4>Many reasons</h4>
+</div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/4">
+<h1><strong>250 Lines of code</strong></h1>
+</div>
 </div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/5">
+<h2>Scope of this presentation</h2>
+
+<h1><em>Update</em></h1>
+
+<h2>but not:</h2>
+
+<h1><strong>Select</strong></h1>
+</div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/6">
 <h2>Existing techniques</h2>
 
 <ul>
@@ -184,18 +174,28 @@
 </ul>
 
 
-<p>The problem is to <strong>understand</strong> which one <em>fit best</em> for you.</p></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/6">
+<p>The problem is to <strong>understand</strong> which one <em>fit best</em> for you.</p>
+</div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/7">
 <h2>What do we expect?</h2>
+
+<p>Standard:</p>
 
 <ul>
 <li><em>Agile</em> process</li>
 <li><em>Reusability</em> of the code</li>
 <li>Easy to <em>test</em></li>
+</ul>
+
+
+<p>Specific:</p>
+
+<ul>
 <li>Make the data  <strong>safe</strong></li>
 </ul>
+
 </div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/7">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/8">
 <h3>The need of Services</h3>
 
 <h5>When amount of utils that supports Model goes higher</h5>
@@ -208,8 +208,9 @@ User.create_from_facebook
 # to
 UserService.create_from_facebook
 # or
-FacebookService.create_user</code></pre></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/8">
+FacebookService.create_user</code></pre>
+</div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/9">
 <h2>Services</h2>
 
 <p>The most common way to extract logic from model is create a service.</p>
@@ -217,18 +218,20 @@ FacebookService.create_user</code></pre></div>
 <p>Service is separated utility class.</p>
 
 <pre class="sh_ruby"><code>module CommentService
-  def create(attributes)
+  def self.create(attributes)
     comment = Comment.create!(attributes)
     deliver_notification(comment)
   end
 end</code></pre>
 
-<h4>"&#x42F; &#x437;&#x43D;&#x430;&#x44E; &#x43E;&#x442;&#x43A;&#x443;&#x434;&#x430; &#x447;&#x442;&#x43E; &#x431;&#x435;&#x440;&#x435;&#x442;&#x441;&#x44F;"</h4></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/9">
+<h4>"&#x42F; &#x437;&#x43D;&#x430;&#x44E; &#x43E;&#x442;&#x43A;&#x443;&#x434;&#x430; &#x447;&#x442;&#x43E; &#x431;&#x435;&#x440;&#x435;&#x442;&#x441;&#x44F;"</h4>
+</div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/10">
 <h4>The problem of services</h4>
 
-<h3>Services <strong>don't</strong> provide <em>default behavior</em></h3></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/10">
+<h3>Services <strong>don't</strong> provide <em>default behavior</em></h3>
+</div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/11">
 <h2>Need of Default Behavior</h2>
 
 <p>Object should incapsulate behavior:</p>
@@ -259,8 +262,9 @@ end</code></pre>
 </ul>
 
 
-<p>(Circles here)</p></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/11">
+<p>(Circles here)</p>
+</div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/12">
 <h4>What is a model?</h4>
 
 <h3>The model is an imitation of real object</h3>
@@ -269,8 +273,9 @@ end</code></pre>
 
 <h3>that we are focused on.</h3>
 
-<h5>Wikipedia</h5></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/12">
+<h5>Wikipedia</h5>
+</div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/13">
 <h2>Implementation</h2>
 
 <p>Using builtin Rails code:</p>
@@ -287,8 +292,20 @@ end</code></pre>
 <li>Reduce number of conventions</li>
 <li>Suites to common knowledge - nothing more than Rails</li>
 </ul>
+
 </div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/13">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/14">
+<h2>Hooks in models</h2>
+
+<p>We create default behavior and our data is safe.</p>
+
+<p>Example: Comment can not be created without notification.</p>
+
+<pre class="sh_ruby"><code>class Comment &lt; AR::Base
+  after_create :send_comment_notification
+end</code></pre>
+</div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/15">
 <h2>Observers</h2>
 
 <p>Model sends it's events to observer automatically and observer is calling a hook.</p>
@@ -303,19 +320,10 @@ end</code></pre>
 <li><em>+</em> Model doesn't depend on the notification code</li>
 <li><strong>-</strong> Some folks say: "Observers Not done well in Rails"</li>
 </ul>
+
 </div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/14">
-<h2>Hooks in models</h2>
-
-<p>We create default behavior and our data is safe.</p>
-
-<p>Example: Comment can not be created without notification.</p>
-
-<pre class="sh_ruby"><code>class Comment &lt; AR::Base
-  after_create :send_comment_notification
-end</code></pre></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/15">
-<h2>Comparation with Service</h2>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/16">
+<h2>API comparision</h2>
 
 <pre class="sh_ruby"><code>Comment.create
 # or
@@ -323,21 +331,23 @@ CommentService.create</code></pre>
 
 <h4>Reimplement other person's API</h4>
 
-<h4>has more wisdom than invent new one.</h4></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/16">
+<h4>has more wisdom than invent new one.</h4>
+</div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/17">
 <h2><strong>Edge cases</strong></h2>
 
 <h3>In all cases data created in regular way</h3>
 
-<h3>In one edge cases special rules applied</h3></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/17">
+<h3>In one edge cases special rules applied</h3>
+</div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/18">
 <h2>Service with options</h2>
 
 <p>Plan A:</p>
 
 <pre class="sh_ruby"><code>module CommentService
-  def create_with_notification(attributes)
-  def create(attributes)
+  def self.create_with_notification(attributes)
+  def self.create(attributes)
 end</code></pre>
 
 <p>Maintenance problems:</p>
@@ -346,22 +356,29 @@ end</code></pre>
 <li>Hard to keep all team informed about all services in the App</li>
 <li>Hard to support as number of options goes higher</li>
 </ul>
+
 </div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/18">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/19">
 <h2>Services with options</h2>
 
 <p>Plan B:</p>
 
 <pre class="sh_ruby"><code>module CommentService
-  def create(attributes, skip_notification = false)
+  def self.create(attributes, skip_notification = false)
 end</code></pre>
 
 <ul>
 <li>Method will be a <strong>mess</strong> as number of options goes higher.</li>
-<li>Don't respect functional paradigm</li>
+<li>Don't respect functional paradigm
+
+<ul>
+<li>As many functions as possible</li>
 </ul>
+</li>
+</ul>
+
 </div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/19">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/20">
 <h2><em>Default behavior</em> and <strong>edge cases</strong></h2>
 
 <p>The property of default behavior in this example:</p>
@@ -386,8 +403,9 @@ end</code></pre>
 </ul>
 </li>
 </ul>
+
 </div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/20">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/21">
 <h2>Observers with option</h2>
 
 <pre class="sh_ruby"><code>
@@ -412,8 +430,9 @@ end</code></pre>
 <li>Have some problems with testing</li>
 <li>Makes the app more fragmented</li>
 </ul>
+
 </div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/21">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/22">
 <h3>Support parameter in model</h3>
 
 <pre class="sh_ruby"><code>class Comment &lt; AR::Base
@@ -425,38 +444,53 @@ end</code></pre>
   end
 end</code></pre>
 
-<p><code>#skip_comment_notification</code> is used only in edge cases.</p></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/22">
+<p><code>#skip_comment_notification</code> is used only in edge cases.</p>
+</div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/23">
 <h3>Observers are effective when</h3>
 
 <h2><strong>no direct access</strong> to <em>observed class</em></h2>
 
 <h4>Example: when it is part of some library inside</h4>
 
-<h4>a fat enterprise project</h4></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/23">
+<h4>a fat enterprise project</h4>
+</div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/24">
+<h2>Observer &lt;=&gt; Trait</h2>
+
+<h3>conversion is <em>cheap</em></h3>
+</div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/25">
 <h3>Model stands for <em>should</em></h3>
 
 <h3>Service stands for <em>could</em></h3>
 
-<h3>Observer stands for <strong>big fat enterprise</strong></h3></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/24">
+<h3>Observer stands for <strong>big fat enterprise</strong></h3>
+</div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/26">
 <h2>The model is still <strong>fat</strong>.</h2>
 
-<h2>What to do?</h2></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/25">
+<h2>What to do?</h2>
+</div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/27">
 <h2>Use traits</h2>
 
 <pre class="sh_ruby"><code>class Comment &lt; AR::Base
   include Traits::Comment::Notification
 end</code></pre>
 
-<p><code>Notification</code> module encapsulates a feature</p></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/26">
-<h2>Traits is <em>Vertical slicing</em></h2>
+<p><code>Notification</code> module encapsulates a feature</p>
+</div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/28">
+<h3><em>Vertical slicing</em> stands for</h3>
 
-<h4>Unlike MVC which is horizontal slicing.</h4></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/27">
+<h2>Split things by features</h2>
+
+<h2>but not by objects</h2>
+
+<h4><strong>Unlike MVC</strong> which is horizontal slicing.</h4>
+</div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/29">
 <h3>Vertical slicing</h3>
 
 <p>Split model into <em>Traits</em></p>
@@ -478,8 +512,9 @@ module CanBeDisabled
   scope :enabled
   def disable!
   def disabled?
-end</code></pre></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/28">
+end</code></pre>
+</div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/30">
 <h3>Basic application architecture</h3>
 
 <table>
@@ -500,8 +535,9 @@ end</code></pre></div>
 </tr>
 
 </table>
+
 </div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/29">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/31">
 <h2>This is OOP</h2>
 
 <p>Traits include all staff that can be defined in model</p>
@@ -512,11 +548,12 @@ end</code></pre></div>
 <li>Validation</li>
 <li>Callbacks</li>
 </ul>
-</div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/30">
-<h3>How to do it?</h3>
 
-<p>Lets split Model code into groups by:</p>
+</div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/32">
+<h3>Dependencies appear</h3>
+
+<p>As number of traits grow:</p>
 
 <ul>
 <li>associations</li>
@@ -526,7 +563,7 @@ end</code></pre></div>
 
 <h4>Dependency tree</h4>
 
-<p><img src="file:///home/bogdan/makabu/my/blog/slides/fighting_fat_models/one/./file/model_dependency.png" width="442" height="320" alt="Model dependency"/></p>
+<p><img src="file:///home/bogdan/makabu/my/blog/slides/fighting_fat_models/one/./file/model_dependency.png" alt="Model dependency"/></p>
 
 <!--<table>-->
 
@@ -585,8 +622,9 @@ end</code></pre></div>
 
 
 <!--</table>-->
+
 </div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/31">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/33">
 <h2>Associations and Traits</h2>
 
 <p>Associations is a base for Traits technique.</p>
@@ -605,14 +643,16 @@ end</code></pre></div>
 </ul>
 </li>
 </ul>
+
 </div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/32">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/34">
 <h4>How to not get lost?</h4>
 
 <h2>If <em>A</em> depends on <em>B</em></h2>
 
-<h2>then <strong>B</strong> should not depend on <strong>A</strong></h2></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/33">
+<h2>then <strong>B</strong> should not depend on <strong>A</strong></h2>
+</div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/35">
 <h2>Traits best practices</h2>
 
 <ul>
@@ -643,8 +683,9 @@ end</code></pre></div>
 </ul>
 </li>
 </ul>
+
 </div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/34">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/36">
 <h2>Libraries using traits</h2>
 
 <ul>
@@ -655,10 +696,13 @@ end</code></pre></div>
 </ul>
 
 
-<h5>If it is <em>possible</em> for such a <strong>complicated library</strong></h5>
+<!--##### If it is *possible* for such a **complicated library** -->
 
-<h5>then it is <strong>easy</strong> for <em>regular projects</em></h5></div>
-</div><div class="slide" data-transition="none"><div class="content invisible" ref="one/01_slide/35">
+
+<!--##### then it is **easy** for *regular projects*-->
+
+</div>
+</div><div class="slide" data-transition="none"><div class="content invisible" ref="one/01_slide/37">
 <h3>Enterprise world</h3>
 
 <p><em>Agile</em> projects are <em>well focused</em></p>
@@ -672,8 +716,9 @@ end</code></pre></div>
 <li>More complicated data structure</li>
 <li>More significant updates</li>
 </ul>
+
 </div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/36">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/38">
 <h2><em>Flow</em> nature and <em>Event</em> nature</h2>
 
 <p>Service has flow nature:</p>
@@ -710,47 +755,57 @@ end</code></pre></div>
 </ul>
 </li>
 </ul>
+
 </div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/37">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/39">
 <h2>Super advanced logic infrastructure</h2>
 
-<p><img src="file:///home/bogdan/makabu/my/blog/slides/fighting_fat_models/one/./file/architechture.png" width="789" height="458" alt="Architecture"/></p></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/38">
+<p><img src="file:///home/bogdan/makabu/my/blog/slides/fighting_fat_models/one/./file/architechture.png" alt="Architecture"/></p>
+</div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/40">
 <h3>There is only one 100% reason</h3>
 
-<h3>when this can be broken.</h3></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/39">
+<h3>when this can be broken.</h3>
+</div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/41">
 <h3>Of course this is</h3>
 
 <h2>Perfomance</h2>
 
-<h4>Others are doubtful</h4></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/40">
-<h1>Summary</h1></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/41">
+<h4>Others are doubtful</h4>
+</div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/42">
+<h1>Summary</h1>
+</div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/43">
 <h3><em>Could?</em>  =&gt; <strong>Service</strong></h3>
 
-<h3><em>Should?</em> =&gt; <strong>Model</strong></h3></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/42">
+<h3><em>Should?</em> =&gt; <strong>Model</strong></h3>
+</div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/44">
 <h2><strong>Fat</strong> models =&gt; <em>Thin</em> Traits</h2>
 
-<h4>and sometimes observers</h4></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/43">
+<h4>and sometimes observers</h4>
+</div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/45">
 <h3><em>Reimplement</em> other person's API</h3>
 
-<h3>has more wisdom than <strong>invent new</strong> one.</h3></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/44">
+<h3>has more wisdom than <strong>invent new</strong> one.</h3>
+</div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/46">
 <h3>If <em>A</em> depends on <em>B</em></h3>
 
-<h3>then <strong>B</strong> should not depend on <strong>A</strong></h3></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/45">
+<h3>then <strong>B</strong> should not depend on <strong>A</strong></h3>
+</div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/47">
 <h3>The <strong>End</strong></h3>
 
 <h4>Thanks for <em>watching</em></h4>
 
 <h5><a href="http://gusiev.com">http://gusiev.com</a></h5>
 
-<h5><a href="https://github.com/bogdan">https://github.com/bogdan</a></h5></div>
+<h5><a href="https://github.com/bogdan">https://github.com/bogdan</a></h5>
+</div>
 </div></div>
 
 </body>

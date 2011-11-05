@@ -20,22 +20,8 @@
   * Many others
 
 * Created:
-  * datagrid - 180+ watchers
-  * js-routes - 100+ watcher
-
-!SLIDE 
-
-## Scope of this presentation
-
-*Scope*:
-
-* Create
-* Update 
-* Delete
-
-**Not the scope**:
-
-* Select
+  * [datagrid](http://github.com/bogdan/datagrid) - 180+ watchers
+  * [js-routes](http://github.com/railsware/js-routes) - 100+ watchers
 
 
 !SLIDE 
@@ -59,6 +45,23 @@
 
 !SLIDE 
 
+
+# **250 Lines of code**
+
+!SLIDE 
+
+## Scope of this presentation
+
+# *Update*
+
+## but not:
+
+# **Select**
+
+
+
+!SLIDE 
+
 ## Existing techniques
 
 * Services 
@@ -76,9 +79,15 @@ The problem is to **understand** which one *fit best* for you.
 
 ## What do we expect?
 
+Standard:
+
 * *Agile* process
 * *Reusability* of the code
 * Easy to *test*
+
+
+Specific:
+
 * Make the data  **safe**
 
 
@@ -108,7 +117,7 @@ Service is separated utility class.
 
     @@@ ruby
     module CommentService
-      def create(attributes)
+      def self.create(attributes)
         comment = Comment.create!(attributes)
         deliver_notification(comment)
       end
@@ -222,8 +231,8 @@ Plan A:
 
     @@@ ruby
     module CommentService
-      def create_with_notification(attributes)
-      def create(attributes)
+      def self.create_with_notification(attributes)
+      def self.create(attributes)
     end
 
 Maintenance problems:
@@ -239,11 +248,12 @@ Plan B:
 
     @@@ ruby
     module CommentService
-      def create(attributes, skip_notification = false)
+      def self.create(attributes, skip_notification = false)
     end
 
 * Method will be a **mess** as number of options goes higher.
 * Don't respect functional paradigm
+  * As many functions as possible
 
 
 !SLIDE 
@@ -312,6 +322,11 @@ The property of default behavior in this example:
 
 !SLIDE 
 
+## Observer <=> Trait
+### conversion is *cheap*
+
+!SLIDE 
+
 
 ###Model stands for *should*
 
@@ -335,8 +350,13 @@ The property of default behavior in this example:
 `Notification` module encapsulates a feature
 
 !SLIDE 
-## Traits is *Vertical slicing* 
-#### Unlike MVC which is horizontal slicing.
+### *Vertical slicing* stands for
+
+## Split things by features 
+## but not by objects
+
+
+#### **Unlike MVC** which is horizontal slicing.
 
 
 !SLIDE 
@@ -410,9 +430,9 @@ Traits include all staff that can be defined in model
 !SLIDE
 
 
-### How to do it?
+### Dependencies appear
 
-Lets split Model code into groups by:
+As number of traits grow:
 
 * associations
 * attributes
@@ -489,8 +509,8 @@ Associations is a base for Traits technique.
 * Devise
 * Datagrid
 
-##### If it is *possible* for such a **complicated library** 
-##### then it is **easy** for *regular projects*
+<!--##### If it is *possible* for such a **complicated library** -->
+<!--##### then it is **easy** for *regular projects*-->
 
 
 !SLIDE invisible
