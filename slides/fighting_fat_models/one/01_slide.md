@@ -50,7 +50,6 @@
 
 !SLIDE 
 
-## Scope of this presentation
 
 # *Update*
 
@@ -81,13 +80,14 @@ The problem is to **understand** which one *fit best* for you.
 
 Standard:
 
-* *Agile* process
-* *Reusability* of the code
+* *Agile*
+* *Reusable* 
 * Easy to *test*
 
 
 Specific:
 
+* *MORE* FEATURES PER SECOND
 * Make the data  **safe**
 
 
@@ -144,8 +144,6 @@ Object should incapsulate behavior:
   * Set of rules that model should fit to exist in real world
     * Comment should deliver email notification
 
-
- 
 
 (Circles here)
 
@@ -283,15 +281,15 @@ The property of default behavior in this example:
 
     class CommentObserver < AR::Observer
       def after_create(comment)
-        unless comment.skip_comment_notification
-          ...
+        deliver_notification(comment) \
+          unless comment.skip_comment_notification
       end
     end
 
 * Hard to access to model internals
   * Some observer code stays in model
 * Have some problems with testing
-* Makes the app more fragmented
+* Makes feature code more fragmented
 
 !SLIDE 
 ### Support parameter in model
@@ -300,10 +298,9 @@ The property of default behavior in this example:
     @@@ ruby
     class Comment < AR::Base
       attr_accessor :skip_comment_notification
-      def after_create
-        unless self.skip_comment_notification
-          send_comment_notification
-        end
+      after_create do
+        send_comment_notification \
+          unless self.skip_comment_notification
       end
     end
 
@@ -415,15 +412,7 @@ Split model into *Traits*
 
 ## This is OOP
 
-Traits include all staff that can be defined in model
-
-* Scopes
-* Associations
-* Validation
-* Callbacks
-
-
-
+### Traits include all staff that can be defined in model
 
 
 
@@ -497,9 +486,6 @@ Associations is a base for Traits technique.
   * "name", "subject", "title" => select one
   * "disabled", "inactive", "deleted" => select one
 
-
-  
-
 !SLIDE 
 
 ## Libraries using traits
@@ -512,21 +498,6 @@ Associations is a base for Traits technique.
 <!--##### If it is *possible* for such a **complicated library** -->
 <!--##### then it is **easy** for *regular projects*-->
 
-
-!SLIDE invisible
-
-### Enterprise world
-
-
-*Agile* projects are *well focused*
-
-**Enterprise** apps use to **do everything**.
-
-That is why:
-
-* More huge web forms
-* More complicated data structure 
-* More significant updates
 
 !SLIDE 
 
