@@ -1,4 +1,6 @@
 require 'rubygems'
+require 'bundler'
+Bundler.setup
 require 'jekyll'
 require "fileutils"
 require "sass/plugin"
