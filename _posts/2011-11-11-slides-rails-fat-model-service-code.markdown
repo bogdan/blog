@@ -1,7 +1,6 @@
 --- 
 layout: post
 title: 'Slides: Fighting with fat models'
-#published: false
 tags: 
 - model
 - service
