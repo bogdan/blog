@@ -73,8 +73,8 @@ namespace :build do
   end
 end
 
-desc "Upload build to github"
-task :upload => [:build] do
+desc "Deploy build to github hosting"
+task :deploy => [:build] do
   build_git "add ."
   build_git "commit -m 'Build #{DateTime.now.to_s}'"
   build_git "push"
