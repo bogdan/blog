@@ -1,20 +1,20 @@
 ---
 layout: post
-title: 'New Rails Release with a few tiny features from me'
+title: 'New Rails Release with a few features from me'
 tags: 
 - rails
 - changelog
 - contribution
 ---
 
-Upcoming Rails 3.2 release has many tiny but very useful features.
+Upcoming Rails 3.2 release has many very useful features.
 
 Some of them are coming from me:
 
 * ActiveRecord #pluck method
 * Strict validation concept
 * Customizable mass assignment sanitizer behavior
-* Power hacking `select[multiple]` tag
+* Gotcha for `select[multiple]` tag
 
 <!--more-->
 
@@ -36,9 +36,9 @@ Client.uniq.pluck(:role)
 
 ## String validation concept
 
-Some validation are not connected with end user and breaking it is more likely a bug than problem with user input. A few constraints can be embed to DB(like foreign keys), but most of them can not. And I think it's a good idea to use AM validators to do such checks as well.
+Some validation are not connected with end user and breaking it is more likely a bug than problem with user input. A few constraints can be embed to DB(like foreign keys), but most of them can not. And it's a good idea to use AM validators to do such checks as well.
 
-Use case
+Use case:
 
 {% highlight ruby %}
 class User < ARB
@@ -56,7 +56,7 @@ In order to fix that You can use [validate! method](https://github.com/rails/rai
 {% endhighlight %}
 
 
-## Mass Assignment Sanitizer
+## Customizing Mass Assignment Sanitizer
 
 Added an ability to specify [your own behavior on mass assignment protection](https://github.com/rails/rails/commit/aa2639e746d8af5d7673bbbbbccbe868edeb0161), controlled by option: 
 
@@ -64,7 +64,7 @@ Added an ability to specify [your own behavior on mass assignment protection](ht
 ActiveModel::MassAssignmentSecurity.mass_assignment_sanitizer
 {% endhighlight %}
 
-The main idea behind this change is to make Mass Assignment Sanitizer to raise exceptions in development and test environments while leaving logging behavior in production. This will be the [default Rails application template](https://github.com/rails/rails/commit/0fab8c388ea9cfcace0907102697c78a68762be3) in version 3.2.
+The main idea behind this change is to make Mass Assignment Sanitizer to raise exceptions in development and test environments while leaving logging behavior in production. This will be the [default Rails application template](https://github.com/rails/rails/commit/0fab8c388ea9cfcace0907102697c78a68762be3) in version 3.2. It will allow to detect mass assignment protection issues caused by bug in code before they will be deployed to production.
 
 
 ## Power hacking select\[multiple\]

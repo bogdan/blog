@@ -18,7 +18,7 @@ Datagrid is a Ruby on Rails plugin that helps you to build and [represent table-
 * Localization
 * Export to CSV
 
-New version has some notable improvements.
+Here are some major features from new release.
 <!--more-->
 
 ### Mongoid support
@@ -38,10 +38,10 @@ column(:completed, :html => true) { |asset| asset.completed? ? image_tag("green.
 column(:actions, :html => true) { |asset| render :partial => "admin/assets/actions", :object => asset }
 {% endhighlight %}
 
-Note that in this case html column won't appear in CSV export.
 
 ### Table customization with Rails Engines
 
+Rails Engines allows you to embed views into Rails plugins and make them customizable.
 If You need serious customization of datagrid `<table>` and HTML Columns doesn't help, you can customize datagrid internal views by running:
 
 {% highlight sh %}
