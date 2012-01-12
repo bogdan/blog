@@ -47,7 +47,7 @@ If You need serious customization of datagrid `<table>` and HTML Columns doesn't
 {% highlight sh %}
 rake datagrid:copy_partials
 {% endhighlight %}
-This will create the following files in your rails root directory:
+This will create the following files in your Rails root directory:
 
 <pre>
 <code>
