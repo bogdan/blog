@@ -83,7 +83,6 @@ end
 desc 'Generate tags page'
 task :tags do
 
-
   FileUtils.mkdir_p("tags")
   site.tags.sort.each do |tag, posts|
     html = ''
@@ -99,7 +98,9 @@ title: Posts tagged "#{tag}"
     posts.each do |post|
       post_data = post.to_liquid
       html << <<-HTML
-        <li><a href="#{post.url}">#{post_data['title']}</a></li>
+        <li>
+          <a href="#{post.url}">#{post_data['title']}</a> - #{post_data["date"].strftime("%d %b %Y")}
+        </li>
       HTML
     end
     html << '</ul>'
