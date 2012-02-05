@@ -95,7 +95,9 @@ title: Posts tagged "#{tag}"
     HTML
 
     html << '<ul class="posts">'
-    posts.each do |post|
+    posts.sort_by do |post|
+      post_data = post.to_liquid["date"]
+    end.reverse_each do |post|
       post_data = post.to_liquid
       html << <<-HTML
         <li>
