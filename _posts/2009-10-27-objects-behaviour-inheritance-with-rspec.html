@@ -1,4 +1,4 @@
---- 
+---
 layout: post
 title: Objects behaviour inheritance with RSpec
 tags: 
@@ -11,7 +11,7 @@ tags:
 About half of a year ago I was writing about <a href="http://gusiev.com/2009/05/what-do-you-expect-from-interface/">object interface and Liskov Substitution Princeple</a>. In short: Any class instance that extends the base class should pass all <span style="text-decoration: line-through;">unit tests</span> behaviour tests written for base class instance. It was a surprise for me that this concept has already been implemented in RSpec.<br/><br/>
 
 <!--more-->
-My previous article was primary inspired by Java programming language and it's interface concept. Unlike Java, Ruby does not have interfaces, but behaviour inheritance is still actual for both languages. RSpec seems the first testing framework that provide the ability to validate LSP and behavior inheritance with 'it_should_behave_like'. <br/>
+My previous article was primary inspired by Java programming language and it's interface concept. Unlike Java, Ruby does not have interfaces, but behaviour inheritance is still actual for both languages. RSpec seems the first testing framework that provide the ability to validate LSP and behavior inheritance with <code>it_should_behave_like</code>. <br/>
 With Ruby modules(mixins) feature we can build reusable code and include it in different classes<a href="http://ruby-doc.org/core/classes/Module.html">(read more)</a>. With RSpec we can bundle the tests as well.<br/>
 
 <br/>
