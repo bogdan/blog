@@ -8,8 +8,7 @@ tags:
 - contribution
 ---
 
-
-Upcoming Rails 3.2 release has many very useful features.
+Upcoming Rails 3.2 release has many useful features.
 
 Some of them are coming from me:
 
@@ -17,6 +16,8 @@ Some of them are coming from me:
 * Strict validation concept
 * Customizable mass assignment sanitizer behavior
 * Gotcha for `select[multiple]` tag
+
+Here is a more detailed description than in the [Changelog](https://gist.github.com/1472145).
 
 <!--more-->
 
@@ -46,6 +47,9 @@ Use case:
 class Article < AR::B
   validates :author, :presence => true
 end
+
+u = Article.new
+u.save # => false
 {% endhighlight %}
 
 `#author` is usually set in controller from `current_user`. If somebody forgets to do it - user see error: 
@@ -56,7 +60,12 @@ More over DEV team is not notified about the problem.
 In order to fix that You can use [validate! method](https://github.com/rails/rails/commit/8620bf90c5e486e1ec44b9aabb63f8c848668ed2) that generates validator that always raises exception when fails:
 
 {% highlight ruby %}
+class User < AR::Base
   validates! :author, :presence => true
+end
+
+u = User.new
+u.save # raises ActiveModel::StrictValidationFailed
 {% endhighlight %}
 
 
