@@ -8,6 +8,7 @@ tags:
 - contribution
 ---
 
+
 Upcoming Rails 3.2 release has many very useful features.
 
 Some of them are coming from me:
@@ -35,20 +36,22 @@ Client.uniq.pluck(:role)
 
 [Pluck in Rails guides](http://edgeguides.rubyonrails.org/active_record_querying.html#pluck)
 
-## String validation concept
+## Strict validation concept
 
 Some validation are not connected with end user and breaking it is more likely a bug than problem with user input. A few constraints can be embed to DB(like foreign keys), but most of them can not. And it's a good idea to use AM validators to do such checks as well.
 
 Use case:
 
 {% highlight ruby %}
-class User < ARB
-  validates_presence_of :author
+class Article < AR::B
+  validates :author, :presence => true
 end
 {% endhighlight %}
 
 `#author` is usually set in controller from `current_user`. If somebody forgets to do it - user see error: 
-`Author cann't be blank` That he can not correct. More over DEV team is not notified about the problem.
+`Author cann't be blank`. 
+And it is not right to show error message to user that he is not able to fix.
+More over DEV team is not notified about the problem.
 
 In order to fix that You can use [validate! method](https://github.com/rails/rails/commit/8620bf90c5e486e1ec44b9aabb63f8c848668ed2) that generates validator that always raises exception when fails:
 
@@ -65,7 +68,7 @@ Added an ability to specify [your own behavior on mass assignment protection](ht
 ActiveModel::MassAssignmentSecurity.mass_assignment_sanitizer
 {% endhighlight %}
 
-The main idea behind this change is to make Mass Assignment Sanitizer to raise exceptions in development and test environments while leaving logging behavior in production. This will be the [default Rails application template](https://github.com/rails/rails/commit/0fab8c388ea9cfcace0907102697c78a68762be3) in version 3.2. It will allow to detect mass assignment protection issues caused by bug in code before they will be deployed to production.
+The main idea behind this change is to make Mass Assignment Sanitizer to raise exceptions in development and test environments while leaving logging behavior in production. This will be the [default Rails application template](https://github.com/rails/rails/commit/0fab8c388ea9cfcace0907102697c78a68762be3) in version 3.2. It will allow to detect mass assignment protection issues caused by bug in code more effectively before they will be deployed to production.
 
 
 ## Power hacking select\[multiple\]
@@ -102,3 +105,9 @@ the deselected multiple select box), or both fields. Since the HTML specificatio
 says key/value pairs have to be sent in the same order they appear in the
 form, and parameters extraction gets the last occurrence of any repeated
 key in the query string, that works for ordinary forms.
+
+Unfortunately this trick can introduce a side effects described well in this [stackoverflow question](http://stackoverflow.com/questions/8929230/why-is-the-first-element-always-blank-in-my-rails-multi-select-using-an-embedde).
+If you know an effective way to fix that - let me know.
+
+
+#### Have fun with upgrading
