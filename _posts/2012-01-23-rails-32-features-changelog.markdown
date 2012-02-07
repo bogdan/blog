@@ -1,7 +1,6 @@
 ---
 layout: post
 title: 'New Rails Release with a few features from me'
-published: false
 tags: 
 - rails
 - changelog
