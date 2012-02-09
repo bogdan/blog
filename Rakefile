@@ -75,7 +75,7 @@ end
 
 desc "Deploy build to github hosting"
 task :deploy => [:build] do
-  build_git "add ."
+  build_git "add -A ."
   build_git "commit -m 'Build #{DateTime.now.to_s}'"
   build_git "push"
 end
