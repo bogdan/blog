@@ -4,7 +4,7 @@ OSS
 	js-routes
 		Investigate why Travis build still failing
 	AjaxSubmit
-		Demo
+		Demo Styling
 		Readme
 		Try in interstellar
 	Rails
@@ -15,13 +15,13 @@ OSS
 		Remove subshell on rake spec
 Mailtrap
 	Impetus
+	Video tutorial wit Sergey
 Config
 	Vim
 		Investigate why Rlog doesn't have highlight
 Blog
 	Article about ActiveSupport::Callbacks
 	Article about Ajax Submit
-	Change blog title: How to make good software for people
 	Attract right person?
 
 
