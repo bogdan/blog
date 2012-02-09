@@ -2,17 +2,20 @@ OSS
 	datagrid
 		Resolve problem with HTML and CSV columns
 	js-routes
-		Investigate why Travis build still failing
 	AjaxSubmit
 		Demo Styling
 		Readme
 		Try in interstellar
+		Explore alternatives
+			https://github.com/bcardarella/client_side_validations/
+			Guy from engineyard's validation
 	Rails
 		Remove run_callbacks second argument
 		AM::Errors#to_json: add option to support full messages
 		Decide what to do with select[multiple]
 	Rspec-rails
 		Remove subshell on rake spec
+	Poland conference
 Mailtrap
 	Impetus
 	Video tutorial wit Sergey
