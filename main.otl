@@ -3,7 +3,6 @@ OSS
 		Resolve problem with HTML and CSV columns
 	js-routes
 	AjaxSubmit
-		Demo Styling
 		Readme
 		Try in interstellar
 		Explore alternatives
@@ -16,9 +15,13 @@ OSS
 	Rspec-rails
 		Remove subshell on rake spec
 	Poland conference
+	Vim execute plugin
 Mailtrap
 	Impetus
-	Video tutorial wit Sergey
+	Video tutorial publishing
+	Send users survey
+	Send in 3 days after user registration asking his feedback on a service
+		Make existing users free from it
 Config
 	Vim
 		Investigate why Rlog doesn't have highlight
