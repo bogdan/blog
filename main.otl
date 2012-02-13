@@ -12,16 +12,22 @@ OSS
 		Remove run_callbacks second argument
 		AM::Errors#to_json: add option to support full messages
 		Decide what to do with select[multiple]
+		Investigate erb prod/dev difference with <%= form = form_tag %>
 	Rspec-rails
 		Remove subshell on rake spec
 	Poland conference
 	Vim execute plugin
 Mailtrap
+	Fix IE8
 	Impetus
-	Video tutorial publishing
 	Send users survey
 	Send in 3 days after user registration asking his feedback on a service
 		Make existing users free from it
+	Video tutorial
+		Publish in gusiev.com
+		Publish in railsware.com
+		PR among registred mailtrap users
+	Setup a schema to notify users about some news
 Config
 	Vim
 		Investigate why Rlog doesn't have highlight
