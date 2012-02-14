@@ -2,6 +2,7 @@ OSS
 	datagrid
 		Resolve problem with HTML and CSV columns
 	js-routes
+		Make pipeline approach the default
 	AjaxSubmit
 		Readme
 		Try in interstellar
@@ -19,9 +20,9 @@ OSS
 Mailtrap
 	Impetus
 	Video tutorial publishing
-	Send users survey
 	Send in 3 days after user registration asking his feedback on a service
 		Make existing users free from it
+	Advertise AjaxSubmit
 Config
 	Vim
 		Investigate why Rlog doesn't have highlight
