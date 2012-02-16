@@ -2,6 +2,7 @@ OSS
 	datagrid
 		Resolve problem with HTML and CSV columns
 	js-routes
+		Make pipeline approach the default
 	AjaxSubmit
 		Readme
 		Try in interstellar
@@ -18,7 +19,6 @@ OSS
 	Poland conference
 	Vim execute plugin
 Mailtrap
-	Fix IE8
 	Impetus
 	Send users survey
 	Send in 3 days after user registration asking his feedback on a service
@@ -28,6 +28,7 @@ Mailtrap
 		Publish in railsware.com
 		PR among registred mailtrap users
 	Setup a schema to notify users about some news
+	Advertise AjaxSubmit
 Config
 	Vim
 		Investigate why Rlog doesn't have highlight
