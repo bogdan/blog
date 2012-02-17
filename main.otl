@@ -2,9 +2,8 @@ OSS
 	datagrid
 		Resolve problem with HTML and CSV columns
 	js-routes
-		Make pipeline approach the default
 	AjaxSubmit
-		Readme
+		Sample CSS
 		Try in interstellar
 		Explore alternatives
 			https://github.com/bcardarella/client_side_validations/
@@ -13,7 +12,6 @@ OSS
 		Remove run_callbacks second argument
 		AM::Errors#to_json: add option to support full messages
 		Decide what to do with select[multiple]
-		Investigate erb prod/dev difference with <%= form = form_tag %>
 	Rspec-rails
 		Remove subshell on rake spec
 	Poland conference
