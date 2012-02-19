@@ -7,21 +7,36 @@ tags:
 - ajax
 - forms
 - validation
+- html
 ---
 
-Web 2.0 world require us build Web Forms with new level of quality. We've got fields that appear dynamically, submit forms via ajax, client side validation and many many other tiny troubles. Sometimes such form makes a real problem comparing to regular Web 1.0 form. Let's call it Forms 2.0. 
+Web 2.0 world force us to build Forms in a new level of quality. AJAX and dynamic HTML changes a way how forms should work internally. Let's call it Forms 2.0. And of course this facts bring a lot of complexity every time we deal with forms. Sometimes such form makes a real problem comparing to regular Web 1.0 form. Here will be a talk how to make Forms 2.0 as simple as Forms 1.0.
 
 <!--more-->
 If you ever find yourself stuck with syncing client and server side validation or bug that form doesn't have some data that was there before submit then you know what I am talking about too.
 
 There are number of visions in the Ruby community on how to solve the problem: some people prefer stay with Forms 1.0. Some people generate JavaScript validators based on ActiveModel validators. Other guys write their own validation in JavaScript and perform it on both client and server side.
 
-The complexity of all these solution goes beyond believe. And here I am going to describe much simpler way of doing it
+The complexity of all these solution goes beyond believe. And here I am going to describe much simpler way of doing it.
 
-What if we pass the validation result as JSON from backend in a simple key:value format like:
+Submit a form with AJAX have never been a problem:
 
 {% highlight js %}
-{email: "Email is not valid", password: "Password is too short"}
+$.ajax({
+  url: $(form).attr('action'),
+  data: $(form).serialize(),
+  type: $(form).attr('method'),
+  success: function () {
+    //do
+  }
+});
+{% endhighlight %}
+
+More over submit with AJAX doesn't require to rerender a page if it was not successfull: less server load and no need to support 'new' and 'edit' mode in HTML template. The real problem we are facing with is Validation.
+And what if we pass the validation result as JSON from backend in a simple key:value format like:
+
+{% highlight js %}
+{email: "is not valid", password: "is too short"}
 {% endhighlight %}
 
 It's fast as wind and easy to implement:
@@ -32,9 +47,9 @@ It's fast as wind and easy to implement:
 * No additional controller action - just modify existing one
 
 
-## Let's do it
+## From Assumptions to Coding
 
-Change the controller to return json instead of HTML:
+As we agreed before controller should return JSON instead of HTML:
 
 {% highlight diff %}
  class UsersController < ApplicationController
@@ -73,20 +88,21 @@ All we need to do after that is just assign errors to the form to the prepared s
 {% endhighlight %}
 
 
-And this job will be done by [AjaxSubmit](https://github.com/bogdan/ajaxsubmit) library:
+All the dirty work can be done by [AjaxSubmit](https://github.com/bogdan/ajaxsubmit) library 
+that implements all the ideas described above:
 
 {% highlight js %}
 $('#new_user').ajaxForm();
 {% endhighlight %}
 
-The main goal reached: Make super modern ajax form is as easy as regular form.
+The main goal reached: Make super modern AJAX form is as easy as regular form.
 If you still can't believe that it is so easy - check out [LIVE demo](http://ajaxsubmit.heroku.com).
 
 
-
-## AjaxSubmit history: Is it flexible?
+## AjaxSubmit: Is it flexible?
 
 AjaxSubmit is a library that has 2 years of experience behind. About 7 different engineers made their contribution during this time.
-Take a look at the [Read Me](https://github.com/bogdan/ajaxsubmit#readme) for more information how to customize it for your needs
+Take a look at the [Read Me](https://github.com/bogdan/ajaxsubmit#readme) for more information about API, callbacks and configuration options.
 
-You can also checkout [Mailtrap](http://mailtrap.io) service where all forms are made with AjaxSubmit. This a perfect example of how your site could look like with this library.
+You can also checkout [Mailtrap](http://mailtrap.io) that is a perfect example of how your site could look like with this library 
+in every web form.
