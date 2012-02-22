@@ -20,15 +20,13 @@ OSS
 	Vim execute plugin
 Mailtrap
 	Impetus
-	Send users survey
-	Send in 3 days after user registration asking his feedback on a service
-		Make existing users free from it
-	Video tutorial
-		Publish in gusiev.com
-		Publish in railsware.com
-		PR among registred mailtrap users
+	Video tutorial rework
+		Voice support
 	Setup a schema to notify users about some news
 	Advertise AjaxSubmit
+	To SI
+		Nice icon for settings
+		Nice styling fo txt/html view switch
 Config
 	Vim
 		Investigate why Rlog doesn't have highlight
