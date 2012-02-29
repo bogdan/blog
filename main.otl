@@ -32,9 +32,12 @@ Mailtrap
 	To SI
 		Nice icon for settings
 		Nice styling of txt/html view switch
+		Long title names
 Configuration
 	Vim
 		Investigate why Rlog doesn't have highlight
+	Skype
+		Investigate with strace
 Blog
 	Article about ActiveSupport::Callbacks
 	Article about Ajax Submit
