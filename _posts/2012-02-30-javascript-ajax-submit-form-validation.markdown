@@ -8,16 +8,14 @@ tags:
 - forms
 - validation
 - html
+- jquery
 ---
 
 Web 2.0 world force us to build Forms in a new level of quality. AJAX and dynamic HTML changes a way how forms should work internally. Let's call it Forms 2.0. And of course this facts bring a lot of complexity every time we deal with forms. Sometimes such form makes a real problem comparing to regular Web 1.0 form. Here will be a talk how to make Forms 2.0 as simple as Forms 1.0.
 
 <!--more-->
-If you ever find yourself stuck with syncing client and server side validation or bug that form doesn't have some data that was there before submit then you know what I am talking about too.
 
-There are number of visions in the Ruby community on how to solve the problem: some people prefer stay with Forms 1.0. Some people generate JavaScript validators based on ActiveModel validators. Other guys write their own validation in JavaScript and perform it on both client and server side.
-
-The complexity of all these solution goes beyond believe. And here I am going to describe much simpler way of doing it.
+## Sumbit with Ajax
 
 Submit a form with AJAX have never been a problem:
 
@@ -32,8 +30,16 @@ $.ajax({
 });
 {% endhighlight %}
 
-More over submit with AJAX doesn't require to rerender a page if it was not successfull: less server load and no need to support 'new' and 'edit' mode in HTML template. The real problem we are facing with is Validation.
-And what if we pass the validation result as JSON from backend in a simple key:value format like:
+More over submit with AJAX doesn't require to rerender a page if it was not successfull: less server load and no need to support 'new' and 'edit' mode in HTML template. 
+Problem that comes up with ajax submit is  Validation.
+If you ever find yourself stuck with syncing client and server side validation or bug that form doesn't have some data that was there before submit then you know what I am talking about too.
+
+## Solving validation problem
+
+There are number of visions in the Ruby community on how to solve the problem: some people prefer stay with Forms 1.0. Some people generate JavaScript validators based on ActiveModel validators. Other guys write their own validation in JavaScript and perform it on both client and server side.
+The complexity of all these solution goes beyond believe. And here I am going to describe much simpler way of doing it.
+
+What if we pass the validation result as JSON from backend in a simple key:value format like:
 
 {% highlight js %}
 {email: "is not valid", password: "is too short"}
@@ -42,14 +48,14 @@ And what if we pass the validation result as JSON from backend in a simple key:v
 It's fast as wind and easy to implement:
 
 * No SQL queries during validation request
-  * Except uniqueness, that is more likely a feature than a bug
-* No Rendering just small JSON as the response
+  * Except uniqueness, that is more likely a feature than a problem
+* No Rendering just small JSON object as response
 * No additional controller action - just modify existing one
 
 
 ## From Assumptions to Coding
 
-As we agreed before controller should return JSON instead of HTML:
+As we agreed - controller should return JSON instead of HTML:
 
 {% highlight diff %}
  class UsersController < ApplicationController

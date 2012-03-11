@@ -1,10 +1,27 @@
+Подробности банковского перевода:
+
+Оплата должна быть произведена в течение 24 часов с момента бронирования. Для получения более подробной информации о том, как сделать банковский перевод, щелкните здесь.
+Платежи банковским переводом за рейсы, выполняемые компанией Wizz Air Ukraine (Украина), должны производиться только в украинских гривнах на банковский счет (номер счета: 26007010004655) со счета в украинском банке.
+Сумма к оплате : 615 UAH 
+
+Украинских гривнах (UAH)
+Номер счёта для банковского перевода внутри страны: 26007010004655
+Код банка (МФО): 300744
+Название банка: Филиал ОАО УниКредит Банк в г. Киеве
+Код: 35895174
+Наименование владельца счета: Авиалинии Визз Эйр Украина
+
+Номер подтверждения: YYTRAG
 Card to pay in ZLT
 	privat24?
 
 Pay for ticket
+	1.141,44 zlt
 	Card to pay in UAH?
+	1 USD = 3,1358 PLN
 	http://railsberry.com/get_tickets
 Flight
+	900 UAH
 	http://wizzair.com/flights/Kyiv-Zhulyany/Katowice/
 Hotel
 	https://secure.reservations-engrande.com/KRK30/ru/eg_reservation_info.php?checkin=2012-04-18&checkout=2012-04-20&city_id=22&guests=1&hotel_id=6553&request_hotel_id=6553&no_redirect=1&sess_vals=YToxOntzOjExOiJmcm9tX3ByZWZpeCI7czoxOiIxIjt9&cur=RUB&room_arr=72063x1x1&__utma=1.445634193.1330688572.1330688572.1330698511.2&__utmb=1.31.10.1330698511&__utmc=1&__utmx=-&__utmz=1.1330688572.1.1.utmgclid=CKa_rpyRyK4CFYsw3wodnBeIKw|utmccn=(not%20set)|utmcmd=(not%20set)|utmctr=%D0%BA%D1%80%D0%B0%D0%BA%D0%BE%D0%B2%20%D0%B4%D0%B5%D1%88%D0%B5%D0%B2%D0%B0%D1%8F%20%D0%B3%D0%BE%D1%81%D1%82%D0%B8%D0%BD%D0%B8%D1%86%D0%B0&__utmv=-&__utmk=6644530&__utma=1.445634193.1330688572.1330688572.1330698511.2&__utmb=1.31.10.1330698511&__utmc=1&__utmx=-&__utmz=1.1330688572.1.1.utmgclid=CKa_rpyRyK4CFYsw3wodnBeIKw|utmccn=(not%20set)|utmcmd=(not%20set)|utmctr=%D0%BA%D1%80%D0%B0%D0%BA%D0%BE%D0%B2%20%D0%B4%D0%B5%D1%88%D0%B5%D0%B2%D0%B0%D1%8F%20%D0%B3%D0%BE%D1%81%D1%82%D0%B8%D0%BD%D0%B8%D1%86%D0%B0&__utmv=-&__utmk=6644530
@@ -21,30 +38,35 @@ Taxi to home
 
 
 
-16.04
+17.04
 	Setup alarm
-17.04 
-	Get up home
-	Taxi to zhulyany
-	Flight to Katowice
-	Buy Krakow Map
-	Bus from Katowice to krakov
-	Hotel checkin
-	.....
-	Hotel Sleep
 18.04 
-	Oswencim?
-	Hotel Sleep
+	Home
+		Get up home
+		Taxi to zhulyany
+	Zhulyany
+		Flight from zhulyany to Katowice
+	Katowice 
+		Buy Krakow Map
+		Prepare taxi or bus ticket from Krakow to Katowice
+		Bus from Katowice to krakov
+	Krakow
+		Hotel checkin
+		.....  Oswencim?
+		Hotel Sleep
 19.04 
-	Conference first day
-	Hotel Sleep
+	Krakow
+		Conference first day
+		Hotel Sleep
 20.04 
-	Conference second day
-	Hotel Sleep
+	Krakow
+		Conference second day
+		Hotel Sleep
 21.04
-	Bus or taxi to Poland airport?
-	Flight to Kiev
-	Taxi to Home
+	Krakow
+		Bus or taxi to Poland airport?
+	Katowice
+		Flight to Kiev
 
 
 Laptop
