@@ -4,27 +4,23 @@ OSS
 	datagrid
 		Resolve problem with HTML and CSV columns
 	js-routes
+		Support STAR node type
 	AjaxSubmit
-		Update library in demo
 		Skins
 			Like in interstellar
-			Minimalistic
-		Explore alternatives
-			https://github.com/bcardarella/client_side_validations/
-			Guy from engineyard's validation
+		More fields in registration form
+		Promote in Reddit
 	    
 	Rails
 		Decide what to do with select[multiple]
 		Journey: Try to remove SLASH and DOT node type
 		Investigate mass assignment protection performance issue
+		Think about update_attributes({}.assignment_safe)
 	Rspec-rails
 		Remove subshell on rake spec
-	Poland conference
-		Keep thinking how to do it
 	Vim execute plugin
 	DiffBench performance tool
 Mailtrap
-	Impetus
 	Video tutorial rework
 		Voice support
 	Setup a schema to notify users about some news
@@ -40,18 +36,14 @@ Configuration
 		Investigate with strace
 Blog
 	Article about ActiveSupport::Callbacks
-	Article about Ajax Submit
-	Attract right person?
 
-New job
+The art of programming
 	Try out Rspec master class
 	Try out consultancy
 
 Poland
 	Chocolate for Ela
 	Respond to Ela
-	Pay for ticket
-	Choose bus or train
 	Pay for hostel
 	Krakow map
 	Get visa
