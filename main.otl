@@ -21,6 +21,7 @@ OSS
 	Vim execute plugin
 	DiffBench performance tool
 Mailtrap
+	Provide Postfix config
 	Video tutorial rework
 		Voice support
 	Setup a schema to notify users about some news
