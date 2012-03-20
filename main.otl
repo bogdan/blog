@@ -20,12 +20,12 @@ OSS
 	Vim execute plugin
 	DiffBench performance tool
 Mailtrap
-	Provide Postfix config
 	Video tutorial rework
 		Voice support
 	Setup a schema to notify users about some news
 	Advertise AjaxSubmit
 	To SI
+		Style number of messages in inbox
 		Nice icon for settings
 		Nice styling of txt/html view switch
 		Long title names
