@@ -62,11 +62,11 @@ As we agreed - controller should return JSON instead of HTML:
    def create
      @user = User.new(params[:user])
      if @user.save
--      render :action => :new
-+      render :json => {:errors => user.errors}
-     else
 -      redirect_to root_path
 +      render :json => {:redirect => root_path}
+     else
+-      render :action => :new
++      render :json => {:errors => user.errors}
      end
    end
  end
