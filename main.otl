@@ -1,5 +1,3 @@
-V
-	Three tennis balls
 OSS
 	datagrid
 		Resolve problem with HTML and CSV columns
@@ -15,6 +13,7 @@ OSS
 		Journey: Try to remove SLASH and DOT node type
 		Investigate mass assignment protection performance issue
 		Think about update_attributes({}.assignment_safe)
+		AM::Errors#add!
 	Rspec-rails
 		Remove subshell on rake spec
 	Vim execute plugin
@@ -36,23 +35,21 @@ Configuration
 		Investigate with strace
 Blog
 	Article about ActiveSupport::Callbacks
-
 The art of programming
-	Try out Rspec master class
-	Try out consultancy
+	Prepare Rspec master class
+		Propose Rspec master class to Lori
 
-Poland
-	Chocolate for Ela
-	Respond to Ela
-	Pay for hostel
-	Krakow map
-	Get visa
-		Strahovka
-		Anketa
-		Priglashenie
-		Photo + Passport
-	
-	Trip
-		Conference plan
-		Cash
-
+Slavik migration
+	Access points:
+		js-routes source
+		mailtrap source
+		Mailtrap user survey doc
+		Yammer
+	Mailtrap:
+		Responsibility:
+			RW provide infrastructure
+			BG support customers
+			BG do features
+		Benefits
+			RW do it's own marketing 
+			BG gets profit
