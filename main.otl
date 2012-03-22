@@ -9,9 +9,7 @@ OSS
 		Promote in Reddit
 	    
 	Rails
-		Decide what to do with select[multiple]
 		Journey: Try to remove SLASH and DOT node type
-		Investigate mass assignment protection performance issue
 		Think about update_attributes({}.assignment_safe)
 		AM::Errors#add!
 	Rspec-rails
