@@ -42,7 +42,7 @@ Slavik migration
 		js-routes source
 		mailtrap source
 		Mailtrap user survey doc
-		Yammer
+		Email for mailtrap support
 	Mailtrap:
 		Responsibility:
 			RW provide infrastructure
