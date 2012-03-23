@@ -2,7 +2,7 @@ OSS
 	datagrid
 		Resolve problem with HTML and CSV columns
 	js-routes
-		Support STAR node type
+		Fix pending tests
 	AjaxSubmit
 		Skins
 			Like in interstellar
@@ -16,11 +16,14 @@ OSS
 		Remove subshell on rake spec
 	Vim execute plugin
 	DiffBench performance tool
+		Advertise somewhere
+		Test suite
 Mailtrap
+	Migration Plan
+		Move support email to another domain
+		Move survey to another google domain
 	Video tutorial rework
 		Voice support
-	Setup a schema to notify users about some news
-	Advertise AjaxSubmit
 	To SI
 		Style number of messages in inbox
 		Nice icon for settings
@@ -33,6 +36,7 @@ Configuration
 		Investigate with strace
 Blog
 	Article about ActiveSupport::Callbacks
+		Push for review
 The art of programming
 	Prepare Rspec master class
 		Propose Rspec master class to Lori
@@ -40,9 +44,9 @@ The art of programming
 Slavik migration
 	Access points:
 		js-routes source
-		mailtrap source
+		Mailtrap source
 		Mailtrap user survey doc
-		Email for mailtrap support
+		Email for Mailtrap support
 	Mailtrap:
 		Responsibility:
 			RW provide infrastructure
