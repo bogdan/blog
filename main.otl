@@ -4,20 +4,29 @@ OSS
 	js-routes
 		Fix pending tests
 	AjaxSubmit
+		http://www.1stwebdesigner.com/css/best-ajax-css-forms-tips-trends-techniques/
+		Add options
+			url
+			type
+			data
+		Multiple errors
 		Skins
 			Like in interstellar
-		Promote in Reddit
+		js-show
 	    
 	Rails
 		Journey: Try to remove SLASH and DOT node type
-		Think about update_attributes({}.assignment_safe)
 		AM::Errors#add!
 	Rspec-rails
 		Remove subshell on rake spec
 	Vim execute plugin
 	DiffBench performance tool
-		Advertise somewhere
-		Test suite
+		Advertise:
+			dzone
+			reddit
+			rubyshow
+			hackernews
+		Make test suite less noisy
 Mailtrap
 	Migration Plan
 		Move support email to another domain
@@ -27,8 +36,6 @@ Mailtrap
 	To SI
 		Style number of messages in inbox
 		Nice icon for settings
-		Nice styling of txt/html view switch
-		Long title names
 Configuration
 	Vim
 		Investigate why Rlog doesn't have highlight
