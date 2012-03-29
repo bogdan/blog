@@ -11,13 +11,7 @@ OSS
 			url
 			type
 			data
-		Multiple errors
-		Skins
-			Like in interstellar
 		js-show
-		Demo: Tweet to download button
-		select + .validation-block {
-			background-image: none; }
 	    
 	Rails
 		Journey: Try to remove SLASH and DOT node type
@@ -33,8 +27,12 @@ OSS
 			hackernews
 		Make test suite less noisy
 Mailtrap
+	HTML strip out warnings
 	Video tutorial rework
 		Voice support
+	Use Resque
+		To track failed emails
+	Email to Slavik
 Configuration
 	Vim
 		Investigate why Rlog doesn't have highlight
@@ -49,12 +47,3 @@ The art of programming
 	Prepare Rspec master class
 		Propose Rspec master class to Lori
 
-Slavik migration
-	Mailtrap:
-		Responsibility:
-			RW provide infrastructure
-			BG support customers
-			BG do features
-		Benefits
-			RW do it's own marketing 
-			BG gets profit
