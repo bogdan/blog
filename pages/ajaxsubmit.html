@@ -14,6 +14,7 @@
     <!-- Scripts -->
     <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://raw.github.com/carhartl/jquery-cookie/master/jquery.cookie.js"></script>
 
 </head>
 
@@ -53,8 +54,15 @@
                 data-hashtags="ajax, html, form, js">Tweet</a>
 
             <script type="text/javascript">
-                twttr.events.bind('tweet', function(event) {
+              function activate() {
+                    $.cookie("ajaxsubmit_twitted", true, {expires: 100000});
                     $('.downloadButton').addClass('active').attr('href', 'https://raw.github.com/bogdan/ajaxsubmit/master/ajaxsubmit.js'); // File download link
+              }
+              $(function () {
+              if ($.cookie("ajaxsubmit_twitted")) activate();
+              });
+                twttr.events.bind('tweet', function(event) {
+                    activate();
                 });
             </script>
 
