@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="robots" content="noindex,follow" />
+
+    <title>Tweet to Download | AjaxSubmit</title>
+
+    <link rel="stylesheet" href="/css/ajaxsubmit.css" media="screen">
+
+    <!-- Scripts -->
+    <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+
+</head>
+
+<body>
+
+    <!-- Header -->
+    <div id="header">
+        <h1>AjaxSubmit</h1>
+        <h2>Convert regular web form into ajax web form</h2>
+    </div>
+
+
+    <!-- Container -->
+    <div id="container">
+            <div style="margin: 0 60px 15px 60px">
+              <h3 style="float: left">
+                <a target="_blank" href="https://github.com/bogdan/ajaxsubmit">Source code</a> 
+              </h3>
+              <h3 style="margin: 0px 24px; float: left">
+                <a target="_blank" href="http://ajaxsubmit.heroku.com">Live DEMO</a> 
+              </h3>
+              <h3 style="float: left">
+                <a target="_blank" href="http://gusiev.com">Author Blog</a> 
+              </h3>
+              <div style="clear: both"></div>
+            </div>
+
+        <p>The button below is activated only after you tweet.</p>
+
+        <div class="tweetButton">
+            <!-- Tweet Info -->
+            <a href="http://twitter.com/share" class="twitter-share-button" data-count="none" data-size="large"
+                data-url="http://gusiev.com/pages/ajaxsubmit.html"
+                data-text="AjaxSubmit - the easiest way to convert regular web form to ajax web form"
+                data-via="mailtrap"
+                data-related=""
+                data-hashtags="ajax, html, form, js">Tweet</a>
+
+            <script type="text/javascript">
+                twttr.events.bind('tweet', function(event) {
+                    $('.downloadButton').addClass('active').attr('href', 'https://raw.github.com/bogdan/ajaxsubmit/master/ajaxsubmit.js'); // File download link
+                });
+            </script>
+
+        </div>
+        
+        <a href="#" class="downloadButton">Download</a>
+
+    </div>
+
+    <!-- Help -->
+    <div id="help">
+    	<p>If you don't want to tweet follow this steps:</p>
+    	<ul>
+    		<li>Open page source code.</li>
+    		<li>Search line <code>twttr.events.bind</code>.</li>
+    		<li>Copypaste the link from javascript callback into your browser.</li>
+    	</ul>
+    </div>
+
+</body>
+
+</html>

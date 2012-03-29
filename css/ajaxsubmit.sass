@@ -1,0 +1,127 @@
+*
+  margin: 0
+  padding: 0
+
+html
+  background-color: #e4e4e4
+
+body
+  color: #888
+  padding: 10px
+  min-height: 600px
+  font: 14px / 1.3 "Segoe UI", Arial, sans-serif
+  text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.7)
+
+a
+  text-decoration: none
+  outline: none
+  color: #54a6de
+  &:visited
+    text-decoration: none
+    outline: none
+    color: #54a6de
+  &:hover
+    text-decoration: underline
+
+#header
+  display: block
+
+h1
+  height: 50px
+  overflow: hidden
+  margin: 150px auto 10px
+  text-align: center
+  color: #222
+
+h2
+  font-size: 17px
+  margin-bottom: 20px
+  font-style: italic
+  font-weight: normal
+  text-align: center
+  color: #222
+
+#footer
+  color: #999
+  font-size: 15px
+  line-height: 1.6
+  padding: 40px 20px 0
+  text-align: center
+  display: block
+
+body >img
+  margin: 50px auto 0
+  display: block
+
+#container
+  width: 450px
+  padding: 30px 10px
+  text-align: center
+  margin: 0 auto
+  position: relative
+  background-color: #fff
+  display: block
+  -moz-border-radius: 10px
+  -webkit-border-radius: 10px
+  border-radius: 10px
+  &:before
+    content: '.'
+    text-indent: -99999px
+    overflow: hidden
+    display: block
+    height: 12px
+    width: 470px
+    //background: url('../img/shadows.png') no-repeat center top
+    position: absolute
+    left: 0
+    top: -12px
+  &:after
+    content: '.'
+    text-indent: -99999px
+    overflow: hidden
+    display: block
+    height: 12px
+    width: 470px
+    //background: url('../img/shadows.png') no-repeat center top
+    position: absolute
+    left: 0
+    top: -12px
+    top: auto
+    bottom: -12px
+    background-position: center bottom
+  p
+    font: 24px / 1.3 "Segoe UI Light", "Segoe UI", Arial, sans-serif
+    padding: 0px 25px 25px 25px
+
+.tweetButton
+  padding-bottom: 25px
+
+a.downloadButton
+  display: inline-block
+  width: 187px
+  height: 69px
+  text-indent: -99999px
+  overflow: hidden
+  background: url('/images/download.png') no-repeat
+  cursor: default
+  border: none
+  text-decoration: none !important
+  &.active
+    background: url('/images/download.png') no-repeat left bottom
+    cursor: pointer
+
+#header h1
+  margin-top: 40px
+
+#help
+  width: 490px
+  margin: 50px auto 0 auto
+  padding: 25px
+  background: #eee
+  -webkit-border-radius: 5px
+  -moz-border-radius: 5px
+  border-radius: 5px
+  ul
+    margin: 10px
+  li
+    list-style: inside

@@ -15,12 +15,15 @@ OSS
 		Skins
 			Like in interstellar
 		js-show
+		Demo: Tweet to download button
+		select + .validation-block {
+			background-image: none; }
 	    
 	Rails
 		Journey: Try to remove SLASH and DOT node type
 		AM::Errors#add!
 	Rspec-rails
-		Remove subshell on rake spec
+		Subshell on rake spec
 	Vim execute plugin
 	DiffBench performance tool
 		Advertise:
@@ -30,19 +33,15 @@ OSS
 			hackernews
 		Make test suite less noisy
 Mailtrap
-	Migration Plan
-		Move support email to another domain
-		Move survey to another google domain
 	Video tutorial rework
 		Voice support
-	To SI
-		Style number of messages in inbox
-		Nice icon for settings
 Configuration
 	Vim
 		Investigate why Rlog doesn't have highlight
+		Try vim-rspec
 	Skype
 		Investigate with strace
+	
 Blog
 	Article about ActiveSupport::Callbacks
 		Push for review
@@ -51,11 +50,6 @@ The art of programming
 		Propose Rspec master class to Lori
 
 Slavik migration
-	Access points:
-		js-routes source
-		Mailtrap source
-		Mailtrap user survey doc
-		Email for Mailtrap support
 	Mailtrap:
 		Responsibility:
 			RW provide infrastructure
