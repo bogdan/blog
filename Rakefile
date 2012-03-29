@@ -21,6 +21,9 @@ def build_git(command)
   puts git
   output = `#{git}`.strip
   puts output.strip unless output == ""
+  if $?.to_i > 0
+    raise "git command failed"
+  end
 end
 
 def site
