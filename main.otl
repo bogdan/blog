@@ -7,6 +7,7 @@ OSS
 		Fix pending tests
 	AjaxSubmit
 		http://www.1stwebdesigner.com/css/best-ajax-css-forms-tips-trends-techniques/
+		Ask SI to promote through design modo
 		Add options
 			url
 			type
@@ -16,6 +17,8 @@ OSS
 	Rails
 		Journey: Try to remove SLASH and DOT node type
 		AM::Errors#add!
+		#to_param implementation: use #to_param internally
+			Resolve circular dependency between to_param and to_query
 	Rspec-rails
 		Subshell on rake spec
 	Vim execute plugin
@@ -25,24 +28,25 @@ OSS
 			reddit
 			rubyshow
 			hackernews
-		Make test suite less noisy
 Mailtrap
 	HTML strip out warnings
 	Video tutorial rework
 		Voice support
 	Use Resque
 		To track failed emails
-	Email to Slavik
+	Write email to tsvetuhin
 Configuration
 	Vim
 		Investigate why Rlog doesn't have highlight
-		Try vim-rspec
 	Skype
 		Investigate with strace
 	
 Blog
 	Article about ActiveSupport::Callbacks
-		Push for review
+	Assumption driven development
+	PAEI model in programming
+
+	
 The art of programming
 	Prepare Rspec master class
 		Propose Rspec master class to Lori
