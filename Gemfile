@@ -1,6 +1,7 @@
 source :rubygems
 
 #gem "gsl"
+gem "gsl", git: "https://github.com/romanbsd/rb-gsl.git"
 gem "rake"
 gem "jekyll"
 gem "liquid", "2.2.2"

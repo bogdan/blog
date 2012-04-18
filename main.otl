@@ -7,12 +7,9 @@ OSS
 		Fix pending tests
 	AjaxSubmit
 		http://www.1stwebdesigner.com/css/best-ajax-css-forms-tips-trends-techniques/
-		Ask SI to promote through design modo
-		Add options
-			url
-			type
-			data
-		js-show
+		Promote
+			Ask SI to promote through design modo
+			js-show
 	    
 	Rails
 		Journey: Try to remove SLASH and DOT node type
@@ -29,6 +26,7 @@ OSS
 			rubyshow
 			hackernews
 Mailtrap
+	Send email to Tsvetuhin
 	HTML strip out warnings
 	Video tutorial rework
 		Voice support
@@ -43,10 +41,9 @@ Configuration
 	
 Blog
 	Article about ActiveSupport::Callbacks
+		Push for review
 	Assumption driven development
 	PAEI model in programming
-
-	
 The art of programming
 	Prepare Rspec master class
 		Propose Rspec master class to Lori

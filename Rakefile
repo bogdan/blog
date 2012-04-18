@@ -5,7 +5,7 @@ require 'jekyll'
 require "fileutils"
 require "sass/plugin"
 
-def f(name)
+def path(name)
   File.dirname(__FILE__) + "/" + name
 end
 
@@ -17,7 +17,7 @@ def sass
 end
 
 def build_git(command)
-  git = "git --work-tree=#{f "build"} --git-dir=#{f "build/.git"} #{command}"
+  git = "git --work-tree=#{path "build"} --git-dir=#{path "build/.git"} #{command}"
   puts git
   output = `#{git}`.strip
   puts output.strip unless output == ""
@@ -53,22 +53,31 @@ end
 
 desc "Build static content"
 task :build => [ "build:clean", :tags, :cloud, :sass] do
-  unless File.exists? f("build")
-    FileUtils.mkdir_p(f("build"))
-    `git clone gh:bogdan/bogdan.github.com build`
-  end
   begin
-    FileUtils.mkdir_p(f("tmp"))
-    FileUtils.mv(f("build/.git"), f("tmp"))
+    FileUtils.mkdir_p(path("tmp"))
+    FileUtils.rm_rf(path("tmp/.git"))
+    FileUtils.mv(path("build/.git"), path("tmp"))
     puts `ejekyll --no-auto build`
   ensure
-    FileUtils.mv(f("tmp/.git"), f("build"))
+    unless File.exists?(path("build/.git"))
+      FileUtils.mv(path("tmp/.git"), path("build"))
+    end
   end
 end
 
 namespace :build do
+  desc "Init build folder"
+  task :init do
+    unless File.exists? path("build")
+      FileUtils.mkdir_p(path("build"))
+      puts `git clone gh:bogdan/bogdan.github.com build`
+      if $?.to_i > 0
+        raise "git command failed"
+      end
+    end
+  end
   desc "Clean build modifications"
-  task :clean do
+  task :clean => ["build:init"] do
     build_git "clean -f ."
     build_git "checkout ."
     build_git "fetch origin"

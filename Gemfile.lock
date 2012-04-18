@@ -1,3 +1,10 @@
+GIT
+  remote: https://github.com/romanbsd/rb-gsl.git
+  revision: 0ec73f997d5e7e991cb94192e8e6e56619fa9e69
+  specs:
+    gsl (1.12.109)
+      narray (>= 0.5.9)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -19,6 +26,7 @@ GEM
     liquid (2.2.2)
     maruku (0.6.0)
       syntax (>= 1.0.0)
+    narray (0.6.0.1)
     posix-spawn (0.3.6)
     rake (0.9.2.2)
     sass (3.1.13)
@@ -29,6 +37,7 @@ PLATFORMS
 
 DEPENDENCIES
   directory_watcher (= 1.4.0)
+  gsl!
   jekyll
   jekyll_ext
   liquid (= 2.2.2)
