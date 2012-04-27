@@ -16,12 +16,13 @@ OSS
 		AM::Errors#add!
 		#to_param implementation: use #to_param internally
 			Resolve circular dependency between to_param and to_query
+		Make uniq/pluck combination work on collection association
+		Rework bulk_migration to be always true
 	Rspec-rails
 		Subshell on rake spec
 	Vim execute plugin
 	DiffBench performance tool
 		Advertise:
-			dzone
 			reddit
 			rubyshow
 			hackernews
