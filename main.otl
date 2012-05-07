@@ -1,5 +1,6 @@
 V
 	Elizabeth Adler Prevage
+	Fish knife
 OSS
 	datagrid
 		Resolve problem with HTML and CSV columns
@@ -10,7 +11,6 @@ OSS
 		Promote
 			Ask SI to promote through design modo
 			js-show
-	    
 	Rails
 		Journey: Try to remove SLASH and DOT node type
 		AM::Errors#add!
@@ -23,9 +23,15 @@ OSS
 	Vim execute plugin
 	DiffBench performance tool
 		Advertise:
-			reddit
 			rubyshow
 			hackernews
+
+
+Get a new idea
+	What to do next?
+		Twithub
+		Interstellar clone
+		Twitter bots
 Mailtrap
 	Send email to Tsvetuhin
 	HTML strip out warnings
@@ -39,13 +45,13 @@ Configuration
 		Investigate why Rlog doesn't have highlight
 	Skype
 		Investigate with strace
-	
 Blog
 	Article about ActiveSupport::Callbacks
 		Push for review
 	Assumption driven development
+	Benchmark your patches
 	PAEI model in programming
 The art of programming
 	Prepare Rspec master class
 		Propose Rspec master class to Lori
-
+	Resque master classes

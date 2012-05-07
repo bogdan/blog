@@ -19,7 +19,7 @@ This is my favorite example of how wrong assumption can be:
 
 Very popular ruby questions for newbies: 
 
-    What is the difference between `private` and `public` methods?
+    What is the difference between `private` and `protected` methods?
 
 Question seems good and reasonable. But most people don't know the right answer even after years with ruby.
 Most people assume that `private` methods can not be called from inherited classes, but `protected` can be.
