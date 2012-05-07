@@ -16,7 +16,7 @@ They are fit well for cases when optimization stays at Ruby level and doesn't re
 
 General flow on how to tackle performance is clear:
 
-* [perftools.rb](https://github.com/tmm1/perftools.rb) shows slow method calls in a nice call tree format.
+* [perftools.rb](https://github.com/tmm1/perftools.rb) shows slow method calls in a nice call graph format.
 * [Benchmark](http://ruby-doc.org/stdlib-1.9.2/libdoc/benchmark/rdoc/Benchmark.html) proves that we made an improvement.
 
 Perftools does all the hard work for you. 
@@ -34,9 +34,13 @@ Run test and open result:
     $IMAGE_VIEWER /tmp/profile_result.gif 
 
 
-Example output: [Rails route generator call tree](http://postimage.org/image/fy4fxhzvr/).
+Example output: **Rails route generator call graph**
 
-Here is short instruction how to read call tree: 
+<a href="http://postimage.org/image/fy4fxhzvr/full/">
+  <img src="/images/perf_sample.gif" width="600px"/>
+</a>
+
+Here is short instruction how to read call graph: 
 
 Each block represents a method that was called. Percentage in a block shows how much time was spend in current method with and without all it's nested calls comparing to overall time. Arrow with number shows how many times parent method called it's children method.
     
