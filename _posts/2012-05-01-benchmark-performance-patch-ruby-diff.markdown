@@ -6,6 +6,8 @@ tags:
 - gem
 - contribution
 - performance
+- callgraph
+- patch
 ---
 
 After a dozen performance patches to many gems want to share some practical experience I gain. 

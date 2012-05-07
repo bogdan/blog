@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 'Assumption Driven Development'
-published: true
+published: false
 tags: 
 - assumption
 - ruby
