@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 'Assumption Driven Development'
+title: 'Assumption Driven Approach'
 published: false
 tags: 
 - assumption
@@ -44,8 +44,12 @@ The answer is: **This is not true**. Private method can be called from inherited
 
 [More about private and public methods here](http://gusiev.com/2010/04/ruby18-private-protected-incapsulatio/).
 
+This is good example on how myths can spread the world:
+Almost every person is surprised by the output of program above.
+
 This makes me feel that many interviewers ask questions while don't know what they are asking about.
 From this point I can state that a lot of ruby interviews goes in a wrong direction by providing an assumption as a fact.
+
 
 ### Class variables assumption
 
@@ -76,7 +80,7 @@ Ruby 2.0 offers lazy enumeration feature.
 
     (1...100000).to_a.lazy.select{|a| a.odd? }.map{|a| a**2}.to_a
 
-In short: In this example there will be only one iteration over an array with no intermediate array between `select` and `map`.
+In short: there will be only one iteration over an array with no intermediate array between `select` and `map`.
 If you are an assumption-driven person, you already assumed that `#lazy` not only saves your memory, but also improve performance.
 
 And problem is that it is not true. [`#lazy` is very slow](https://bugs.ruby-lang.org/issues/6183). 
@@ -86,7 +90,13 @@ And problem is that it is not true. [`#lazy` is very slow](https://bugs.ruby-lan
 ### How to use assumption in a right way?
 
 Why we are still using assumptions a lot? Because they are cheap: they allow us to move faster without proofing that we are moving the right direction.
-But We need to:
+
+Here are some MUSTs that we need to follow:
+
+* Always make sure that you are 100% right when you are interviewing other person.
+* Never make assumptions in performance field.
+
+And here are some more conceptual advices:
 
 * Make our assumptions depend on facts, but not other assumptions.
 * Prove any assumption with fact before going with another assumption
