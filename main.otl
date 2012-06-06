@@ -18,6 +18,9 @@ OSS
 			Resolve circular dependency between to_param and to_query
 		Make uniq/pluck combination work on collection association
 		Rework bulk_migration to be always true
+		/rails/generate/model User name:string
+		/rails/rake db:migrate
+		Strict validation: allow custom exception
 	Rspec-rails
 		Subshell on rake spec
 	Vim execute plugin
@@ -25,6 +28,9 @@ OSS
 		Advertise:
 			rubyshow
 			hackernews
+	Poltergeist
+		Improve a way to testClick
+		
 
 
 Get a new idea
@@ -32,6 +38,10 @@ Get a new idea
 		Twithub
 		Interstellar clone
 		Twitter bots
+	Investigate kickstarter
+		Try out new generation text editor idea
+	Tweethub
+		Setup production
 Mailtrap
 	Send email to Tsvetuhin
 	HTML strip out warnings
