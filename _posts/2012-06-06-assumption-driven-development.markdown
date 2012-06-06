@@ -1,7 +1,6 @@
 ---
 layout: post
 title: 'Assumption Driven Approach'
-published: false
 tags: 
 - assumption
 - ruby
@@ -98,7 +97,7 @@ Here are some MUSTs that we need to follow:
 
 And here are some more conceptual advices:
 
-* Make our assumptions depend on facts, but not other assumptions.
+* Make assumptions depend on facts, but not other assumptions.
 * Prove any assumption with fact before going with another assumption
 * Do not tell people about assumptions as if they are facts.
 * When we can't make a good assumption from the beginning, maybe it's time to gather more facts
