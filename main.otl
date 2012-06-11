@@ -4,8 +4,7 @@ V
 OSS
 	datagrid
 		Resolve problem with HTML and CSV columns
-	js-routes
-		Fix pending tests
+		Gether user feedback
 	AjaxSubmit
 		http://www.1stwebdesigner.com/css/best-ajax-css-forms-tips-trends-techniques/
 		Promote
@@ -24,10 +23,6 @@ OSS
 	Rspec-rails
 		Subshell on rake spec
 	Vim execute plugin
-	DiffBench performance tool
-		Advertise:
-			rubyshow
-			hackernews
 	Poltergeist
 		Improve a way to testClick
 		
@@ -35,7 +30,6 @@ OSS
 
 Get a new idea
 	What to do next?
-		Twithub
 		Interstellar clone
 		Twitter bots
 	Investigate kickstarter
@@ -49,7 +43,6 @@ Mailtrap
 		Voice support
 	Use Resque
 		To track failed emails
-	Write email to tsvetuhin
 Configuration
 	Vim
 		Investigate why Rlog doesn't have highlight
@@ -58,9 +51,8 @@ Configuration
 Blog
 	Article about ActiveSupport::Callbacks
 		Push for review
-	Assumption driven development
-	Benchmark your patches
 	PAEI model in programming
+
 The art of programming
 	Prepare Rspec master class
 		Propose Rspec master class to Lori
