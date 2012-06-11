@@ -1,7 +1,10 @@
 V
 	Elizabeth Adler Prevage
 	Fish knife
+	Trempels
 OSS
+	diffbench
+		Check advertisement at RubyShow
 	datagrid
 		Resolve problem with HTML and CSV columns
 		Gether user feedback
@@ -50,10 +53,13 @@ Configuration
 		Investigate with strace
 Blog
 	Article about ActiveSupport::Callbacks
-		Push for review
 	PAEI model in programming
 
 The art of programming
 	Prepare Rspec master class
 		Propose Rspec master class to Lori
 	Resque master classes
+
+
+Keep focus?
+Why do you know so many new ideas while you have good onenow?
