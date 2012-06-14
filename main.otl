@@ -5,16 +5,17 @@ V
 	Earthen pot
 OSS
 	Javascript ajax debug script
-	diffbench
-		Check advertisement at RubyShow
+		Promote somewhere
+		Maybe blog post?
 	datagrid
 		Resolve problem with HTML and CSV columns
-		Gether user feedback
 	AjaxSubmit
 		http://www.1stwebdesigner.com/css/best-ajax-css-forms-tips-trends-techniques/
 		Promote
 			Ask SI to promote through design modo
 			js-show
+		Take a look at rails-ujs
+			Find posibilities to reuse that API
 	Rails
 		Journey: Try to remove SLASH and DOT node type
 		AM::Errors#add!
@@ -30,8 +31,10 @@ OSS
 	Vim execute plugin
 	Poltergeist
 		Improve a way to testClick
-		
-
+		Investigate timeouts
+	Tweethub
+		Find a way to promote
+		Review a list of event types
 
 Get a new idea
 	What to do next?
@@ -39,8 +42,6 @@ Get a new idea
 		Twitter bots
 	Investigate kickstarter
 		Try out new generation text editor idea
-	Tweethub
-		Setup production
 Mailtrap
 	Send email to Tsvetuhin
 	HTML strip out warnings
@@ -61,7 +62,3 @@ The art of programming
 	Prepare Rspec master class
 		Propose Rspec master class to Lori
 	Resque master classes
-
-
-Keep focus?
-Why do you know so many new ideas while you have good onenow?
