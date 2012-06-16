@@ -22,7 +22,7 @@ Here I am gonna use Chrome browser as an example:
 
 <img width="400px" src="http://i.imm.io/skBN.png"/>
 
-### THIS IS A LOT AND THIS SHOULD CHANGE
+### THIS SHOULD CHANGE
 
 With [this tiny script](https://github.com/bogdan/jquery-ajax-debug) you don't need any:
 Error response will be displayed in Popup at once after it occur.
