@@ -30,7 +30,6 @@ OSS
 		Subshell on rake spec
 	Vim execute plugin
 	Poltergeist
-		Improve a way to testClick
 		Investigate timeouts
 	Tweethub
 		Find a way to promote

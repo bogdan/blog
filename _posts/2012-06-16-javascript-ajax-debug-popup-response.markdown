@@ -20,14 +20,18 @@ Here I am gonna use Chrome browser as an example:
 
 <!--more-->
 
-<img width="400px" src="http://i.imm.io/skBN.png"/>
+<a href="http://i.imm.io/skBN.png">
+  <img width="400px" src="http://i.imm.io/skBN.png"/>
+</a>
 
 ### THIS SHOULD CHANGE
 
 With [this tiny script](https://github.com/bogdan/jquery-ajax-debug) you don't need any:
 Error response will be displayed in Popup at once after it occur.
 
-<img width="400px" src="http://i.imm.io/skDh.png"/>
+<a href="http://i.imm.io/skDh.png">
+  <img width="400px" src="http://i.imm.io/skDh.png"/>
+</a>
 
 
 
