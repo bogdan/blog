@@ -24,8 +24,8 @@ OSS
 		Ask for feedback on bulk_migration
 		/rails/generate/model User name:string
 		/rails/rake db:migrate
-		Strict validation: allow custom exception
 		Check SQL select * from pv where price <= Infinity
+		Make rails raise exception if asset is used directly but not precompiled
 	Rspec-rails
 		Subshell on rake spec
 	Vim execute plugin
@@ -46,6 +46,7 @@ Get a new idea
 	Twitter bots
 		What to post?
 	Investigate kickstarter
+		May be it needs to be investigated again?
 	Text editor with AST support
 	Norka
 		Investigate screen scrapping compatibilities
@@ -54,15 +55,13 @@ Get a new idea
 		Discuss with Alan
 	Document to txt conversion service
 		Find clients
+		Investigate already existing services
 	Reporting service
-	Russian Infection
+		Rethink what Allan said
 Mailtrap
-	Send email to Tsvetuhin
-	HTML strip out warnings
-	Video tutorial rework
-		Voice support
-	Use Resque
-		To track failed emails
+	Decide what to do with Vitya
+
+
 Configuration
 	Vim
 		Investigate why Rlog doesn't have highlight
