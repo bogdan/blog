@@ -104,14 +104,14 @@
 [https://github.com/bogdan/ajaxsubmit](https://github.com/bogdan/ajaxsubmit)
 
     @@@ javascript
+    $.errors.format ='<div 
+      class="validation-message 
+        validation-text"></div>';
     $(".ajax-form").ajaxForm()
-
 
 !SLIDE 
 
-## And it works!
-
-<img src="/image/works.png"/>
+# And a little CSS
 
     @@@ css
     .validation-text { display: none; }
@@ -120,6 +120,13 @@
       display: block;
       color: red;
     }
+
+!SLIDE 
+
+## And it works!
+
+<img src="/image/works.png"/>
+
 
 !SLIDE 
 
@@ -133,3 +140,54 @@
 !SLIDE 
 
 # But this is not the end
+
+!SLIDE 
+
+# Inline validation 
+# require good formatting
+# which yield
+# DESIGN/CSS overhead
+
+!SLIDE 
+
+# DESIGN/CSS overhead
+
+* Design:
+  * Errors overlaps page content
+  * Form starts to jump around when validation appears
+  * Show errors only on focus
+* CSS:
+  * Support all input types
+  * Support any kind of css layout
+
+
+!SLIDE 
+
+# Three variants of design:
+
+* Show errors in flat page flow
+* Show errors on hover
+* Show errors in popup-like box with close button
+
+[http://ajaxsubmit.heroku.com/](http://ajaxsubmit.heroku.com/)
+
+!SLIDE 
+
+# Solving CSS overhead
+
+* Flexible formatting configuration
+* Custom DOM for any particular validation error
+
+!SLIDE 
+
+# Ajaxsubmit configuration idea
+
+    @@@ javascript
+    $.errors = {
+      attribute: "validate"
+      activationClass: "validation-active"
+      format: "<div class='validation-block'>
+        <div class='validation-message'></div>
+        </div>"
+      messageClass: "validation-message"
+    }
