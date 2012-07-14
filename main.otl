@@ -4,6 +4,7 @@ V
 	Trempels
 	Earthen pot
 OSS
+	Russian Infection
 	datagrid
 		Resolve problem with HTML and CSV columns
 	AjaxSubmit
@@ -50,19 +51,16 @@ Get a new idea
 	Norka
 		Investigate screen scrapping compatibilities
 		Invent UI
+		Ask Dmitra about what people at Miraline are doing
 	Bug tracker with tree support
-		Discuss with Alan
+		Discuss with Allan
 	Document to txt conversion service
+		Explore alternatives
 		Find clients
 	Reporting service
-	Russian Infection
+		Ask Allan about his friend that doing data analysis software
 Mailtrap
-	Send email to Tsvetuhin
-	HTML strip out warnings
-	Video tutorial rework
-		Voice support
-	Use Resque
-		To track failed emails
+	Find a way to comeback
 Configuration
 	Vim
 		Investigate why Rlog doesn't have highlight
