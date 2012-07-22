@@ -26,6 +26,8 @@ Here I am gonna use Chrome browser as an example:
 
 ### THIS SHOULD CHANGE
 
+Why we can not automate this daily routine work?
+
 With [this tiny script](https://github.com/bogdan/jquery-ajax-debug) you don't need any:
 Error response will be displayed in Popup at once after it occur.
 

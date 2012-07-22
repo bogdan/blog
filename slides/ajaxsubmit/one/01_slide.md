@@ -155,10 +155,10 @@
 * Design:
   * Errors overlaps page content
   * Form starts to jump around when validation appears
-  * Show errors only on focus
+  * Different forms and input types
 * CSS:
-  * Support all input types
-  * Support any kind of css layout
+  * Different forms and input types
+  * Implement a beauty of the design
 
 
 !SLIDE 
@@ -191,3 +191,8 @@
         </div>"
       messageClass: "validation-message"
     }
+
+
+!SLIDE 
+
+# kk
