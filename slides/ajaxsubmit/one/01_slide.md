@@ -1,16 +1,19 @@
 
 !SLIDE 
 
-# AjaxSubmit
+# Web Forms
 ## Bogdan Gusiev
 ### July 2012
 
 !SLIDE bullets incremental
+
 ## Web Forms are important
 
-* they live for a very long time
-* in general they are the same as they were 10 years ago
-* but some things have changed
+More important than 
+
+* deploy apps to clouds
+* follow scrum at 100% 
+* have 100% coverage
 
 
 !SLIDE 
@@ -32,6 +35,8 @@
 
 # Client side validation
 
+Different approaches
+
 * Separated client side validation code
 * Generate client side validations based on Rails validation
 * Write validation in JavaScript and execute it in backend
@@ -49,7 +54,7 @@
 # Why we can not validate on backend always?
 
 * Forms are small
-* Ajax query is fast
+* AJAX is our friend
   * 100 ms or even less
 * Just so easy
 
@@ -65,6 +70,8 @@
 ## errors if validation failed
 
 !SLIDE 
+
+## Rework server side
 
     @@@ diff
      def create
@@ -195,4 +202,83 @@
 
 !SLIDE 
 
-# kk
+
+    @@@ javascript
+    $.errors.attribute = "validate"
+
+&amp;
+
+    @@@ html
+    <div validate="company company_id">
+      <select name="company">...</select>
+    </div>
+
+&amp;
+
+    @@@ javascript
+    [
+      ["company_id", "is blank"],
+      ["company", "not included in the list"]
+    ]
+
+
+!SLIDE 
+  
+    @@@ javascript
+    $.errors.activationClass = 
+                "validation-active"
+
+&amp;
+
+    @@@ html
+    <div class="validation-active" 
+      validate="company company_id">
+      <select name="company">...</select>
+      <!-- Error message here -->
+    </div>
+
+&amp;
+
+    @@@ css
+    .validation-active select {
+      color: red;
+    }
+
+!SLIDE 
+  
+    @@@ javascript
+    $.errors.format ='<div 
+      class="validation-message 
+        validation-text"></div>'
+
+&amp;
+
+    @@@ html
+    <div class="validation-active" 
+      validate="company company_id">
+      <select name="company">...</select>
+      <div class="validation-message 
+        validation-text">is blank</div>
+    </div>
+
+&amp;
+
+### More CSS
+
+
+!SLIDE 
+
+    @@@ javascript
+    $.errors.messageClass = 
+             "validation-message"
+
+
+Place to insert error message into error format
+
+!SLIDE 
+
+## Summary
+
+!SLIDE 
+
+* 
