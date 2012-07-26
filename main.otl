@@ -1,8 +1,10 @@
-V
+Home
 	Elizabeth Adler Prevage
 	Fish knife
 	Trempels
+	Candy from eurasia
 	Earthen pot
+	Fitness club
 OSS
 	Pivotal-Commit
 	datagrid
@@ -24,7 +26,7 @@ OSS
 			Find posibilities to reuse that API
 		ajaxsubmit-rails
 	Rails
-		AS::Callbacks: deprecate autodefine around when before and after present
+		AS::Callbacks: deprecate define #around when #filter present
 		Journey: Try to remove SLASH and DOT node type
 		AM::Errors#add!
 		#to_param implementation: use #to_param internally
