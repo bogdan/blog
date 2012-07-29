@@ -11,12 +11,14 @@ tags:
 ---
 
 This is short notes about my experience with full text search based on PostgreSQL and Solr.
-Solr was primary used with a help of Sunspot gem, which was definitely a good idea, 
-but unfortunately caused some drawbacks.
+Solr was primary used with a help of [Sunspot gem](https://github.com/sunspot/sunspot), which was definitely a good idea, 
+but unfortunately caused some drawbacks. PostgreSQL provides full text search out of the box and to my opinion doesn't need any 
+additional ruby specific tools other than ORM.
+<!--more-->
 
 ## TL;DR
 
-PostgreSQL approach is simple and fit well an agile project.
+PostgreSQL approach is simple and fit well to agile project.
 Solr is pretty powerful, but you need to pay for that power. And this is a significant cost.
 Think twice if you really need this power from the first day of full text search in your project.
 
@@ -26,7 +28,7 @@ Solr search index is something you create almost manually by defining a new data
 Keeping this search index in sync with database data is always your responsibility.
 No matter which gem you will use to connect Solr and Relational database.
 
-Here is an example of schema definition based on [Sunspot](https://github.com/sunspot/sunspot) gem:
+Here is an example of schema definition based on Sunspot gem:
 
 {% highlight ruby %}
 class Product < ActiveRecord::Base
@@ -80,7 +82,7 @@ def self.search_facets(ids)
 end
 {% endhighlight %}
 
-While Solr based faced would be easier:
+While Solr based facet would be easier:
 
 {% highlight ruby %}
 Product.search do |s|
@@ -90,7 +92,7 @@ Product.search do |s|
 end
 {% endhighlight %}
 
-Sunspot gives a nice DSL.
+Sunspot gives a nice DSL that overlaps with SQL in many things (e.g. [comparation operators](https://github.com/sunspot/sunspot/wiki/Scoping-by-attribute-fields)), while postgres lets use SQL - language you should know already.
 
 There is also easy to spot that Solr and Sunspot tool chain brings more features to you out of the box.
 But this is where Solr advantages ends.

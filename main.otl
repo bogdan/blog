@@ -42,7 +42,9 @@ OSS
 		/rails/rake db:migrate
 		Check SQL select * from pv where price <= Infinity
 		Make rails raise exception if asset is used directly but not precompiled
+		Make associations return association class instead of Array
 		AM::MassAssignmentSecurity: review strong-params and make proposal
+		Resolve changelog merge problem
 	Rspec-rails
 		Subshell on rake spec
 	Vim execute plugin
