@@ -1,15 +1,25 @@
-V
+Home
 	Elizabeth Adler Prevage
 	Fish knife
 	Trempels
+	Candy from eurasia
 	Earthen pot
+	Fitness club
 OSS
 	Russian Infection
 	Pivotal-Commit
 	datagrid
 		Resolve problem with HTML and CSV columns
+		Advertise to
+			https://github.com/pluginaweek/table_helper
 	AjaxSubmit
-		http://www.1stwebdesigner.com/css/best-ajax-css-forms-tips-trends-techniques/
+		Implement interactive validation 
+			/objects/:id/validate
+			/objects/:id?validate=true
+			Crazy variant?
+			Investigate how client_side_validations does that
+		Advertise to 
+			https://github.com/bcardarella/client_side_validations/
 		Promote
 			Ask SI to promote through design modo
 			js-show
@@ -17,7 +27,7 @@ OSS
 			Find posibilities to reuse that API
 		ajaxsubmit-rails
 	Rails
-		AS::Callbacks: deprecate autodefine around when before and after present
+		AS::Callbacks: deprecate define #around when #filter present
 		Journey: Try to remove SLASH and DOT node type
 		AM::Errors#add!
 		#to_param implementation: use #to_param internally
@@ -28,6 +38,7 @@ OSS
 		/rails/rake db:migrate
 		Check SQL select * from pv where price <= Infinity
 		Make rails raise exception if asset is used directly but not precompiled
+		AM::MassAssignmentSecurity: review strong-params and make proposal
 	Rspec-rails
 		Subshell on rake spec
 	Vim execute plugin

@@ -29,8 +29,8 @@ In this way the performance will always be under control. And this benchmark wou
 
 #### Patch 1: [Decrease amount of generated code](https://github.com/rails/rails/commit/bf6e29e00759547d5d0e0bab20434a12a449eb48)
 
-`#define_method` is a good way to define method. With the exception that it doesn't support methods with blocks.
-In case of dynamic method that operates block we need to use `eval` in some way.
+`#define_method` is a good way to define method. With the exception that it doesn't support methods with blocks and it is significatly slower.
+In case of rails we need to use `eval` in many places to support blocks and performance.
 A general pattern that would make your code easier to read: do not let generated method be more than one line of code.
 
 {% highlight ruby %}
