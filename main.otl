@@ -6,6 +6,12 @@ Home
 	Earthen pot
 	Fitness club
 OSS
+	diffbench
+		Advertise to:
+			https://github.com/change/method_profiler
+		TODO:
+			Exit code support
+			bm and bmbm support
 	Russian Infection
 	Pivotal-Commit
 	datagrid
@@ -13,7 +19,7 @@ OSS
 		Advertise to
 			https://github.com/pluginaweek/table_helper
 	AjaxSubmit
-		Implement interactive validation 
+		ajaxsubmit-rails
 			/objects/:id/validate
 			/objects/:id?validate=true
 			Crazy variant?
@@ -21,11 +27,9 @@ OSS
 		Advertise to 
 			https://github.com/bcardarella/client_side_validations/
 		Promote
-			Ask SI to promote through design modo
 			js-show
 		Take a look at rails-ujs
 			Find posibilities to reuse that API
-		ajaxsubmit-rails
 	Rails
 		AS::Callbacks: deprecate define #around when #filter present
 		Journey: Try to remove SLASH and DOT node type
@@ -43,16 +47,16 @@ OSS
 		Subshell on rake spec
 	Vim execute plugin
 	Poltergeist
-	Tweethub
-		Find a way to promote
-			Contact Github
-			Blog post
-			ruby5
-			rubyflow
-			dzone
-			hackernews
-			reddit
-		Review a list of event types
+Tweethub
+	Find a way to promote
+		Contact Github
+		Blog post
+		ruby5
+		rubyflow
+		dzone
+		hackernews
+		reddit
+	Review a list of event types
 
 Get a new idea
 	Interstellar clone
