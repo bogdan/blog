@@ -14,15 +14,16 @@ OSS
 			bm and bmbm support
 	Russian Infection
 	Pivotal-Commit
+	Accept values for
+		Remove discover
+		Rewrite discover article in blog
 	datagrid
 		Resolve problem with HTML and CSV columns
-		Advertise to
-			https://github.com/pluginaweek/table_helper
 	AjaxSubmit
 		ajaxsubmit-rails
 			/objects/:id/validate
 			/objects/:id?validate=true
-			Crazy variant?
+			/ajaxsubmitvalidate?klass=User&attributes[email]=a@b.com
 			Investigate how client_side_validations does that
 		Advertise to 
 			https://github.com/bcardarella/client_side_validations/
@@ -31,6 +32,7 @@ OSS
 		Take a look at rails-ujs
 			Find posibilities to reuse that API
 	Rails
+		More clean errors for ActiveRecord::RecordInvalid
 		AS::Callbacks: deprecate define #around when #filter present
 		Journey: Try to remove SLASH and DOT node type
 		AM::Errors#add!
@@ -42,14 +44,12 @@ OSS
 		/rails/rake db:migrate
 		Check SQL select * from pv where price <= Infinity
 		Make rails raise exception if asset is used directly but not precompiled
-		Make associations return association class instead of Array
 		AM::MassAssignmentSecurity: review strong-params and make proposal
 		Resolve changelog merge problem
 		Minify backtrace for exceptions in rails console
 	Rspec-rails
 		Subshell on rake spec
 	Vim execute plugin
-	Poltergeist
 Tweethub
 	Find a way to promote
 		Contact Github

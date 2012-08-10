@@ -11,7 +11,7 @@ tags:
 ---
 
 This is short notes about my experience with full text search based on PostgreSQL and Solr.
-Solr was primary used with a help of [Sunspot gem](https://github.com/sunspot/sunspot), which was definitely a good idea, 
+Solr was primary used with a help of [Sunspot gem](https://github.com/sunspot/sunspot) that was definitely a good idea, 
 but unfortunately caused some drawbacks. PostgreSQL provides full text search out of the box and to my opinion doesn't need any 
 additional ruby specific tools other than ORM.
 <!--more-->
@@ -19,13 +19,17 @@ additional ruby specific tools other than ORM.
 ## TL;DR
 
 PostgreSQL approach is simple and fit well to agile project.
-Solr is pretty powerful, but you need to pay for that power. And this is a significant cost.
+Solr is pretty powerful, but you need to pay for that power. And this is significant cost.
 Think twice if you really need this power from the first day of full text search in your project.
 
 ## Search index
 
 Solr search index is something you create almost manually by defining a new data schema.
+<<<<<<< HEAD
 Sunspot sets `after_save` hooks to your model to update it's solr index.
+=======
+No matter which gem you will use to connect Solr and Relational database.
+>>>>>>> 022e00a845ca69684fbb83e47d5338dd54493056
 
 Here is an example of schema definition based on Sunspot gem:
 
@@ -54,7 +58,7 @@ class Product < ActiveRecord::Base
   before_validation :set_searchable_content
   protected
   def set_searchable_content
-    self.searchable_content = [self.title, self.material, self.position.category, self.position.brand].join(" ")
+    self.searchable_content = [self.title, self.material, self.category.title, self.brand.title].join(" ")
   end
 end
 {% endhighlight %}
@@ -93,8 +97,12 @@ Product.search do |s|
 end
 {% endhighlight %}
 
+<<<<<<< HEAD
 At first look you might say that Solr way is more clear, but you still don't know what it does in deep details.
 Sunspot gives a nice DSL that overlaps with SQL in many things (e.g. [comparation operators](https://github.com/sunspot/sunspot/wiki/Scoping-by-attribute-fields)), while postgres lets use SQL - language you should know already.
+=======
+Sunspot gives a nice DSL that overlaps with SQL in many things (e.g. [comparison operators](https://github.com/sunspot/sunspot/wiki/Scoping-by-attribute-fields)), while postgres lets use SQL - language you should know already.
+>>>>>>> 022e00a845ca69684fbb83e47d5338dd54493056
 
 There is also easy to spot that Solr and Sunspot tool chain brings more features to you out of the box.
 But this is where Solr advantages ends.
@@ -115,9 +123,13 @@ Here is a short example that tells Solr to do some string transformation before 
 
 ## Deployment and Testing
 
+<<<<<<< HEAD
 Solr is a standalone application and you need to take care about the following facts:
 
 Solr configuration is a part of source code since some search business logic depends on it. This might require:
+=======
+Solr is a standalone application and you need to take care about Solr configuration. It is a part of a code since some search business logic depends on it. This might require:
+>>>>>>> 022e00a845ca69684fbb83e47d5338dd54493056
 
 * different solr config files across different branches 
 * test suite that covers some config options
@@ -143,7 +155,6 @@ No matter which gem you will use to connect Solr and Relational database: you ne
 
 Conceptually I would like my database to respond for every data search operation e.g. full text search.
 This is where PostgreSQL is going. But this feature is not that strong now e.g. it still lacks spell checking and result highlight features.
-Solr is old school tool having all full text search features you ever imagine, but need to pay a lot for this power.
-
+Solr is old school tool having all full text search features you ever imagine, but it's heavy configuration file and technology stack should be easier.
 
 
