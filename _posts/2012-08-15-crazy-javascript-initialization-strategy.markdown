@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Crazy Javascript initialization strategy
-published: true
+published: false
 tags: 
 - solr
 - sunspot

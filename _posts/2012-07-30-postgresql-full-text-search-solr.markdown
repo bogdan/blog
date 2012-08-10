@@ -25,11 +25,7 @@ Think twice if you really need this power from the first day of full text search
 ## Search index
 
 Solr search index is something you create almost manually by defining a new data schema.
-<<<<<<< HEAD
 Sunspot sets `after_save` hooks to your model to update it's solr index.
-=======
-No matter which gem you will use to connect Solr and Relational database.
->>>>>>> 022e00a845ca69684fbb83e47d5338dd54493056
 
 Here is an example of schema definition based on Sunspot gem:
 
@@ -39,10 +35,10 @@ class Product < ActiveRecord::Base
     text :title
     text :material
     text :category do
-      position.category
+      category.title
     end
     text :brand do
-      position.brand
+      brand.title
     end
   end # do
 end
@@ -58,7 +54,7 @@ class Product < ActiveRecord::Base
   before_validation :set_searchable_content
   protected
   def set_searchable_content
-    self.searchable_content = [self.title, self.material, self.category.title, self.brand.title].join(" ")
+    self.searchable_content = [title, material, category.title, brand.title].join(" ")
   end
 end
 {% endhighlight %}
@@ -97,12 +93,8 @@ Product.search do |s|
 end
 {% endhighlight %}
 
-<<<<<<< HEAD
 At first look you might say that Solr way is more clear, but you still don't know what it does in deep details.
-Sunspot gives a nice DSL that overlaps with SQL in many things (e.g. [comparation operators](https://github.com/sunspot/sunspot/wiki/Scoping-by-attribute-fields)), while postgres lets use SQL - language you should know already.
-=======
 Sunspot gives a nice DSL that overlaps with SQL in many things (e.g. [comparison operators](https://github.com/sunspot/sunspot/wiki/Scoping-by-attribute-fields)), while postgres lets use SQL - language you should know already.
->>>>>>> 022e00a845ca69684fbb83e47d5338dd54493056
 
 There is also easy to spot that Solr and Sunspot tool chain brings more features to you out of the box.
 But this is where Solr advantages ends.
@@ -113,27 +105,25 @@ Here is a short example that tells Solr to do some string transformation before 
 <fieldType name="text" class="solr.TextField" omitNorms="false">
   <analyzer>
     <tokenizer class="solr.StandardTokenizerFactory"/>
+    <!-- remove punctualtion -->
     <filter class="solr.StandardFilterFactory"/>
+    <!-- lower case letters -->
     <filter class="solr.LowerCaseFilterFactory"/>
+    <!-- language semantic support -->
     <filter class="solr.SnowballPorterFilterFactory" language="English"/>
   </analyzer>
 </fieldType>
 {% endhighlight %}
 
+When you go deeper into solr you might need to deal with configs like example above.
 
 ## Deployment and Testing
 
-<<<<<<< HEAD
-Solr is a standalone application and you need to take care about the following facts:
-
-Solr configuration is a part of source code since some search business logic depends on it. This might require:
-=======
 Solr is a standalone application and you need to take care about Solr configuration. It is a part of a code since some search business logic depends on it. This might require:
->>>>>>> 022e00a845ca69684fbb83e47d5338dd54493056
 
 * different solr config files across different branches 
 * test suite that covers some config options
-  * different solr instances launched for development and test environments
+* different solr instances launched for development and test environments
 * a need to rebuild search index when you switch branches
 
 Postgres built in search doesn't have these problems at all. This will give a significant performance boost in agile process.  Deployment, testing and switching branches doesn't require any full text search specific action.
