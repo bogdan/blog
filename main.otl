@@ -45,6 +45,7 @@ OSS
 		Make associations return association class instead of Array
 		AM::MassAssignmentSecurity: review strong-params and make proposal
 		Resolve changelog merge problem
+		Minify backtrace for exceptions in rails console
 	Rspec-rails
 		Subshell on rake spec
 	Vim execute plugin

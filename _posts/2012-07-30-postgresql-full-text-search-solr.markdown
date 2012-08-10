@@ -1,7 +1,7 @@
 ---
 layout: post
-title: 'Full text search - Solr vs PostgreSQL in a scope of Rails app'
-published: false
+title: Full text search - Solr(Sunspot) vs PostgreSQL 
+published: true
 tags: 
 - solr
 - sunspot
@@ -25,8 +25,7 @@ Think twice if you really need this power from the first day of full text search
 ## Search index
 
 Solr search index is something you create almost manually by defining a new data schema.
-Keeping this search index in sync with database data is always your responsibility.
-No matter which gem you will use to connect Solr and Relational database.
+Sunspot sets `after_save` hooks to your model to update it's solr index.
 
 Here is an example of schema definition based on Sunspot gem:
 
@@ -44,6 +43,8 @@ class Product < ActiveRecord::Base
   end # do
 end
 {% endhighlight %}
+
+
 
 PostgreSQL search index might be yet another column in the database, set by pre save hook:
 
@@ -92,16 +93,31 @@ Product.search do |s|
 end
 {% endhighlight %}
 
+At first look you might say that Solr way is more clear, but you still don't know what it does in deep details.
 Sunspot gives a nice DSL that overlaps with SQL in many things (e.g. [comparation operators](https://github.com/sunspot/sunspot/wiki/Scoping-by-attribute-fields)), while postgres lets use SQL - language you should know already.
 
 There is also easy to spot that Solr and Sunspot tool chain brings more features to you out of the box.
 But this is where Solr advantages ends.
+Note stat Solr config file is not as readable as Sunspot DSL. 
+Here is a short example that tells Solr to do some string transformation before create a search index:
+
+{% highlight xml %}
+<fieldType name="text" class="solr.TextField" omitNorms="false">
+  <analyzer>
+    <tokenizer class="solr.StandardTokenizerFactory"/>
+    <filter class="solr.StandardFilterFactory"/>
+    <filter class="solr.LowerCaseFilterFactory"/>
+    <filter class="solr.SnowballPorterFilterFactory" language="English"/>
+  </analyzer>
+</fieldType>
+{% endhighlight %}
+
 
 ## Deployment and Testing
 
 Solr is a standalone application and you need to take care about the following facts:
 
-Solr configuration is a part of a code since some search business logic depends on it. This might require:
+Solr configuration is a part of source code since some search business logic depends on it. This might require:
 
 * different solr config files across different branches 
 * test suite that covers some config options
@@ -119,6 +135,15 @@ First of them is complicated search index that cover more than one model (Ex: `P
 It makes both approaches more complex as business logic becomes more complex.
 
 But in case of Solr this is not the only one thing to care.
-
 With database size growth you gain more problems. Solr index do not have that nice migration mechanism and dump transfer tools as Relational databases.
+No matter which gem you will use to connect Solr and Relational database: you need to take care when search index schema changes.
+
+
+## Conclusion
+
+Conceptually I would like my database to respond for every data search operation e.g. full text search.
+This is where PostgreSQL is going. But this feature is not that strong now e.g. it still lacks spell checking and result highlight features.
+Solr is old school tool having all full text search features you ever imagine, but need to pay a lot for this power.
+
+
 
