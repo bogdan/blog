@@ -12,13 +12,14 @@ OSS
 		TODO:
 			Exit code support
 			bm and bmbm support
-	Russian Infection
+	Russian Infection ruby gem
 	Pivotal-Commit
 	Accept values for
 		Remove discover
 		Rewrite discover article in blog
 	datagrid
 		Resolve problem with HTML and CSV columns
+		Improve test data in datagrid demo
 	AjaxSubmit
 		ajaxsubmit-rails
 			/objects/:id/validate
@@ -46,6 +47,7 @@ OSS
 		Make rails raise exception if asset is used directly but not precompiled
 		AM::MassAssignmentSecurity: review strong-params and make proposal
 		Resolve changelog merge problem
+		Pass binds to AR::Base.conn.select_value
 	Rspec-rails
 		Subshell on rake spec
 	Vim execute plugin
