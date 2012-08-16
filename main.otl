@@ -47,6 +47,7 @@ OSS
 		AM::MassAssignmentSecurity: review strong-params and make proposal
 		Resolve changelog merge problem
 		Pass binds to AR::Base.conn.select_value
+		Minify backtrace for exceptions in rails console
 	Rspec-rails
 		Subshell on rake spec
 	Vim execute plugin

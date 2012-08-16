@@ -1,7 +1,7 @@
 ---
 layout: post
-title: 'Full text search - Solr vs PostgreSQL in a scope of Rails app'
-published: false
+title: Full text search - Solr(Sunspot) vs PostgreSQL 
+published: true
 tags: 
 - solr
 - sunspot
@@ -25,7 +25,7 @@ Think twice if you really need this power from the first day of full text search
 ## Search index
 
 Solr search index is something you create almost manually by defining a new data schema.
-No matter which gem you will use to connect Solr and Relational database.
+Sunspot sets `after_save` hooks to your model to update it's solr index.
 
 Here is an example of schema definition based on Sunspot gem:
 
@@ -35,14 +35,16 @@ class Product < ActiveRecord::Base
     text :title
     text :material
     text :category do
-      position.category
+      category.title
     end
     text :brand do
-      position.brand
+      brand.title
     end
   end # do
 end
 {% endhighlight %}
+
+
 
 PostgreSQL search index might be yet another column in the database, set by pre save hook:
 
@@ -52,7 +54,7 @@ class Product < ActiveRecord::Base
   before_validation :set_searchable_content
   protected
   def set_searchable_content
-    self.searchable_content = [self.title, self.material, self.category.title, self.brand.title].join(" ")
+    self.searchable_content = [title, material, category.title, brand.title].join(" ")
   end
 end
 {% endhighlight %}
@@ -91,10 +93,29 @@ Product.search do |s|
 end
 {% endhighlight %}
 
+At first look you might say that Solr way is more clear, but you still don't know what it does in deep details.
 Sunspot gives a nice DSL that overlaps with SQL in many things (e.g. [comparison operators](https://github.com/sunspot/sunspot/wiki/Scoping-by-attribute-fields)), while postgres lets use SQL - language you should know already.
 
 There is also easy to spot that Solr and Sunspot tool chain brings more features to you out of the box.
 But this is where Solr advantages ends.
+Note stat Solr config file is not as readable as Sunspot DSL. 
+Here is a short example that tells Solr to do some string transformation before create a search index:
+
+{% highlight xml %}
+<fieldType name="text" class="solr.TextField" omitNorms="false">
+  <analyzer>
+    <tokenizer class="solr.StandardTokenizerFactory"/>
+    <!-- remove punctualtion -->
+    <filter class="solr.StandardFilterFactory"/>
+    <!-- lower case letters -->
+    <filter class="solr.LowerCaseFilterFactory"/>
+    <!-- language semantic support -->
+    <filter class="solr.SnowballPorterFilterFactory" language="English"/>
+  </analyzer>
+</fieldType>
+{% endhighlight %}
+
+When you go deeper into solr you might need to deal with configs like example above.
 
 ## Deployment and Testing
 
@@ -102,7 +123,7 @@ Solr is a standalone application and you need to take care about Solr configurat
 
 * different solr config files across different branches 
 * test suite that covers some config options
-  * different solr instances launched for development and test environments
+* different solr instances launched for development and test environments
 * a need to rebuild search index when you switch branches
 
 Postgres built in search doesn't have these problems at all. This will give a significant performance boost in agile process.  Deployment, testing and switching branches doesn't require any full text search specific action.
@@ -116,5 +137,14 @@ First of them is complicated search index that cover more than one model (Ex: `P
 It makes both approaches more complex as business logic becomes more complex.
 
 But in case of Solr this is not the only one thing to care.
-With database size growth you gain more problems. Solr index do not have that nice migration mechanism and dump transfer tools as Relational databases.  Keeping this search index in sync with database data is always your responsibility.
+With database size growth you gain more problems. Solr index do not have that nice migration mechanism and dump transfer tools as Relational databases.
+No matter which gem you will use to connect Solr and Relational database: you need to take care when search index schema changes.
+
+
+## Conclusion
+
+Conceptually I would like my database to respond for every data search operation e.g. full text search.
+This is where PostgreSQL is going. But this feature is not that strong now e.g. it still lacks spell checking and result highlight features.
+Solr is old school tool having all full text search features you ever imagine, but it's heavy configuration file and technology stack should be easier.
+
 
