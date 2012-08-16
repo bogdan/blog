@@ -19,7 +19,6 @@ OSS
 		Rewrite discover article in blog
 	datagrid
 		Resolve problem with HTML and CSV columns
-		Improve test data in datagrid demo
 	AjaxSubmit
 		ajaxsubmit-rails
 			/objects/:id/validate
