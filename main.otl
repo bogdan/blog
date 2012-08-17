@@ -12,7 +12,7 @@ OSS
 		TODO:
 			Exit code support
 			bm and bmbm support
-	Russian Infection
+	Russian Infection ruby gem
 	Pivotal-Commit
 	Accept values for
 		Remove discover
@@ -46,6 +46,7 @@ OSS
 		Make rails raise exception if asset is used directly but not precompiled
 		AM::MassAssignmentSecurity: review strong-params and make proposal
 		Resolve changelog merge problem
+		Pass binds to AR::Base.conn.select_value
 		Minify backtrace for exceptions in rails console
 		Document out resource(s) :as option
 	Rspec-rails

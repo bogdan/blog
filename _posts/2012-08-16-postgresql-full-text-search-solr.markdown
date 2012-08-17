@@ -94,7 +94,7 @@ end
 {% endhighlight %}
 
 At first look you might say that Solr way is more clear, but you still don't know what it does in deep details.
-Sunspot gives a nice DSL that overlaps with SQL in many things (e.g. [comparison operators](https://github.com/sunspot/sunspot/wiki/Scoping-by-attribute-fields)), while postgres lets use SQL - language you should know already.
+Sunspot gives DSL is yet another language to query data. It includes all types of operations (e.g. [comparison operators](https://github.com/sunspot/sunspot/wiki/Scoping-by-attribute-fields), while postgres lets use SQL - language you should know already.
 
 There is also easy to spot that Solr and Sunspot tool chain brings more features to you out of the box.
 But this is where Solr advantages ends.
@@ -116,6 +116,7 @@ Here is a short example that tells Solr to do some string transformation before 
 {% endhighlight %}
 
 When you go deeper into solr you might need to deal with configs like example above.
+While in case of PostgreSQL you can do any string transformation using ruby.
 
 ## Deployment and Testing
 
