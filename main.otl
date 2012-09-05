@@ -48,6 +48,7 @@ OSS
 		Pass binds to AR::Base.conn.select_value
 		Minify backtrace for exceptions in rails console
 		model.attributes.except(:id, :created_at, :updated_at)
+		Document out resource(s) :as option
 	Rspec-rails
 		Subshell on rake spec
 	Vim execute plugin
