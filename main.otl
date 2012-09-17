@@ -7,8 +7,6 @@ Home
 	Fitness club
 OSS
 	diffbench
-		Advertise to:
-			https://github.com/change/method_profiler
 		TODO:
 			Exit code support
 			bm and bmbm support
@@ -19,6 +17,7 @@ OSS
 		Rewrite discover article in blog
 	datagrid
 		Resolve problem with HTML and CSV columns
+		Write to ActiveAdmin owners
 	AjaxSubmit
 		ajaxsubmit-rails
 			/objects/:id/validate
@@ -49,6 +48,9 @@ OSS
 		Pass binds to AR::Base.conn.select_value
 		Minify backtrace for exceptions in rails console
 		Document out resource(s) :as option
+		#update_column to support hash argument
+		Checkout agly link in bid introduction email 
+			employer_bid_url(@bid)
 	Rspec-rails
 		Subshell on rake spec
 	Vim execute plugin
@@ -76,10 +78,6 @@ Get a new idea
 		Ask Dmitra about what people at Miraline are doing
 	Bug tracker with tree support
 		Discuss with Allan
-	Document to txt conversion service
-		Explore alternatives
-		Find clients
-		Investigate already existing services
 	Reporting service
 		Ask Allan about his friend that doing data analysis software
 Mailtrap
