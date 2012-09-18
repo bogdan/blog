@@ -51,6 +51,7 @@ OSS
 		#update_column to support hash argument
 		Checkout agly link in bid introduction email 
 			employer_bid_url(@bid)
+		Remove trailing slash in root_url
 	Rspec-rails
 		Subshell on rake spec
 	Vim execute plugin
@@ -98,6 +99,8 @@ Blog
 	Ajax debug article
 		javascriptshow
 		plugins.jquery.com
+	Mension this article
+		http://robots.thoughtbot.com/post/31728620503/refactoring-replace-conditional-with-polymorphism
 
 
 The art of programming

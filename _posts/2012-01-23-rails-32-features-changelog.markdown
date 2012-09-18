@@ -43,7 +43,7 @@ Some validation are not connected with end user and breaking it is more likely a
 Use case:
 
 {% highlight ruby %}
-class Article < AR::B
+class Article < AR::Base
   validates :author, :presence => true
 end
 
@@ -59,7 +59,7 @@ More over DEV team is not notified about the problem.
 In order to fix that You can use [validate! method](https://github.com/rails/rails/commit/8620bf90c5e486e1ec44b9aabb63f8c848668ed2) that generates validator that always raises exception when fails:
 
 {% highlight ruby %}
-class User < AR::Base
+class Article < AR::Base
   validates! :author, :presence => true
 end
 
