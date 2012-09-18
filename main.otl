@@ -2,7 +2,6 @@ Home
 	Elizabeth Adler Prevage
 	Fish knife
 	Trempels
-	Candy from eurasia
 	Earthen pot
 	Fitness club
 OSS
@@ -10,14 +9,24 @@ OSS
 		TODO:
 			Exit code support
 			bm and bmbm support
-	Russian Infection ruby gem
-	Pivotal-Commit
+	russian infection ruby gem
+	git-storyid
+		blog posts comments
+		stackoverflow
+		dzone
+		hackernews
+		reddit
+		Ruby toolbox
+		rubyshow
+		ruby5
+		rubyflow
+		http://afreshcup.com/
 	Accept values for
 		Remove discover
 		Rewrite discover article in blog
 	datagrid
 		Resolve problem with HTML and CSV columns
-		Write to ActiveAdmin owners
+		Build generators
 	AjaxSubmit
 		ajaxsubmit-rails
 			/objects/:id/validate
@@ -33,12 +42,9 @@ OSS
 	Rails
 		More clean errors for ActiveRecord::RecordInvalid
 		AS::Callbacks: deprecate define #around when #filter present
-		Journey: Try to remove SLASH and DOT node type
-		AM::Errors#add!
 		#to_param implementation: use #to_param internally
 			Resolve circular dependency between to_param and to_query
 		Make uniq/pluck combination work on collection association
-		Ask for feedback on bulk_migration
 		/rails/generate/model User name:string
 		/rails/rake db:migrate
 		Check SQL select * from pv where price <= Infinity
@@ -47,6 +53,7 @@ OSS
 		Resolve changelog merge problem
 		Pass binds to AR::Base.conn.select_value
 		Minify backtrace for exceptions in rails console
+		model.attributes.except(:id, :created_at, :updated_at)
 		Document out resource(s) :as option
 		#update_column to support hash argument
 		Checkout agly link in bid introduction email 
@@ -81,10 +88,6 @@ Get a new idea
 		Discuss with Allan
 	Reporting service
 		Ask Allan about his friend that doing data analysis software
-Mailtrap
-	Find a way to comeback
-		Rethink what Allan said
-	Decide what to do with Vitya
 
 
 Configuration
@@ -104,6 +107,7 @@ Blog
 
 
 The art of programming
+	Organize a conference with rubygarage
 	Prepare Rspec master class
 		Propose Rspec master class to Lori
 	Resque master classes
