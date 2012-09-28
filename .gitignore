@@ -1,6 +1,6 @@
 css/*.css
 build
 _site/
-tags
+./tags/
 _includes/cloud.html
 _includes/keywords.html

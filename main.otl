@@ -59,6 +59,7 @@ OSS
 		Checkout agly link in bid introduction email 
 			employer_bid_url(@bid)
 		Remove trailing slash in root_url
+		Remove unwanted transaction call on find_or_initialize_<has_one>
 	Rspec-rails
 		Subshell on rake spec
 	Vim execute plugin
