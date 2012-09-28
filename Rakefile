@@ -96,7 +96,9 @@ end
 desc 'Generate tags page'
 task :tags do
 
+  FileUtils.rm_rf("tags")
   FileUtils.mkdir_p("tags")
+
   site.tags.sort.each do |tag, posts|
     html = ''
     html << <<-HTML
