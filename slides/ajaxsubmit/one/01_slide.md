@@ -13,23 +13,23 @@ More important than
 
 * deploy apps to clouds
 * follow scrum at 100% 
-* have 100% coverage
+* have 100% test coverage
 
 
 !SLIDE 
 
-# New web forms requirements
+# *New web forms* **requirements**
 
 * Submit with ajax
 * Small amount of fields
 * Inline validation 
-* Agile process
+* Agile process (more features per second)
 
 !SLIDE 
 
-## Validation is a problem
+## **Validation** is a problem
 
-### Move client side validation to client is main solution
+### Move *validation to client* is main solution
 
 !SLIDE 
 
@@ -37,25 +37,25 @@ More important than
 
 Different approaches
 
-* Separated client side validation code
-* Generate client side validations based on Rails validation
-* Write validation in JavaScript and execute it in backend
+* *Separated* client validation code
+* *Generated* client side validations based on Rails validation
+* Write validation *in JavaScript* and execute it in backend
 
 !SLIDE 
 
 # Why like this?
 
-* No way to make 100% reusable
-* Huge complexity
-* Tons of bugs
+* **No way** to make 100% reusable
+* Huge **complexity**
+* Tons of **bugs**
 
 !SLIDE 
 
-# Why we can not validate on backend always?
+# Why not to validate on *backend always*?
 
 * Forms are small
 * AJAX is our friend
-  * 100 ms or even less
+  * 100ms or even less
 * Just so easy
 
 
@@ -63,7 +63,7 @@ Different approaches
 
 ## Submit a form with ajax  
 
-## obtain data if successful 
+## obtain data or redirection URL if successful 
 
 ### or
 
@@ -73,17 +73,17 @@ Different approaches
 
 ## Rework server side
 
-    @@@ diff
-     def create
-       @user = User.new(params[:user])
-       if @user.save
-    -    redirect_to root_path
-    +    render json: {redirect: root_path}
-       else
-    -    render action: "new"
-    +    render json: {errors: @user.errors}
-       end
-     end
+<pre><code>
+ def create
+   @user = User.new(params[:user])
+   if @user.save
+<span class="diff remove">-    redirect_to root_path</span>
+<span class="diff add">+    render json: {redirect: root_path}</span>
+   else
+<span class="diff remove">-    render action: "new"</span>
+<span class="diff add">+    render json: {errors: @user.errors}</span>
+   end
+ end</code></pre>
 
 !SLIDE 
 
@@ -148,23 +148,25 @@ Different approaches
 
 # But this is not the end
 
+## some problems still remain
+
 !SLIDE 
 
 # Inline validation 
-# require good formatting
+# require *good formatting*
 # which yield
-# DESIGN/CSS overhead
+# **DESIGN/CSS overhead**
 
 !SLIDE 
 
 # DESIGN/CSS overhead
 
 * Design:
-  * Errors overlaps page content
-  * Form starts to jump around when validation appears
-  * Different forms and input types
+  * **Errors overlaps** page content
+  * **Form jump around** when validation appears
+  * Different errors layout
 * CSS:
-  * Different forms and input types
+  * input, select, textarea
   * Implement a beauty of the design
 
 
@@ -177,6 +179,13 @@ Different approaches
 * Show errors in popup-like box with close button
 
 [http://ajaxsubmit.heroku.com/](http://ajaxsubmit.heroku.com/)
+
+!SLIDE 
+
+<img src="/image/pointer.png"/>
+<br/>
+<img src="/image/works.png"/>
+<img src="/image/mailtrap.png"/>
 
 !SLIDE 
 
@@ -279,6 +288,10 @@ Place to insert error message into error format
 
 ## Summary
 
+* Complexity never was a good idea 
+* Web Forms 2.0 could be done in a way that doesn't break deadline
+
 !SLIDE 
 
-* 
+
+
