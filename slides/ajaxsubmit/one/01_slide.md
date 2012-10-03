@@ -7,7 +7,7 @@
 
 !SLIDE bullets incremental
 
-## Web Forms **are important**
+## Web Forms are important
 
 More important than 
 
@@ -16,14 +16,14 @@ More important than
 * have 100% test coverage
 
 
-<!--!SLIDE -->
+!SLIDE 
 
-<!--# *New web forms* **requirements**-->
+# *New web forms* **requirements**
 
-<!--* Submit with ajax-->
-<!--* Small amount of fields-->
-<!--* Inline validation -->
-<!--* Agile process (more features per second)-->
+* Submit with ajax
+* Small amount of fields
+* Inline validation 
+* Agile process (more features per second)
 
 !SLIDE 
 
@@ -41,13 +41,13 @@ Different approaches
 * *Generated* client side validations based on Rails validation
 * Write validation *in JavaScript* and execute it in backend
 
-<!--!SLIDE -->
+!SLIDE 
 
-<!--# Why like this?-->
+# Why like this?
 
-<!--* **No way** to make 100% reusable-->
-<!--* Huge **complexity**-->
-<!--* Tons of **bugs**-->
+* **No way** to make 100% reusable
+* Huge **complexity**
+* Tons of **bugs**
 
 !SLIDE 
 
@@ -114,7 +114,6 @@ Different approaches
     $.errors.format ='<div 
       class="validation-message 
         validation-text"></div>';
-
     $(".ajax-form").ajaxForm()
 
 !SLIDE 
@@ -135,11 +134,6 @@ Different approaches
 
 <img src="/image/works.png"/>
 
-## [http://ajaxsubmit.heroku.com/](http://ajaxsubmit.heroku.com/)
-<br/>
-<br/>
-<br/>
-<br/>
 
 !SLIDE 
 
@@ -156,58 +150,148 @@ Different approaches
 
 ## some problems still remain
 
-<!--!SLIDE -->
+!SLIDE 
 
-<!--# Inline validation -->
-<!--# require *good formatting*-->
-<!--# which yield-->
-<!--# **DESIGN/CSS overhead**-->
+# Inline validation 
+# require *good formatting*
+# which yield
+# **DESIGN/CSS overhead**
 
-<!--!SLIDE -->
+!SLIDE 
 
-<!--# DESIGN/CSS overhead-->
+# DESIGN/CSS overhead
 
-<!--* Design:-->
-  <!--* **Errors overlaps** page content-->
-  <!--* **Form jump around** when validation appears-->
-  <!--* Different errors layout-->
-<!--* CSS:-->
-  <!--* input, select, textarea-->
-  <!--* Implement a beauty of the design-->
-
-
+* Design:
+  * **Errors overlaps** page content
+  * **Form jump around** when validation appears
+  * Different errors layout
+* CSS:
+  * input, select, textarea
+  * Implement a beauty of the design
 
 
 !SLIDE 
 
-## [http://ajaxsubmit.heroku.com/](http://ajaxsubmit.heroku.com/)
+# Three variants of design:
+
+* Show errors in flat page flow
+* Show errors on hover
+* Show errors in popup-like box with close button
+
+[http://ajaxsubmit.heroku.com/](http://ajaxsubmit.heroku.com/)
+
+!SLIDE 
 
 <img src="/image/pointer.png"/>
 <br/>
 <img src="/image/works.png"/>
 <img src="/image/mailtrap.png"/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
 
+!SLIDE 
+
+# Solving CSS overhead
+
+* Flexible formatting configuration
+* Custom DOM for any particular validation error
+
+!SLIDE 
+
+# Ajaxsubmit configuration idea
+
+    @@@ javascript
+    $.errors = {
+      attribute: "validate"
+      activationClass: "validation-active"
+      format: "<div class='validation-block'>
+        <div class='validation-message'></div>
+        </div>"
+      messageClass: "validation-message"
+    }
 
 
 !SLIDE 
 
-## [http://github.com/bogdan/ajaxsubmit](http://github.com/bogdan/ajaxsubmit)
 
-## [http://ajaxsubmit.heroku.com](http://ajaxsubmit.heroku.com)
+    @@@ javascript
+    $.errors.attribute = "validate"
+
+&amp;
+
+    @@@ html
+    <div validate="company company_id">
+      <select name="company">...</select>
+    </div>
+
+&amp;
+
+    @@@ javascript
+    [
+      ["company_id", "is blank"],
+      ["company", "not included in the list"]
+    ]
 
 
-## ----
+!SLIDE 
+  
+    @@@ javascript
+    $.errors.activationClass = 
+                "validation-active"
 
-## [http://gusiev.com](http://gusiev.com)
+&amp;
 
-## [http://github.com/bogdan](http://github.com/bogdan)
+    @@@ html
+    <div class="validation-active" 
+      validate="company company_id">
+      <select name="company">...</select>
+      <!-- Error message here -->
+    </div>
+
+&amp;
+
+    @@@ css
+    .validation-active select {
+      color: red;
+    }
+
+!SLIDE 
+  
+    @@@ javascript
+    $.errors.format ='<div 
+      class="validation-message 
+        validation-text"></div>'
+
+&amp;
+
+    @@@ html
+    <div class="validation-active" 
+      validate="company company_id">
+      <select name="company">...</select>
+      <div class="validation-message 
+        validation-text">is blank</div>
+    </div>
+
+&amp;
+
+### More CSS
+
+
+!SLIDE 
+
+    @@@ javascript
+    $.errors.messageClass = 
+             "validation-message"
+
+
+Place to insert error message into error format
+
+!SLIDE 
+
+## Summary
+
+* Complexity never was a good idea 
+* Web Forms 2.0 could be done in a way that doesn't break deadline
+
+!SLIDE 
+
+
 
