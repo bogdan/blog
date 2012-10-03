@@ -27,6 +27,7 @@ OSS
 	datagrid
 		Resolve problem with HTML and CSV columns
 		Build generators
+		Ability to specify whole grid as html
 	AjaxSubmit
 		ajaxsubmit-rails
 			/objects/:id/validate
@@ -75,6 +76,8 @@ Tweethub
 	Review a list of event types
 
 Get a new idea
+	Advanced Minesweeper
+	Reality rift
 	Interstellar clone
 	Twitter bots
 		What to post?
