@@ -1,0 +1,15 @@
+.diff.add {
+  background-color: #DFD;
+}
+.diff.remove {
+  background-color: #FDD;
+}
+
+em {
+  color: green;
+}
+
+strong {
+  color: red;
+  font-weight: normal;
+}
