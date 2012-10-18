@@ -34,12 +34,18 @@ OSS
 			/objects/:id?validate=true
 			/ajaxsubmitvalidate?klass=User&attributes[email]=a@b.com
 			Investigate how client_side_validations does that
+			Take a look at rails-ujs
+				Find posibilities to reuse that API
 		Advertise to 
 			https://github.com/bcardarella/client_side_validations/
 		Promote
-			js-show
-		Take a look at rails-ujs
-			Find posibilities to reuse that API
+			js-show         
+				Want to let you know about ajaxsubmit library.
+				This library is aimed to convert any regular web form into ajax web form.
+
+				http://ajaxsubmit.heroku.com
+
+				I think it's done with some new level of flexibility that wasn't done before: checkout configuration and API documentation.
 	Rails
 		More clean errors for ActiveRecord::RecordInvalid
 		AS::Callbacks: deprecate define #around when #filter present
