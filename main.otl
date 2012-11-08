@@ -5,6 +5,9 @@ Home
 	Earthen pot
 	Fitness club
 OSS
+	Ruby
+		Irb bug: >> (&:)<tab>
+
 	diffbench
 		TODO:
 			Exit code support
@@ -48,7 +51,6 @@ OSS
 				I think it's done with some new level of flexibility that wasn't done before: checkout configuration and API documentation.
 	Rails
 		More clean errors for ActiveRecord::RecordInvalid
-		AS::Callbacks: deprecate define #around when #filter present
 		#to_param implementation: use #to_param internally
 			Resolve circular dependency between to_param and to_query
 		Make uniq/pluck combination work on collection association
@@ -67,6 +69,7 @@ OSS
 			employer_bid_url(@bid)
 		Remove trailing slash in root_url
 		Remove unwanted transaction call on find_or_initialize_<has_one>
+		ActiveModel csv serializer
 	Rspec-rails
 		Subshell on rake spec
 	Vim execute plugin
@@ -108,12 +111,9 @@ Configuration
 Blog
 	Article about ActiveSupport::Callbacks
 	PAEI model in programming
-	Tweethub blog post
 	Ajax debug article
 		javascriptshow
 		plugins.jquery.com
-	Mension this article
-		http://robots.thoughtbot.com/post/31728620503/refactoring-replace-conditional-with-polymorphism
 
 
 The art of programming
