@@ -50,7 +50,6 @@ OSS
 
 				I think it's done with some new level of flexibility that wasn't done before: checkout configuration and API documentation.
 	Rails
-		More clean errors for ActiveRecord::RecordInvalid
 		#to_param implementation: use #to_param internally
 			Resolve circular dependency between to_param and to_query
 		Make uniq/pluck combination work on collection association
@@ -58,7 +57,6 @@ OSS
 		/rails/rake db:migrate
 		Check SQL select * from pv where price <= Infinity
 		Make rails raise exception if asset is used directly but not precompiled
-		AM::MassAssignmentSecurity: review strong-params and make proposal
 		Resolve changelog merge problem
 		Pass binds to AR::Base.conn.select_value
 		Minify backtrace for exceptions in rails console
@@ -67,9 +65,6 @@ OSS
 		#update_column to support hash argument
 		Checkout agly link in bid introduction email 
 			employer_bid_url(@bid)
-		Remove trailing slash in root_url
-		Remove unwanted transaction call on find_or_initialize_<has_one>
-		ActiveModel csv serializer
 	Rspec-rails
 		Subshell on rake spec
 	Vim execute plugin
@@ -114,6 +109,7 @@ Blog
 	Ajax debug article
 		javascriptshow
 		plugins.jquery.com
+	Compare dinosaurs growth to startup growth
 
 
 The art of programming
