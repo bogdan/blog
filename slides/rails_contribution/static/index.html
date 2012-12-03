@@ -1,0 +1,594 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <title>My Preso</title>
+
+  <meta name="viewport" content="width=device-width"/>
+
+  <link rel="stylesheet" href="./css/reset.css" type="text/css"/>
+  <link rel="stylesheet" href="./css/showoff.css" type="text/css"/>
+
+  <script type="text/javascript" src="./js/jquery-1.4.2.min.js"></script>
+  <script type="text/javascript" src="./js/jquery.cycle.all.js"></script>
+	<script type="text/javascript" src="./js/jquery-print.js"></script>
+  <script type="text/javascript" src="./js/jquery.batchImageLoad.js"></script>
+
+  <script type="text/javascript" src="./js/jquery.doubletap-0.1.js"></script>
+
+  <script type="text/javascript" src="./js/fg.menu.js"></script>
+  <script type="text/javascript" src="./js/showoff.js"></script>
+  <script type="text/javascript" src="./js/jTypeWriter.js"> </script>
+  <script type="text/javascript" src="./js/sh_main.min.js"></script>
+  <script type="text/javascript" src="./js/core.js"></script>
+  <script type="text/javascript" src="./js/showoffcore.js"></script>
+  <script type="text/javascript" src="./js/coffee-script.js"></script>
+
+  <link type="text/css" href="./css/fg.menu.css" media="screen" rel="stylesheet" />
+  <link type="text/css" href="./css/theme/ui.all.css" media="screen" rel="stylesheet" />
+  <link type="text/css" href="./css/sh_style.css" rel="stylesheet" >
+
+  
+    <link rel="stylesheet" href="file/common.css" type="text/css"/>
+  
+
+  
+
+  <script type="text/javascript">
+  $(function(){
+      setupPreso(false, './');
+  });
+  </script>
+
+</head>
+
+<body>
+
+<a tabindex="0" href="#search-engines" class="fg-button fg-button-icon-right ui-widget ui-state-default ui-corner-all" id="navmenu"><span class="ui-icon ui-icon-triangle-1-s"></span>slides</a>
+<div id="navigation" class="hidden"></div>
+
+<div id="help">
+  <table>
+    <tr><td class="key">z, ?</td><td>toggle help (this)</td></tr>
+    <tr><td class="key">space, &rarr;</td><td>next slide</td></tr>
+    <tr><td class="key">shift-space, &larr;</td><td>previous slide</td></tr>
+    <tr><td class="key">d</td><td>toggle debug mode</td></tr>
+    <tr><td class="key">## &lt;ret&gt;</td><td>go to slide #</td></tr>
+    <tr><td class="key">c, t</td><td>table of contents (vi)</td></tr>
+    <tr><td class="key">f</td><td>toggle footer</td></tr>
+    <tr><td class="key">r</td><td>reload slides</td></tr>
+    <tr><td class="key">n</td><td>toggle notes</td></tr>
+    <tr><td class="key">p</td><td>run preshow</td></tr>
+  </table>
+</div>
+
+<div class="buttonNav">
+  <input type="submit" onClick="prevStep();" value="prev"/>
+  <input type="submit" onClick="nextStep();" value="next"/>
+</div>
+
+<div id="preso">loading presentation...</div>
+<div id="footer">
+  <span id="slideInfo"></span>
+  <span id="debugInfo"></span>
+  <span id="notesInfo"></span>
+</div>
+
+<div id="slides" class="offscreen" style="display:none;">
+<div class="slide" data-transition="none"><div class="content" ref="one/01_slide/1">
+<h1>Contribute to Rails</h1>
+
+<h2>in a right way</h2></div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/2">
+<ul>
+<li>Motivate to start looking at the source code more often</li>
+<li>Give a vision on rails internal problems
+
+<ul>
+<li>Solved</li>
+<li>Unsolved</li>
+</ul>
+</li>
+</ul>
+</div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/3">
+<h2>The first thing to spot is that</h2>
+
+<h1>documentation isn't</h1>
+
+<h1>good enough</h1>
+
+<h3>If you start looking at the source code</h3>
+
+<h3>more than at the documentation than you are on a right track.</h3></div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/4">
+<h2>Looking at source code</h2>
+
+<h1>reveal hidden features</h1>
+
+<pre class="sh_ruby"><code>def add_default_name_and_id(options)
+  ...
+  options["name"] += "[]" 
+    if options["multiple"]
+  ...
+end</code></pre>
+
+<p>Use case:</p>
+
+<pre class="sh_ruby"><code>roles.each do |role|
+  f.check_box :role_ids, 
+    :value =&gt; role.id, :multiple =&gt; true
+end</code></pre></div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/5">
+<h2>Looking at source code</h2>
+
+<h1>reveal a hidden bugs</h1>
+
+<pre class="sh_html"><code>&lt;input type="checkbox" 
+    name="user[role_ids][]" 
+    value="1" multiple="multiple"&gt;</code></pre></div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/6">
+<h2>Looking at source code</h2>
+
+<h1>reveals all internal problems</h1>
+
+<p><img src="./file/one/callback_party.png" width="841" height="296" style="width: 100%, height: auto"/>
+
+<script>
+$(function() {
+    $("img").removeAttr("width")
+    $("img").removeAttr("height")
+    })
+</script>
+
+
+<p><a href="https://github.com/rails/rails/blob/master/activemodel/lib/active_model/callbacks.rb#L138">Source link</a></p></p>
+</div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/7">
+<h1>bundle open activerecord</h1></div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/8">
+<h2>Start with</h2>
+
+<h1>fixing bugs in documentation</h1>
+
+<h1>is wrong way</h1>
+
+<ul>
+<li>You don't improve yourself</li>
+<li>You can do same tasks at work and get paid</li>
+</ul>
+</div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/9">
+<h2>Contribute to opensource is</h2>
+
+<h1>do something that</h1>
+
+<ul>
+<li>Makes your life easier</li>
+<li>Lets you improve yourself</li>
+</ul>
+</div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/10">
+<h1>A few examples of</h1>
+
+<h1>what can make life easier</h1></div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/11">
+<h1>Pluck method</h1>
+
+<pre class="sh_ruby"><code>User.where(:active =&gt; true).pluck(:id)
+# SELECT id FROM users WHERE active = 1
+
+User.uniq.pluck(:role)
+# SELECT DISTINCT role FROM users</code></pre></div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/12">
+<h2>Mass assignment security that is easy to spot</h2>
+
+<pre><code>&gt; Education.new(:user_id =&gt; 1)
+
+ActiveModel::MassAssignmentSecurity::Error: 
+  Can't mass-assign protected 
+    attributes: user_id
+from active_model/mass_assignment_security
+  /sanitizer.rb:48:in 
+    `process_removed_attributes'
+</code></pre></div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/13">
+<h1>Strict validation</h1>
+
+<p>Do not let user see validation errors that he can not correct</p>
+
+<pre class="sh_ruby"><code>class Article &lt; AR::Base
+  validates! :author, :presence =&gt; true
+end
+
+u = User.new
+u.save
+   # raises ActiveModel::StrictValidationFailed</code></pre></div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/14">
+<h2>How to improve yourself?</h2>
+
+<h2>Solve a problem that you</h2>
+
+<h1>do not solve in daily work</h1></div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/15">
+<h2>Rails is full of things that are not ok</h2>
+
+<h2>And this is where we can improve ourselves</h2></div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/16">
+<h1>A histrory of Rails callback</h1>
+
+<h3><strike>Rails gay callback party</strike></h3></div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/17">
+<h1>How callback pattern appeared?</h1>
+
+<pre><code>validates_presence_of :author
+validates_size_of :title
+validates_uniqueness_of :slug
+
+before_filter :load_user
+before_filter :require_admin_rights
+after_filter :set_page_title
+
+before_save :downcase_email_address
+after_save :deliver_registration_email
+before_save :generate_api_token
+</code></pre></div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/18">
+<h2>A feeling like</h2>
+
+<h1>something is add to array</h1>
+
+<pre class="sh_ruby"><code>def self.validate(&amp;validator)
+   self.validators &lt;&lt; validator
+end
+
+def valid?
+  validators.all? do |validator|
+    validator.call(self)
+  end
+end</code></pre></div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/19">
+<h1>How this gonna work with objects hierarchy?</h1>
+
+<pre class="sh_ruby"><code>class User &lt; AR::Base
+  validates_size_of :name
+end
+
+class Customer &lt; User
+  validates_presence_of :company
+end
+
+class TeamMember &lt; User
+  validates_presence_of :role
+end</code></pre></div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/20">
+<h1>Is it fast?</h1>
+
+<ul>
+<li>Interations over array when #valid? is called</li>
+<li>Memory usage to store these arrays</li>
+<li>Pass though inherited objects on update</li>
+</ul>
+</div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/21">
+<h2>A feeling like when callbacks were invented</h2>
+
+<h1>Rails core team</h1>
+
+<h1>was not aware of OOP</h1>
+
+<pre class="sh_ruby"><code>def valid?
+  validates_presence_of(:aution) &amp;&amp; 
+    validates_size_of(:title) &amp;&amp;
+    validates_uniqueness_of(:slug) &amp;&amp; 
+    super
+end</code></pre></div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/22">
+<h1>Anyway active_support/callbacks.rb was invented</h1>
+
+<h2>and it was huge step ahead</h2>
+
+<h2>comparing to different implementation</h2>
+
+<h2>accross Rails libraries</h2></div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/23">
+<h1>Performance problem was solved</h1>
+
+<pre><code>class CallbackChain &lt; Array
+def compile
+  method = []
+  method &lt;&lt; "value = nil"
+  method &lt;&lt; "halted = false"
+  callbacks = "value = !halted &amp;&amp; (!block_given? || yield)"
+  reverse_each do |callback|
+    callbacks = callback.apply(callbacks)
+  end
+  method &lt;&lt; callbacks
+  method &lt;&lt; "value"
+  method.join("\n")
+end
+end
+</code></pre></div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/24">
+<h1>But Rails Boot time was a cost</h1>
+
+<h2>Each time new callback is added</h2>
+
+<pre class="sh_ruby"><code>validates_presence_of :user</code></pre>
+
+<h2>Rails redefines callback method</h2>
+
+<pre><code>def set_callback(*args)
+  add_callback_to_chain(*args)
+  recompile_callback_method
+  and_dont_forget_about_inherited_classes
+end
+</code></pre></div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/25">
+<h2>What did I do?</h2>
+
+<h1>Get rid of other optimization in Callbacks</h1>
+
+<h2>It was clean that other optimization</h2>
+
+<h2>made in callbacks doesn't work</h2></div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/26">
+
+
+<pre>
+1   <span class="plus">+</span>
+3   <span class="plus">+</span><span class="plus">+</span><span class="minus">-</span>
+2   <span class="plus">+</span><span class="minus">-</span>
+4   <span class="plus">+</span><span class="plus">+</span><span class="minus">-</span><span class="minus">-</span>
+19  <span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span>
+14  <span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span>
+27  <span class="plus">+</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span>
+30  <span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span>
+47  <span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span>
+7   <span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="minus">-</span>
+4   <span class="plus">+</span><span class="plus">+</span><span class="minus">-</span><span class="minus">-</span>
+42  <span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span>
+19  <span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span>
+19  <span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span>
+14  <span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span>
+5   <span class="plus">+</span><span class="plus">+</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span>
+21  <span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span>
+120 <span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span>
+26  <span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span>
+16  <span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span>
+45  <span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="plus">+</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span><span class="minus">-</span>
+</pre>
+
+
+</div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/27">
+<h1>Callbacks optimization method</h1>
+
+<h1>could be generated lazily</h1>
+
+<pre class="sh_ruby"><code>def run_callbacks(name)
+  runner_method = __callback_runner_name(name)
+  unless respond_to?(name)
+    define_callback_runner(name)
+  end
+  send(name)
+end</code></pre></div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/28">
+<h2>The only one thing left</h2>
+
+<h1>Construct a runner method is slow</h1>
+
+<pre class="sh_ruby"><code>def __callback_runner_name(kind)
+  class_id = name.hash.abs
+  "_run__#{class_id}__#{kind}__callbacks"
+end</code></pre></div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/29">
+<h2>Last try resulted in this comment</h2>
+
+<p><img src="./file/one/rafael_comment.png" width="737" height="212"/></p>
+
+<!--@bogdan this commit make the Active Model suite to brake sometimes. Reverting this commit all the tests pass.-->
+
+
+
+
+<!--I used [this script](https://gist.github.com/f6828a03ee4d40bffbc3) to run the suite many times.-->
+
+
+
+
+<!--With this commit: `50 times, 3 failures`-->
+
+
+
+
+<!--Without this commit: `100 times, 0 failures`-->
+
+
+<p><a href="https://github.com/rails/rails/pull/6351#commitcomment-1404989">Link</a></p></div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/30">
+<h1>A histroy of Rails Router</h1></div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/31">
+<h1>Rails 1.x</h1>
+
+<pre><code>/:controller/:action(/:id)
+</code></pre>
+
+<h2>Allows to move through abstraction layer</h2></div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/32">
+<h1>Rails 1.x</h1>
+
+<pre><code>url_for(
+  :controller =&gt; :users, 
+  :action =&gt; :show,
+  :id =&gt; 1
+)
+</code></pre></div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/33">
+<h1>Rails 2.x</h1>
+
+<pre><code>/:controller/(:id/):action
+</code></pre>
+
+<h2>Rest compatible</h2></div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/34">
+<h1>Rails 2.x</h1>
+
+<h2>Named Routes</h2>
+
+<pre><code>user_path(1)
+</code></pre>
+
+<ul>
+<li>Each route has an internal <em>unique name</em></li>
+<li>Find a route by name is really faster</li>
+</ul>
+</div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/35">
+<h1>Rails 3.x</h1>
+
+<pre><code>(/locale/:locale)/page/:name 
+              =&gt; "pages#show"
+</code></pre>
+
+<ul>
+<li>Additional flexibility</li>
+<li><p>Journey as a router backend</p></li>
+<li><p>Makes REST less strict</p>
+
+<ul>
+<li>because nobody care at the end but it is ok</li>
+</ul>
+</li>
+</ul>
+</div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/36">
+<h1>Journey solved route recognition problem</h1>
+
+<p>Journey parses each route and converts it into</p>
+
+<p>Abstract Syntax Tree</p></div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/37">
+<h1>The result of</h1>
+
+<h1>router evolution</h1></div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/38">
+<h2>It's new library, so</h2>
+
+<h1>Journey is not optimized yet</h1>
+
+<pre class="sh_ruby"><code>
+routes.map! { |r|
+  match_data  = r.path.match(req.path_info)
+  match_names = match_data.names.map do |n| 
+    n.to_sym 
+  end
+  match_values = match_data.captures.map do |v| 
+    v &amp;&amp; Utils.unescape_uri(v) 
+  end
+  info = Hash[match_names.zip(match_values).
+    find_all { |_,y| y }]
+
+  [match_data, r.defaults.merge(info), r]
+}</code></pre></div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/39">
+<h1>Bloody mess internals</h1>
+
+<h2>as the outcome</h2>
+
+<pre class="sh_ruby"><code>if options.has_key?(:action) 
+    &amp;&amp; options[:action].nil?
+  options[:action] = 'index'
+end
+if options[:action] == 'index' 
+  recall[:action] = options.delete(:action) 
+end</code></pre>
+
+<p><a href="https://github.com/rails/rails/blob/master/actionpack/lib/action_dispatch/routing/route_set.rb#L522">Source code</a></p></div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/40">
+<h1>A need to support unnamed routes with recall</h1>
+
+<pre class="sh_ruby"><code># Pseudocode
+def url_for(options)
+  options = options.reverse_merge(recall)
+  route = routes.find do |route|
+    route.match?(options)
+  end
+  route = format_route(route, options)
+end</code></pre></div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/41">
+<h1>ActionPack is a worth</h1>
+
+<h1>rails component now</h1></div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/42">
+<h1>Why json kills the performance?</h1>
+
+<pre><code>        user     system   total     real
+user_path(1)                   
+        0.1500   0.0000   0.1500 (  0.150241)
+users_path(1, format: :json)   
+        1.0700   0.0100   1.0800 (  1.079205)
+</code></pre>
+
+<p>(link generated 1000 times)</p></div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/43">
+<h2>Links generation is extremely slow</h2>
+
+<p>It takes one millisecond to create a link like this:</p>
+
+<pre class="sh_ruby"><code>      user_path(user, :format =&gt; "json")</code></pre>
+
+<p>A page with <strong>100 links</strong> will be generated in <strong>100ms</strong></p></div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/44">
+<h1>http://github.com</h1>
+
+<pre class="sh_javascript"><code>jQuery("a").length // =&gt; 177</code></pre></div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/45">
+
+
+<pre>
+@module.module_eval -END_EVAL, __FILE__, __LINE__ + 1
+  remove_possible_method :#{name}
+  def #{name}(*args)
+    if #<strong>{optimize_helper?</strong>(route)}  args.size == #{route.required_parts.size}  !args.last.is_a?(Hash)  <strong>optimize</strong>_routes_generation?
+      <strong># this is fast</strong>
+      options = #{options.inspect}
+      options.merge!(url_options) if respond_to?(:url_options)
+      options[:path] = "#{<strong>optimized_helper</strong>(route)}"
+      ActionDispatch::Http::URL.url_for(options)
+    else
+      <strong># this is slow</strong>
+      url_for(handle_positional_args(args, #{options.inspect}, #{route.segment_keys.inspect}))
+    end
+  end
+END_EVAL
+</pre>
+
+
+</div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/46">
+<blockquote><p>"I, based on my work with various teams,
+<strong>consider Rails</strong> a nice set of conventions,
+a <strong>fantastic routing system</strong> and a very useful ORM."</p></blockquote>
+
+<p>Someone comment in github.com/rails/rails</p></div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/47">
+<h2>Why all those things are optimized?</h2>
+
+<h2>I want things to be always optimized</h2>
+
+<p>(c) Aaron Peterson</p></div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/48">
+<h1>This problem is not solved</h1>
+
+<h2>Aaron Peterson is too busy to solve it for you</h2>
+
+<h2>And I can not solve it on my own</h2>
+
+<h1>I need your help</h1></div>
+</div></div>
+
+</body>
+</html>
