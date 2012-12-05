@@ -82,6 +82,11 @@ $(function() {
 
 #   bundle open activerecord
 
+!SLIDE 
+
+# Now lets talk about 
+
+# how to contribute
 
 !SLIDE 
 
@@ -270,6 +275,7 @@ Do not let user see validation errors that he can not correct
 # Performance problem was solved
 
 
+    @@@ ruby
     class CallbackChain < Array
     def compile
       method = []
@@ -601,5 +607,49 @@ Someone comment in github.com/rails/rails
 # I need your help
 
 
+!SLIDE 
 
+## One more thing
+# About Company I am working in right now 
+
+
+!SLIDE 
+
+
+![Curebit sales](sales.png)
+
+
+
+# _
+
+# _
+
+# _
+
+# _
+
+# &nbsp;
+
+
+
+!SLIDE 
+
+# Our team needs good engineers
+
+
+<img src="Curebit-new.png" style="width: 50%">
+
+
+### Send resumes to 
+
+<h2><a href="mailto:jobs@curebit.com">jobs@curebit.com</a></h2>
+
+!SLIDE 
+
+
+# Thanks!
+
+## [http://gusiev.com](http://gusiev.com)
+
+## [http://github.com/bogdan](http://github.com/bogdan)
 
