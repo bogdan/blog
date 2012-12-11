@@ -149,6 +149,10 @@ $(function() {
 </div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/7">
 <h1>bundle open activerecord</h1></div>
 </div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/8">
+<h1>Now lets talk about</h1>
+
+<h1>how to contribute</h1></div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/9">
 <h2>Start with</h2>
 
 <h1>fixing bugs in documentation</h1>
@@ -160,7 +164,7 @@ $(function() {
 <li>You can do same tasks at work and get paid</li>
 </ul>
 </div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/9">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/10">
 <h2>Contribute to opensource is</h2>
 
 <h1>do something that</h1>
@@ -170,11 +174,11 @@ $(function() {
 <li>Lets you improve yourself</li>
 </ul>
 </div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/10">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/11">
 <h1>A few examples of</h1>
 
 <h1>what can make life easier</h1></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/11">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/12">
 <h1>Pluck method</h1>
 
 <pre class="sh_ruby"><code>User.where(:active =&gt; true).pluck(:id)
@@ -182,7 +186,7 @@ $(function() {
 
 User.uniq.pluck(:role)
 # SELECT DISTINCT role FROM users</code></pre></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/12">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/13">
 <h2>Mass assignment security that is easy to spot</h2>
 
 <pre><code>&gt; Education.new(:user_id =&gt; 1)
@@ -194,7 +198,7 @@ from active_model/mass_assignment_security
   /sanitizer.rb:48:in 
     `process_removed_attributes'
 </code></pre></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/13">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/14">
 <h1>Strict validation</h1>
 
 <p>Do not let user see validation errors that he can not correct</p>
@@ -206,21 +210,21 @@ end
 u = User.new
 u.save
    # raises ActiveModel::StrictValidationFailed</code></pre></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/14">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/15">
 <h2>How to improve yourself?</h2>
 
 <h2>Solve a problem that you</h2>
 
 <h1>do not solve in daily work</h1></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/15">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/16">
 <h2>Rails is full of things that are not ok</h2>
 
 <h2>And this is where we can improve ourselves</h2></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/16">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/17">
 <h1>A histrory of Rails callback</h1>
 
 <h3><strike>Rails gay callback party</strike></h3></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/17">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/18">
 <h1>How callback pattern appeared?</h1>
 
 <pre><code>validates_presence_of :author
@@ -235,7 +239,7 @@ before_save :downcase_email_address
 after_save :deliver_registration_email
 before_save :generate_api_token
 </code></pre></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/18">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/19">
 <h2>A feeling like</h2>
 
 <h1>something is add to array</h1>
@@ -249,7 +253,7 @@ def valid?
     validator.call(self)
   end
 end</code></pre></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/19">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/20">
 <h1>How this gonna work with objects hierarchy?</h1>
 
 <pre class="sh_ruby"><code>class User &lt; AR::Base
@@ -263,7 +267,7 @@ end
 class TeamMember &lt; User
   validates_presence_of :role
 end</code></pre></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/20">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/21">
 <h1>Is it fast?</h1>
 
 <ul>
@@ -272,7 +276,7 @@ end</code></pre></div>
 <li>Pass though inherited objects on update</li>
 </ul>
 </div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/21">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/22">
 <h2>A feeling like when callbacks were invented</h2>
 
 <h1>Rails core team</h1>
@@ -285,7 +289,7 @@ end</code></pre></div>
     validates_uniqueness_of(:slug) &amp;&amp; 
     super
 end</code></pre></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/22">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/23">
 <h1>Anyway active_support/callbacks.rb was invented</h1>
 
 <h2>and it was huge step ahead</h2>
@@ -293,10 +297,10 @@ end</code></pre></div>
 <h2>comparing to different implementation</h2>
 
 <h2>accross Rails libraries</h2></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/23">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/24">
 <h1>Performance problem was solved</h1>
 
-<pre><code>class CallbackChain &lt; Array
+<pre class="sh_ruby"><code>class CallbackChain &lt; Array
 def compile
   method = []
   method &lt;&lt; "value = nil"
@@ -309,9 +313,8 @@ def compile
   method &lt;&lt; "value"
   method.join("\n")
 end
-end
-</code></pre></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/24">
+end</code></pre></div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/25">
 <h1>But Rails Boot time was a cost</h1>
 
 <h2>Each time new callback is added</h2>
@@ -326,7 +329,7 @@ end
   and_dont_forget_about_inherited_classes
 end
 </code></pre></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/25">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/26">
 <h2>What did I do?</h2>
 
 <h1>Get rid of other optimization in Callbacks</h1>
@@ -334,7 +337,7 @@ end
 <h2>It was clean that other optimization</h2>
 
 <h2>made in callbacks doesn't work</h2></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/26">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/27">
 
 
 <pre>
@@ -363,7 +366,7 @@ end
 
 
 </div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/27">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/28">
 <h1>Callbacks optimization method</h1>
 
 <h1>could be generated lazily</h1>
@@ -375,7 +378,7 @@ end
   end
   send(name)
 end</code></pre></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/28">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/29">
 <h2>The only one thing left</h2>
 
 <h1>Construct a runner method is slow</h1>
@@ -384,7 +387,7 @@ end</code></pre></div>
   class_id = name.hash.abs
   "_run__#{class_id}__#{kind}__callbacks"
 end</code></pre></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/29">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/30">
 <h2>Last try resulted in this comment</h2>
 
 <p><img src="./file/one/rafael_comment.png" width="737" height="212"/></p>
@@ -408,16 +411,16 @@ end</code></pre></div>
 
 
 <p><a href="https://github.com/rails/rails/pull/6351#commitcomment-1404989">Link</a></p></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/30">
-<h1>A histroy of Rails Router</h1></div>
 </div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/31">
+<h1>A histroy of Rails Router</h1></div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/32">
 <h1>Rails 1.x</h1>
 
 <pre><code>/:controller/:action(/:id)
 </code></pre>
 
 <h2>Allows to move through abstraction layer</h2></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/32">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/33">
 <h1>Rails 1.x</h1>
 
 <pre><code>url_for(
@@ -426,14 +429,14 @@ end</code></pre></div>
   :id =&gt; 1
 )
 </code></pre></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/33">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/34">
 <h1>Rails 2.x</h1>
 
 <pre><code>/:controller/(:id/):action
 </code></pre>
 
 <h2>Rest compatible</h2></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/34">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/35">
 <h1>Rails 2.x</h1>
 
 <h2>Named Routes</h2>
@@ -446,7 +449,7 @@ end</code></pre></div>
 <li>Find a route by name is really faster</li>
 </ul>
 </div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/35">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/36">
 <h1>Rails 3.x</h1>
 
 <pre><code>(/locale/:locale)/page/:name 
@@ -464,17 +467,17 @@ end</code></pre></div>
 </li>
 </ul>
 </div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/36">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/37">
 <h1>Journey solved route recognition problem</h1>
 
 <p>Journey parses each route and converts it into</p>
 
 <p>Abstract Syntax Tree</p></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/37">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/38">
 <h1>The result of</h1>
 
 <h1>router evolution</h1></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/38">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/39">
 <h2>It's new library, so</h2>
 
 <h1>Journey is not optimized yet</h1>
@@ -493,7 +496,7 @@ routes.map! { |r|
 
   [match_data, r.defaults.merge(info), r]
 }</code></pre></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/39">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/40">
 <h1>Bloody mess internals</h1>
 
 <h2>as the outcome</h2>
@@ -507,7 +510,7 @@ if options[:action] == 'index'
 end</code></pre>
 
 <p><a href="https://github.com/rails/rails/blob/master/actionpack/lib/action_dispatch/routing/route_set.rb#L522">Source code</a></p></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/40">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/41">
 <h1>A need to support unnamed routes with recall</h1>
 
 <pre class="sh_ruby"><code># Pseudocode
@@ -518,11 +521,11 @@ def url_for(options)
   end
   route = format_route(route, options)
 end</code></pre></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/41">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/42">
 <h1>ActionPack is a worth</h1>
 
 <h1>rails component now</h1></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/42">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/43">
 <h1>Why json kills the performance?</h1>
 
 <pre><code>        user     system   total     real
@@ -533,7 +536,7 @@ users_path(1, format: :json)
 </code></pre>
 
 <p>(link generated 1000 times)</p></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/43">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/44">
 <h2>Links generation is extremely slow</h2>
 
 <p>It takes one millisecond to create a link like this:</p>
@@ -541,11 +544,11 @@ users_path(1, format: :json)
 <pre class="sh_ruby"><code>      user_path(user, :format =&gt; "json")</code></pre>
 
 <p>A page with <strong>100 links</strong> will be generated in <strong>100ms</strong></p></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/44">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/45">
 <h1>http://github.com</h1>
 
 <pre class="sh_javascript"><code>jQuery("a").length // =&gt; 177</code></pre></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/45">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/46">
 
 
 <pre>
@@ -568,19 +571,19 @@ END_EVAL
 
 
 </div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/46">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/47">
 <blockquote><p>"I, based on my work with various teams,
 <strong>consider Rails</strong> a nice set of conventions,
 a <strong>fantastic routing system</strong> and a very useful ORM."</p></blockquote>
 
 <p>Someone comment in github.com/rails/rails</p></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/47">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/48">
 <h2>Why all those things are optimized?</h2>
 
 <h2>I want things to be always optimized</h2>
 
 <p>(c) Aaron Peterson</p></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/48">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/49">
 <h1>This problem is not solved</h1>
 
 <h2>Aaron Peterson is too busy to solve it for you</h2>
@@ -588,6 +591,46 @@ a <strong>fantastic routing system</strong> and a very useful ORM."</p></blockqu
 <h2>And I can not solve it on my own</h2>
 
 <h1>I need your help</h1></div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/50">
+<h2>One more thing</h2>
+
+<h1>About Curebit</h1>
+
+<h2>Company I am working in right now</h2></div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/51">
+<p><img src="./file/one/sales.png" width="901" height="579" alt="Curebit sales"/></p>
+
+<h1>_</h1>
+
+<h1>_</h1>
+
+<h1>_</h1>
+
+<h1>_</h1>
+
+<h1/></div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/52">
+<h1>World Class Product</h1>
+
+<h1>World Class Salary</h1>
+
+<p><img src="./file/one/Curebit-new.png" width="1150" height="392" style="width: 50%"/>
+
+<h3>Send resumes to</h3>
+
+<h2><a href="mailto:jobs@curebit.com">jobs@curebit.com</a></h2>
+
+
+</p>
+</div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/53">
+<h1>Thanks!</h1>
+
+<h2><a href="http://gusiev.com">http://gusiev.com</a></h2>
+
+<h2><a href="http://github.com/bogdan">http://github.com/bogdan</a></h2>
+
+<h2><a href="jobs@curebit.com">jobs@curebit.com</a></h2></div>
 </div></div>
 
 </body>

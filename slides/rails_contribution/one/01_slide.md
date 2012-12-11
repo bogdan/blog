@@ -610,7 +610,8 @@ Someone comment in github.com/rails/rails
 !SLIDE 
 
 ## One more thing
-# About Company I am working in right now 
+# About Curebit 
+## Company I am working in right now 
 
 
 !SLIDE 
@@ -634,7 +635,8 @@ Someone comment in github.com/rails/rails
 
 !SLIDE 
 
-# Our team needs good engineers
+# World Class Product
+# World Class Salary
 
 
 <img src="Curebit-new.png" style="width: 50%">
@@ -652,4 +654,6 @@ Someone comment in github.com/rails/rails
 ## [http://gusiev.com](http://gusiev.com)
 
 ## [http://github.com/bogdan](http://github.com/bogdan)
+
+## [jobs@curebit.com](jobs@curebit.com)
 
