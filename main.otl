@@ -63,6 +63,8 @@ OSS
 		model.attributes.except(:id, :created_at, :updated_at)
 		Document out resource(s) :as option
 		#update_column to support hash argument
+		#valid! method
+		Move #create! to the right spot
 		Checkout agly link in bid introduction email 
 			employer_bid_url(@bid)
 	Rspec-rails
@@ -110,6 +112,8 @@ Blog
 		javascriptshow
 		plugins.jquery.com
 	Compare dinosaurs growth to startup growth
+
+	
 
 
 The art of programming

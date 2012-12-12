@@ -6,4 +6,3 @@ paginate: 10
 permalink: "/:year/:month/:title"
 url: "http://gusiev.com"
 content_delimeter: "<!--more-->"
-
