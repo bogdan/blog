@@ -4,6 +4,8 @@ Home
 	Trempels
 	Earthen pot
 	Fitness club
+	eBook
+	Katishki
 OSS
 	Ruby
 		Irb bug: >> (&:)<tab>
@@ -13,6 +15,7 @@ OSS
 			Exit code support
 			bm and bmbm support
 	russian infection ruby gem
+	Log analyzer
 	git-storyid
 		blog posts comments
 		stackoverflow
@@ -28,7 +31,6 @@ OSS
 		Remove discover
 		Rewrite discover article in blog
 	datagrid
-		Resolve problem with HTML and CSV columns
 		Build generators
 		Ability to specify whole grid as html
 	AjaxSubmit
@@ -50,26 +52,39 @@ OSS
 
 				I think it's done with some new level of flexibility that wasn't done before: checkout configuration and API documentation.
 	Rails
-		#to_param implementation: use #to_param internally
+		Archived
 			Resolve circular dependency between to_param and to_query
-		Make uniq/pluck combination work on collection association
-		/rails/generate/model User name:string
-		/rails/rake db:migrate
-		Check SQL select * from pv where price <= Infinity
-		Make rails raise exception if asset is used directly but not precompiled
+			Make uniq/pluck combination work on collection association
+			/rails/generate/model User name:string
+			/rails/rake db:migrate
+			Check SQL select * from pv where price <= Infinity
+			Make rails raise exception if asset is used directly but not precompiled
 		Resolve changelog merge problem
+		rake db:migrate:down STEP=
+		as_json(:id, :email, :active) api
 		Pass binds to AR::Base.conn.select_value
 		Minify backtrace for exceptions in rails console
 		model.attributes.except(:id, :created_at, :updated_at)
 		Document out resource(s) :as option
 		#update_column to support hash argument
-		#valid! method
 		Move #create! to the right spot
-		Checkout agly link in bid introduction email 
+		Checkout ugly link in bid introduction email 
 			employer_bid_url(@bid)
+		Application.yml
+		Done
+			#valid! method
+		Filter from log SQL parameters
+		Model.schema
 	Rspec-rails
 		Subshell on rake spec
 	Vim execute plugin
+
+
+Reading
+	Google Scripting
+		https://developers.google.com/apps-script/articles/gmail-stats
+	Potential source of PR
+		http://www.sdruby.org/podcast
 Tweethub
 	Find a way to promote
 		Contact Github
@@ -98,6 +113,8 @@ Get a new idea
 		Discuss with Allan
 	Reporting service
 		Ask Allan about his friend that doing data analysis software
+	LogMagnat
+		Build prototype
 
 
 Configuration
@@ -112,6 +129,8 @@ Blog
 		javascriptshow
 		plugins.jquery.com
 	Compare dinosaurs growth to startup growth
+
+
 
 	
 
