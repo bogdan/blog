@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Where to work as a rubyist in Ukraine?
+title: Where to work as a rubyist in Ukraine
 #published: false
 tags: 
 - job
