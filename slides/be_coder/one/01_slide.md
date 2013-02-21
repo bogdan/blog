@@ -122,7 +122,7 @@ How do you think how big is it now?
 ## Another example of 
 # Picking wrong library
 
-    Removing has_many_polymorphs gem
+    Removing *** gem
     ---
      Gemfile              |  1 -
      Gemfile.lock         |  3 ---
@@ -176,7 +176,7 @@ And it's Ok!
 
 !SLIDE 
 
-# Why this is important?
+# Why define it like this?
 
 * Good products tend to make one thing in 10 different ways 
   * over do 10 different things
@@ -208,7 +208,7 @@ And it's Ok!
 
 !SLIDE 
 
-## But we should understand that
+## We should understand that
 
 # Learn *classic programming* 
 #is better
@@ -223,18 +223,18 @@ And it's Ok!
 
 !SLIDE 
 
-# The gem that doesn't save 
-# lines of code is bad gem
+# *Gems should save* 
+# lines of code
 
 ### (with exception for performance improving gems)
 
 ## Use something because of good API 
-## doesn't worth it at the end.
+## **doesn't worth** it at the end.
 
 
 !SLIDE 
 
-## Why is it better to be coder than architect 
+## Why is it better to be *coder than architect* 
 
 # for you?
 
@@ -260,9 +260,11 @@ And it's Ok!
 
 ### And it is obvious that
 
-## Great developer will 
-## know for sure 
-# what code to reuse
+## *Great developer*
+## will know for sure 
+### (not by his pure imagination)
+# what libraries are databases 
+# are *good to reuse*
 
 
 !SLIDE 
