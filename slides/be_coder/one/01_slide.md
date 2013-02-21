@@ -1,110 +1,98 @@
 !SLIDE 
 
-# Why is it better to be coder than architect?
+# Why is it better to be *coder* than **architect**?
 
 !SLIDE 
 
 ## Why is it better to be coder than architect?
-# For ME
+# *For Me*
 
 !SLIDE 
 
 # There was also a marketing name 
-## that I didn't manage to copypaste
-
+## that I didn't manage to copypaste it
 
 
 !SLIDE 
 
 # Who is an architect?
 
-    me: "Человек, который пишет код каждый день,
+    me: "Человек, который умеет писать код,
       может решить эту задачу за 10 минут"
 
-    someone: "Я не пишу код каждый день.
-      Я больше по архитектуре."
+    someone: "Я не пишу код.
+                Я больше по архитектуре."
 
 !SLIDE 
 
-# Architect Fact:
+### Architect Facts:
 
 * Handles most modern smart phone in a hand
   * Not less than 1 hour a day
 * Thinking about  "Architecture"
   * Not less than 6 hours a day
-* Has more than 2 databases in project
-  * Better when project is not yet in production
-* Have meetings 
+* Has 3 or more databases in project
+  * Better when project is not yet released
+* Go to meetings 
   * Not less than 1 hour a day
 
 
-!SLIDE 
-
-## What is an architecture?
-
-# It is a code reuse metrics
 
 !SLIDE 
 
-# Why this is important?
-
-* Good products tend to make one thing in 10 different ways 
-  * over do 10 different things
-* Less lines of code is one of the greatest quality metrics
+## Some *common* 
+# Programming **Mistakes**
 
 !SLIDE 
 
-## Github Commits
+## High load
 
-* manage with git command line
-* manage though web
-* receive as web hooks
-* etc.
+Most people think that <br>
+when web site becomes popular <br>
+a **high load issue** becomes a bottle neck.
 
-
-!SLIDE 
-
-* Easier to maintain
-* Less time to write down
-* Less bugs
-* Works faster
-
+This is **not true** for most of the projects: <br>
+reach load problems is harder <br>
+than reach *support problems* <br>
 
 !SLIDE 
 
-# Bugs load over High load
+# Example of Support Problem
 
-Most people think that when web site becomes popular 
-a high load issue becomes a bottle neck.
+The initial version of ActiveRecord::Relation#pluck looked like this 
 
-This is not true for most of the projects: 
-reach load problems is harder 
-than reach support problems
+<img src="pluck_old.png"/>
 
+How do you think how big is it now?
+
+!SLIDE 
+
+
+<img src="pluck.png">
 
 
 !SLIDE 
 
-## What is a benefit of using Resque over DelayedJob?
+## The Art of Decision Making 
 
-# It uses Redis as backend instead of Mysql
+# What is a *benefit* of using *Resque* over **DelayedJob**?
 
-!SLIDE 
-
-# This is the cost 
-
-# but not the benefit!!
+## It uses *Redis* as backend instead of **MySQL**
 
 
 !SLIDE 
 
     
+    Delayed::Job.enqueue(...)
+
     Delayed::Job Create (0.2ms)   
         INSERT INTO `delayed_jobs` (...) 
                             VALUES (...)
 
 
 !SLIDE 
+
+    Resque.enqueue(...)
 
     Redis >> SADD resque:queues low
     Redis >> 4.09ms
@@ -123,36 +111,26 @@ than reach support problems
 
     ???
 
+## You have to learn a new commands 
+## to do same thing
+
+## over and over again
 
 
 !SLIDE 
 
-## How many lines of code here?
+## Another example of 
+# Picking wrong library
 
-    @@@ ruby
-    class User
-      
-      def name
-        [first_name, last_name].join(" ")
-      end
+    Removing has_many_polymorphs gem
+    ---
+     Gemfile              |  1 -
+     Gemfile.lock         |  3 ---
+     app/models/coupon.rb | 10 ++++++++--
+     .../show.haml        |  2 +-
+     lib/util.rb          |  4 ++--
 
-    end
-
-
-!SLIDE 
-
-# What code to reuse?
-
-* Most Stars in github
-* Great guy Bob recommended it
-
-
-!SLIDE 
-
-# You will now it as soon as you 
-# start writing reusable code yourself
-
-
+    11 insertions(+), 9 deletions(-)
 
 !SLIDE 
 
@@ -161,39 +139,109 @@ Random phrase from the internet:
 ## "Hey! I already know a framework 
 ## that uses same ideas as Node.js
   
-##  It is Visual Basic."
+!SLIDE 
+
+# It is Visual Basic."
 
 
 IT is following the loop just like any other industry
-And it's ok!
+And it's Ok!
 
 
 !SLIDE 
 
-### But we should understand that
+# *Root* of the **problem** 
 
-## Learn classic programming is better
+!SLIDE 
 
-### than learn popular technologies
+# People pure vision 
+# of the architecture is based on
+# their **implicit faith** 
+# that they can *see the future*
+
+
+!SLIDE 
+
+## Sometimes you will try to write code 
+## that *fit the future* of your application
+
+# While it **doesn't fit presence** 
+# of your application yet
+
+!SLIDE 
+
+## What is an **architecture**?
+
+# It is a code *reuse metrics*
+
+!SLIDE 
+
+# Why this is important?
+
+* Good products tend to make one thing in 10 different ways 
+  * over do 10 different things
+* Less lines of code is one of the greatest quality metrics
+
+!SLIDE 
+
+## Github Commits CRUD
+
+* manage with git command line
+* manage though web
+* receive as web hooks
+* receive as email
+* etc.
+
+!SLIDE 
+
+# What *code to reuse*?
+
+!SLIDE 
+
+# You will know it 
+## as soon as you *start writing* 
+# reusable code *yourself*
 
 !SLIDE 
 
 # Advices
 
- If you said architecture 3 times in a row
- You won't solve the problem in the next hour
+!SLIDE 
+
+## But we should understand that
+
+# Learn *classic programming* 
+#is better
+
+## than learn **popular technologies**
 
 !SLIDE 
 
-The gem that doesn't save lines of code is bad gem
 
-(with exception for performance improving gems)
-
-Use something because of good API doesn't worth it at the end.
+## If you said architecture 2 times in a row
+##  You won't solve the problem in the next hour
 
 !SLIDE 
 
-# If you stop thinking about architecture you will have more time to:
+# The gem that doesn't save 
+# lines of code is bad gem
+
+### (with exception for performance improving gems)
+
+## Use something because of good API 
+## doesn't worth it at the end.
+
+
+!SLIDE 
+
+## Why is it better to be coder than architect 
+
+# for you?
+
+!SLIDE 
+
+## If you stop thinking about architecture 
+## you will have more time to:
 
 * Write reusable code
 * Build great product
@@ -210,10 +258,19 @@ Use something because of good API doesn't worth it at the end.
 
 !SLIDE 
 
-# Great developer is a person that writes reusable code 
-# and know what code to reuse
+### And it is obvious that
 
-## (in case it is 3rd party)
+## Great developer will 
+## know for sure 
+# what code to reuse
 
+
+!SLIDE 
+
+# Thank You
+
+## [http://gusiev.com](http://gusiev.com)
+
+## [http://github.com/bogdan](http://github.com/bogdan)
 
 
