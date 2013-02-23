@@ -4,12 +4,18 @@ Home
 	Trempels
 	Earthen pot
 	Fitness club
+	eBook
+	Katishki
 OSS
+	Ruby
+		Irb bug: >> (&:)<tab>
+
 	diffbench
 		TODO:
 			Exit code support
 			bm and bmbm support
 	russian infection ruby gem
+	Log analyzer
 	git-storyid
 		blog posts comments
 		stackoverflow
@@ -25,7 +31,6 @@ OSS
 		Remove discover
 		Rewrite discover article in blog
 	datagrid
-		Resolve problem with HTML and CSV columns
 		Build generators
 		Ability to specify whole grid as html
 	AjaxSubmit
@@ -47,29 +52,39 @@ OSS
 
 				I think it's done with some new level of flexibility that wasn't done before: checkout configuration and API documentation.
 	Rails
-		More clean errors for ActiveRecord::RecordInvalid
-		AS::Callbacks: deprecate define #around when #filter present
-		#to_param implementation: use #to_param internally
+		Archived
 			Resolve circular dependency between to_param and to_query
-		Make uniq/pluck combination work on collection association
-		/rails/generate/model User name:string
-		/rails/rake db:migrate
-		Check SQL select * from pv where price <= Infinity
-		Make rails raise exception if asset is used directly but not precompiled
-		AM::MassAssignmentSecurity: review strong-params and make proposal
+			Make uniq/pluck combination work on collection association
+			/rails/generate/model User name:string
+			/rails/rake db:migrate
+			Check SQL select * from pv where price <= Infinity
+			Make rails raise exception if asset is used directly but not precompiled
 		Resolve changelog merge problem
+		rake db:migrate:down STEP=
+		as_json(:id, :email, :active) api
 		Pass binds to AR::Base.conn.select_value
 		Minify backtrace for exceptions in rails console
 		model.attributes.except(:id, :created_at, :updated_at)
 		Document out resource(s) :as option
 		#update_column to support hash argument
-		Checkout agly link in bid introduction email 
+		Move #create! to the right spot
+		Checkout ugly link in bid introduction email 
 			employer_bid_url(@bid)
-		Remove trailing slash in root_url
-		Remove unwanted transaction call on find_or_initialize_<has_one>
+		Application.yml
+		Done
+			#valid! method
+		Filter from log SQL parameters
+		Model.schema
 	Rspec-rails
 		Subshell on rake spec
 	Vim execute plugin
+
+
+Reading
+	Google Scripting
+		https://developers.google.com/apps-script/articles/gmail-stats
+	Potential source of PR
+		http://www.sdruby.org/podcast
 Tweethub
 	Find a way to promote
 		Contact Github
@@ -99,6 +114,8 @@ Get a new idea
 	Reporting service
 		Ask Allan about his friend that doing data analysis software
 	Bees or Ants strategy game
+	LogMagnat
+		Build prototype
 
 
 Configuration
@@ -109,15 +126,15 @@ Configuration
 Blog
 	Article about ActiveSupport::Callbacks
 	PAEI model in programming
-	Tweethub blog post
 	Ajax debug article
 		javascriptshow
 		plugins.jquery.com
+	Compare dinosaurs growth to startup growth
 
 Write new Interview cases
 	https://docs.google.com/document/d/1WLupR56Ma2lO5OhLD0g8-nrjunbV7TEmlM6sQx3xESQ/edit#
 
-
+	
 The art of programming
 	Organize a conference with rubygarage
 	Prepare Rspec master class

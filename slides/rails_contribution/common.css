@@ -1,0 +1,11 @@
+.content > pre {
+  font-size: 250%;
+}
+
+.plus {
+  color: green;
+}
+
+.minus {
+  color: red;
+}
