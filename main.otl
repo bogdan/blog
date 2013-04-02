@@ -4,8 +4,10 @@ Home
 	Trempels
 	Earthen pot
 	Fitness club
-	eBook
 	Katishki
+	Oven basket
+		Get dimensions
+
 OSS
 	Ruby
 		Irb bug: >> (&:)<tab>
@@ -14,8 +16,6 @@ OSS
 		TODO:
 			Exit code support
 			bm and bmbm support
-	russian infection ruby gem
-	Log analyzer
 	git-storyid
 		blog posts comments
 		stackoverflow
@@ -59,6 +59,7 @@ OSS
 			/rails/rake db:migrate
 			Check SQL select * from pv where price <= Infinity
 			Make rails raise exception if asset is used directly but not precompiled
+		has_many :tags, :accepts_nested_attributes => true
 		Resolve changelog merge problem
 		rake db:migrate:down STEP=
 		as_json(:id, :email, :active) api
@@ -75,6 +76,7 @@ OSS
 			#valid! method
 		Filter from log SQL parameters
 		Model.schema
+		redirect_to :back with default
 	Rspec-rails
 		Subshell on rake spec
 	Vim execute plugin
@@ -83,18 +85,6 @@ OSS
 Reading
 	Google Scripting
 		https://developers.google.com/apps-script/articles/gmail-stats
-	Potential source of PR
-		http://www.sdruby.org/podcast
-Tweethub
-	Find a way to promote
-		Contact Github
-		Blog post
-		ruby5
-		rubyflow
-		dzone
-		hackernews
-		reddit
-	Review a list of event types
 
 Get a new idea
 	Advanced Minesweeper
@@ -130,9 +120,6 @@ Blog
 		plugins.jquery.com
 	Compare dinosaurs growth to startup growth
 
-
-
-	
 
 
 The art of programming

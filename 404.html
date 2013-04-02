@@ -8,3 +8,12 @@ title: Not Found
 
     {% include search.html %}
 </div>
+<script>
+
+var path = window.location.pathname;
+if (path.substr(0, 3)  == "/x/") {
+  var short_code = path.substr(3, path.length-1)
+  if (short_code == "statused-worker")
+    window.location = "https://gist.github.com/bogdan/1222167"
+}
+</script>
