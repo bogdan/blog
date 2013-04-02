@@ -1,4 +1,4 @@
-source :rubygems
+source 'http://rubygems.org'
 
 #gem "gsl"
 gem "gsl", git: "https://github.com/romanbsd/rb-gsl.git"
