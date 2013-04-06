@@ -1,6 +1,7 @@
 !SLIDE 
 
-# Background Jobs Frameworks
+# Background Jobs 
+# Frameworks
 
 ## Bogdan G.
 
@@ -24,13 +25,13 @@
 
 * Resque
 * Delayed Job
-* SideKick
 
 
 !SLIDE 
 
 
-# And this is all about this presentation as well
+# And presentation  is 
+# all about this as well
 
 
 !SLIDE 
@@ -77,16 +78,14 @@ But when we say "asyncronously" we want to controll this process:
     @@@ ruby
     class SendHeavyReportToUser
       @queue = :low
-      @retry_exceptions = 
-        [Net::SMTPServerBusy, 
-          Timeout::Error, 
-          Resque::DirtyExit]
       @retry_limit = 3
       @retry_delay = 60 #seconds
     end
 
-
-user.delay(:priority => 5, :queue => "low", :attempts => 7)
+    user.delay(
+      :priority => 5,
+      :queue => "low",
+      :attempts => 7)
 
 
 !SLIDE 
@@ -124,7 +123,7 @@ user.delay(:priority => 5, :queue => "low", :attempts => 7)
       :subject => failed_jobs.count.to_s +
         "in enterprise queue now", 
       :body => "..."
-      )
+      ).deliver
     end
 
 
@@ -134,10 +133,10 @@ starting from zero knowledge about DJ
 
 !SLIDE 
 
-## DJ support any document or relational database, 
-## but using Redis will have problems.
+## DJ supports any document or relational database 
+## Using Redis will have problems
 
-Because DJ was originally designed with using relation database features.
+Because DJ was originally designed with using relation database features
 
 !SLIDE 
 
@@ -148,7 +147,7 @@ Because DJ was originally designed with using relation database features.
 
 !SLIDE 
 
-## The true benefit of Redis over Relation database 
+## The true benefit of Redis over RDBMS
 ## is that it is 100 times faster
 
 !SLIDE 
@@ -170,7 +169,7 @@ Because DJ was originally designed with using relation database features.
 
 !SLIDE 
 
-# Redis hates activerecord
+# Redis hates ActiveRecord
 
     @@@ ruby
     class User < AR::Base
@@ -232,7 +231,8 @@ Because DJ was originally designed with using relation database features.
           :enqueue_without_transaction, 
           :enqueue
         def enqueue(*args)
-          ActiveRecord::Base.after_transaction do
+          ActiveRecord::Base.
+            after_transaction do
             enqueue_without_transaction(*args)
           end
         end
@@ -311,16 +311,22 @@ Because DJ was originally designed with using relation database features.
       user_id,
       "4123-5682-3821-1111", {...}
     )
+!SLIDE 
+    @@@ ruby
     CreditCardValidator.
       in_progress?(user_id) # => true
     CreditCardValidator.
       status(user_id) # => nil
+!SLIDE 
+    @@@ ruby
     sleep(5)
     CreditCardValidator.
       in_progress?(user_id) # => false
     CreditCardValidator.
       status(user_id) 
-    # => {:success => false, :errors => ["Credit expire date not given"]}
+    # => {:success => false, 
+    #    :errors => 
+    #       ["Credit expire date not given"]}
 
 !SLIDE 
 
@@ -351,22 +357,6 @@ Because DJ was originally designed with using relation database features.
 But not sure you really need it.
 
 
-!SLIDE 
-
-# SideKiq example:
-
-## Right from official doc
-
-    @@@ ruby
-    class HardWorker
-      include Sidekiq::Worker
-
-      def perform(name, count)
-        puts 'Doing hard work'
-      end
-    end
-
-It seems like is even more flexible
 
 !SLIDE 
 

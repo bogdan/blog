@@ -76,7 +76,9 @@
 
 <div id="slides" class="offscreen" style="display:none;">
 <div class="slide" data-transition="none"><div class="content" ref="one/01_slide/1">
-<h1>Background Jobs Frameworks</h1>
+<h1>Background Jobs</h1>
+
+<h1>Frameworks</h1>
 
 <h2>Bogdan G.</h2>
 
@@ -101,11 +103,12 @@
 <ul>
 <li>Resque</li>
 <li>Delayed Job</li>
-<li>SideKick</li>
 </ul>
 </div>
 </div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/4">
-<h1>And this is all about this presentation as well</h1></div>
+<h1>And presentation  is</h1>
+
+<h1>all about this as well</h1></div>
 </div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/5">
 <h1>What is a job?</h1>
 
@@ -133,15 +136,14 @@ end</code></pre></div>
 
 <pre class="sh_ruby"><code>class SendHeavyReportToUser
   @queue = :low
-  @retry_exceptions = 
-    [Net::SMTPServerBusy, 
-      Timeout::Error, 
-      Resque::DirtyExit]
   @retry_limit = 3
   @retry_delay = 60 #seconds
-end</code></pre>
+end
 
-<p>user.delay(:priority =&gt; 5, :queue =&gt; "low", :attempts =&gt; 7)</p></div>
+user.delay(
+  :priority =&gt; 5,
+  :queue =&gt; "low",
+  :attempts =&gt; 7)</code></pre></div>
 </div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/10">
 <h2>Delayed Job: Minimalistic</h2>
 
@@ -168,18 +170,18 @@ if failed_jobs.any?
   :subject =&gt; failed_jobs.count.to_s +
     "in enterprise queue now", 
   :body =&gt; "..."
-  )
+  ).deliver
 end</code></pre>
 
 <p>I've spend 20 minutes on building this feature</p>
 
 <p>starting from zero knowledge about DJ</p></div>
 </div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/14">
-<h2>DJ support any document or relational database,</h2>
+<h2>DJ supports any document or relational database</h2>
 
-<h2>but using Redis will have problems.</h2>
+<h2>Using Redis will have problems</h2>
 
-<p>Because DJ was originally designed with using relation database features.</p></div>
+<p>Because DJ was originally designed with using relation database features</p></div>
 </div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/15">
 <h1>Resque: must use redis</h1>
 
@@ -187,7 +189,7 @@ end</code></pre>
 
 <h3>and troll your friends that still not using it.</h3></div>
 </div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/16">
-<h2>The true benefit of Redis over Relation database</h2>
+<h2>The true benefit of Redis over RDBMS</h2>
 
 <h2>is that it is 100 times faster</h2></div>
 </div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/17">
@@ -208,7 +210,7 @@ end</code></pre>
 
 <h1>being that fast and that cool</h1></div>
 </div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/19">
-<h1>Redis hates activerecord</h1>
+<h1>Redis hates ActiveRecord</h1>
 
 <pre class="sh_ruby"><code>class User &lt; AR::Base
   after_create :fetch_linkedin_profile
@@ -267,7 +269,8 @@ Resque.class_eval do
       :enqueue_without_transaction, 
       :enqueue
     def enqueue(*args)
-      ActiveRecord::Base.after_transaction do
+      ActiveRecord::Base.
+        after_transaction do
         enqueue_without_transaction(*args)
       end
     end
@@ -332,25 +335,29 @@ end
   CreditCardValidator,
   user_id,
   "4123-5682-3821-1111", {...}
-)
-CreditCardValidator.
+)</code></pre></div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/29">
+<pre class="sh_ruby"><code>CreditCardValidator.
   in_progress?(user_id) # =&gt; true
 CreditCardValidator.
-  status(user_id) # =&gt; nil
-sleep(5)
+  status(user_id) # =&gt; nil</code></pre></div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/30">
+<pre class="sh_ruby"><code>sleep(5)
 CreditCardValidator.
   in_progress?(user_id) # =&gt; false
 CreditCardValidator.
   status(user_id) 
-# =&gt; {:success =&gt; false, :errors =&gt; ["Credit expire date not given"]}</code></pre></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/29">
+# =&gt; {:success =&gt; false, 
+#    :errors =&gt; 
+#       ["Credit expire date not given"]}</code></pre></div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/31">
 <pre class="sh_ruby"><code>class CreditCardValidator &lt; StatusedWorker
   def self.job_identity_arguments(
       user_id, number, attrs)
     [user_id]
   end
 end</code></pre></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/30">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/32">
 <pre class="sh_ruby"><code># RESQUE api change: 
 # define perform at instance level
 def perform(user_id, number, , attrs)
@@ -364,21 +371,7 @@ end</code></pre>
 <h2><a href="http://x.gusiev.com/statused-worker">http://x.gusiev.com/statused-worker</a></h2>
 
 <p>But not sure you really need it.</p></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/31">
-<h1>SideKiq example:</h1>
-
-<h2>Right from official doc</h2>
-
-<pre class="sh_ruby"><code>class HardWorker
-  include Sidekiq::Worker
-
-  def perform(name, count)
-    puts 'Doing hard work'
-  end
-end</code></pre>
-
-<p>It seems like is even more flexible</p></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/32">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/33">
 <h1>Thank You</h1>
 
 <h2><a href="http://gusiev.com">http://gusiev.com</a></h2>
