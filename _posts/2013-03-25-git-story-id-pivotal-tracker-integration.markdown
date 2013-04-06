@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Attach git commits to pivotal stories
-#published: false
+published: false
 tags: 
 - git
 - commit
