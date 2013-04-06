@@ -83,7 +83,17 @@
 <h3>April 2013</h3>
 
 <h3><a href="http://x.gusiev.com/background-jobs-frameworks">http://x.gusiev.com/background-jobs-frameworks</a></h3></div>
-</div><div class="slide" data-transition="none"><div class="content incremental" ref="one/01_slide/2">
+</div><div class="slide" data-transition="none">
+  <div class="content" ref="one/01_slide/2">
+<p><img src="./file/one/gap.jpg" width="300" height="300"/>
+
+<br/>
+
+
+<p><img src="./file/one/sales.png" width="650" height="198"/></p>
+</p>
+</div>
+</div><div class="slide" data-transition="none"><div class="content incremental" ref="one/01_slide/3">
 <h2>First thing that came</h2>
 
 <h2>to your mind should be</h2>
@@ -94,9 +104,9 @@
 <li>SideKick</li>
 </ul>
 </div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/3">
-<h1>And this is all about this presentation as well</h1></div>
 </div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/4">
+<h1>And this is all about this presentation as well</h1></div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/5">
 <h1>What is a job?</h1>
 
 <pre class="sh_ruby"><code>class SendHeavyReportToUser
@@ -104,21 +114,21 @@
     user.send_heavy_report
   end
 end</code></pre></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/5">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/6">
 <h2>But not every framework think so:</h2>
 
 <pre class="sh_ruby"><code>User.find_somewhere.
   delay.
   send_heavy_report(*args)</code></pre></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/6">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/7">
 <h2>The job is an API convention</h2>
 
 <h1>to process something asyncronously</h1></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/7">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/8">
 <h2>So previous definition of Job was just an MVJ:</h2>
 
 <h1>Minimum Valuable Job</h1></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/8">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/9">
 <p>But when we say "asyncronously" we want to controll this process:</p>
 
 <pre class="sh_ruby"><code>class SendHeavyReportToUser
@@ -132,20 +142,20 @@ end</code></pre></div>
 end</code></pre>
 
 <p>user.delay(:priority =&gt; 5, :queue =&gt; "low", :attempts =&gt; 7)</p></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/9">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/10">
 <h2>Delayed Job: Minimalistic</h2>
 
 <h2>Resque: power to build really advanced things</h2></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/10">
-<h1>Storing the Queue</h1></div>
 </div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/11">
+<h1>Storing the Queue</h1></div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/12">
 <h2>Delayed Job propose to store it in default database.</h2>
 
 <pre><code>Delayed::Job.all
 </code></pre>
 
 <h2>And you know it's API very well</h2></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/12">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/13">
 <h2>A great benefit to build</h2>
 
 <h2>your own features on top of it</h2>
@@ -164,23 +174,23 @@ end</code></pre>
 <p>I've spend 20 minutes on building this feature</p>
 
 <p>starting from zero knowledge about DJ</p></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/13">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/14">
 <h2>DJ support any document or relational database,</h2>
 
 <h2>but using Redis will have problems.</h2>
 
 <p>Because DJ was originally designed with using relation database features.</p></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/14">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/15">
 <h1>Resque: must use redis</h1>
 
 <h3>Which gives you a power of being modern</h3>
 
 <h3>and troll your friends that still not using it.</h3></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/15">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/16">
 <h2>The true benefit of Redis over Relation database</h2>
 
 <h2>is that it is 100 times faster</h2></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/16">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/17">
 <h2>In real world example is Ecommerce site:</h2>
 
 <ul>
@@ -193,11 +203,11 @@ end</code></pre>
 <h2>Resque can process</h2>
 
 <h2>But DJ can not</h2></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/17">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/18">
 <h1>But you will pay a lot for</h1>
 
 <h1>being that fast and that cool</h1></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/18">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/19">
 <h1>Redis hates activerecord</h1>
 
 <pre class="sh_ruby"><code>class User &lt; AR::Base
@@ -214,7 +224,7 @@ class FetchLinkedinProfile
     user = User.find(user_id)
   end
 end</code></pre></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/19">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/20">
 <h2>How it look like from IO standpoint</h2>
 
 <div style="font-size: 70%">
@@ -248,7 +258,7 @@ end</code></pre></div>
 <p>
 
 </p></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/20">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/21">
 <pre class="sh_ruby"><code>require 'ar_after_transaction'
 require 'resque'
 Resque.class_eval do
@@ -265,7 +275,7 @@ Resque.class_eval do
 end</code></pre>
 
 <p><a href="http://x.gusiev.com/resque-active-record">http://x.gusiev.com/resque-active-record</a></p></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/21">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/22">
 <h1>How to debug redis queue?</h1>
 
 <ul>
@@ -273,7 +283,7 @@ end</code></pre>
 <li>but what if there are thousands of jobs there?</li>
 </ul>
 </div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/22">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/23">
 <ul>
 <li><p>Resque.redis.client.logger = Rails.logger</p></li>
 <li><p><a href="http://redis.io/commands">http://redis.io/commands</a></p></li>
@@ -283,7 +293,7 @@ end</code></pre>
 <h3>You will quickly understand that redis client API</h3>
 
 <h3>is not as good as ActiveRecord API.</h3></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/23">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/24">
 <pre class="sh_ruby"><code>Resque.redis.client.logger = 
   Logger.new(STDOUT)
 
@@ -295,7 +305,7 @@ end
 # RPUSH resque:queue:low 
 #  {"class":"UpdateMetrics","args":[3]}
 # 0.50ms</code></pre></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/24">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/25">
 <pre class="sh_ruby"><code>Resque.redis.lrange("queue:low", 0, 10).
   map { |job| JSON.parse(job) }
 
@@ -307,17 +317,17 @@ end
 # {"class"=&gt;"UpdateMetrics", "args"=&gt;[3]},
 # {"class"=&gt;"UpdateMetrics", "args"=&gt;[9]},
 # {"class"=&gt;"UpdateMetrics", "args"=&gt;[3]}]</code></pre></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/25">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/26">
 <h2>Do you want to be a part of that debug process?</h2>
 
 <h2>Do you have enough free time to learn all new way of doing same things?</h2>
 
 <h1>It is for you to decide</h1></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/26">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/27">
 <h2>Really advanced things</h2>
 
 <h1>Statused Worker Example:</h1></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/27">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/28">
 <pre class="sh_ruby"><code>Resque.enqueue(
   CreditCardValidator,
   user_id,
@@ -333,14 +343,14 @@ CreditCardValidator.
 CreditCardValidator.
   status(user_id) 
 # =&gt; {:success =&gt; false, :errors =&gt; ["Credit expire date not given"]}</code></pre></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/28">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/29">
 <pre class="sh_ruby"><code>class CreditCardValidator &lt; StatusedWorker
   def self.job_identity_arguments(
       user_id, number, attrs)
     [user_id]
   end
 end</code></pre></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/29">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/30">
 <pre class="sh_ruby"><code># RESQUE api change: 
 # define perform at instance level
 def perform(user_id, number, , attrs)
@@ -354,7 +364,7 @@ end</code></pre>
 <h2><a href="http://x.gusiev.com/statused-worker">http://x.gusiev.com/statused-worker</a></h2>
 
 <p>But not sure you really need it.</p></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/30">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/31">
 <h1>SideKiq example:</h1>
 
 <h2>Right from official doc</h2>
@@ -368,7 +378,7 @@ end</code></pre>
 end</code></pre>
 
 <p>It seems like is even more flexible</p></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/31">
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/32">
 <h1>Thank You</h1>
 
 <h2><a href="http://gusiev.com">http://gusiev.com</a></h2>

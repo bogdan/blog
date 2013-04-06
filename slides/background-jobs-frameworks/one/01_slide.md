@@ -7,7 +7,15 @@
 ### April 2013
 
 
+
+
 ### [http://x.gusiev.com/background-jobs-frameworks](http://x.gusiev.com/background-jobs-frameworks)
+
+!SLIDE 
+
+<img src="gap.jpg">
+<br/>
+<img src="sales.png">
 
 !SLIDE incremental
 
