@@ -231,10 +231,15 @@ end</code></pre></div>
 
 <div style="font-size: 70%">
 <div style="width:48%;float: left">
+<h2>
+Web Server Process
+</h2>
 <ol>
 <li>BEGIN </li>
 <li>INSERT INTO `users`</li>
 <li>RPUSH resque:queue:low</li>
+<li>---</li>
+<li>---</li>
 <li>---</li>
 <li>COMMIT</li>
 </ol>
@@ -242,6 +247,9 @@ end</code></pre></div>
 
 
 <div style="width:48%;float: right">
+<h2>
+Worker Process
+</h2>
   <ol>
   <li>---</li>
   <li>---<br/></li>
@@ -250,16 +258,13 @@ end</code></pre></div>
   <li>SELECT * FROM users WHERE id = ?<br/>
   </li>
   </ol>
+<h2>=&gt;AR::RecordNotFound</h2>
 </div>
   <div style="clear:both"/>
 </div>
 
 
-<h2>AR::RecordNotFound</h2>
-
-<p>
-
-</p></div>
+</div>
 </div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/21">
 <pre class="sh_ruby"><code>require 'ar_after_transaction'
 require 'resque'
@@ -366,12 +371,12 @@ def perform(user_id, number, , attrs)
     :success =&gt; result.success?,
     :errors =&gt; result.errors
   )
-end</code></pre>
-
+end</code></pre></div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/33">
 <h2><a href="http://x.gusiev.com/statused-worker">http://x.gusiev.com/statused-worker</a></h2>
 
-<p>But not sure you really need it.</p></div>
-</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/33">
+<h2>But not sure you really need it</h2></div>
+</div><div class="slide" data-transition="none"><div class="content" ref="one/01_slide/34">
 <h1>Thank You</h1>
 
 <h2><a href="http://gusiev.com">http://gusiev.com</a></h2>

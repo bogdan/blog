@@ -192,10 +192,15 @@ Because DJ was originally designed with using relation database features
 ## How it look like from IO standpoint
 <div style="font-size: 70%">
 <div style="width:48%;float: left">
+<h2>
+Web Server Process
+</h2>
 <ol>
 <li>BEGIN </li>
 <li>INSERT INTO `users`</li>
 <li>RPUSH resque:queue:low</li>
+<li>---</li>
+<li>---</li>
 <li>---</li>
 <li>COMMIT</li>
 </ol>
@@ -203,6 +208,9 @@ Because DJ was originally designed with using relation database features
 
 
 <div style="width:48%;float: right">
+<h2>
+Worker Process
+</h2>
   <ol>
   <li>---</li>
   <li>---<br/></li>
@@ -211,14 +219,11 @@ Because DJ was originally designed with using relation database features
   <li>SELECT * FROM users WHERE id = ?<br/>
   </li>
   </ol>
+<h2>=&gt;AR::RecordNotFound</h2>
 </div>
   <div style="clear:both">&nbsp;</div>
 </div>
 
-##    AR::RecordNotFound
-&nbsp;
-&nbsp;
-&nbsp;
 
 !SLIDE 
 
@@ -353,8 +358,11 @@ Because DJ was originally designed with using relation database features
       )
     end
 
+
+!SLIDE 
 ## [http://x.gusiev.com/statused-worker](http://x.gusiev.com/statused-worker)
-But not sure you really need it.
+
+## But not sure you really need it
 
 
 
