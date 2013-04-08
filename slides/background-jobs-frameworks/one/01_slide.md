@@ -190,27 +190,23 @@ Because DJ was originally designed with using relation database features
 !SLIDE 
 
 ## How it look like from IO standpoint
-<div style="font-size: 70%">
-<div style="width:48%;float: left">
-<h2>
-Web Server Process
-</h2>
-<ol>
-<li>BEGIN </li>
-<li>INSERT INTO `users`</li>
-<li>RPUSH resque:queue:low</li>
-<li>---</li>
-<li>---</li>
-<li>---</li>
-<li>COMMIT</li>
-</ol>
+
+<div style="font-size: 70%;width:48%;float: left">
+  <h2> Web Server Process </h2>
+  <ol>
+  <li>BEGIN </li>
+  <li>INSERT INTO `users`</li>
+  <li>RPUSH resque:queue:low</li>
+  <li>---</li>
+  <li>---</li>
+  <li>---</li>
+  <li>COMMIT</li>
+  </ol>
 </div>
 
 
-<div style="width:48%;float: right">
-<h2>
-Worker Process
-</h2>
+<div style="font-size: 70%;width:48%;float: right">
+  <h2> Worker Process </h2>
   <ol>
   <li>---</li>
   <li>---<br/></li>
@@ -219,10 +215,21 @@ Worker Process
   <li>SELECT * FROM users WHERE id = ?<br/>
   </li>
   </ol>
-<h2>=&gt;AR::RecordNotFound</h2>
+  <h2>=&gt;AR::RecordNotFound</h2>
 </div>
-  <div style="clear:both">&nbsp;</div>
-</div>
+
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
 
 
 !SLIDE 
