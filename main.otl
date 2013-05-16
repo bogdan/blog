@@ -59,6 +59,7 @@ OSS
 			/rails/rake db:migrate
 			Check SQL select * from pv where price <= Infinity
 			Make rails raise exception if asset is used directly but not precompiled
+			#valid! method
 		has_many :tags, :accepts_nested_attributes => true
 		Resolve changelog merge problem
 		rake db:migrate:down STEP=
@@ -72,11 +73,10 @@ OSS
 		Checkout ugly link in bid introduction email 
 			employer_bid_url(@bid)
 		Application.yml
-		Done
-			#valid! method
 		Filter from log SQL parameters
 		Model.schema
 		redirect_to :back with default
+		rails console helper doesn't have *_path *_url
 	Rspec-rails
 		Subshell on rake spec
 	Vim execute plugin
