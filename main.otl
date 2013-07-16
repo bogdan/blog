@@ -8,6 +8,7 @@ Home
 	Oven basket
 		30x40
 	Large ceramic knife
+	Tolkalka
 OSS
 	Ruby
 		Irb bug: >> (&:)<tab>
@@ -28,7 +29,6 @@ OSS
 		rubyflow
 		http://afreshcup.com/
 	Accept values for
-		Remove discover
 		Rewrite discover article in blog
 	datagrid
 		Build generators
@@ -60,6 +60,7 @@ OSS
 			Check SQL select * from pv where price <= Infinity
 			Make rails raise exception if asset is used directly but not precompiled
 			#valid! method
+			Move mass assignment attributes to activemodel
 		has_many :tags, :accepts_nested_attributes => true
 		Resolve changelog merge problem
 		rake db:migrate:down STEP=
@@ -77,7 +78,7 @@ OSS
 		Model.schema
 		redirect_to :back with default
 		rails console helper doesn't have *_path *_url
-		Move mass assignment attributes to activemodel
+		DateTime blow up a log
 	Rspec-rails
 		Subshell on rake spec
 	Vim execute plugin
@@ -111,9 +112,8 @@ Get a new idea
 
 Configuration
 	Vim
-		Investigate why Rlog doesn't have highlight
+		Delimitmate with repeat(.)
 	Skype
-		Investigate with strace
 Blog
 	Article about ActiveSupport::Callbacks
 	PAEI model in programming
