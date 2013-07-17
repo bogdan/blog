@@ -8,6 +8,9 @@ Home
 	Oven basket
 		30x40
 	Large ceramic knife
+	Kran
+	Verevka
+	Buhgalter day
 OSS
 	Ruby
 		Irb bug: >> (&:)<tab>
@@ -31,7 +34,6 @@ OSS
 		Remove discover
 		Rewrite discover article in blog
 	datagrid
-		Build generators
 		Ability to specify whole grid as html
 	AjaxSubmit
 		ajaxsubmit-rails
@@ -60,6 +62,7 @@ OSS
 			Check SQL select * from pv where price <= Infinity
 			Make rails raise exception if asset is used directly but not precompiled
 			#valid! method
+			Move mass assignment attributes to activemodel
 		has_many :tags, :accepts_nested_attributes => true
 		Resolve changelog merge problem
 		rake db:migrate:down STEP=
@@ -77,7 +80,8 @@ OSS
 		Model.schema
 		redirect_to :back with default
 		rails console helper doesn't have *_path *_url
-		Move mass assignment attributes to activemodel
+		insert_fixture to accept an array
+		Make increment thread safe
 	Rspec-rails
 		Subshell on rake spec
 	Vim execute plugin
@@ -122,8 +126,14 @@ Blog
 		plugins.jquery.com
 	Compare dinosaurs growth to startup growth
 
-Write new Interview cases
-	https://docs.google.com/document/d/1WLupR56Ma2lO5OhLD0g8-nrjunbV7TEmlM6sQx3xESQ/edit#
+Invent new interview tasks
+	Minesweeper
+	Lines
+		5 in a row
+		router
+	Tetris
+	Haml
+
 
 The art of programming
 	Organize a conference with rubygarage
