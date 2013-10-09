@@ -32,8 +32,15 @@ OSS
 		http://afreshcup.com/
 	Accept values for
 		Rewrite discover article in blog
+		Move discover to its separated gem
+	Liquid
+		Exception handling for humans
+		Interpolation syntax support
 	datagrid
-		Ability to specify whole grid as html
+		exlicit columns order
+		batch size option
+		datagridrow for data and html view
+		inline html usage
 	AjaxSubmit
 		ajaxsubmit-rails
 			/objects/:id/validate
@@ -82,6 +89,16 @@ OSS
 		rails console helper doesn't have *_path *_url
 		insert_fixture to accept an array
 		DateTime blow up a log
+		pluck a hash
+		valid! debug message
+		red sql
+		select(crazy_method, :selected => ....)
+		'_id'.humanize
+		AR::Base#param_key
+		AR::Base#can_be_deleted?
+		String#to_date with wrong date
+		Sqlite millisecond hunting
+			where(:created_at => Date.today.beginning_of_day)
 	Rspec-rails
 		Subshell on rake spec
 	Vim execute plugin
