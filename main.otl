@@ -11,6 +11,8 @@ Home
 	Kran
 	Verevka
 	Tolkalka
+
+	ярошенко  чет 13 16 нечет 12-15 202
 OSS
 	Ruby
 		Irb bug: >> (&:)<tab>
@@ -39,7 +41,7 @@ OSS
 	datagrid
 		exlicit columns order
 		batch size option
-		datagridrow for data and html view
+		datagrid row for data and html view
 		inline html usage
 	AjaxSubmit
 		ajaxsubmit-rails
@@ -70,6 +72,7 @@ OSS
 			#valid! method
 			Move mass assignment attributes to activemodel
 			Make increment thread safe
+			DateTime blow up a log
 		has_many :tags, :accepts_nested_attributes => true
 		Resolve changelog merge problem
 		rake db:migrate:down STEP=
@@ -88,7 +91,6 @@ OSS
 		redirect_to :back with default
 		rails console helper doesn't have *_path *_url
 		insert_fixture to accept an array
-		DateTime blow up a log
 		pluck a hash
 		valid! debug message
 		red sql
