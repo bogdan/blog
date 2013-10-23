@@ -1,0 +1,332 @@
+<!doctype html>
+%html{:lang => "en"}
+  %head
+    %meta{:charset => "utf-8"}/
+    %title bogdan/datagrid
+    %meta{:content => "A framework for easily creating beautiful presentations using HTML", :name => "description"}/
+    %meta{:content => "Hakim El Hattab", :name => "author"}/
+    %meta{:content => "yes", :name => "apple-mobile-web-app-capable"}/
+    %meta{:content => "black-translucent", :name => "apple-mobile-web-app-status-bar-style"}/
+    %meta{:content => "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no", :name => "viewport"}/
+    %link{:href => "http://lab.hakim.se/reveal-js/css/reveal.css", :rel => "stylesheet"}/
+    %link{:href => "http://lab.hakim.se/reveal-js/css/theme/night.css", :rel => "stylesheet"}/
+    / For syntax highlighting
+    %link{:href => "http://lab.hakim.se/reveal-js/lib/css/zenburn.css", :rel => "stylesheet"}/
+    / If the query includes 'print-pdf', use the PDF print sheet
+    :javascript
+      document.write( '<link rel="stylesheet" href="http://lab.hakim.se/reveal-js/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+    %style
+      :sass
+        .reveal
+          pre
+            code
+              padding: 20px 5px
+  %body
+    .reveal
+      .slides
+        %section
+          %h1 bogdan/datagrid
+          %h3 Bogdan Gusiev
+          %h3 October 2013
+        %section
+          %h2 Talk Plan
+          %h4 (old school)
+          %ol
+            %li Make you free from routine
+            %li Reports lesson
+            %li The Future
+
+        %section
+          %h4 Why?
+          
+          %h3 Because I want to know what is in my database
+
+          %h5 If you still don't care - your project is not in production yet
+
+        %section
+
+          %h3 Project values
+
+          %ul
+            %li Team
+            %li Happy users
+            %li Data
+            %li Code
+
+        %section
+          %h3 What is in my database?
+
+          %ul
+            %li.fragment.highlight-red Find data
+            %li Browse data
+            %li Edit data
+            %li CSV export
+
+        %section 
+          %h3 A perfect data finding tool
+          %img{src: "https://d22epkcpuulnqj.cloudfront.net/50d2e001e4b05c01ee949e79/50d2e001e4b05c01ee949e7a/526688a62cdc73932f7141bb.png?Expires=2147483647&Signature=JJQ5BpNuvM2~7eCzFEQ8woFGz0LmPKgkhkNGCEvR6l40DmybhxJ8WjJk3rlcA6SD2d~fIXv5kQ4Es6FR3AkMQipq8wxGlIzapg1fFdmnaJq73ouCNKeiSrW42EBhoiLVt6LOnYtlyBc6--MsXpaR766BCVIFbSXhJe~ylbFTito_&Key-Pair-Id=APKAITAZRW24HHYVXS3A"}
+
+        %section
+          %h3 A perfect data finding tool
+          %img{src: "https://d22epkcpuulnqj.cloudfront.net/50d2e001e4b05c01ee949e79/50d2e001e4b05c01ee949e7a/526689152cdc73932f7141fd.png?Expires=2147483647&Signature=JGwPq1S-bvJ1Zuclm9-jGbubxnaDzIMuussT2YEGm2U~26jUiJ6Jnuohh4CMIGgZeqyN3pqB7b37iSo3Fc2l6dqAAiJuJgUPs6VpT0WXKRXkOxuuBKIYCsIhnm-VOqh-xZaXEUwGKSV21p59YLrhOd7N4Cp0XT5bQ8fjpogjsqo_&Key-Pair-Id=APKAITAZRW24HHYVXS3A"}
+          
+        %section
+          %h3 Not a big deal to use ActiveRecord
+          %pre
+            %code.ruby
+              :preserve
+                Reward.by_status(status).
+                  by_reason(reason).
+                  where(:created_at => from_created_at..to_created_at).
+                  by_campaigns(selected_campaigns)
+
+        %section
+
+          %h2 Some problems
+          %pre
+            %code.ruby
+              :preserve
+                User.where(:created_at => Date.today)
+          .fragment
+            %pre
+              %code.ruby
+                :preserve
+                  User.where(:created_at => Date.today.beginning_of_day..Date.today.end_of_day)
+          .fragment
+            %pre
+              %code.ruby
+                :preserve
+                  def convert_date_to_timestamp(value)
+                    if !value
+                      value
+                    elsif value.is_a?(Array)
+                      [value.first.try(:beginning_of_day), value.last.try(:end_of_day)]
+                    elsif value.is_a?(Range)
+                      (value.first.beginning_of_day..value.last.end_of_day)
+                    else
+                      value.beginning_of_day..value.end_of_day
+                    end
+                  end
+        %section
+          %h3 I would spend 90% of time building GUI but not finders
+          %h3 If I would use ActiveRecord
+          %h3 So, let the GUI autogenerate itself
+        %section
+
+          %pre
+            %code.ruby
+              :preserve
+                class RewardsGrid
+
+                  include Datagrid
+
+                  scope { Reward.order("created_at desc") }
+
+                  filter(:created_at, :date, :range => true, :default => (1.month.ago.to_date..Date.today))
+                  filter(:campaign_type, :enum, :select => CAMPAIGN_TYPES) do |value|
+                    where(:type => value)
+                  end
+                  filter(:tag_name, :enum, :select => :tag_names) do |value|
+                    by_tag_name(value)
+                  end
+
+                  filter(:active, :eboolean) do |value|
+                    value == "YES" ? active : inactive
+                  end
+
+                end
+
+        %section
+          %h1 Data table
+
+          %pre
+            %code.haml
+              :preserve
+                %table
+                  %tr
+                    %th Id
+                    %th Email
+                    %th Name
+                    %th Creation Date
+                  - @users.each do |user|
+                    %tr
+                      %td= user.id
+                      %td= user.email
+                      %td= user.name
+                      %td= user.created_at.to_date
+        %section
+          %h2 It is easy to build
+          %pre
+            %code.ruby
+              :preserve
+                column(:id)
+                column(:email)
+                column(:name)
+                column(:created_at) do |model|
+                  model.created_at.to_date
+                end
+        %section
+          %h2 But what about:
+
+          %ul
+            %li Ordering
+            %li CSV export
+            %li Columns visibility
+        %section
+          %pre
+            %code.ruby
+              :preserve
+                column(:related_email, mandatory: true) do |offer|
+                  offer.person.email
+                end
+
+                column(:short_link, mandatory: true) do |offer|
+                  format(offer.short_url) do |value|
+                    link_to("Claim", value)
+                  end
+                end
+
+                column(:campaign, mandatory: true) do |offer|
+                  campaign = offer.campaign
+                  format(campaign.name) do |value|
+                    link_to(value, site_campaign_path(campaign.site, campaign))
+                  end
+                end
+
+                %w(share click visit referral).each do |action|
+                  column(action, header: action.pluralize.humanize) do |offer|
+                    offer.activities.by_actions(action).count
+                  end
+                end
+
+        
+        %section
+          %h3 There is no GUI problems
+          %pre
+            %code.ruby
+              :preserve
+                class UsersController
+                  def index
+                    @grid = UsersGrid.new(params[:users_grid])
+                    @assets = @grid.assets.page(params[:page])
+                  end
+                end
+          %pre
+            %code.haml
+              :preserve
+                = datagrid_form_for @grid, :url => report_path
+                = datagrid_table @grid, @assets
+        %section
+          %h1 The Basics
+
+          %ul{style: "width: 100%"}
+            %li 
+              Scope
+              %pre
+                %code.ruby
+                  :preserve
+                    scope { User.order("created_at desc") }
+            %li 
+              Filters
+              %pre
+                %code.ruby
+                  :preserve
+                    filter(:posts_count, :integer, :range => true)
+            
+            %li 
+              Columns
+              %pre
+                %code.ruby
+                  :preserve
+                    column(:created_at) do |user|
+                      user.created_at.to_date
+                    end
+
+        %section
+          %h2 Basic Filter Types
+          %ul
+            %li default
+            %li date
+            %li enum
+            %li boolean
+            %li eboolean
+            %li integer
+            %li float
+            %li string
+
+        %section
+          %h1 The Power 
+        %section
+          %h2 Changing scope on the fly
+          %pre
+            %code.ruby
+              :preserve
+                grid = ProjectsGrid.new(params[:my_grid]) do |scope|
+                  scope.where(:owner_id => current_user.id)
+                end
+        %section
+          %h2 Define asc/desc ordering
+          %pre
+            %code.ruby
+              :preserve
+                column(
+                  :priority, 
+                  # suppose that models with null priority will be always on bottom
+                  :order => "priority is not null desc, priority", 
+                  :order_desc => "prioritty is not null desc, priority desc"
+                ) 
+        %section
+          %h2 Different HTML/CSV formatting
+          %pre
+            %code.ruby
+              :preserve
+                column(:name) do |asset|
+                  format(asset.name) do |value|
+                    content_tag(:strong, value)
+                  end
+                end
+        %section
+          %h2 Order by joined column
+          %pre
+            %code.ruby
+              :preserve
+                column(:profile_updated_at, :order => proc { |scope|
+                  scope.join(:profile).order("profiles.updated_at")
+                }) do |model|
+                  model.profile.updated_at.to_date
+                end 
+          
+
+        %section
+          %h2 Infinite ranges and default values
+          %pre
+            %code.ruby
+              :preserve
+                filter(:posts_count, :integer, :range => true, :default => [1, nil])
+
+    %script{:src => "http://lab.hakim.se/reveal-js/lib/js/head.min.js"}
+    %script{:src => "http://lab.hakim.se/reveal-js/js/reveal.js"}
+    :javascript
+      // Full list of configuration options available here:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+      	controls: true,
+      	progress: true,
+      	history: true,
+      	center: true,
+
+      	theme: Reveal.getQueryHash().theme || 'simple', // available themes are in /css/theme
+      	transition: Reveal.getQueryHash().transition || 'fade', // default/cube/page/concave/zoom/linear/fade/none
+
+      	// Optional libraries used to extend on reveal.js
+      	dependencies: [
+      		// { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+      		{ src: 'http://lab.hakim.se/reveal-js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      		{ src: 'http://lab.hakim.se/reveal-js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      		{ src: 'http://lab.hakim.se/reveal-js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+      		// { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+      		// { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+      		// { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
+      		// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+      	]
+      });
