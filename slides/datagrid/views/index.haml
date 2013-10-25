@@ -21,6 +21,8 @@
           pre
             code
               padding: 20px 5px
+          ul
+            min-width: 50%
   %body
     .reveal
       .slides
@@ -303,11 +305,83 @@
             %code.ruby
               :preserve
                 filter(:posts_count, :integer, :range => true, :default => [1, nil])
+        %section
+          %h2 Multivalues filter
+          %pre
+            %code.ruby
+              :preserve
+                filter(:id, :integer, :multiple => true)
+                Grid.new(:id => "1,2").assets # => select * from &lt;table&gt; where id in (1,2)
 
+
+        %section 
+          %h2 Rails engines
+          %pre
+            %code.shell
+              :preserve
+                rake datagrid:copy_partials
+          %pre
+            %code
+              :preserve
+                app/views/datagrid
+                ├── _form.html.erb
+                ├── _head.html.erb
+                ├── _order_for.html.erb
+                ├── _row.html.erb
+                └── _table.html.erb
+                
+        %section
+          %h2 Admin pages gems
+
+          %ul
+            %li activeadmin
+            %li rails_admin
+            %li active_scaffold
+            %li etc.
+
+
+        %section
+          %ul
+            %li Datagrid preffers flexibility over working out of the box
+            %li Have at most 30% of datagrid features and flexibility
+            %li Maintainers refused to support datagrid out of the box
+            %li Datagrid is multi-ORM
+        %section
+          %pre
+            %code.ruby
+              :preserve
+                class DatagridActiveAdmin
+                  def self.integrate_datagrid(context, grid_class)
+                    context.config.filters = false
+                    context.config.paginate = false
+                    context.send :collection_action, :index  do
+                      datagrid = grid_class.new(params[grid_class.param_name])
+                      respond_to do |f|
+                        f.html do
+                          render template: "admin/datagrid", locals: {datagrid: datagrid}, layout: 'active_admin'
+                        end
+                        f.csv do
+                          send_data(@grid.to_csv, type: 'text/csv', 
+                            filename: "%{datagrid.class.to_s.underscore}-%{DateTime.now}.csv")
+                        end
+                      end
+                    end
+                  end
+                end
+          %pre
+            %code.ruby
+              :preserve
+                DatagridActiveAdmin.integrate_datagrid(self, UsersGrid)
+        %section
+          %h3 Pro development Tips
+          %ul
+            %li Any gem should reduce lines of code
+            %li Working out of the box VS Flexibility
+            %li Entry level = number of API methods
+          
     %script{:src => "http://lab.hakim.se/reveal-js/lib/js/head.min.js"}
     %script{:src => "http://lab.hakim.se/reveal-js/js/reveal.js"}
     :javascript
-      // Full list of configuration options available here:
       // https://github.com/hakimel/reveal.js#configuration
       Reveal.initialize({
       	controls: true,
