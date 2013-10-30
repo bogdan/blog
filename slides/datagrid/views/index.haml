@@ -23,11 +23,13 @@
               padding: 20px 5px
           ul
             min-width: 50%
+          .red
+            color: red
   %body
     .reveal
       .slides
         %section
-          %h1 bogdan/datagrid
+          %h2 bogdan/datagrid
           %h3 Bogdan Gusiev
           %h3 October 2013
         %section
@@ -110,9 +112,38 @@
                     end
                   end
         %section
-          %h3 I would spend 90% of time building GUI but not finders
+          %h3 I would spend 90% of time building GUI
           %h3 If I would use ActiveRecord
           %h3 So, let the GUI autogenerate itself
+
+        %section
+          %h1 The Basics
+
+          %ul{style: "width: 100%"}
+            %li 
+              Scope
+              %pre
+                %code.ruby
+                  :preserve
+                    scope { User.includes(:profile).order("created_at desc") }
+            %li 
+              Filters
+              %pre
+                %code.ruby
+                  :preserve
+                    filter(:email, :string, options) do |value|
+                      where("email ilike '%&#35;{value}%'")
+                    end
+            
+            %li 
+              Columns
+              %pre
+                %code.ruby
+                  :preserve
+                    column(:created_at) do |user|
+                      user.created_at.to_date
+                    end
+
         %section
 
           %pre
@@ -219,32 +250,6 @@
                 = datagrid_form_for @grid, :url => report_path
                 = datagrid_table @grid, @assets
         %section
-          %h1 The Basics
-
-          %ul{style: "width: 100%"}
-            %li 
-              Scope
-              %pre
-                %code.ruby
-                  :preserve
-                    scope { User.order("created_at desc") }
-            %li 
-              Filters
-              %pre
-                %code.ruby
-                  :preserve
-                    filter(:posts_count, :integer, :range => true)
-            
-            %li 
-              Columns
-              %pre
-                %code.ruby
-                  :preserve
-                    column(:created_at) do |user|
-                      user.created_at.to_date
-                    end
-
-        %section
           %h2 Basic Filter Types
           %ul
             %li default
@@ -343,7 +348,6 @@
         %section
           %ul
             %li Datagrid preffers flexibility over working out of the box
-            %li Have at most 30% of datagrid features and flexibility
             %li Maintainers refused to support datagrid out of the box
             %li Datagrid is multi-ORM
         %section
@@ -362,7 +366,7 @@
                         end
                         f.csv do
                           send_data(@grid.to_csv, type: 'text/csv', 
-                            filename: "%{datagrid.class.to_s.underscore}-%{DateTime.now}.csv")
+                            filename: "&#35;{datagrid.class.to_s.underscore}-&#35;{DateTime.now}.csv")
                         end
                       end
                     end
@@ -371,13 +375,66 @@
           %pre
             %code.ruby
               :preserve
-                DatagridActiveAdmin.integrate_datagrid(self, UsersGrid)
+                ActiveAdmin.register User do
+                  DatagridActiveAdmin.integrate_datagrid(self, UsersGrid)
+                end
         %section
           %h3 Pro development Tips
-          %ul
-            %li Any gem should reduce lines of code
-            %li Working out of the box VS Flexibility
-            %li Entry level = number of API methods
+        %section
+          %h3 Any gem should reduce lines of code
+
+          %p 
+            People don't like learning APIs. 
+            It is good learn less and do more.
+
+            %pre
+              %code.ruby
+                :preserve
+                  # Bad DSL
+                  2+2
+                  # Good DSL
+                  2.add :to =&gt; 2
+
+        %section
+          %h2 Dont rewrite Ruby features as custom DSL
+
+          %pre
+            %code.ruby
+              :preserve
+                column(:created_at, format: :date)
+
+          %h3.fragment
+            Localization? Format? Timestamp?
+
+          %pre.fragment
+            %code.ruby
+              :preserve
+                module DatagridExtension
+                  def date_column(name)
+                    column(name) do |model, grid|
+                      I18n.localize(model.send(name).to_date, :locale => grid.current_locale)
+                    end
+                  end
+                end
+
+        %section
+          %h2 Entry level 
+          %h2 = 
+          %h2 number of API methods
+
+          %p
+            It is really hard to maintain a documentation <br/>for 30+ methods
+            With 200+ options.
+          %h3
+            It is even more hard <br/>to get someone familiar with them.
+
+
+        %section
+          %h2 Quick Start
+          %h1 VS
+          %h2 Flexibility
+          %h3 It is so hard to cover both. But try to
+
           
     %script{:src => "http://lab.hakim.se/reveal-js/lib/js/head.min.js"}
     %script{:src => "http://lab.hakim.se/reveal-js/js/reveal.js"}
