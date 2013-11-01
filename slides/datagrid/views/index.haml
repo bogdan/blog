@@ -32,7 +32,7 @@
           %h2 bogdan/datagrid
           %h3 Bogdan Gusiev
           %h3 October 2013
-        %section
+        -#%section
           %h2 Talk Plan
           %h4 (old school)
           %ol
@@ -41,9 +41,16 @@
             %li The Future
 
         %section
-          %h4 Why?
+          %h1 App Support pages
+        %section
+          %h3 Why?
+          %pre
+            %code.sql
+              :preserve
+                select * from users where ...
           
-          %h3 Because I want to know what is in my database
+          %h3 Because I want to know 
+          %h3 what is in my database
 
           %h5 If you still don't care - your project is not in production yet
 
@@ -54,7 +61,7 @@
           %ul
             %li Team
             %li Happy users
-            %li Data
+            %li.fragment.highlight-green Data
             %li Code
 
         %section
@@ -100,6 +107,11 @@
             %pre
               %code.ruby
                 :preserve
+                  User.where(:created_at => -Infinity..1.month.ago.end_of_day)
+          .fragment
+            %pre
+              %code.ruby
+                :preserve
                   def convert_date_to_timestamp(value)
                     if !value
                       value
@@ -110,8 +122,44 @@
                     else
                       value.beginning_of_day..value.end_of_day
                     end
-                  end
         %section
+          %h1 Data table
+
+          %pre
+            %code.haml
+              :preserve
+                %table
+                  %tr
+                    %th Id
+                    %th Email
+                    %th Name
+                    %th Creation Date
+                  - @users.each do |user|
+                    %tr
+                      %td= user.id
+                      %td= user.email
+                      %td= user.name
+                      %td= user.created_at.to_date
+        %section
+          %h2 It is easy to build
+          %pre
+            %code.ruby
+              :preserve
+                column(:id)
+                column(:email)
+                column(:name)
+                column(:created_at) do |model|
+                  model.created_at.to_date
+                end
+        %section
+          %h2 But what about:
+
+          %ul
+            %li Ordering
+            %li CSV export
+            %li Columns visibility
+        %section
+          %h2 But the main problem is GUI
           %h3 I would spend 90% of time building GUI
           %h3 If I would use ActiveRecord
           %h3 So, let the GUI autogenerate itself
@@ -149,62 +197,19 @@
           %pre
             %code.ruby
               :preserve
-                class RewardsGrid
 
-                  include Datagrid
-
-                  scope { Reward.order("created_at desc") }
-
-                  filter(:created_at, :date, :range => true, :default => (1.month.ago.to_date..Date.today))
-                  filter(:campaign_type, :enum, :select => CAMPAIGN_TYPES) do |value|
-                    where(:type => value)
-                  end
-                  filter(:tag_name, :enum, :select => :tag_names) do |value|
-                    by_tag_name(value)
-                  end
-
-                  filter(:active, :eboolean) do |value|
-                    value == "YES" ? active : inactive
-                  end
-
+                filter(:created_at, :date, :range => true, :default => (1.month.ago.to_date..Date.today))
+                filter(:campaign_type, :enum, :select => CAMPAIGN_TYPES) do |value|
+                  where(:type => value)
+                end
+                filter(:tag_name, :enum, :select => :tag_names) do |value|
+                  by_tag_name(value)
                 end
 
-        %section
-          %h1 Data table
-
-          %pre
-            %code.haml
-              :preserve
-                %table
-                  %tr
-                    %th Id
-                    %th Email
-                    %th Name
-                    %th Creation Date
-                  - @users.each do |user|
-                    %tr
-                      %td= user.id
-                      %td= user.email
-                      %td= user.name
-                      %td= user.created_at.to_date
-        %section
-          %h2 It is easy to build
-          %pre
-            %code.ruby
-              :preserve
-                column(:id)
-                column(:email)
-                column(:name)
-                column(:created_at) do |model|
-                  model.created_at.to_date
+                filter(:active, :eboolean) do |value|
+                  value == "YES" ? active : inactive
                 end
-        %section
-          %h2 But what about:
 
-          %ul
-            %li Ordering
-            %li CSV export
-            %li Columns visibility
         %section
           %pre
             %code.ruby
@@ -260,6 +265,23 @@
             %li integer
             %li float
             %li string
+        %section
+          %h2 Basic Filter options
+          %ul
+            %li multiple
+            %li range
+            %li allow_blank
+            %li select
+            %li header
+            %li default
+        %section
+          %h2 Column options
+
+          %ul
+            %li mandatory 
+            %li order
+            %li order_desc
+            %li order_by_value
 
         %section
           %h1 The Power 
@@ -320,7 +342,7 @@
 
 
         %section 
-          %h2 Rails engines
+          %h2 GUI flexibility
           %pre
             %code.shell
               :preserve
@@ -334,6 +356,28 @@
                 ├── _order_for.html.erb
                 ├── _row.html.erb
                 └── _table.html.erb
+        %section
+
+          %h2 App Specific options
+
+          %pre
+            %code.ruby
+              :preserve
+                column(:new_sales, :tooltip => "Amount of sales comming from referral programs")
+
+          %h4 app/views/datagrid/_head.html.erb
+          %pre
+            %code.diff
+              :plain
+                &nbsp;
+                     &lt;th class="&lt;%= datagrid_column_classes(grid, column) %>">
+                       &lt;%= column.header %>
+                +      <% if text = column.options[:tooltip] %>
+                +        <a class="question-image js-tooltip" tooltip="<%= text %>"></a>
+                +      <% end %>
+                       <%= datagrid_order_for(grid, column) if column.order && options[:order]%>
+                     &lt;/th>
+
                 
         %section
           %h2 Admin pages gems
@@ -346,10 +390,10 @@
 
 
         %section
-          %ul
-            %li Datagrid preffers flexibility over working out of the box
-            %li Maintainers refused to support datagrid out of the box
-            %li Datagrid is multi-ORM
+
+          %h3 Data filtering component is very basic
+          %h2 Possible to use datagrid instead
+          %h4 But maintainers refuse to support it out of the box
         %section
           %pre
             %code.ruby
@@ -379,9 +423,9 @@
                   DatagridActiveAdmin.integrate_datagrid(self, UsersGrid)
                 end
         %section
-          %h3 Pro development Tips
+          %h3 Pro Development Tips
         %section
-          %h3 Any gem should reduce lines of code
+          %h3 Human readable is not enough to be good DSL
 
           %p 
             People don't like learning APIs. 
@@ -416,6 +460,31 @@
                     end
                   end
                 end
+        %section 
+          %h2 Be Object Oriented
+
+          %pre
+            %code.ruby
+              :preserve
+                class UsersGrid
+                  include MyProjectDatagrid
+                  def current_locale
+
+          %pre
+            %code.ruby
+              :preserve
+                describe User do
+                  context do
+                    before do
+                      puts self.inspect
+                    end
+                  end
+                end
+          %pre
+            %code
+              :preserve
+                #&lt;RSpec::Core::ExampleGroup::Nested_1:0x007fcc550a40a0 ... &gt;
+
 
         %section
           %h2 Entry level 
@@ -424,17 +493,31 @@
 
           %p
             It is really hard to maintain a documentation <br/>for 30+ methods
-            With 200+ options.
+            with 200+ options.
           %h3
-            It is even more hard <br/>to get someone familiar with them.
+            It is even more hard <br/>to get someone else familiar with them.
 
 
         %section
           %h2 Quick Start
           %h1 VS
           %h2 Flexibility
-          %h3 It is so hard to cover both. But try to
+          %br
+          %h3 Try to cover both
+          %h3 but have one of them preferred
 
+        %section
+          %h2 Code
+          %h3 
+            %a{href: "http://github.com/bogdan/datagrid"} github.com/bogdan/datagrid 
+
+          %h2 Docs
+          %h3 
+            %a{href: "http://github.com/bogdan/datagrid/wiki"} github.com/bogdan/datagrid/wiki 
+          %h2 Demo
+          %h3 
+            %a{href: "http://datagrid.heroku.com"} datagrid.heroku.com 
+          
           
     %script{:src => "http://lab.hakim.se/reveal-js/lib/js/head.min.js"}
     %script{:src => "http://lab.hakim.se/reveal-js/js/reveal.js"}
