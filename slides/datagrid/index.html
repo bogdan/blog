@@ -36,17 +36,13 @@
           <h3>October 2013</h3>
         </section>
         <section>
-          <h2>Talk Plan</h2>
-          <h4>(old school)</h4>
-          <ol>
-            <li>Make you free from routine</li>
-            <li>Reports lesson</li>
-            <li>The Future</li>
-          </ol>
+          <h1>App Support pages</h1>
         </section>
         <section>
-          <h4>Why?</h4>
-          <h3>Because I want to know what is in my database</h3>
+          <h3>Why?</h3>
+          <pre><code class='sql'>select * from users where ...&#x000A;</code></pre>
+          <h3>Because I want to know</h3>
+          <h3>what is in my database</h3>
           <h5>If you still don't care - your project is not in production yet</h5>
         </section>
         <section>
@@ -54,7 +50,7 @@
           <ul>
             <li>Team</li>
             <li>Happy users</li>
-            <li>Data</li>
+            <li class='fragment highlight-green'>Data</li>
             <li>Code</li>
           </ul>
         </section>
@@ -86,10 +82,30 @@
             <pre><code class='ruby'>User.where(:created_at => Date.today.beginning_of_day..Date.today.end_of_day)</code></pre>
           </div>
           <div class='fragment'>
-            <pre><code class='ruby'>def convert_date_to_timestamp(value)&#x000A;  if !value&#x000A;    value&#x000A;  elsif value.is_a?(Array)&#x000A;    [value.first.try(:beginning_of_day), value.last.try(:end_of_day)]&#x000A;  elsif value.is_a?(Range)&#x000A;    (value.first.beginning_of_day..value.last.end_of_day)&#x000A;  else&#x000A;    value.beginning_of_day..value.end_of_day&#x000A;  end&#x000A;end</code></pre>
+            <pre><code class='ruby'>User.where(:created_at => -Infinity..1.month.ago.end_of_day)</code></pre>
+          </div>
+          <div class='fragment'>
+            <pre><code class='ruby'>def convert_date_to_timestamp(value)&#x000A;  if !value&#x000A;    value&#x000A;  elsif value.is_a?(Array)&#x000A;    [value.first.try(:beginning_of_day), value.last.try(:end_of_day)]&#x000A;  elsif value.is_a?(Range)&#x000A;    (value.first.beginning_of_day..value.last.end_of_day)&#x000A;  else&#x000A;    value.beginning_of_day..value.end_of_day&#x000A;  end</code></pre>
           </div>
         </section>
         <section>
+          <h1>Data table</h1>
+          <pre><code class='haml'>%table&#x000A;  %tr&#x000A;    %th Id&#x000A;    %th Email&#x000A;    %th Name&#x000A;    %th Creation Date&#x000A;  - @users.each do |user|&#x000A;    %tr&#x000A;      %td= user.id&#x000A;      %td= user.email&#x000A;      %td= user.name&#x000A;      %td= user.created_at.to_date</code></pre>
+        </section>
+        <section>
+          <h2>It is easy to build</h2>
+          <pre><code class='ruby'>column(:id)&#x000A;column(:email)&#x000A;column(:name)&#x000A;column(:created_at) do |model|&#x000A;  model.created_at.to_date&#x000A;end</code></pre>
+        </section>
+        <section>
+          <h2>But what about:</h2>
+          <ul>
+            <li>Ordering</li>
+            <li>CSV export</li>
+            <li>Columns visibility</li>
+          </ul>
+        </section>
+        <section>
+          <h2>But the main problem is GUI</h2>
           <h3>I would spend 90% of time building GUI</h3>
           <h3>If I would use ActiveRecord</h3>
           <h3>So, let the GUI autogenerate itself</h3>
@@ -112,23 +128,7 @@
           </ul>
         </section>
         <section>
-          <pre><code class='ruby'>class RewardsGrid&#x000A;&#x000A;  include Datagrid&#x000A;&#x000A;  scope { Reward.order("created_at desc") }&#x000A;&#x000A;  filter(:created_at, :date, :range => true, :default => (1.month.ago.to_date..Date.today))&#x000A;  filter(:campaign_type, :enum, :select => CAMPAIGN_TYPES) do |value|&#x000A;    where(:type => value)&#x000A;  end&#x000A;  filter(:tag_name, :enum, :select => :tag_names) do |value|&#x000A;    by_tag_name(value)&#x000A;  end&#x000A;&#x000A;  filter(:active, :eboolean) do |value|&#x000A;    value == "YES" ? active : inactive&#x000A;  end&#x000A;&#x000A;end&#x000A;</code></pre>
-        </section>
-        <section>
-          <h1>Data table</h1>
-          <pre><code class='haml'>%table&#x000A;  %tr&#x000A;    %th Id&#x000A;    %th Email&#x000A;    %th Name&#x000A;    %th Creation Date&#x000A;  - @users.each do |user|&#x000A;    %tr&#x000A;      %td= user.id&#x000A;      %td= user.email&#x000A;      %td= user.name&#x000A;      %td= user.created_at.to_date</code></pre>
-        </section>
-        <section>
-          <h2>It is easy to build</h2>
-          <pre><code class='ruby'>column(:id)&#x000A;column(:email)&#x000A;column(:name)&#x000A;column(:created_at) do |model|&#x000A;  model.created_at.to_date&#x000A;end</code></pre>
-        </section>
-        <section>
-          <h2>But what about:</h2>
-          <ul>
-            <li>Ordering</li>
-            <li>CSV export</li>
-            <li>Columns visibility</li>
-          </ul>
+          <pre><code class='ruby'>filter(:created_at, :date, :range => true, :default => (1.month.ago.to_date..Date.today))&#x000A;filter(:campaign_type, :enum, :select => CAMPAIGN_TYPES) do |value|&#x000A;  where(:type => value)&#x000A;end&#x000A;filter(:tag_name, :enum, :select => :tag_names) do |value|&#x000A;  by_tag_name(value)&#x000A;end&#x000A;&#x000A;filter(:active, :eboolean) do |value|&#x000A;  value == "YES" ? active : inactive&#x000A;end&#x000A;</code></pre>
         </section>
         <section>
           <pre><code class='ruby'>column(:related_email, mandatory: true) do |offer|&#x000A;  offer.person.email&#x000A;end&#x000A;&#x000A;column(:short_link, mandatory: true) do |offer|&#x000A;  format(offer.short_url) do |value|&#x000A;    link_to("Claim", value)&#x000A;  end&#x000A;end&#x000A;&#x000A;column(:campaign, mandatory: true) do |offer|&#x000A;  campaign = offer.campaign&#x000A;  format(campaign.name) do |value|&#x000A;    link_to(value, site_campaign_path(campaign.site, campaign))&#x000A;  end&#x000A;end&#x000A;&#x000A;%w(share click visit referral).each do |action|&#x000A;  column(action, header: action.pluralize.humanize) do |offer|&#x000A;    offer.activities.by_actions(action).count&#x000A;  end&#x000A;end&#x000A;&#x000A;</code></pre>
@@ -149,6 +149,26 @@
             <li>integer</li>
             <li>float</li>
             <li>string</li>
+          </ul>
+        </section>
+        <section>
+          <h2>Basic Filter options</h2>
+          <ul>
+            <li>multiple</li>
+            <li>range</li>
+            <li>allow_blank</li>
+            <li>select</li>
+            <li>header</li>
+            <li>default</li>
+          </ul>
+        </section>
+        <section>
+          <h2>Column options</h2>
+          <ul>
+            <li>mandatory</li>
+            <li>order</li>
+            <li>order_desc</li>
+            <li>order_by_value</li>
           </ul>
         </section>
         <section>
@@ -179,9 +199,22 @@
           <pre><code class='ruby'>filter(:id, :integer, :multiple => true)&#x000A;Grid.new(:id => "1,2").assets # => select * from &lt;table&gt; where id in (1,2)&#x000A;&#x000A;</code></pre>
         </section>
         <section>
-          <h2>Rails engines</h2>
+          <h2>GUI flexibility</h2>
           <pre><code class='shell'>rake datagrid:copy_partials</code></pre>
-          <pre><code>app/views/datagrid&#x000A;├── _form.html.erb&#x000A;├── _head.html.erb&#x000A;├── _order_for.html.erb&#x000A;├── _row.html.erb&#x000A;└── _table.html.erb&#x000A;</code></pre>
+          <pre><code>app/views/datagrid&#x000A;├── _form.html.erb&#x000A;├── _head.html.erb&#x000A;├── _order_for.html.erb&#x000A;├── _row.html.erb&#x000A;└── _table.html.erb</code></pre>
+        </section>
+        <section>
+          <h2>App Specific options</h2>
+          <pre><code class='ruby'>column(:new_sales, :tooltip => "Amount of sales comming from referral programs")&#x000A;</code></pre>
+          <h4>app/views/datagrid/_head.html.erb</h4>
+          <pre><code class='diff'>&nbsp;
+               &lt;th class="&lt;%= datagrid_column_classes(grid, column) %>">
+                 &lt;%= column.header %>
+          +      <% if text = column.options[:tooltip] %>
+          +        <a class="question-image js-tooltip" tooltip="<%= text %>"></a>
+          +      <% end %>
+                 <%= datagrid_order_for(grid, column) if column.order && options[:order]%>
+               &lt;/th></code></pre>
         </section>
         <section>
           <h2>Admin pages gems</h2>
@@ -193,21 +226,19 @@
           </ul>
         </section>
         <section>
-          <ul>
-            <li>Datagrid preffers flexibility over working out of the box</li>
-            <li>Maintainers refused to support datagrid out of the box</li>
-            <li>Datagrid is multi-ORM</li>
-          </ul>
+          <h3>Data filtering component is very basic</h3>
+          <h2>Possible to use datagrid instead</h2>
+          <h4>But maintainers refuse to support it out of the box</h4>
         </section>
         <section>
           <pre><code class='ruby'>class DatagridActiveAdmin&#x000A;  def self.integrate_datagrid(context, grid_class)&#x000A;    context.config.filters = false&#x000A;    context.config.paginate = false&#x000A;    context.send :collection_action, :index  do&#x000A;      datagrid = grid_class.new(params[grid_class.param_name])&#x000A;      respond_to do |f|&#x000A;        f.html do&#x000A;          render template: "admin/datagrid", locals: {datagrid: datagrid}, layout: 'active_admin'&#x000A;        end&#x000A;        f.csv do&#x000A;          send_data(@grid.to_csv, type: 'text/csv', &#x000A;            filename: "&#35;{datagrid.class.to_s.underscore}-&#35;{DateTime.now}.csv")&#x000A;        end&#x000A;      end&#x000A;    end&#x000A;  end&#x000A;end</code></pre>
           <pre><code class='ruby'>ActiveAdmin.register User do&#x000A;  DatagridActiveAdmin.integrate_datagrid(self, UsersGrid)&#x000A;end</code></pre>
         </section>
         <section>
-          <h3>Pro development Tips</h3>
+          <h3>Pro Development Tips</h3>
         </section>
         <section>
-          <h3>Any gem should reduce lines of code</h3>
+          <h3>Human readable is not enough to be good DSL</h3>
           <p>
             People don't like learning APIs.
             It is good learn less and do more.
@@ -220,7 +251,13 @@
           <h3 class='fragment'>
             Localization? Format? Timestamp?
           </h3>
-          <pre class='fragment'><code class='ruby'>module DatagridExtension&#x000A;  def date_column(name)&#x000A;    column(name) do |model, grid|&#x000A;      I18n.localize(model.send(name).to_date, :locale => grid.current_locale)&#x000A;    end&#x000A;  end&#x000A;end&#x000A;</code></pre>
+          <pre class='fragment'><code class='ruby'>module DatagridExtension&#x000A;  def date_column(name)&#x000A;    column(name) do |model, grid|&#x000A;      I18n.localize(model.send(name).to_date, :locale => grid.current_locale)&#x000A;    end&#x000A;  end&#x000A;end</code></pre>
+        </section>
+        <section>
+          <h2>Be Object Oriented</h2>
+          <pre><code class='ruby'>class UsersGrid&#x000A;  include MyProjectDatagrid&#x000A;  def current_locale&#x000A;</code></pre>
+          <pre class='fragment'><code class='ruby'>describe User do&#x000A;  context do&#x000A;    before do&#x000A;      puts self.inspect&#x000A;    end&#x000A;  end&#x000A;end</code></pre>
+          <pre><code>#&lt;RSpec::Core::ExampleGroup::Nested_1:0x007fcc550a40a0 ... &gt;&#x000A;&#x000A;</code></pre>
         </section>
         <section>
           <h2>Entry level</h2>
@@ -228,17 +265,33 @@
           <h2>number of API methods</h2>
           <p>
             It is really hard to maintain a documentation <br/>for 30+ methods
-            With 200+ options.
+            with 200+ options.
           </p>
           <h3>
-            It is even more hard <br/>to get someone familiar with them.
+            It is even more hard <br/>to get someone else familiar with them.
           </h3>
         </section>
         <section>
           <h2>Quick Start</h2>
           <h1>VS</h1>
           <h2>Flexibility</h2>
-          <h3>It is so hard to cover both. But try to</h3>
+          <br />
+          <h3>Try to cover both</h3>
+          <h3>but have one of them preferred</h3>
+        </section>
+        <section>
+          <h2>Code</h2>
+          <h3>
+            <a href='http://github.com/bogdan/datagrid'>github.com/bogdan/datagrid</a>
+          </h3>
+          <h2>Docs</h2>
+          <h3>
+            <a href='http://github.com/bogdan/datagrid/wiki'>github.com/bogdan/datagrid/wiki</a>
+          </h3>
+          <h2>Demo</h2>
+          <h3>
+            <a href='http://datagrid.heroku.com'>datagrid.heroku.com</a>
+          </h3>
         </section>
       </div>
     </div>
