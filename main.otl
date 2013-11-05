@@ -101,6 +101,7 @@ OSS
 		Sqlite millisecond hunting
 			where(:created_at => Date.today.beginning_of_day)
 		DateTime | TimeWithZone#to_json
+		Rollback changes on transaction rollback
 	Rspec-rails
 		Subshell on rake spec
 	Vim execute plugin
