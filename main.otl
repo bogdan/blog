@@ -96,10 +96,8 @@ OSS
 		red sql
 		'_id'.humanize
 		AR::Base#param_key
-		String#to_date with wrong date
 		Sqlite millisecond hunting
 			where(:created_at => Date.today.beginning_of_day)
-		DateTime | TimeWithZone#to_json
 		Rollback changes on transaction rollback
 		select with nil choices
 			https://github.com/rails/rails/blob/master/actionview/lib/action_view/helpers/tags/select.rb#L36
