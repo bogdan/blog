@@ -101,6 +101,9 @@ OSS
 		Rollback changes on transaction rollback
 		select with nil choices
 			https://github.com/rails/rails/blob/master/actionview/lib/action_view/helpers/tags/select.rb#L36
+		Instantiate sti association build with class
+			offer.rewards.build(type: 'ReferralReward').class # => ReferralReward
+
 	Rspec-rails
 		Subshell on rake spec
 	Vim execute plugin
