@@ -73,8 +73,8 @@ OSS
 			Move mass assignment attributes to activemodel
 			Make increment thread safe
 			DateTime blow up a log
-		https://github.com/rails/rails/pull/13606/files
 
+			AR::Base#can_be_deleted?
 		has_many :tags, :accepts_nested_attributes => true
 		Resolve changelog merge problem
 		rake db:migrate:down STEP=
@@ -96,17 +96,17 @@ OSS
 		pluck a hash
 		valid! debug message
 		red sql
-		select(crazy_method, :selected => ....)
 		'_id'.humanize
 		AR::Base#param_key
-		AR::Base#can_be_deleted?
-		String#to_date with wrong date
 		Sqlite millisecond hunting
 			where(:created_at => Date.today.beginning_of_day)
-		DateTime | TimeWithZone#to_json
 		Rollback changes on transaction rollback
 		select with nil choices
 			https://github.com/rails/rails/blob/master/actionview/lib/action_view/helpers/tags/select.rb#L36
+		Instantiate sti association build with class
+			offer.rewards.build(type: 'ReferralReward').class # => ReferralReward
+		https://github.com/rails/rails/pull/13606/files
+
 	Rspec-rails
 		Subshell on rake spec
 	Vim execute plugin
