@@ -11,7 +11,6 @@ Home
 	Verevka
 	Tolkalka
 
-	ярошенко  чет 13 16 нечет 12-15 202
 OSS
 	Ruby
 		Irb bug: >> (&:)<tab>
@@ -61,6 +60,8 @@ OSS
 
 				I think it's done with some new level of flexibility that wasn't done before: checkout configuration and API documentation.
 	Rails
+		
+
 		Archived
 			Resolve circular dependency between to_param and to_query
 			Make uniq/pluck combination work on collection association
@@ -72,6 +73,7 @@ OSS
 			Move mass assignment attributes to activemodel
 			Make increment thread safe
 			DateTime blow up a log
+
 			AR::Base#can_be_deleted?
 		has_many :tags, :accepts_nested_attributes => true
 		Resolve changelog merge problem
@@ -103,6 +105,7 @@ OSS
 			https://github.com/rails/rails/blob/master/actionview/lib/action_view/helpers/tags/select.rb#L36
 		Instantiate sti association build with class
 			offer.rewards.build(type: 'ReferralReward').class # => ReferralReward
+		https://github.com/rails/rails/pull/13606/files
 
 	Rspec-rails
 		Subshell on rake spec
@@ -130,8 +133,6 @@ Get a new idea
 	Reporting service
 		Ask Allan about his friend that doing data analysis software
 	Bees or Ants strategy game
-	LogMagnat
-		Build prototype
 
 
 Configuration
@@ -165,7 +166,4 @@ Invent new interview tasks
 
 
 The art of programming
-	Organize a conference with rubygarage
 	Prepare Rspec master class
-		Propose Rspec master class to Lori
-	Resque master classes
