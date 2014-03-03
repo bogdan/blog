@@ -37,7 +37,7 @@ def approve!
 end
 {% endhighlight %}
 
-Maybe I am ancient developer that lives in 90's but a preffer ruby version looks more human readable to me.
+Maybe I am ancient developer that lives in 90's but ruby version looks more human readable to me.
 
 ### So why do we still tend to use state machine gems
 
@@ -48,9 +48,9 @@ In my head it appears as some kind of allowed transitions map:
 
 {% highlight ruby %}
 order_transition_map = { 
-  nil => [:pending],
-  :pending => [:paid, :rejected],
-  :paid => :delivered
+  nil => [:pending], # Initial state is always pending
+  :pending => [:approved, :rejected], # Pending can be transitioned to to paid and delivered
+  :approved => :paid # Delivered can only be transitioned to paid
 }
 {% endhighlight %}
 
@@ -61,6 +61,21 @@ If the state machine's main goal is to validate transitions than let's implement
 class Order < AR::Base
   validates :state, :transition => order_transition_map
 end
+{% endhighlight %}
+
+
+With This pattern you can define state transition methods in ruby:
+
+
+{% highlight ruby %}
+def upproved!
+  # ....
+end
+
+def upproved?
+  # ....
+end
+
 {% endhighlight %}
 
 
