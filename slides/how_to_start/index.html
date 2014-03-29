@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang='en'>
+  <head>
+    <meta charset='utf-8'>
+    <title>How to start a project?</title>
+    <meta content='A framework for easily creating beautiful presentations using HTML' name='description'>
+    <meta content='Hakim El Hattab' name='author'>
+    <meta content='yes' name='apple-mobile-web-app-capable'>
+    <meta content='black-translucent' name='apple-mobile-web-app-status-bar-style'>
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' name='viewport'>
+    <link href='http://lab.hakim.se/reveal-js/css/reveal.css' rel='stylesheet'>
+    <link href='http://lab.hakim.se/reveal-js/css/theme/night.css' rel='stylesheet'>
+    <!-- For syntax highlighting -->
+    <link href='http://lab.hakim.se/reveal-js/lib/css/zenburn.css' rel='stylesheet'>
+    <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+    <script>
+      document.write( '<link rel="stylesheet" href="http://lab.hakim.se/reveal-js/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+    </script>
+  </head>
+  <body>
+    <div class='reveal'>
+      <div class='slides'>
+        <section>
+          <h1>How to start a project?</h1>
+          <h3>Bogdan Gusiev</h3>
+          <h3>August 2013</h3>
+        </section>
+        <section>
+          <h2>
+            What should I do
+          </h2>
+          <h1>
+            in first 3 days
+          </h1>
+          <h2>
+            of a project?
+          </h2>
+        </section>
+        <section>
+          <h1>Curebit</h1>
+          <h3 class='fragment'>"Driving Ecommerce Growth With Customer Referrals"</h3>
+        </section>
+        <section>
+          <div class='fragment'>
+            <h3>Expectation:</h3>
+            <code>wc -l app/models/referral.rb # =&gt; 1000+</code>
+          </div>
+          <br>
+          <br>
+          <div class='fragment'>
+            <h3>
+              Reality:
+              <br>
+            </h3>
+            <code>Activity.where(:action =&gt; "referral")</code>
+          </div>
+          <div class='fragment'>
+            <br>
+            <br>
+            <h3>No fat model. It is awesome.</h3>
+            <h3>But wait where is the code?</h3>
+          </div>
+        </section>
+        <section>
+          <h1>WTF?</h1>
+          <h2 class='fragment'>3 month to fix an issue</h2>
+          <h3 class='fragment'>That need to be solved in first 3 days</h3>
+          <h2 class='fragment'>But was solved after 2 years of production</h2>
+        </section>
+        <section>
+          <h3>What people do in first 3 days of a project:</h3>
+          <ul>
+            <li>Make an ultimate 2 years roadmap</li>
+            <li>
+              Pick up technology
+              <ul>
+                <li>Language</li>
+                <li>Framework</li>
+                <li>Database</li>
+              </ul>
+            </li>
+            <li>Forecast scaling</li>
+            <li>Decide where to spend earned money</li>
+          </ul>
+        </section>
+        <section data-markdown=''>
+          <script type='text/template'>
+            ### Most of things getting discussed
+            ### earlier has no relation to project
+            ### You are going to build
+          </script>
+        </section>
+        <section>
+          <h2>3 days is such a short period</h2>
+          <h2>There is no time for holywars</h2>
+        </section>
+        <section></section>
+        <section>
+          <h2>What will be hard to change down the road?</h2>
+          <h2>What differs this IT project from the rest?</h2>
+          <h2>Which thing is the same for all IT project?</h2>
+        </section>
+        <section>
+          <h2>It has to do something with</h2>
+          <h1 class='fragment highlight-red'>Information Technology</h1>
+        </section>
+        <section data-markdown=''>
+          <script type='text/template'>
+            ## Information technology
+            <br/>
+            ``` sh
+            curl "https://wikipedia/Information_technology&printable=yes" | wc -l
+            # => 1446
+            ```
+            # ;TLDR
+          </script>
+        </section>
+        <section>
+          <h2>Why the Information technology is useful?</h2>
+          <h2 class='fragment'>
+            Because it helps to
+            <span class="fragment highlight-green">share information</span>
+            <span class="fragment highlight-red"> between people </span>
+          </h2>
+        </section>
+        <section>
+          <h3>Even if you do a great job</h3>
+          <h2 class='fragment highlight-green'>processing information</h2>
+          <h3>It is becomming useful</h3>
+          <h2 class='fragment highlight-red'>only when you share it</h2>
+        </section>
+        <section data-markdown=''>
+          <script type='text/template'>
+            ### Generic Application Data Model
+            <h2><nobr>Person 1 -> Information <- Person 2</nobr></h2>
+          </script>
+        </section>
+        <section data-markdown=''>
+          <script type='text/template'>
+            ###Common Application Data Models
+            ## Ecommerce:
+            ##  Customer -> Order <- Product
+          </script>
+        </section>
+        <section data-markdown=''>
+          <script type='text/template'>
+            ## Ecommerce common model
+            ![Ecommerce1](https://api.monosnap.com/image/download?id=Z5Gwq85LF9XSQM2J0FFHHLo5x)
+          </script>
+        </section>
+        <section data-markdown=''>
+          <script type='text/template'>
+            ## Move specific
+            ![](https://api.monosnap.com/image/download?id=lSdYobnES6NwUFOrEuAIkyzZb)
+          </script>
+        </section>
+        <section data-markdown=''>
+          <script type='text/template'>
+            ## Even more specific
+            ![](https://api.monosnap.com/image/download?id=Uf0wGbTKc3ZbpeCXFap8D5CT7)
+          </script>
+        </section>
+        <section data-markdown=''>
+          <script type='text/template'>
+            ## A relation `->` on the diagram
+            #### not only means that Person produces Information or Person receives Information
+            #### It means that Person should have a constant access to the Information possibly in many ways:
+            * Browse individual entries
+            * See various reports
+            * Getting notified about changes
+          </script>
+        </section>
+        <section data-markdown=''>
+          <script type='text/template'>
+            # `->`  = has_many
+            ## in relational databases world
+          </script>
+        </section>
+        <section>
+          <h2>has_many/belongs_to relations</h2>
+          <h3>describe the core of application business logic really great</h3>
+        </section>
+        <section>
+          <h3>This fact made Relation Databases a standard in the industry</h3>
+          <h2>And if you don't understand</h2>
+          <h3>how to approach business logic using relations you have a really big problems</h3>
+        </section>
+        <section data-markdown=''>
+          <script type='text/template'>
+            ## Social Network
+            <h2><nobr>Author -> Activity <- Subscriber</nobr></h2>
+            <p class="fragment">
+            <img src="https://api.monosnap.com/image/download?id=rNJSrZUqwyYWkayD0FUjC7Bg5" />
+            </p>
+          </script>
+        </section>
+        <section data-markdown=''>
+          <script type='text/template'>
+            ## How does it look like in code?
+            <br/>
+            ``` ruby
+            # The Basics
+            
+            User.has_many :subscriptions, :foreign_key => :subscriber_id
+            User.has_many :subscribed_entries, :foreign_key => :author_id, 
+              :class_name => "Subscription"
+            User.has_many :likes, :photos, :activities
+            [Like, Photo, Comment].each do |k|
+            k.has_one :activity, :as => :target
+            end
+            
+            # The Core
+            
+            class User
+              def authored_activities
+              def subscribed_activities
+            end
+            ```
+          </script>
+        </section>
+        <section data-markdown=''>
+          <script type='text/template'>
+            The most complicated part left
+            <h3 class="fragment">implement <br/> #authored_activities<span class='fragment highlight-red'> #subscribed_activities </span></h3>
+            <div class="fragment">
+            <img src="https://api.monosnap.com/image/download?id=c3qOtt5uMSSGnpHTf3Oa2pScm" />
+            </div>
+          </script>
+        </section>
+        <section data-markdown=''>
+          <script type='text/template'>
+            ### Not all of the information technologies
+            ### smells like Relational database
+            ## But IT pattern still persist
+          </script>
+        </section>
+        <section>
+          <h3>Email Client</h3>
+          <h2 class='fragment'>
+            <nobr>Sender -&gt; Message &lt;- Recipient</nobr>
+          </h2>
+          <h2 class='fragment'>
+            <nobr>App1: Sender -&gt; Message</nobr>
+          </h2>
+          <h2 class='fragment'>
+            <nobr>App2: Message &lt;- Recipient</nobr>
+          </h2>
+        </section>
+        <section>
+          <h3>Search Engine</h3>
+          <h2>Site -> Result Item <- Query</h2>
+          <img src='https://api.monosnap.com/image/download?id=ILHCoxrWnAjawYNokuv7rc1Wi'>
+        </section>
+        <section>
+          <h2>Search Engine</h2>
+          <p>Even if RDBMS is last thing you will think about in this scope</p>
+          <pre><code>Site.has_many :result_items&#x000A;&#x000A;ResultItem.belongs_to :site&#x000A;ResultItem.belongs_to :query&#x000A;&#x000A;&#x000A;Query.has_many :result_items, :order =&gt; ?&#x000A;</code></pre>
+        </section>
+        <section data-markdown=''>
+          <script type='text/template'>
+            ## Be Focused
+          </script>
+        </section>
+        <section data-markdown=''>
+          <script type='text/template'>
+            ## Many people involed
+            <pre style="margin: 0 auto; width: 400px; font-size: 1.2em">
+                P1 → I1 ← P2
+                     ↑
+                     P3
+            </pre>
+            Only 3 days - no time for all 3
+          </script>
+        </section>
+        <section data-markdown=''>
+          <script type='text/template'>
+            ## Do not share information
+            # I1 <- Person -> I2
+            ## Is not very useful
+          </script>
+        </section>
+        <section data-markdown=''>
+          <script type='text/template'>
+            ## Two projects for same audience:
+            <br/>
+            # P1 -> I1,I2 <- P2
+            <br/>
+            ### Only makes sence for elder project that end up with it's current market
+          </script>
+        </section>
+        <section data-markdown=''>
+          <script type='text/template'>
+            ## People assembly line
+            # P1 -> I1 <- P2 -> I2 <- P3
+            ### Makes sence in big fat enterprise when your APP automates a large workflow involving people with different Persons
+          </script>
+        </section>
+        <section data-markdown=''>
+          <script type='text/template'>
+            ## Pretty bad idea
+            * P1 -> I1 <- P2 | P3 -> I2 <- P4
+            * You simply don't know what to do
+          </script>
+        </section>
+        <section data-markdown=''>
+          <script type='text/template'>
+            ### No sense to change IT pattern over time.
+            ### Better to just start from scratch
+            ### Because things are good for
+            ### things they were originally designed for
+          </script>
+        </section>
+        <section>
+          <h3>So what should I do in first 3 days?</h3>
+          <ol>
+            <li>Identify an Application Data Model of a project</li>
+            <li>Draw down core relations</li>
+            <li>Ensure everyone get on the same page with it</li>
+          </ol>
+        </section>
+      </div>
+    </div>
+    <script src='http://lab.hakim.se/reveal-js/lib/js/head.min.js'></script>
+    <script src='http://lab.hakim.se/reveal-js/js/reveal.js'></script>
+    <script>
+      // Full list of configuration options available here:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+      	controls: true,
+      	progress: true,
+      	history: true,
+      	center: true,
+      
+      	theme: Reveal.getQueryHash().theme || 'simple', // available themes are in /css/theme
+      	transition: Reveal.getQueryHash().transition || 'fade', // default/cube/page/concave/zoom/linear/fade/none
+      
+      	// Optional libraries used to extend on reveal.js
+      	dependencies: [
+      		// { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+      		{ src: 'http://lab.hakim.se/reveal-js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      		{ src: 'http://lab.hakim.se/reveal-js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      		{ src: 'http://lab.hakim.se/reveal-js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+      		// { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+      		// { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+      		// { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
+      		// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+      	]
+      });
+    </script>
+  </body>
+</html>

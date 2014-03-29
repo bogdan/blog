@@ -142,12 +142,23 @@ Configuration
 		Delimitmate with repeat(.)
 	Skype
 Blog
-	Article about ActiveSupport::Callbacks
 	PAEI model in programming
+	Templating engines
+		* Logic free
+		* Frontend rendering
+		* Sandbox mode
+		* Minimalistic
+	Undocumented Rails Principles
+		ActiveBasecamp
+		Self-similarity
+		Break through abstraction level
+
+	
 	Ajax debug article
 		javascriptshow
 		plugins.jquery.com
 	Compare dinosaurs growth to startup growth
+	
 
 Invent new interview tasks
 	Minesweeper

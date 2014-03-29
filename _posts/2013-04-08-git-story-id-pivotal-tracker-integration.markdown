@@ -14,7 +14,6 @@ All of them seems abusing for me: the outcome of pivotal/git integration is a gi
 
 That's why I've decided to make the most trivial integration that covers this idea and don't provide additional complexity:
 Meet [git-storyid](https://github.com/bogdan/git-storyid) gem - the only one git/pivotaltracker integration that saves your time.
-
 <!--more-->
 
 ## Installation
