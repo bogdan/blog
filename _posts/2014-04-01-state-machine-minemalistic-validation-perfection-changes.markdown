@@ -88,5 +88,5 @@ end
 
 Now it looks really readable and a person who never saw this kind of API before can figure out what is happening.
 
-Give a try to: [ChangesValidator](https://github.com/bogdan/changes_validator) in your app
+Give a try to: [__ChangesValidator__](https://github.com/bogdan/changes_validator) in your app
 
