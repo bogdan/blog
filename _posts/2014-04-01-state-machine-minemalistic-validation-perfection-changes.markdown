@@ -1,7 +1,6 @@
 ---
 layout: post
-title: "Minimalistic State Machine: Less is MORE!"
-published: false
+title: "Minimalistic State Machine: Less is More"
 tags: 
 - rails
 - validation
@@ -13,6 +12,9 @@ I have tried a bunch of ActiveRecord's state machine gems.
 Their functionality is very close to each other. It allows to validate a state transition
 and reinvent ruby programming language to define transition methods.
 The fact that all of them produces custom API to define a ruby method doesn't look right...
+<!--more-->
+
+### Samples using common state machine gems
 
 {% highlight ruby %}
 # State Machine gem example
@@ -86,5 +88,5 @@ end
 
 Now it looks really readable and a person who never saw this kind of API before can figure out what is happening.
 
-Give it a try to: [ChangesValidator](https://github.com/bogdan/changes_validator)
+Give a try to: [ChangesValidator](https://github.com/bogdan/changes_validator) in your app
 
