@@ -2,6 +2,7 @@ source 'http://rubygems.org'
 
 #gem "gsl"
 gem "gsl", git: "https://github.com/romanbsd/rb-gsl.git"
+#gem "gsl-nmatrix", git: "https://github.com/SciRuby/rb-gsl.git"
 gem "gli", "1.6.0"
 gem "showoff"
 gem "rake"
