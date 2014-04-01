@@ -106,6 +106,7 @@ OSS
 		Instantiate sti association build with class
 			offer.rewards.build(type: 'ReferralReward').class # => ReferralReward
 		https://github.com/rails/rails/pull/13606/files
+		User.order(:id).last(3) don't use SQL limiting
 
 	Rspec-rails
 		Subshell on rake spec

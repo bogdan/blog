@@ -1,0 +1,323 @@
+<!doctype html>
+%html{:lang => "en"}
+  %head
+    %meta{:charset => "utf-8"}/
+    %title Parsers
+    %meta{:content => "", :name => "description"}/
+    %meta{:content => "Bogdan Gusiev", :name => "author"}/
+    %meta{:content => "yes", :name => "apple-mobile-web-app-capable"}/
+    %meta{:content => "black-translucent", :name => "apple-mobile-web-app-status-bar-style"}/
+    %meta{:content => "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no", :name => "viewport"}/
+    %link{:href => "http://lab.hakim.se/reveal-js/css/reveal.css", :rel => "stylesheet"}/
+    %link{:href => "http://lab.hakim.se/reveal-js/css/theme/night.css", :rel => "stylesheet"}/
+    / For syntax highlighting
+    %link{:href => "http://lab.hakim.se/reveal-js/lib/css/zenburn.css", :rel => "stylesheet"}/
+    / If the query includes 'print-pdf', use the PDF print sheet
+    :javascript
+      document.write( '<link rel="stylesheet" href="http://lab.hakim.se/reveal-js/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+    %style
+      :sass
+        .reveal
+          pre
+            code
+              padding: 20px 5px
+          ul
+            min-width: 50%
+          .red
+            color: red
+  %body
+    .reveal
+      .slides
+        %section
+          %h2 Parsers. Rails Router Example
+          %h3 Bogdan Gusiev
+          %h3 October 2013
+
+        %section
+          %h1 P-A-R-S-E-R-S
+        %section
+          %h3 Why?
+          
+          %h3 Because best way to pass data from one App to another is
+          %h2 Serialization
+
+          %h5 
+            %strike COM
+            %strike RMI
+
+
+        %section
+          %h3 One more less obvious reason
+
+          но сейчас обсуждаем возможность сделать конфу более технической.
+
+          %h2 So this talk will be hardcore
+          
+        %section
+          %h3 Plan
+
+          %ul
+            %li Easy Part
+            %li Classification
+            %li Parsers Theory
+            %li Simple examples
+            %li Live examples
+
+
+        %section
+          %h3 The easiest parser you could invent?
+
+          %h2 bogdan@example.com
+
+          %h3 \w+@\w+(\.\w+)+
+          %h3 /\A[^@]+@([^@\.]+\.)+[^@\.]+\z/ 
+
+        %section
+          %h2 What is a grammar?
+          %h3 Each regular expression can parse particular grammar
+          
+        %section
+          %h3 Regular expressions are great!
+
+          %h3 Their power is huge.
+          %h2 But what is the limit?
+
+        %section 
+          %h3 
+            Regular exmpressions can only be used to parse 
+            .highlight-green Regular 
+            grammars
+
+          %h2 
+            But what about 
+            .highlight-red Non-regular?
+
+        %section
+          %h2 Regular expression can only parse something that could be parsed with one iteration
+          %h3 in other words
+          %h1 From Left to Right
+
+        %section
+          %pre
+            %code
+              :preserve
+                +380(67)222-33-00
+                bogdan@example.com
+                192.168.0.1
+        %section
+
+          %h2 In order to understand why we 
+          %h2 to get into the most boring part
+          %h1 The Theory
+        %section
+
+          %h3 Grammar in Math is described via Generators concept.
+
+          Each generator represents a transformation from one symbol to group of other symbols
+          
+        %section
+          %h1 Regular Grammars
+
+          %pre
+            %code
+              :preserve
+                ab
+                aab
+                abb
+                abbb
+                aabb
+                aaab
+          %h5 Regexp: a+b+
+
+          %pre
+            %code.ruby
+              :preserve
+                S -> aS
+                S -> aR
+                R -> bR
+                R -> b
+          %ul
+            %li S,R - non-deterministic symbols
+            %li a,b - deterministic symbols
+            %li string is not considered final if it contains non-deterministic symbols
+
+          
+
+        %section
+          %h3 Regular grammar that describes an Email
+          %h5 (almost)
+          %pre
+            %code
+              :preserve
+                E -> [0-z]N
+                N -> [0-z]N
+                N -> @D
+                D -> [0-z]D
+                D -> [0-z].Z
+                Z -> [0-z]Z
+                Z -> [0-z]
+
+                  
+          
+        %section
+          %h3 Is there a regular expression that parses this?
+          %pre
+            %code.ruby
+              :preserve
+                S -> aSb
+                S -> ab
+          %pre
+            %code
+              :preserve
+                ab
+                aabb
+                aaabbb
+                aaaabbbb
+
+        %section
+          %h2 The answer is NO.
+          %h3 We can not parse such a simple case with regular expressions.
+
+
+        %section
+          %h1 Regularity Criteria
+
+          %h5 Grammar is regular if it don't contain "recursive" generators.
+
+        %section
+          %h3 So what to do?
+
+          %h2 Not sure
+          %h3 the only one thing we know is that regular expressions will not help
+
+          %pre
+            %code.ruby
+              :preserve
+                def match_aabb?(string)
+                  string.each_char.with_index.each do |c, i|
+                    case c
+                    when 'a'
+                      count_a += 1
+                    when 'b'
+                      return count_a == string.size - i - 1
+                    else
+                      return false
+                    end
+                  end
+                  return false
+                end
+
+        %section
+          %h3 This is where we understand the power of Regex's
+          %h2 And their limits
+          %h3 Writing parsers for non-regular grammars is a big problem
+        %section
+          %h1 Grammars/Parsers can be
+
+          %ul
+            %li Regular
+            %li Recursive
+
+        %section
+          %h1 Getting close to real world examples
+
+          %pre
+            %code
+              :preserve
+                12*(2+8/(13.5+7))
+
+
+          %img{src: "http://monosnap.com/image/1BfsQy5LwfhC4khKNTLjvTvnx2M58A.png"}
+          
+        %section
+          %h2 Regex are still possible
+          %h3 But not really in the long term
+
+          http://monosnap.com/image/7wOQJ9xYqaX6oxeCvOUZGDjT4Gq8Ve.png
+
+        %section
+          %h2 Start from Tokenizing
+          %pre
+            %code
+              :preserve
+                ['12', '*', '(', '2', '+', '8' '/', '(', '13.5', '+', '7', ')', ')']
+
+
+        %section
+          %h2 Builing Abstract Syntax Tree (AST)
+          %h4 The Hardest Part
+          %pre
+            %code.ruby
+              :preserve
+                ['12', '*', ['(', '2', '+', '8' '/', '(', '13.5', '+', '7', ')', ')'] ]
+                ['12', '*', [ '2', '+', '8' '/', '(', '13.5', '+', '7', ')'] ]
+                ['12', '*', [ '2', '+', [ '8' '/', '(', '13.5', '+', '7', ')' ] ] ]
+                ['12', '*', [ '2', '+', [ '8' '/', [ '13.5', '+', '7', ] ]]]
+
+                ['12', '*', [ '2', '+', [ '8' '/', [ '13.5', '+', '7', ] ] ]
+          %ol
+            %li Find lowest priority operator
+            %li Split Array into 3 parts: before operator, operator, after operator
+            %li Repeat 1-3 for before part and after part
+
+        %section
+          %h2 Work with AST is easy
+          %pre
+            %code.ruby
+              :preserve
+                def evaluate(ast)
+                  if ast.is_a?(Array)
+                    left, operator, right = ast
+                    evaluate(left).send(operator, evaluate(right))
+                  else
+                    ast.to_f
+                  end
+                end
+
+        %section
+          %h2 It is very easy to support
+          %img{src: "http://monosnap.com/image/7wOQJ9xYqaX6oxeCvOUZGDjT4Gq8Ve.png"}
+          
+        %section
+          %h2 Building AST
+          %h5 Hard problem
+
+          %h2 But you are able to use tools
+          
+
+        %section
+          %h2 Ukraine is having a hard time
+          %h3 How we can help? What others can not do?
+          %h5 
+            Software developers have unique opportunity to support economics of our country.
+            We are the only one that can really help money to ukraine.
+          %h2 So, lets do our work better
+          %h5 And waste less money on new Smart Phones
+
+          
+          
+    %script{:src => "http://lab.hakim.se/reveal-js/lib/js/head.min.js"}
+    %script{:src => "http://lab.hakim.se/reveal-js/js/reveal.js"}
+    :javascript
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+      	controls: true,
+      	progress: true,
+      	history: true,
+      	center: true,
+
+      	theme: Reveal.getQueryHash().theme || 'simple', // available themes are in /css/theme
+      	transition: Reveal.getQueryHash().transition || 'fade', // default/cube/page/concave/zoom/linear/fade/none
+
+      	// Optional libraries used to extend on reveal.js
+      	dependencies: [
+      		// { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+      		{ src: 'http://lab.hakim.se/reveal-js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      		{ src: 'http://lab.hakim.se/reveal-js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      		{ src: 'http://lab.hakim.se/reveal-js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+      		// { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+      		// { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+      		// { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
+      		// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+      	]
+      });
