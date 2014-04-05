@@ -1,8 +1,8 @@
 GIT
   remote: https://github.com/romanbsd/rb-gsl.git
-  revision: 0ec73f997d5e7e991cb94192e8e6e56619fa9e69
+  revision: 8c012d6199fd08fe60d60ceb4a7021fc3c0be7a6
   specs:
-    gsl (1.12.109)
+    gsl (1.14.7)
       narray (>= 0.5.9)
 
 GEM
@@ -28,9 +28,8 @@ GEM
     json (1.7.7)
     kramdown (0.13.7)
     liquid (2.2.2)
-    maruku (0.6.0)
-      syntax (>= 1.0.0)
-    narray (0.6.0.1)
+    maruku (0.7.1)
+    narray (0.6.0.8)
     nokogiri (1.5.9)
     parslet (1.5.0)
       blankslate (~> 2.0)
@@ -51,7 +50,6 @@ GEM
       rack (~> 1.5, >= 1.5.2)
       rack-protection (~> 1.4)
       tilt (~> 1.3, >= 1.3.4)
-    syntax (1.0.0)
     tilt (1.4.1)
 
 PLATFORMS
