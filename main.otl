@@ -14,7 +14,15 @@ Home
 	umbrella
 	Toschi
 	Places to go on weekend?
+		Umbrella
+		daily
+		Grelka
+		Hot water
+		masg
+		dfi
 	Shipachki + silicon
+	
+
 OSS
 	Ruby
 		Irb bug: >> (&:)<tab>
@@ -113,6 +121,7 @@ OSS
 			offer.rewards.build(type: 'ReferralReward').class # => ReferralReward
 		https://github.com/rails/rails/pull/13606/files
 		User.order(:id).last(3) don't use SQL limiting
+		4.0 -> 4.1 routes.sites_path(:zz => {})
 
 	Rspec-rails
 		Subshell on rake spec

@@ -1,37 +1,45 @@
 <!doctype html>
 <html lang='en'>
   <head>
-    <meta charset='utf-8' />
-    <title>How to build a Parser</title>
-    <meta content='' name='description' />
-    <meta content='Bogdan Gusiev' name='author' />
-    <meta content='yes' name='apple-mobile-web-app-capable' />
-    <meta content='black-translucent' name='apple-mobile-web-app-status-bar-style' />
-    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' name='viewport' />
-    <link href='http://lab.hakim.se/reveal-js/css/reveal.css' rel='stylesheet' />
-    <link href='http://lab.hakim.se/reveal-js/css/theme/night.css' rel='stylesheet' />
+    <meta charset='utf-8'>
+    <title>Parsers</title>
+    <meta content='' name='description'>
+    <meta content='Bogdan Gusiev' name='author'>
+    <meta content='yes' name='apple-mobile-web-app-capable'>
+    <meta content='black-translucent' name='apple-mobile-web-app-status-bar-style'>
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' name='viewport'>
+    <link href='http://lab.hakim.se/reveal-js/css/reveal.css' rel='stylesheet'>
+    <link href='http://lab.hakim.se/reveal-js/css/theme/night.css' rel='stylesheet'>
     <!-- For syntax highlighting -->
-    <link href='http://lab.hakim.se/reveal-js/lib/css/zenburn.css' rel='stylesheet' />
+    <link href='http://lab.hakim.se/reveal-js/lib/css/zenburn.css' rel='stylesheet'>
     <!-- If the query includes 'print-pdf', use the PDF print sheet -->
-    <script type='text/javascript'>
-      //<![CDATA[
-        document.write( '<link rel="stylesheet" href="http://lab.hakim.se/reveal-js/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
-      //]]>
+    <script>
+      document.write( '<link rel="stylesheet" href="http://lab.hakim.se/reveal-js/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
     </script>
     <style>
+      .yellow {
+        color: yellow; }
+      
       .reveal pre code {
-        padding: 20px 5px; }
+        padding: 20px 5px;
+        font-size: 1.8em;
+        line-height: 1.3em; }
       .reveal ul {
         min-width: 50%; }
       .reveal .red {
-        color: red; }
+        color: #ff2c2d; }
+      .reveal .green {
+        color: #17ff2e; }
+      .reveal .blue {
+        color: #1b91ff; }
     </style>
   </head>
   <body>
     <div class='reveal'>
       <div class='slides'>
         <section>
-          <h2>Parser. Rails Router Example.</h2>
+          <h1>Parsers</h1>
+          <h4>Rails Router Example</h4>
           <h3>Bogdan Gusiev</h3>
           <h3>October 2013</h3>
         </section>
@@ -40,286 +48,308 @@
         </section>
         <section>
           <h3>Why?</h3>
-          <h3>Becuse the best way to pass data from application to another is serialization</h3>
-          <h5>Hope everyone forgot what is COM and RMI already</h5>
+          <h3>Because best way to pass data from one App to another is</h3>
+          <h2>Serialization</h2>
+          <h5>
+            <strike>COM</strike>
+            <strike>RMI</strike>
+          </h5>
+        </section>
+        <section>
+          <h3>One more less obvious reason</h3>
+          <h2 style='font-family: arial'>
+            ... сейчас обсуждаем возможность сделать конфу более технической.
+          </h2>
+          <h2>So this talk required to be hardcore</h2>
         </section>
         <section>
           <h3>Plan</h3>
           <ul>
-            <li>Team</li>
-            <li>Happy users</li>
-            <li class='fragment highlight-green'>Data</li>
-            <li>Code</li>
+            <li>Easy Part</li>
+            <li>Classification</li>
+            <li>Parsers Theory</li>
+            <li>Simple examples</li>
+            <li>Live examples</li>
           </ul>
         </section>
         <section>
-          <h3>What is in my database?</h3>
-          <ul>
-            <li class='fragment highlight-red'>Find data</li>
-            <li>Browse data</li>
-            <li>Edit data</li>
-            <li>CSV export</li>
-          </ul>
-        </section>
-        <section>
-          <h3>A perfect data finding tool</h3>
-          <img src='https://d22epkcpuulnqj.cloudfront.net/50d2e001e4b05c01ee949e79/50d2e001e4b05c01ee949e7a/526688a62cdc73932f7141bb.png?Expires=2147483647&amp;Signature=JJQ5BpNuvM2~7eCzFEQ8woFGz0LmPKgkhkNGCEvR6l40DmybhxJ8WjJk3rlcA6SD2d~fIXv5kQ4Es6FR3AkMQipq8wxGlIzapg1fFdmnaJq73ouCNKeiSrW42EBhoiLVt6LOnYtlyBc6--MsXpaR766BCVIFbSXhJe~ylbFTito_&amp;Key-Pair-Id=APKAITAZRW24HHYVXS3A' />
-        </section>
-        <section>
-          <h3>A perfect data finding tool</h3>
-          <img src='https://d22epkcpuulnqj.cloudfront.net/50d2e001e4b05c01ee949e79/50d2e001e4b05c01ee949e7a/526689152cdc73932f7141fd.png?Expires=2147483647&amp;Signature=JGwPq1S-bvJ1Zuclm9-jGbubxnaDzIMuussT2YEGm2U~26jUiJ6Jnuohh4CMIGgZeqyN3pqB7b37iSo3Fc2l6dqAAiJuJgUPs6VpT0WXKRXkOxuuBKIYCsIhnm-VOqh-xZaXEUwGKSV21p59YLrhOd7N4Cp0XT5bQ8fjpogjsqo_&amp;Key-Pair-Id=APKAITAZRW24HHYVXS3A' />
-        </section>
-        <section>
-          <h3>Not a big deal to use ActiveRecord</h3>
-          <pre><code class='ruby'>Reward.by_status(status).&#x000A;  by_reason(reason).&#x000A;  where(:created_at => from_created_at..to_created_at).&#x000A;  by_campaigns(selected_campaigns)&#x000A;</code></pre>
-        </section>
-        <section>
-          <h2>Some problems</h2>
-          <pre><code class='ruby'>User.where(:created_at => Date.today)</code></pre>
+          <h3>The easiest way to build parser</h3>
+          <pre class='fragment'><code>bogdan@example.com&#x000A;</code></pre>
           <div class='fragment'>
-            <pre><code class='ruby'>User.where(:created_at => Date.today.beginning_of_day..Date.today.end_of_day)</code></pre>
+            <h3>Regular Expression</h3>
+            <pre><code>\w+@\w+(\.\w+)+</code></pre>
           </div>
           <div class='fragment'>
-            <pre><code class='ruby'>User.where(:created_at => -Infinity..1.month.ago.end_of_day)</code></pre>
-          </div>
-          <div class='fragment'>
-            <pre><code class='ruby'>def convert_date_to_timestamp(value)&#x000A;  if !value&#x000A;    value&#x000A;  elsif value.is_a?(Array)&#x000A;    [value.first.try(:beginning_of_day), value.last.try(:end_of_day)]&#x000A;  elsif value.is_a?(Range)&#x000A;    (value.first.beginning_of_day..value.last.end_of_day)&#x000A;  else&#x000A;    value.beginning_of_day..value.end_of_day&#x000A;  end</code></pre>
+            <pre><code>/\A[^@]+@([^@\.]+\.)+[^@\.]+\z/ &#x000A;</code></pre>
+            <p>etc.</p>
           </div>
         </section>
         <section>
-          <h1>Data table</h1>
-          <pre><code class='haml'>%table&#x000A;  %tr&#x000A;    %th Id&#x000A;    %th Email&#x000A;    %th Name&#x000A;    %th Creation Date&#x000A;  - @users.each do |user|&#x000A;    %tr&#x000A;      %td= user.id&#x000A;      %td= user.email&#x000A;      %td= user.name&#x000A;      %td= user.created_at.to_date</code></pre>
+          <h3>Each regular expression can parse particular grammar</h3>
+          <h2>What is a grammar?</h2>
         </section>
         <section>
-          <h2>It is easy to build</h2>
-          <pre><code class='ruby'>column(:id)&#x000A;column(:email)&#x000A;column(:name)&#x000A;column(:created_at) do |model|&#x000A;  model.created_at.to_date&#x000A;end</code></pre>
+          <h3>Regular expressions are great!</h3>
+          <h3>Their power is huge.</h3>
+          <h2>But what is the limit?</h2>
         </section>
         <section>
-          <h2>But what about:</h2>
+          <h3>
+            Regular expressions can only be used to parse
+            <span class='green'>Regular grammars</span>
+          </h3>
+          <h2>
+            But what about
+            <span class='red'>Non-regular?</span>
+          </h2>
+        </section>
+        <section>
+          <h3>Regular expression can only parse something that could be parsed with one iteration</h3>
+          <h4>in other words</h4>
+          <h1>From Left to Right</h1>
+        </section>
+        <section>
+          <h3>Several obvious examples</h3>
+          <pre><code>+380(67)222-33-00&#x000A;bogdan@example.com&#x000A;192.168.0.1</code></pre>
+        </section>
+        <section>
+          <h2>In order to understand why</h2>
+          <h2>we need to get into the most boring part</h2>
+          <h1>The Theory</h1>
+        </section>
+        <section>
+          <h3>Grammar in Math is described via Generators concept.</h3>
+          Each generator represents a transformation from one symbol to group of other symbols
+        </section>
+        <section>
+          <h3>Regular Grammars</h3>
+          <pre><code>ab&#x000A;aab&#x000A;abb&#x000A;abbb&#x000A;aabb&#x000A;aaab</code></pre>
+          <h5>Regexp: a+b+</h5>
+          <pre><code class='ruby'>S -> aS&#x000A;S -> aR&#x000A;R -> bR&#x000A;R -> b</code></pre>
           <ul>
-            <li>Ordering</li>
-            <li>CSV export</li>
-            <li>Columns visibility</li>
+            <li>S,R - non-deterministic symbols</li>
+            <li>a,b - deterministic symbols</li>
+            <li>string is not considered final if it contains non-deterministic symbols</li>
           </ul>
         </section>
         <section>
-          <h2>But the main problem is GUI</h2>
-          <h3>I would spend 90% of time building GUI</h3>
-          <h3>If I would use ActiveRecord</h3>
-          <h3>So, let the GUI autogenerate itself</h3>
+          <h3>Regular grammar that describes an Email</h3>
+          <h5>(almost)</h5>
+          <pre><code>S -> [0-z]N&#x000A;N -> [0-z]N&#x000A;N -> @D&#x000A;D -> [0-z]D&#x000A;D -> [0-z].Z&#x000A;Z -> [0-z]Z&#x000A;Z -> [0-z]</code></pre>
+          <ul>
+            <li>S - start</li>
+            <li>N - name</li>
+            <li>D - domain</li>
+            <li>Z - zone</li>
+          </ul>
         </section>
         <section>
-          <h1>The Basics</h1>
-          <ul style='width: 100%'>
+          <h3>Is there a regular expression that parses this?</h3>
+          <pre><code class='ruby'>S -> aSb&#x000A;S -> ab</code></pre>
+          <pre><code>ab&#x000A;aabb&#x000A;aaabbb&#x000A;aaaabbbb&#x000A;</code></pre>
+        </section>
+        <section>
+          <h2>The answer is NO.</h2>
+          <h3>We can not parse such a simple case with regular expressions.</h3>
+        </section>
+        <section>
+          <h2>Regularity Criteria</h2>
+          <h3>Grammar is regular if it don't contain "recursive" generators.</h3>
+        </section>
+        <section>
+          <h3>So what to do?</h3>
+          <h2>Not sure</h2>
+          <h3>the only one thing we know is that regular expressions will not help</h3>
+          <pre><code class='ruby'>def match_aabb_pattern?(string)&#x000A;  string.each_char.with_index.each do |c, i|&#x000A;    case c&#x000A;    when 'a'&#x000A;      count_a += 1&#x000A;    when 'b'&#x000A;      return count_a == string.size - i - 1&#x000A;    else&#x000A;      return false&#x000A;    end&#x000A;  end&#x000A;  return false&#x000A;end&#x000A;</code></pre>
+        </section>
+        <section>
+          <h3>This is where we understand the power of Regex's</h3>
+          <h2>And their limits</h2>
+          <h3>Writing parsers for non-regular grammars is a big problem</h3>
+        </section>
+        <section>
+          <h2>Grammars/Parsers can be</h2>
+          <ul>
             <li>
-              Scope
-              <pre><code class='ruby'>scope { User.includes(:profile).order("created_at desc") }</code></pre>
+              <h3>Regular</h3>
             </li>
             <li>
-              Filters
-              <pre><code class='ruby'>filter(:email, :string, options) do |value|&#x000A;  where("email ilike '%&#35;{value}%'")&#x000A;end&#x000A;</code></pre>
-            </li>
-            <li>
-              Columns
-              <pre><code class='ruby'>column(:created_at) do |user|&#x000A;  user.created_at.to_date&#x000A;end&#x000A;</code></pre>
+              <h3>Recursive</h3>
             </li>
           </ul>
         </section>
         <section>
-          <pre><code class='ruby'>filter(:created_at, :date, :range => true, :default => (1.month.ago.to_date..Date.today))&#x000A;filter(:campaign_type, :enum, :select => CAMPAIGN_TYPES) do |value|&#x000A;  where(:type => value)&#x000A;end&#x000A;filter(:tag_name, :enum, :select => :tag_names) do |value|&#x000A;  by_tag_name(value)&#x000A;end&#x000A;&#x000A;filter(:active, :eboolean) do |value|&#x000A;  value == "YES" ? active : inactive&#x000A;end&#x000A;</code></pre>
+          <h2>Getting close to real world examples</h2>
+          <img src='http://monosnap.com/image/1BfsQy5LwfhC4khKNTLjvTvnx2M58A.png'>
         </section>
         <section>
-          <pre><code class='ruby'>column(:related_email, mandatory: true) do |offer|&#x000A;  offer.person.email&#x000A;end&#x000A;&#x000A;column(:short_link, mandatory: true) do |offer|&#x000A;  format(offer.short_url) do |value|&#x000A;    link_to("Claim", value)&#x000A;  end&#x000A;end&#x000A;&#x000A;column(:campaign, mandatory: true) do |offer|&#x000A;  campaign = offer.campaign&#x000A;  format(campaign.name) do |value|&#x000A;    link_to(value, site_campaign_path(campaign.site, campaign))&#x000A;  end&#x000A;end&#x000A;&#x000A;%w(share click visit referral).each do |action|&#x000A;  column(action, header: action.pluralize.humanize) do |offer|&#x000A;    offer.activities.by_actions(action).count&#x000A;  end&#x000A;end&#x000A;&#x000A;</code></pre>
+          <h2>Regex are still possible</h2>
+          <h3>But not really in the long term</h3>
+          <img src='http://monosnap.com/image/7wOQJ9xYqaX6oxeCvOUZGDjT4Gq8Ve.png'>
         </section>
         <section>
-          <h3>There is no GUI problems</h3>
-          <pre><code class='ruby'>class UsersController&#x000A;  def index&#x000A;    @grid = UsersGrid.new(params[:users_grid])&#x000A;    @assets = @grid.assets.page(params[:page])&#x000A;  end&#x000A;end</code></pre>
-          <pre><code class='haml'>= datagrid_form_for @grid, :url => report_path&#x000A;= datagrid_table @grid, @assets</code></pre>
+          <h2>Start from Tokenizing</h2>
+          <pre><code>"12*(2+8/(13.5+7))" =>&#x000A;[&#x000A;  '12', '*', '(', '2', '+', '8' '/', &#x000A;  '(', '13.5', '+', '7', ')', ')'&#x000A;]&#x000A;&#x000A;</code></pre>
         </section>
         <section>
-          <h2>Basic Filter Types</h2>
+          <h2>Builing Abstract Syntax Tree (AST)</h2>
+          <h4>The Hardest Part</h4>
+          <pre>['12', <span class='highlight yellow'>'*'</span>, <span class='highlight green'>[</span><span class='highlight red'>'('</span>, '2', '+', '8' '/', '(', '13.5', '+', '7', ')', <span class='highlight red'>')'</span><span class='highlight green'>]</span> ]&#x000A;[left = '12', <span class='highlight yellow'>operator</span>, right = <span class='highlight green'>[</span>...<span class='highlight green'>]</span>]&#x000A;&#x000A;['12', '*', [ '2', '+', '8' '/', '(', '13.5', '+', '7', ')'] ]&#x000A;Cleanup useless brackets&#x000A;&#x000A;['12', '*', [ '2', '+', [ '8' '/', '(', '13.5', '+', '7', ')' ] ] ]&#x000A;# Repeat for right and left node&#x000A;&#x000A;['12', '*', [ '2', '+', [ '8' '/', [ '13.5', '+', '7', ] ]]]&#x000A;# Repeat for right and left node</pre>
+          <ol>
+            <li>Find lowest priority operator</li>
+            <li>Split Array into 3 parts: left operand, operator, right operand</li>
+            <li>Repeat 1-3 for before part and after part</li>
+          </ol>
+        </section>
+        <section>
+          <h2>Work with AST is easy</h2>
+          <pre><code class='ruby'>def evaluate(ast)&#x000A;  if ast.is_a?(Array)&#x000A;    left, operator, right = ast&#x000A;    evaluate(left).send(operator, evaluate(right))&#x000A;  else&#x000A;    ast.to_f&#x000A;  end&#x000A;end&#x000A;</code></pre>
+        </section>
+        <section>
+          <h2>After such a heavy infrastructure</h2>
+          <h2>it is easies to support</h2>
+          <img src='http://monosnap.com/image/7wOQJ9xYqaX6oxeCvOUZGDjT4Gq8Ve.png'>
+        </section>
+        <section>
+          <h2>Building AST</h2>
+          <h2>is Hard problem</h2>
+          <h2>But you are able to use tools</h2>
+        </section>
+        <section>
+          <h2>Recursive parsers library</h2>
           <ul>
-            <li>default</li>
-            <li>date</li>
-            <li>enum</li>
-            <li>boolean</li>
-            <li>eboolean</li>
-            <li>integer</li>
-            <li>float</li>
-            <li>string</li>
+            <li>treetop - a little easier, a bit slower</li>
+            <li>racc - more hard core, used in Rails Router</li>
           </ul>
         </section>
         <section>
-          <h2>Basic Filter options</h2>
-          <ul>
-            <li>multiple</li>
-            <li>range</li>
-            <li>allow_blank</li>
-            <li>select</li>
-            <li>header</li>
-            <li>default</li>
-          </ul>
+          <h2>Rails router sytax</h2>
+          <pre><code>/users/:id(.:format)&#x000A;(/locale/:locale)/users/:id(.:format)&#x000A;(/locale/:locale(/currency/:currency))/users/:id(.:format)&#x000A;</code></pre>
+          <h3>Regularity criteria can be broken.</h3>
         </section>
         <section>
-          <h2>Column options</h2>
-          <ul>
-            <li>mandatory</li>
-            <li>order</li>
-            <li>order_desc</li>
-            <li>order_by_value</li>
-          </ul>
+          <h3>This is a huge problem and require router to be parsed by recursive parser.</h3>
         </section>
         <section>
-          <h1>The Power</h1>
+          <h2>Route tokenizer:</h2>
+          <pre><code>/users/:id(.:format)</code></pre>
+          <table>
+            <tr>
+              <th>Token</th>
+              <th>Type</th>
+            </tr>
+            <tr>
+              <td>/</td>
+              <td>SLASH</td>
+            </tr>
+            <tr>
+              <td>users</td>
+              <td>LITERAL</td>
+            </tr>
+            <tr>
+              <td>/</td>
+              <td>SLASH</td>
+            </tr>
+            <tr>
+              <td>:id</td>
+              <td>SYMBOL</td>
+            </tr>
+            <tr>
+              <td>(</td>
+              <td>LPAREN</td>
+            </tr>
+            <tr>
+              <td>.</td>
+              <td>DOT</td>
+            </tr>
+            <tr>
+              <td>:format</td>
+              <td>SYMBOL</td>
+            </tr>
+            <tr>
+              <td>)</td>
+              <td>RPAREN</td>
+            </tr>
+          </table>
         </section>
         <section>
-          <h2>Changing scope on the fly</h2>
-          <pre><code class='ruby'>grid = ProjectsGrid.new(params[:my_grid]) do |scope|&#x000A;  scope.where(:owner_id => current_user.id)&#x000A;end</code></pre>
+          <h2>Fragments from parser</h2>
+          <a href='https://github.com/rails/rails/blob/master/actionpack/lib/action_dispatch/journey/parser.y'>
+            github.com/rails/rails/blob/master/actionpack/lib/action_dispatch/journey/parser.y
+          </a>
+          <h4>They are so severe that created their own syntax</h4>
+          <pre><div class='fragment'>
+            &nbsp;
+            group
+            : LPAREN expressions RPAREN { ... }
+            ;
+          </div>
+          <div class='fragment'>
+            expressions
+            : expressions expression  { ... }
+            | expression              { ... }
+            | or
+            ;
+          </div>
+          <div class='fragment'>
+            # Simplied!
+            expression
+            : symbol
+            | literal
+            | slash
+            | dot
+            | group
+            | star
+            ;
+          </div></pre>
         </section>
         <section>
-          <h2>Define asc/desc ordering</h2>
-          <pre><code class='ruby'>column(&#x000A;  :priority, &#x000A;  # suppose that models with null priority will be always on bottom&#x000A;  :order => "priority is not null desc, priority", &#x000A;  :order_desc => "prioritty is not null desc, priority desc"&#x000A;)</code></pre>
-        </section>
-        <section>
-          <h2>Different HTML/CSV formatting</h2>
-          <pre><code class='ruby'>column(:name) do |asset|&#x000A;  format(asset.name) do |value|&#x000A;    content_tag(:strong, value)&#x000A;  end&#x000A;end</code></pre>
-        </section>
-        <section>
-          <h2>Order by joined column</h2>
-          <pre><code class='ruby'>column(:profile_updated_at, :order => proc { |scope|&#x000A;  scope.join(:profile).order("profiles.updated_at")&#x000A;}) do |model|&#x000A;  model.profile.updated_at.to_date&#x000A;end &#x000A;&#x000A;</code></pre>
-        </section>
-        <section>
-          <h2>Infinite ranges and default values</h2>
-          <pre><code class='ruby'>filter(:posts_count, :integer, :range => true, :default => [1, nil])</code></pre>
-        </section>
-        <section>
-          <h2>Multivalues filter</h2>
-          <pre><code class='ruby'>filter(:id, :integer, :multiple => true)&#x000A;Grid.new(:id => "1,2").assets # => select * from &lt;table&gt; where id in (1,2)&#x000A;&#x000A;</code></pre>
-        </section>
-        <section>
-          <h2>GUI flexibility</h2>
-          <pre><code class='shell'>rake datagrid:copy_partials</code></pre>
-          <pre><code>app/views/datagrid&#x000A;├── _form.html.erb&#x000A;├── _head.html.erb&#x000A;├── _order_for.html.erb&#x000A;├── _row.html.erb&#x000A;└── _table.html.erb</code></pre>
-        </section>
-        <section>
-          <h2>App Specific options</h2>
-          <pre><code class='ruby'>column(:new_sales, :tooltip => "Amount of sales comming from referral programs")&#x000A;</code></pre>
-          <h4>app/views/datagrid/_head.html.erb</h4>
-          <pre><code class='diff'>&nbsp;
-               &lt;th class="&lt;%= datagrid_column_classes(grid, column) %>">
-                 &lt;%= column.header %>
-          +      <% if text = column.options[:tooltip] %>
-          +        <a class="question-image js-tooltip" tooltip="<%= text %>"></a>
-          +      <% end %>
-                 <%= datagrid_order_for(grid, column) if column.order && options[:order]%>
-               &lt;/th></code></pre>
-        </section>
-        <section>
-          <h2>Admin pages gems</h2>
-          <ul>
-            <li>activeadmin</li>
-            <li>rails_admin</li>
-            <li>active_scaffold</li>
-            <li>etc.</li>
-          </ul>
-        </section>
-        <section>
-          <h3>Data filtering component is very basic</h3>
-          <h2>Possible to use datagrid instead</h2>
-          <h4>But maintainers refuse to support it out of the box</h4>
-        </section>
-        <section>
-          <pre><code class='ruby'>class DatagridActiveAdmin&#x000A;  def self.integrate_datagrid(context, grid_class)&#x000A;    context.config.filters = false&#x000A;    context.config.paginate = false&#x000A;    context.send :collection_action, :index  do&#x000A;      datagrid = grid_class.new(params[grid_class.param_name])&#x000A;      respond_to do |f|&#x000A;        f.html do&#x000A;          render template: "admin/datagrid", locals: {datagrid: datagrid}, layout: 'active_admin'&#x000A;        end&#x000A;        f.csv do&#x000A;          send_data(@grid.to_csv, type: 'text/csv', &#x000A;            filename: "&#35;{datagrid.class.to_s.underscore}-&#35;{DateTime.now}.csv")&#x000A;        end&#x000A;      end&#x000A;    end&#x000A;  end&#x000A;end</code></pre>
-          <pre><code class='ruby'>ActiveAdmin.register User do&#x000A;  DatagridActiveAdmin.integrate_datagrid(self, UsersGrid)&#x000A;end</code></pre>
-        </section>
-        <section>
-          <h3>Pro Development Tips</h3>
-        </section>
-        <section>
-          <h3>Human readable is not enough to be good DSL</h3>
-          <p>
-            People don't like learning APIs.
-            It is good learn less and do more.
-            <pre><code class='ruby'># Bad DSL&#x000A;2+2&#x000A;# Good DSL&#x000A;2.add :to =&gt; 2&#x000A;</code></pre>
-          </p>
-        </section>
-        <section>
-          <h2>Dont rewrite Ruby features as custom DSL</h2>
-          <pre><code class='ruby'>column(:created_at, format: :date)&#x000A;</code></pre>
-          <h3 class='fragment'>
-            Localization? Format? Timestamp?
-          </h3>
-          <pre class='fragment'><code class='ruby'>module DatagridExtension&#x000A;  def date_column(name)&#x000A;    column(name) do |model, grid|&#x000A;      I18n.localize(model.send(name).to_date, :locale => grid.current_locale)&#x000A;    end&#x000A;  end&#x000A;end</code></pre>
-        </section>
-        <section>
-          <h2>Be Object Oriented</h2>
-          <pre><code class='ruby'>class UsersGrid&#x000A;  include MyProjectDatagrid&#x000A;  def current_locale&#x000A;</code></pre>
-          <pre class='fragment'><code class='ruby'>describe User do&#x000A;  context do&#x000A;    before do&#x000A;      puts self.inspect&#x000A;    end&#x000A;  end&#x000A;end</code></pre>
-          <pre><code>#&lt;RSpec::Core::ExampleGroup::Nested_1:0x007fcc550a40a0 ... &gt;&#x000A;&#x000A;</code></pre>
-        </section>
-        <section>
-          <h2>Entry level</h2>
-          <h2>=</h2>
-          <h2>number of API methods</h2>
-          <p>
-            It is really hard to maintain a documentation <br/>for 30+ methods
-            with 200+ options.
-          </p>
+          <h2>Parser markup is compilable to ruby</h2>
+          <pre><code>racc -l -o parser.rb parser.y&#x000A;</code></pre>
           <h3>
-            It is even more hard <br/>to get someone else familiar with them.
+            <a href='https://github.com/tenderlove/racc'>github.com/tenderlove/racc</a>
           </h3>
+          <a href='https://github.com/rails/rails/blob/master/actionpack/lib/action_dispatch/journey/parser.rb'>
+            github.com/rails/rails/blob/master/actionpack/lib/action_dispatch/journey/parser.rb
+          </a>
         </section>
         <section>
-          <h2>Quick Start</h2>
-          <h1>VS</h1>
-          <h2>Flexibility</h2>
-          <br />
-          <h3>Try to cover both</h3>
-          <h3>but have one of them preferred</h3>
-        </section>
-        <section>
-          <h2>Code</h2>
-          <h3>
-            <a href='http://github.com/bogdan/datagrid'>github.com/bogdan/datagrid</a>
-          </h3>
-          <h2>Docs</h2>
-          <h3>
-            <a href='http://github.com/bogdan/datagrid/wiki'>github.com/bogdan/datagrid/wiki</a>
-          </h3>
-          <h2>Demo</h2>
-          <h3>
-            <a href='http://datagrid.heroku.com'>datagrid.heroku.com</a>
-          </h3>
+          <h2>Ukraine is having a hard time</h2>
+          <h3>How we can help? What others can not do?</h3>
+          <h5>
+            Software developers have unique opportunity to support economics of our country.
+            We are the only one that can really bring money to Ukraine.
+          </h5>
+          <h2>So, lets do our work better</h2>
+          <h5>And waste less money on new Smart Phones</h5>
         </section>
       </div>
     </div>
     <script src='http://lab.hakim.se/reveal-js/lib/js/head.min.js'></script>
     <script src='http://lab.hakim.se/reveal-js/js/reveal.js'></script>
-    <script type='text/javascript'>
-      //<![CDATA[
-        // https://github.com/hakimel/reveal.js#configuration
-        Reveal.initialize({
-        	controls: true,
-        	progress: true,
-        	history: true,
-        	center: true,
-        
-        	theme: Reveal.getQueryHash().theme || 'simple', // available themes are in /css/theme
-        	transition: Reveal.getQueryHash().transition || 'fade', // default/cube/page/concave/zoom/linear/fade/none
-        
-        	// Optional libraries used to extend on reveal.js
-        	dependencies: [
-        		// { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
-        		{ src: 'http://lab.hakim.se/reveal-js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-        		{ src: 'http://lab.hakim.se/reveal-js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-        		{ src: 'http://lab.hakim.se/reveal-js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
-        		// { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
-        		// { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
-        		// { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
-        		// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
-        	]
-        });
-      //]]>
+    <script>
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+      	controls: true,
+      	progress: true,
+      	history: true,
+      	center: true,
+      
+      	theme: Reveal.getQueryHash().theme || 'simple', // available themes are in /css/theme
+      	transition: Reveal.getQueryHash().transition || 'fade', // default/cube/page/concave/zoom/linear/fade/none
+      
+      	// Optional libraries used to extend on reveal.js
+      	dependencies: [
+      		// { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+      		{ src: 'http://lab.hakim.se/reveal-js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      		{ src: 'http://lab.hakim.se/reveal-js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      		{ src: 'http://lab.hakim.se/reveal-js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+      		// { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+      		// { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+      		// { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
+      		// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+      	]
+      });
     </script>
   </body>
 </html>

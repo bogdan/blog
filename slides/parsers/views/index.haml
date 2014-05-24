@@ -15,21 +15,29 @@
     / If the query includes 'print-pdf', use the PDF print sheet
     :javascript
       document.write( '<link rel="stylesheet" href="http://lab.hakim.se/reveal-js/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
-    %style
-      :sass
-        .reveal
-          pre
-            code
-              padding: 20px 5px
-          ul
-            min-width: 50%
-          .red
-            color: red
+    :sass
+      .yellow
+        color: yellow
+      .reveal
+        pre
+          code
+            padding: 20px 5px
+            font-size: 1.80em
+            line-height: 1.3em
+        ul
+          min-width: 50%
+        .red
+          color: #ff2c2d
+        .green
+          color: #17ff2e
+        .blue
+          color: #1b91ff
   %body
     .reveal
       .slides
         %section
-          %h2 Parsers. Rails Router Example
+          %h1 Parsers
+          %h4 Rails Router Example
           %h3 Bogdan Gusiev
           %h3 October 2013
 
@@ -49,9 +57,10 @@
         %section
           %h3 One more less obvious reason
 
-          но сейчас обсуждаем возможность сделать конфу более технической.
+          %h2{style: 'font-family: arial'}
+            == ... сейчас обсуждаем возможность сделать конфу более технической.
 
-          %h2 So this talk will be hardcore
+          %h2 So this talk required to be hardcore
           
         %section
           %h3 Plan
@@ -65,16 +74,31 @@
 
 
         %section
-          %h3 The easiest parser you could invent?
+          %h3 The easiest way to build parser
 
-          %h2 bogdan@example.com
+          %pre.fragment
+            %code
+              :preserve
+                bogdan@example.com
+                
+          .fragment
+            %h3 Regular Expression
 
-          %h3 \w+@\w+(\.\w+)+
-          %h3 /\A[^@]+@([^@\.]+\.)+[^@\.]+\z/ 
+            %pre
+              %code
+                :preserve
+                  \w+@\w+(\.\w+)+
+          .fragment
+            %pre
+              %code
+                :preserve
+                  /\A[^@]+@([^@\.]+\.)+[^@\.]+\z/ 
+
+            %p etc.
 
         %section
-          %h2 What is a grammar?
           %h3 Each regular expression can parse particular grammar
+          %h2 What is a grammar?
           
         %section
           %h3 Regular expressions are great!
@@ -84,20 +108,20 @@
 
         %section 
           %h3 
-            Regular exmpressions can only be used to parse 
-            .highlight-green Regular 
-            grammars
+            Regular expressions can only be used to parse 
+            %span.green Regular grammars
 
           %h2 
             But what about 
-            .highlight-red Non-regular?
+            %span.red Non-regular?
 
         %section
-          %h2 Regular expression can only parse something that could be parsed with one iteration
-          %h3 in other words
+          %h3 Regular expression can only parse something that could be parsed with one iteration
+          %h4 in other words
           %h1 From Left to Right
 
         %section
+          %h3 Several obvious examples
           %pre
             %code
               :preserve
@@ -106,8 +130,8 @@
                 192.168.0.1
         %section
 
-          %h2 In order to understand why we 
-          %h2 to get into the most boring part
+          %h2 In order to understand why
+          %h2 we need to get into the most boring part
           %h1 The Theory
         %section
 
@@ -116,7 +140,7 @@
           Each generator represents a transformation from one symbol to group of other symbols
           
         %section
-          %h1 Regular Grammars
+          %h3 Regular Grammars
 
           %pre
             %code
@@ -149,13 +173,18 @@
           %pre
             %code
               :preserve
-                E -> [0-z]N
+                S -> [0-z]N
                 N -> [0-z]N
                 N -> @D
                 D -> [0-z]D
                 D -> [0-z].Z
                 Z -> [0-z]Z
                 Z -> [0-z]
+          %ul
+            %li S - start
+            %li N - name
+            %li D - domain
+            %li Z - zone
 
                   
           
@@ -180,9 +209,9 @@
 
 
         %section
-          %h1 Regularity Criteria
+          %h2 Regularity Criteria
 
-          %h5 Grammar is regular if it don't contain "recursive" generators.
+          %h3 Grammar is regular if it don't contain "recursive" generators.
 
         %section
           %h3 So what to do?
@@ -193,7 +222,7 @@
           %pre
             %code.ruby
               :preserve
-                def match_aabb?(string)
+                def match_aabb_pattern?(string)
                   string.each_char.with_index.each do |c, i|
                     case c
                     when 'a'
@@ -212,16 +241,18 @@
           %h2 And their limits
           %h3 Writing parsers for non-regular grammars is a big problem
         %section
-          %h1 Grammars/Parsers can be
+          %h2 Grammars/Parsers can be
 
           %ul
-            %li Regular
-            %li Recursive
+            %li 
+              %h3 Regular
+            %li 
+              %h3 Recursive
 
         %section
-          %h1 Getting close to real world examples
+          %h2 Getting close to real world examples
 
-          %pre
+          -#%pre
             %code
               :preserve
                 12*(2+8/(13.5+7))
@@ -233,31 +264,40 @@
           %h2 Regex are still possible
           %h3 But not really in the long term
 
-          http://monosnap.com/image/7wOQJ9xYqaX6oxeCvOUZGDjT4Gq8Ve.png
+          %img{src: "http://monosnap.com/image/7wOQJ9xYqaX6oxeCvOUZGDjT4Gq8Ve.png"}
 
         %section
           %h2 Start from Tokenizing
           %pre
             %code
               :preserve
-                ['12', '*', '(', '2', '+', '8' '/', '(', '13.5', '+', '7', ')', ')']
+                "12*(2+8/(13.5+7))" =>
+                [
+                  '12', '*', '(', '2', '+', '8' '/', 
+                  '(', '13.5', '+', '7', ')', ')'
+                ]
 
 
         %section
           %h2 Builing Abstract Syntax Tree (AST)
           %h4 The Hardest Part
           %pre
-            %code.ruby
-              :preserve
-                ['12', '*', ['(', '2', '+', '8' '/', '(', '13.5', '+', '7', ')', ')'] ]
-                ['12', '*', [ '2', '+', '8' '/', '(', '13.5', '+', '7', ')'] ]
-                ['12', '*', [ '2', '+', [ '8' '/', '(', '13.5', '+', '7', ')' ] ] ]
-                ['12', '*', [ '2', '+', [ '8' '/', [ '13.5', '+', '7', ] ]]]
+            -#%code.ruby{style: 'font-size: 1.0em'}
+            :preserve
+              ['12', <span class='highlight yellow'>'*'</span>, <span class='highlight green'>[</span><span class='highlight red'>'('</span>, '2', '+', '8' '/', '(', '13.5', '+', '7', ')', <span class='highlight red'>')'</span><span class='highlight green'>]</span> ]
+              [left = '12', <span class='highlight yellow'>operator</span>, right = <span class='highlight green'>[</span>...<span class='highlight green'>]</span>]
 
-                ['12', '*', [ '2', '+', [ '8' '/', [ '13.5', '+', '7', ] ] ]
+              ['12', '*', [ '2', '+', '8' '/', '(', '13.5', '+', '7', ')'] ]
+              Cleanup useless brackets
+
+              ['12', '*', [ '2', '+', [ '8' '/', '(', '13.5', '+', '7', ')' ] ] ]
+              # Repeat for right and left node
+
+              ['12', '*', [ '2', '+', [ '8' '/', [ '13.5', '+', '7', ] ]]]
+              # Repeat for right and left node
           %ol
             %li Find lowest priority operator
-            %li Split Array into 3 parts: before operator, operator, after operator
+            %li Split Array into 3 parts: left operand, operator, right operand
             %li Repeat 1-3 for before part and after part
 
         %section
@@ -275,22 +315,125 @@
                 end
 
         %section
-          %h2 It is very easy to support
+          %h2 After such a heavy infrastructure 
+          %h2 it is easies to support
           %img{src: "http://monosnap.com/image/7wOQJ9xYqaX6oxeCvOUZGDjT4Gq8Ve.png"}
           
         %section
           %h2 Building AST
-          %h5 Hard problem
+          %h2 is Hard problem
 
           %h2 But you are able to use tools
           
+
+        %section
+          %h2 Recursive parsers library
+
+          %ul
+            %li treetop - a little easier, a bit slower
+            %li racc - more hard core, used in Rails Router
+
+        %section
+          %h2 Rails router sytax
+
+          %pre
+            %code
+              :preserve
+                /users/:id(.:format)
+                (/locale/:locale)/users/:id(.:format)
+                (/locale/:locale(/currency/:currency))/users/:id(.:format)
+
+          %h3 Regularity criteria can be broken.
+
+        %section
+          %h3 This is a huge problem and require router to be parsed by recursive parser.
+        %section 
+          %h2 Route tokenizer:
+          %pre
+            %code
+              :preserve
+                /users/:id(.:format)
+          %table 
+            %tr 
+              %th Token 
+              %th Type
+            %tr 
+              %td / 
+              %td SLASH
+            %tr 
+              %td users 
+              %td LITERAL
+            %tr 
+              %td / 
+              %td SLASH
+            %tr 
+              %td :id 
+              %td SYMBOL
+            %tr 
+              %td ( 
+              %td LPAREN
+            %tr 
+              %td . 
+              %td DOT
+            %tr 
+              %td :format 
+              %td SYMBOL
+            %tr 
+              %td ) 
+              %td RPAREN
+
+        %section
+
+          %h2 Fragments from parser
+          %a{href: 'https://github.com/rails/rails/blob/master/actionpack/lib/action_dispatch/journey/parser.y'}
+            github.com/rails/rails/blob/master/actionpack/lib/action_dispatch/journey/parser.y
+
+          %h4 They are so severe that created their own syntax
+
+          %pre
+            .fragment
+              &nbsp;
+              group
+              \: LPAREN expressions RPAREN { ... }
+              ;
+            .fragment
+              expressions
+              \: expressions expression  { ... }
+              | expression              { ... }
+              | or
+              ;
+            .fragment
+              \# Simplied!
+              expression
+              \: symbol
+              | literal
+              | slash
+              | dot
+              | group
+              | star
+              ;
+        %section
+          %h2 Parser markup is compilable to ruby
+
+          %pre
+            %code
+              :preserve
+                racc -l -o parser.rb parser.y
+
+          %h3
+            %a{href: 'https://github.com/tenderlove/racc'} github.com/tenderlove/racc
+
+
+          %a{href: 'https://github.com/rails/rails/blob/master/actionpack/lib/action_dispatch/journey/parser.rb'} 
+            github.com/rails/rails/blob/master/actionpack/lib/action_dispatch/journey/parser.rb
+
 
         %section
           %h2 Ukraine is having a hard time
           %h3 How we can help? What others can not do?
           %h5 
             Software developers have unique opportunity to support economics of our country.
-            We are the only one that can really help money to ukraine.
+            We are the only one that can really bring money to Ukraine.
           %h2 So, lets do our work better
           %h5 And waste less money on new Smart Phones
 
