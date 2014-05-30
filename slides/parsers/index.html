@@ -49,7 +49,7 @@
         <section>
           <h3>Why?</h3>
           <h3>Because best way to pass data from one App to another is</h3>
-          <h2>Serialization</h2>
+          <h2 class='fragment highlight green'>Serialization</h2>
           <h5>
             <strike>COM</strike>
             <strike>RMI</strike>
@@ -60,10 +60,11 @@
           <h2 style='font-family: arial'>
             ... сейчас обсуждаем возможность сделать конфу более технической.
           </h2>
-          <h2>So this talk required to be hardcore</h2>
+          <h2>So this talk required to be</h2>
+          <h1 class='fragment highlight red'>hardcore</h1>
         </section>
         <section>
-          <h3>Plan</h3>
+          <h1>Plan</h1>
           <ul>
             <li>Easy Part</li>
             <li>Classification</li>
@@ -86,12 +87,18 @@
         </section>
         <section>
           <h3>Each regular expression can parse particular grammar</h3>
-          <h2>What is a grammar?</h2>
+          <h2>
+            What is a
+            <div class='highlight green'>grammar?</div>
+          </h2>
         </section>
         <section>
           <h3>Regular expressions are great!</h3>
           <h3>Their power is huge.</h3>
-          <h2>But what is the limit?</h2>
+          <h2>
+            But what is the
+            <div class='highlight red'>limit?</div>
+          </h2>
         </section>
         <section>
           <h3>
@@ -105,8 +112,13 @@
         </section>
         <section>
           <h3>Regular expression can only parse something that could be parsed with one iteration</h3>
-          <h4>in other words</h4>
-          <h1>From Left to Right</h1>
+          <br>
+          <br>
+          <br>
+          <div class='fragment'>
+            <h4>in other words</h4>
+            <h2>From Left to Right</h2>
+          </div>
         </section>
         <section>
           <h3>Several obvious examples</h3>
@@ -159,32 +171,32 @@
         <section>
           <h3>So what to do?</h3>
           <h2>Not sure</h2>
-          <h3>the only one thing we know is that regular expressions will not help</h3>
-          <pre><code class='ruby'>def match_aabb_pattern?(string)&#x000A;  string.each_char.with_index.each do |c, i|&#x000A;    case c&#x000A;    when 'a'&#x000A;      count_a += 1&#x000A;    when 'b'&#x000A;      return count_a == string.size - i - 1&#x000A;    else&#x000A;      return false&#x000A;    end&#x000A;  end&#x000A;  return false&#x000A;end&#x000A;</code></pre>
+          <h4>the only one thing we know is that regular expressions will not help</h4>
+          <pre style='font-size: 0.4em'><code class='ruby'>def match_aabb_pattern?(string)&#x000A;  string.each_char.with_index.each do |c, i|&#x000A;    case c&#x000A;    when 'a'&#x000A;      count_a += 1&#x000A;    when 'b'&#x000A;      return count_a == string.size - i - 1&#x000A;    else&#x000A;      return false&#x000A;    end&#x000A;  end&#x000A;  return false&#x000A;end&#x000A;</code></pre>
         </section>
         <section>
-          <h3>This is where we understand the power of Regex's</h3>
-          <h2>And their limits</h2>
-          <h3>Writing parsers for non-regular grammars is a big problem</h3>
+          <h2>Regular Expressions</h2>
+          <h1>
+            <span class='highlight green'>Powers</span>
+            <span>&amp;</span>
+            <span class='highlight red'>Limits</span>
+          </h1>
         </section>
         <section>
           <h2>Grammars/Parsers can be</h2>
-          <ul>
-            <li>
-              <h3>Regular</h3>
-            </li>
-            <li>
-              <h3>Recursive</h3>
-            </li>
-          </ul>
+          <h1>
+            <span class='highlight green'>Regular</span>
+            <span>&amp;</span>
+            <span class='highlight red'>Recursive</span>
+          </h1>
         </section>
         <section>
           <h2>Getting close to real world examples</h2>
           <img src='http://monosnap.com/image/1BfsQy5LwfhC4khKNTLjvTvnx2M58A.png'>
+          <h2>Regex are still possible</h2>
         </section>
         <section>
-          <h2>Regex are still possible</h2>
-          <h3>But not really in the long term</h3>
+          <h2>But not really in the long term</h2>
           <img src='http://monosnap.com/image/7wOQJ9xYqaX6oxeCvOUZGDjT4Gq8Ve.png'>
         </section>
         <section>
@@ -194,7 +206,7 @@
         <section>
           <h2>Builing Abstract Syntax Tree (AST)</h2>
           <h4>The Hardest Part</h4>
-          <pre>['12', <span class='highlight yellow'>'*'</span>, <span class='highlight green'>[</span><span class='highlight red'>'('</span>, '2', '+', '8' '/', '(', '13.5', '+', '7', ')', <span class='highlight red'>')'</span><span class='highlight green'>]</span> ]&#x000A;[left = '12', <span class='highlight yellow'>operator</span>, right = <span class='highlight green'>[</span>...<span class='highlight green'>]</span>]&#x000A;&#x000A;['12', '*', [ '2', '+', '8' '/', '(', '13.5', '+', '7', ')'] ]&#x000A;Cleanup useless brackets&#x000A;&#x000A;['12', '*', [ '2', '+', [ '8' '/', '(', '13.5', '+', '7', ')' ] ] ]&#x000A;# Repeat for right and left node&#x000A;&#x000A;['12', '*', [ '2', '+', [ '8' '/', [ '13.5', '+', '7', ] ]]]&#x000A;# Repeat for right and left node</pre>
+          <pre>['12', <span class='highlight yellow'>'*'</span>, <span class='highlight green'>[</span><span class='highlight red'>'('</span>, '2', '+', '8' '/', '(', '13.5', '+', '7', ')', <span class='highlight red'>')'</span><span class='highlight green'>]</span> ]&#x000A;[left = '12', <span class='highlight yellow'>operator</span>, right = <span class='highlight green'>[</span>...<span class='highlight green'>]</span>]&#x000A;&#x000A;['12', '*', [ '2', '+', '8' '/', '(', '13.5', '+', '7', ')'] ]&#x000A;Cleanup useless brackets <span class="highlight red">( )</span>&#x000A;&#x000A;&#x000A;['12', '*', [ '2', <span class="highlight yellow">'+'</span>, <span class="highlight green">[</span> '8' '/', '(', '13.5', '+', '7', ')' <span class="highlight green">]</span> ] ]&#x000A;# Repeat for right and left node&#x000A;&#x000A;['12', '*', [ '2', '+', [ '8', <span class="highlight yellow">'/'</span>, <span class="highlight green">[</span> '13.5', '+', '7', <span class="highlight green">]</span> ]]]&#x000A;# Repeat for right and left node</pre>
           <ol>
             <li>Find lowest priority operator</li>
             <li>Split Array into 3 parts: left operand, operator, right operand</li>
@@ -304,7 +316,7 @@
           </div></pre>
         </section>
         <section>
-          <h2>Parser markup is compilable to ruby</h2>
+          <h2>Parser markup is compiled to ruby</h2>
           <pre><code>racc -l -o parser.rb parser.y&#x000A;</code></pre>
           <h3>
             <a href='https://github.com/tenderlove/racc'>github.com/tenderlove/racc</a>
@@ -315,13 +327,24 @@
         </section>
         <section>
           <h2>Ukraine is having a hard time</h2>
-          <h3>How we can help? What others can not do?</h3>
-          <h5>
+          <p>
             Software developers have unique opportunity to support economics of our country.
             We are the only one that can really bring money to Ukraine.
-          </h5>
+          </p>
           <h2>So, lets do our work better</h2>
           <h5>And waste less money on new Smart Phones</h5>
+        </section>
+        <section>
+          <h2>Thanks for your attension</h2>
+          <h3>
+            <a href='http://gusiev.com'>http://gusiev.com</a>
+          </h3>
+          <h3>
+            <a href='http://github.com/bogdan'>http://github.com/bogdan</a>
+          </h3>
+          <h3>
+            <a href='http://gusiev.com/slides/parsers'>http://gusiev.com/slides/parsers</a>
+          </h3>
         </section>
       </div>
     </div>
