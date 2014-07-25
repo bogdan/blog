@@ -8,19 +8,31 @@ Home
 		30x40
 	Large ceramic knife
 	Kran
-	Verevka
 	Tolkalka
 	drums
 	umbrella
 	Toschi
-	Places to go on weekend?
-		Umbrella
-		daily
+	Trade Center
+		Dreamtown
+		OceanPlaza
+		Lesnaya
+		Ukraina
+		Globus
+		Bolshevik
+		Skymall
+	Park
+		Mariinskiy
+		Feofania
+		Slavy
+		Dubki
+		Dorogozhichi
+
+
+	daily
 		Grelka
 		Hot water
 		masg
 		dfi
-	Shipachki + silicon
 	
 
 OSS
@@ -83,17 +95,14 @@ OSS
 			/rails/rake db:migrate
 			Check SQL select * from pv where price <= Infinity
 			Make rails raise exception if asset is used directly but not precompiled
-			#valid! method
 			Move mass assignment attributes to activemodel
 			Make increment thread safe
-			DateTime blow up a log
 
 			AR::Base#can_be_deleted?
-		has_many :tags, :accepts_nested_attributes => true
-		Resolve changelog merge problem
+			has_many :tags, :accepts_nested_attributes => true
+			Resolve changelog merge problem
 		rake db:migrate:down STEP=
 		as_json(:id, :email, :active) api
-		Pass binds to AR::Base.conn.select_value
 		Minify backtrace for exceptions in rails console
 		model.attributes.except(:id, :created_at, :updated_at)
 		Document out resource(s) :as option
@@ -110,7 +119,6 @@ OSS
 		pluck a hash
 		valid! debug message
 		red sql
-		'_id'.humanize
 		AR::Base#param_key
 		Sqlite millisecond hunting
 			where(:created_at => Date.today.beginning_of_day)
@@ -119,9 +127,9 @@ OSS
 			https://github.com/rails/rails/blob/master/actionview/lib/action_view/helpers/tags/select.rb#L36
 		Instantiate sti association build with class
 			offer.rewards.build(type: 'ReferralReward').class # => ReferralReward
-		https://github.com/rails/rails/pull/13606/files
 		User.order(:id).last(3) don't use SQL limiting
-		4.0 -> 4.1 routes.sites_path(:zz => {})
+		class Model < ActiveRecord::Base
+		change_table should execute alter table only once
 
 	Rspec-rails
 		Subshell on rake spec
