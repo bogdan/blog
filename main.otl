@@ -101,13 +101,12 @@ OSS
 			AR::Base#can_be_deleted?
 			has_many :tags, :accepts_nested_attributes => true
 			Resolve changelog merge problem
+			#update_column to support hash argument
 		rake db:migrate:down STEP=
 		as_json(:id, :email, :active) api
 		Minify backtrace for exceptions in rails console
 		model.attributes.except(:id, :created_at, :updated_at)
 		Document out resource(s) :as option
-		#update_column to support hash argument
-		Move #create! to the right spot
 		Checkout ugly link in bid introduction email 
 			employer_bid_url(@bid)
 		Application.yml
@@ -125,11 +124,11 @@ OSS
 		Rollback changes on transaction rollback
 		select with nil choices
 			https://github.com/rails/rails/blob/master/actionview/lib/action_view/helpers/tags/select.rb#L36
-		Instantiate sti association build with class
-			offer.rewards.build(type: 'ReferralReward').class # => ReferralReward
 		User.order(:id).last(3) don't use SQL limiting
 		class Model < ActiveRecord::Base
 		change_table should execute alter table only once
+		Inverse scope like Campaign.not(:active)
+		VisitorOffer.joins(:offer).where(offers: { campaign_id: Site.first.campaigns }).to_sql
 
 	Rspec-rails
 		Subshell on rake spec
