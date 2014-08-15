@@ -102,7 +102,7 @@ $('#new_user').ajaxForm();
 {% endhighlight %}
 
 The main goal reached: Make super modern AJAX form is as easy as regular form.
-If you still can't believe that it is so easy - check out [LIVE demo](http://ajaxsubmit.heroku.com).
+If you still can't believe that it is so easy - check out [LIVE demo](http://ajaxsubmit.herokuapp.com).
 
 
 ## AjaxSubmit: Is it flexible?
