@@ -19,7 +19,7 @@ Currently I am trying to make rails app support this out of the box.
 And here is first small step to this goal:
 
 [This patch](https://github.com/rails/rails/pull/8638) allows a complete validation though ajax using active model validators.
-This is a [live demo](http://rails-ajax-validation.herokuappapp.com/developers/new) of what it allows to do.
+This is a [live demo](http://rails-ajax-validation.herokuapp.com/developers/new) of what it allows to do.
 If you feel especially interested in this feature, say your +1 here or on github.
 
 <!--more-->

@@ -82,7 +82,7 @@ OSS
 				Want to let you know about ajaxsubmit library.
 				This library is aimed to convert any regular web form into ajax web form.
 
-				http://ajaxsubmit.herokuappapp.com
+				http://ajaxsubmit.herokuapp.com
 
 				I think it's done with some new level of flexibility that wasn't done before: checkout configuration and API documentation.
 	Rails
