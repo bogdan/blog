@@ -47,7 +47,7 @@
           %h3 Why?
           
           %h3 Because best way to pass data from one App to another is
-          %h2 Serialization
+          %h2.fragment.highlight.green Serialization
 
           %h5 
             %strike COM
@@ -60,10 +60,11 @@
           %h2{style: 'font-family: arial'}
             == ... сейчас обсуждаем возможность сделать конфу более технической.
 
-          %h2 So this talk required to be hardcore
+          %h2 So this talk required to be 
+          %h1.fragment.highlight.red hardcore
           
         %section
-          %h3 Plan
+          %h1 Plan
 
           %ul
             %li Easy Part
@@ -98,13 +99,17 @@
 
         %section
           %h3 Each regular expression can parse particular grammar
-          %h2 What is a grammar?
+          %h2 
+            What is a 
+            .highlight.green grammar?
           
         %section
           %h3 Regular expressions are great!
 
           %h3 Their power is huge.
-          %h2 But what is the limit?
+          %h2 
+            But what is the 
+            .highlight.red limit?
 
         %section 
           %h3 
@@ -117,8 +122,12 @@
 
         %section
           %h3 Regular expression can only parse something that could be parsed with one iteration
-          %h4 in other words
-          %h1 From Left to Right
+          %br
+          %br
+          %br
+          .fragment
+            %h4 in other words
+            %h2 From Left to Right
 
         %section
           %h3 Several obvious examples
@@ -217,9 +226,9 @@
           %h3 So what to do?
 
           %h2 Not sure
-          %h3 the only one thing we know is that regular expressions will not help
+          %h4 the only one thing we know is that regular expressions will not help
 
-          %pre
+          %pre{style: 'font-size: 0.4em'}
             %code.ruby
               :preserve
                 def match_aabb_pattern?(string)
@@ -237,17 +246,22 @@
                 end
 
         %section
-          %h3 This is where we understand the power of Regex's
-          %h2 And their limits
-          %h3 Writing parsers for non-regular grammars is a big problem
+          %h2 Regular Expressions
+
+          %h1 
+            %span.highlight.green Powers 
+            %span &amp; 
+            %span.highlight.red Limits
+          -#%h3 This is where we understand the power of Regex's
+          -#%h2 And their limits
+          -#%h3 Writing parsers for non-regular grammars is a big problem
         %section
           %h2 Grammars/Parsers can be
+          %h1 
+            %span.highlight.green Regular 
+            %span &amp; 
+            %span.highlight.red Recursive
 
-          %ul
-            %li 
-              %h3 Regular
-            %li 
-              %h3 Recursive
 
         %section
           %h2 Getting close to real world examples
@@ -259,10 +273,10 @@
 
 
           %img{src: "http://monosnap.com/image/1BfsQy5LwfhC4khKNTLjvTvnx2M58A.png"}
+          %h2 Regex are still possible
           
         %section
-          %h2 Regex are still possible
-          %h3 But not really in the long term
+          %h2 But not really in the long term
 
           %img{src: "http://monosnap.com/image/7wOQJ9xYqaX6oxeCvOUZGDjT4Gq8Ve.png"}
 
@@ -288,12 +302,13 @@
               [left = '12', <span class='highlight yellow'>operator</span>, right = <span class='highlight green'>[</span>...<span class='highlight green'>]</span>]
 
               ['12', '*', [ '2', '+', '8' '/', '(', '13.5', '+', '7', ')'] ]
-              Cleanup useless brackets
+              Cleanup useless brackets <span class="highlight red">( )</span>
+              
 
-              ['12', '*', [ '2', '+', [ '8' '/', '(', '13.5', '+', '7', ')' ] ] ]
+              ['12', '*', [ '2', <span class="highlight yellow">'+'</span>, <span class="highlight green">[</span> '8' '/', '(', '13.5', '+', '7', ')' <span class="highlight green">]</span> ] ]
               # Repeat for right and left node
 
-              ['12', '*', [ '2', '+', [ '8' '/', [ '13.5', '+', '7', ] ]]]
+              ['12', '*', [ '2', '+', [ '8', <span class="highlight yellow">'/'</span>, <span class="highlight green">[</span> '13.5', '+', '7', <span class="highlight green">]</span> ]]]
               # Repeat for right and left node
           %ol
             %li Find lowest priority operator
@@ -413,7 +428,7 @@
               | star
               ;
         %section
-          %h2 Parser markup is compilable to ruby
+          %h2 Parser markup is compiled to ruby
 
           %pre
             %code
@@ -430,13 +445,21 @@
 
         %section
           %h2 Ukraine is having a hard time
-          %h3 How we can help? What others can not do?
-          %h5 
+          %p 
             Software developers have unique opportunity to support economics of our country.
             We are the only one that can really bring money to Ukraine.
           %h2 So, lets do our work better
           %h5 And waste less money on new Smart Phones
 
+        %section
+
+          %h2 Thanks for your attension
+          %h3
+            %a{href: 'http://gusiev.com'} http://gusiev.com
+          %h3
+            %a{href: 'http://github.com/bogdan'} http://github.com/bogdan
+          %h3
+            %a{href: 'http://gusiev.com/slides/parsers'} http://gusiev.com/slides/parsers
           
           
     %script{:src => "http://lab.hakim.se/reveal-js/lib/js/head.min.js"}

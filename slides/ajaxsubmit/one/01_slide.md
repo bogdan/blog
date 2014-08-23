@@ -178,7 +178,7 @@ Different approaches
 * Show errors on hover
 * Show errors in popup-like box with close button
 
-[http://ajaxsubmit.heroku.com/](http://ajaxsubmit.heroku.com/)
+[http://ajaxsubmit.herokuapp.com/](http://ajaxsubmit.herokuapp.com/)
 
 !SLIDE 
 

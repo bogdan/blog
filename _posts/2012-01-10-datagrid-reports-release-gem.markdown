@@ -10,7 +10,7 @@ tags:
 
 [Datagrid](https://github.com/bogdan/datagrid) version 0.5.0 has been released. 
 
-Datagrid is a Ruby on Rails plugin that helps you to build and [represent table-like data](http://datagrid.heroku.com) with:
+Datagrid is a Ruby on Rails plugin that helps you to build and [represent table-like data](http://datagrid.herokuapp.com) with:
 
 * Customizable filtering
 * Columns
@@ -23,7 +23,7 @@ Here are some major features from new release.
 
 ### Mongoid support
 
-Previously Datagrid supported only ActiveRecord ORM. Now Mongoid is also available: [see the demo](http://datagrid.heroku.com/document_reports).
+Previously Datagrid supported only ActiveRecord ORM. Now Mongoid is also available: [see the demo](http://datagrid.herokuapp.com/document_reports).
 
 New datagrid driver architecture allows to add yet another ORM in less then [40 lines of code](https://github.com/bogdan/datagrid/blob/master/lib/datagrid/drivers/mongoid.rb).
 

@@ -41,7 +41,7 @@ done
 Before you commit:
 
 *	Check that database doesn't store any Class name that is under renaming. Apply migration in "Yes" case.
-* Check for super-meta calls where class name or method name is constructed dynamically(you didn't do that, right?)
+* Check for super-meta calls where class name or method name is constructed dynamically (you don't do it often, right?)
 *	Run your unit tests(you have some, yeah?) and check core pages before commit.
 *	Check diff with your version control system
 
