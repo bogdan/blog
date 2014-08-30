@@ -1104,6 +1104,7 @@ Utils =
 
 App =
   run: ->
+    this.toggle_level()
     this.toggle_verb_inputs()
     data = Utils.serializeHash($('.js-form').serializeArray())
     for tense in TENSES
@@ -1134,6 +1135,13 @@ App =
       if $('.js-regular-verbs-control').val() in MODALS
         $('.js-regular-verbs-control').val('live')
 
+  toggle_level: ->
+    level = $('.js-level-input button.active').html()
+    $('.medium').toggle(level in ['Medium', 'Advanced'])
+    $('.advanced').toggle(level in ['Advanced'])
+
+
+
 
 $('.js-form').submit (event) ->
   event.preventDefault()
@@ -1150,6 +1158,7 @@ $('.js-select-control button').click ->
 $('.js-verb-type-control button').click ->
   App.run()
 
+
 $ ->
   App.run()
   
@@ -1164,6 +1173,18 @@ $ ->
 <div class="container-fluid">
   <h1>English Grammar Table</h1>
   <form role="form" action='#' class='js-form'>
+    <div class='row'>
+
+      <div class="col-md-2"><h5>Level:</h5></div>
+      <div class="col-md-7 form-group">
+        <div class="btn-group js-select-control js-level-input" data-name="level">
+          <button type="button" class="btn btn-default active">Beginner</button>
+          <button type="button" class="btn btn-default">Medium</button>
+          <button type="button" class="btn btn-default">Advanced</button>
+        </div>
+      </div>
+
+    </div>
     <div class='row'>
 
       <div class="col-md-2"><h5>Pronoun:</h5></div>
@@ -1193,7 +1214,7 @@ $ ->
       </div>
     </div>
 
-    <div class='row'>
+    <div class='row medium'>
       <div class="col-md-2"><h5>Form:</h5></div>
       <div class='col-md-7 form-group'>
         <div class="btn-group js-select-control" data-name="form">
@@ -1263,13 +1284,13 @@ $ ->
         <td class='past'>I lived</td>
         <td class='future'>I will live</td>
       </tr>
-      <tr class='perfect'>
+      <tr class='perfect medium'>
         <td>Perfect</td>
         <td class='present'>I live</td>
         <td class='past'>I lived</td>
         <td class='future'>I will live</td>
       </tr>
-      <tr class='perfect_continues'>
+      <tr class='perfect_continues advanced'>
         <td>Perfect Continues</td>
         <td class='present'></td>
         <td class='past'></td>
