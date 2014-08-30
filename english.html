@@ -10,12 +10,13 @@
 
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script src="http://underscorejs.org/underscore-min.js"></script>
 
 <style>
   .hidden {
     display: none;
   }
-  .container {
+  .container-fluid {
     max-width: 700px
   }
 </style>
@@ -25,8 +26,16 @@
 MODALS = ['be', 'may', 'might', 'can', 'could', 'shall', 'should', 'must']
 
 TENSES = ['present', 'past', 'future']
-MARKS =  ['positive', 'negative']
-COMPLETENESSES = ['simple', 'continues', 'perfect']
+COMPLETENESSES = ['simple', 'continues', 'perfect', 'perfect_continues']
+SHORTENINGS = [
+  [/I am/, "I'm"],
+  [/(you|we|they) are/, "you're"],
+  [/(he|she|it) is/, "$1's"],
+  [/will not/, "won't"],
+  [/(\w+) not/, "$1n't"],
+  [/(I|he|she|it|you|we|they) have (\w+)/, "$1've $2"]
+  [/\swill/, "'ll"]
+]
 IRREGULAR_VERBS = 
   "abide" : [
     "abode\/abided",
@@ -420,6 +429,10 @@ IRREGULAR_VERBS =
     "made",
     "made"
   ],
+  "may" : [
+    "might",
+    "might"
+  ],
   "mean" : [
     "meant",
     "meant"
@@ -451,6 +464,10 @@ IRREGULAR_VERBS =
   "mow" : [
     "mowed",
     "mown"
+  ],
+  "must" : [
+    "must",
+    "must"
   ],
   "overdraw" : [
     "overdrew",
@@ -901,7 +918,7 @@ window.Grammar =
 
 
 
-  inging: (verb)-> 
+  gerund: (verb)-> 
     @change_ending(verb, 'ing')
 
   change_ending: (verb, ending)-> 
@@ -936,12 +953,13 @@ window.Grammar =
       'regular'
 
   perform: (options) -> 
-    pronoun = this.normalize_pronoun(options.pronoun)
+    pronoun = options.pronoun
     verb = options.verb
     tense = options.tense
     mark = options.mark
     completeness = options.completeness
     modality = Grammar.modality(verb)
+    shortened = options.form == "shortened"
 
 
     patterns =
@@ -958,9 +976,9 @@ window.Grammar =
 
         continues:
           regular:
-            negative: "#{pronoun} #{@present_simple_be(pronoun)} not #{@inging(verb)}"
-            positive: "#{pronoun} #{@present_simple_be(pronoun)} #{@inging(verb)}"
-            question: "#{@present_simple_be(pronoun)} #{pronoun} #{@inging(verb)}"
+            negative: "#{pronoun} #{@present_simple_be(pronoun)} not #{@gerund(verb)}"
+            positive: "#{pronoun} #{@present_simple_be(pronoun)} #{@gerund(verb)}"
+            question: "#{@present_simple_be(pronoun)} #{pronoun} #{@gerund(verb)}"
           modal: null
 
         perfect:
@@ -972,6 +990,12 @@ window.Grammar =
             negative: "#{pronoun} have not #{@perfect(verb)}"
             positive: "#{pronoun} have #{@perfect(verb)}"
             question: "have #{pronoun} #{@perfect(verb)}"
+        perfect_continues:
+          regular:
+            negative: "#{pronoun} have not been #{@gerund(verb)}"
+            positive: "#{pronoun} have been #{@gerund(verb)}"
+            question: "have #{pronoun} been #{@gerund(verb)}"
+          modal: null
 
       past:
         simple:
@@ -982,13 +1006,13 @@ window.Grammar =
           modal:
             negative: "#{pronoun} #{@past(verb, pronoun)} not"
             positive: "#{pronoun} #{@past(verb, pronoun)}"
-            question: "#{verb} #{pronoun}"
+            question: "#{@present_simple_conjuction(verb, pronoun)} #{pronoun}"
 
         continues:
           regular:
-            negative: "#{pronoun} #{@past('be', pronoun)} not #{@inging(verb)}"
-            positive: "#{pronoun} #{@past('be', pronoun)} #{@inging(verb)}"
-            question: "#{@past('be', pronoun)} #{pronoun} #{@inging(verb)}"
+            negative: "#{pronoun} #{@past('be', pronoun)} not #{@gerund(verb)}"
+            positive: "#{pronoun} #{@past('be', pronoun)} #{@gerund(verb)}"
+            question: "#{@past('be', pronoun)} #{pronoun} #{@gerund(verb)}"
           modal: null
 
         perfect:
@@ -1000,6 +1024,12 @@ window.Grammar =
             negative: "#{pronoun} had not #{@perfect(verb)}"
             positive: "#{pronoun} had #{@perfect(verb)}"
             question: "had #{pronoun} #{@perfect(verb)}"
+        perfect_continues:
+          regular:
+            negative: "#{pronoun} had not been #{@gerund(verb)}"
+            positive: "#{pronoun} had been #{@gerund(verb)}"
+            question: "had #{pronoun} been #{@gerund(verb)}"
+          modal: null
 
       future:
         simple:
@@ -1015,9 +1045,9 @@ window.Grammar =
 
         continues:
           regular:
-            negative: "#{pronoun} will not be #{@inging(verb)}"
-            positive: "#{pronoun} will be #{@inging(verb)}"
-            question: "will #{pronoun} be #{@inging(verb)}"
+            negative: "#{pronoun} will not be #{@gerund(verb)}"
+            positive: "#{pronoun} will be #{@gerund(verb)}"
+            question: "will #{pronoun} be #{@gerund(verb)}"
           modal: null
 
         perfect:
@@ -1026,15 +1056,34 @@ window.Grammar =
             positive: "#{pronoun} will have #{@perfect(verb)}"
             question: "will #{pronoun} have #{@perfect(verb)}"
           modal: null
+        perfect_continues:
+          regular:
+            negative: "#{pronoun} will have not been #{@gerund(verb)}"
+            positive: "#{pronoun} will have been #{@gerund(verb)}"
+            question: "will #{pronoun} have been #{@gerund(verb)}"
+          modal: null
 
 
     if result = patterns[tense][completeness][modality]
-      Utils.capitalize(result[mark])
+      result = result[mark]
+      if shortened
+        result = Grammar.shorten(result)
+      Utils.capitalize(result)
     else
       null
 
-  normalize_pronoun: (name) ->
-    if name == "I"
+  shorten: (text) ->
+    if !text
+      return text
+
+    _.each SHORTENINGS, (element) ->
+      # Only one shortening
+      if text.indexOf("'") < 0
+        text = text.replace(element[0], element[1])
+    text
+
+  normalize_wordcase: (name) ->
+    if name == "I" or !name
       name
     else
       name.toLowerCase(name)
@@ -1068,13 +1117,12 @@ App =
     $(element).addClass('active')
     name = group.data('name')
     input = $("input[name=#{name}")
-    value = $(element).html()
+    value = Grammar.normalize_wordcase($(element).html())
     if input.length == 0
 
       $('.js-form').append("<input type='hidden' name='#{name}' value='#{value}'/>")
     else
       input.val(value)
-    App.run()
 
   toggle_verb_inputs: ->
     modal = $('.js-verb-type-control button.active').html() == "Modal"
@@ -1096,6 +1144,7 @@ $('.js-select-control').each ->
 
 $('.js-select-control button').click ->
   App.toggle_button(this)
+  App.run()
 
 
 $('.js-verb-type-control button').click ->
@@ -1112,12 +1161,13 @@ $ ->
 </head>
 <body>
 
-<div class="container">
+<div class="container-fluid">
   <h1>English Grammar Table</h1>
   <form role="form" action='#' class='js-form'>
     <div class='row'>
 
-      <div class="col-md-12 form-group">
+      <div class="col-md-2"><h5>Pronoun:</h5></div>
+      <div class="col-md-7 form-group">
         <div class="btn-group js-select-control" data-name="pronoun">
           <button type="button" class="btn btn-default active">I</button>
           <button type="button" class="btn btn-default">You</button>
@@ -1125,7 +1175,6 @@ $ ->
           <button type="button" class="btn btn-default">She</button>
           <button type="button" class="btn btn-default">It</button>
           <button type="button" class="btn btn-default">We</button>
-          <button type="button" class="btn btn-default">You</button>
           <button type="button" class="btn btn-default">They</button>
         </div>
       </div>
@@ -1133,43 +1182,50 @@ $ ->
     </div>
       
     <div class='row'>
-      <div class='col-md-12 form-group'>
+      <div class="col-md-2"><h5>Mark:</h5></div>
+      <div class='col-md-7 form-group'>
 
         <div class="btn-group js-select-control" data-name="mark">
-          <button type="button" class="btn btn-default">positive</button>
-          <button type="button" class="btn btn-default">negative</button>
-          <button type="button" class="btn btn-default">question</button>
+          <button type="button" class="btn btn-default">Positive</button>
+          <button type="button" class="btn btn-default">Negative</button>
+          <button type="button" class="btn btn-default">Question</button>
         </div>
       </div>
-      </div>
+    </div>
 
     <div class='row'>
+      <div class="col-md-2"><h5>Form:</h5></div>
+      <div class='col-md-7 form-group'>
+        <div class="btn-group js-select-control" data-name="form">
+          <button type="button" class="btn btn-default">Full</button>
+          <button type="button" class="btn btn-default">Shortened</button>
+        </div>
+      </div>
+    </div>
 
-      <div class='col-md-12 form-group'>
+    <div class='row'>
+      <div class="col-md-2"><h5>Conjuction:</h5></div>
+      <div class='col-md-7 form-group'>
         <div class="btn-group js-select-control js-verb-type-control" data-name="verb_type">
           <button type="button" class="btn btn-default">Regular</button>
           <button type="button" class="btn btn-default">Modal</button>
         </div>
       </div>
-      </div>
+    </div>
 
     <div class='row'>
-      <div class='col-md-12 form-group'>
+      <div class="col-md-2"><h5>Verb:</h5></div>
+      <div class='col-md-6 form-group'>
         <div class="btn-group js-select-control js-modal-verbs-control" data-name="verb">
           <button type="button" class="btn btn-default">be</button>
           <button type="button" class="btn btn-default">can</button>
           <button type="button" class="btn btn-default">may</button>
           <button type="button" class="btn btn-default">must</button>
         </div>
-      </div>
-    </div>
-
-    <div class='row'>
-      <div class='col-md-12 form-group'>
         <div class="input-group">
           <input class="form-control js-regular-verbs-control" type='text' name='verb' placeholder='verb' value='like'>
           <div class="input-group-btn">
-            <input type='submit' class="form-control btn btn-primary" value='Pew!'/>
+            <input type='submit' class="btn btn-primary" value='Pew!'/>
           </div>
         </div>
       </div>
@@ -1213,7 +1269,11 @@ $ ->
         <td class='past'>I lived</td>
         <td class='future'>I will live</td>
       </tr>
-      <tr>
+      <tr class='perfect_continues'>
+        <td>Perfect Continues</td>
+        <td class='present'></td>
+        <td class='past'></td>
+        <td class='future'></td>
       </tr>
 
     </table>
