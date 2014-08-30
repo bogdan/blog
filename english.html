@@ -2,9 +2,26 @@
 <head>
 <script src="http://coffeescript.org/extras/coffee-script.js"> </script>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+<style>
+  .hidden {
+    display: none;
+  }
+  .container {
+    max-width: 700px
+  }
+</style>
+
+
 <script type='text/coffeescript'>
-
-
 MODALS = ['be', 'may', 'might', 'can', 'could', 'shall', 'should', 'must']
 
 TENSES = ['present', 'past', 'future']
@@ -919,7 +936,7 @@ window.Grammar =
       'regular'
 
   perform: (options) -> 
-    pronoun = options.pronoun
+    pronoun = this.normalize_pronoun(options.pronoun)
     verb = options.verb
     tense = options.tense
     mark = options.mark
@@ -990,7 +1007,11 @@ window.Grammar =
             negative: "#{pronoun} will not #{verb}"
             positive: "#{pronoun} will #{verb}"
             question: "will #{pronoun} #{verb}"
-          modal: null
+          modal: if verb == "be"
+            negative: "#{pronoun} will not #{verb}"
+            positive: "#{pronoun} will #{verb}"
+            question: "will #{pronoun} #{verb}"
+            
 
         continues:
           regular:
@@ -1008,9 +1029,15 @@ window.Grammar =
 
 
     if result = patterns[tense][completeness][modality]
-      result[mark]
+      Utils.capitalize(result[mark])
     else
       null
+
+  normalize_pronoun: (name) ->
+    if name == "I"
+      name
+    else
+      name.toLowerCase(name)
 
 
 Utils =
@@ -1019,19 +1046,59 @@ Utils =
     for item in data
       result[item.name] = item.value
     result
+
+  capitalize: (text) ->
+    if !text
+      return text
+    text[0].toUpperCase() + text.substring(1)
     
 
 App =
   run: ->
+    this.toggle_verb_inputs()
     data = Utils.serializeHash($('.js-form').serializeArray())
     for tense in TENSES
       for completeness in COMPLETENESSES
         string = Grammar.perform($.extend(data, {tense: tense, completeness: completeness}))
         $(".#{completeness} .#{tense}").html(string)
 
+  toggle_button: (element) ->
+    group = $(element).parent()
+    group.find('button').removeClass('active');
+    $(element).addClass('active')
+    name = group.data('name')
+    input = $("input[name=#{name}")
+    value = $(element).html()
+    if input.length == 0
+
+      $('.js-form').append("<input type='hidden' name='#{name}' value='#{value}'/>")
+    else
+      input.val(value)
+    App.run()
+
+  toggle_verb_inputs: ->
+    modal = $('.js-verb-type-control button.active').html() == "Modal"
+    $('.js-modal-verbs-control').toggle(modal)
+    $('.js-regular-verbs-control').parent().toggle(!modal)
+    if modal 
+      $('.js-regular-verbs-control').val($('.js-modal-verbs-control button.active').html())
+    else
+      if $('.js-regular-verbs-control').val() in MODALS
+        $('.js-regular-verbs-control').val('live')
+
 
 $('.js-form').submit (event) ->
   event.preventDefault()
+  App.run()
+
+$('.js-select-control').each ->
+  App.toggle_button($(this).find('button:first'))
+
+$('.js-select-control button').click ->
+  App.toggle_button(this)
+
+
+$('.js-verb-type-control button').click ->
   App.run()
 
 $ ->
@@ -1042,73 +1109,116 @@ $ ->
 
 </script>
 
-<style>
-  table {
-    border: 1px solid black;
-  }
-  td {
-    min-width: 130px;
-    padding: 5px;
-    border: 1px solid black;
-  }
-</style>
 </head>
 <body>
-<table cellspacing="0" cellpadding="0">
-  <form action='#' class='js-form'>
-    <select name='pronoun'>
-      <option value='I'>I</option>
-      <option value='he'>He</option>
-      <option value='she'>She</option>
-      <option value='it'>It</option>
-      <option value='we'>We</option>
-      <option value='you'>You</option>
-      <option value='they'>They</option>
-    </select>
-    <select name='mark'>
-      <option value='positive'>positive</option>
-      <option value='negative'>negative</option>
-      <option value='question'>question</option>
-    </select>
-    <input type='text' name='verb' placeholder='verb' value='like'>
+
+<div class="container">
+  <h1>English Grammar Table</h1>
+  <form role="form" action='#' class='js-form'>
+    <div class='row'>
+
+      <div class="col-md-12 form-group">
+        <div class="btn-group js-select-control" data-name="pronoun">
+          <button type="button" class="btn btn-default active">I</button>
+          <button type="button" class="btn btn-default">You</button>
+          <button type="button" class="btn btn-default">He</button>
+          <button type="button" class="btn btn-default">She</button>
+          <button type="button" class="btn btn-default">It</button>
+          <button type="button" class="btn btn-default">We</button>
+          <button type="button" class="btn btn-default">You</button>
+          <button type="button" class="btn btn-default">They</button>
+        </div>
+      </div>
+
+    </div>
+      
+    <div class='row'>
+      <div class='col-md-12 form-group'>
+
+        <div class="btn-group js-select-control" data-name="mark">
+          <button type="button" class="btn btn-default">positive</button>
+          <button type="button" class="btn btn-default">negative</button>
+          <button type="button" class="btn btn-default">question</button>
+        </div>
+      </div>
+      </div>
+
+    <div class='row'>
+
+      <div class='col-md-12 form-group'>
+        <div class="btn-group js-select-control js-verb-type-control" data-name="verb_type">
+          <button type="button" class="btn btn-default">Regular</button>
+          <button type="button" class="btn btn-default">Modal</button>
+        </div>
+      </div>
+      </div>
+
+    <div class='row'>
+      <div class='col-md-12 form-group'>
+        <div class="btn-group js-select-control js-modal-verbs-control" data-name="verb">
+          <button type="button" class="btn btn-default">be</button>
+          <button type="button" class="btn btn-default">can</button>
+          <button type="button" class="btn btn-default">may</button>
+          <button type="button" class="btn btn-default">must</button>
+        </div>
+      </div>
+    </div>
+
+    <div class='row'>
+      <div class='col-md-12 form-group'>
+        <div class="input-group">
+          <input class="form-control js-regular-verbs-control" type='text' name='verb' placeholder='verb' value='like'>
+          <div class="input-group-btn">
+            <input type='submit' class="form-control btn btn-primary" value='Pew!'/>
+          </div>
+        </div>
+      </div>
+    </div>
     
-    <input type='submit' value='Pew!'/>
+
   </form>
-  <tr>
-    <td>
 
-    </td>
-    <td>
-      Present
-    </td>
-    <td>
-      Past
-    </td>
-    <td>
-      Future
-    </td>
-  </tr>
-  <tr class='simple'>
-    <td>Simple</td>
-    <td class='present'>I live</td>
-    <td class='past'>I lived</td>
-    <td class='future'>I will live</td>
-  </tr>
-  <tr class='continues'>
-    <td>Continues</td>
-    <td class='present'>I live</td>
-    <td class='past'>I lived</td>
-    <td class='future'>I will live</td>
-  </tr>
-  <tr class='perfect'>
-    <td>Perfect</td>
-    <td class='present'>I live</td>
-    <td class='past'>I lived</td>
-    <td class='future'>I will live</td>
-  </tr>
-  <tr>
-  </tr>
+  <div class='row'>
+      <div class='col-md-12 form-group'>
+    <table class="table" cellspacing="0" cellpadding="0">
+      <tr>
+        <th>
 
-</table>
+        </th>
+        <th>
+          Present
+        </th>
+        <th>
+          Past
+        </th>
+        <th>
+          Future
+        </th>
+      </tr>
+      <tr class='simple'>
+        <td>Simple</td>
+        <td class='present'>I live</td>
+        <td class='past'>I lived</td>
+        <td class='future'>I will live</td>
+      </tr>
+      <tr class='continues'>
+        <td>Continues</td>
+        <td class='present'>I live</td>
+        <td class='past'>I lived</td>
+        <td class='future'>I will live</td>
+      </tr>
+      <tr class='perfect'>
+        <td>Perfect</td>
+        <td class='present'>I live</td>
+        <td class='past'>I lived</td>
+        <td class='future'>I will live</td>
+      </tr>
+      <tr>
+      </tr>
+
+    </table>
+  </div>
+  </div>
+</div>
 </body>
-</html>
+</html>                               
