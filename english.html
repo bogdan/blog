@@ -17,7 +17,10 @@
     display: none;
   }
   .container-fluid {
-    max-width: 700px
+    max-width: 700px;
+  }
+  .config-form: {
+    min-height: 350px;
   }
 </style>
 
@@ -925,6 +928,8 @@ window.Grammar =
     @remove_ending(verb) + ending
 
   remove_ending: (verb)-> 
+    if verb == 'be'
+      return verb
     if verb.match(/e$/)
       verb.substring(0, verb.length - 1)
     else
@@ -957,7 +962,9 @@ window.Grammar =
     verb = options.verb
     tense = options.tense
     mark = options.mark
+    object = options.object
     completeness = options.completeness
+    level = options.level
     modality = Grammar.modality(verb)
     shortened = options.form == "shortened"
 
@@ -966,109 +973,184 @@ window.Grammar =
       present:
         simple:
           regular:
-            negative: "#{pronoun} #{@present_simple_conjuction('do', pronoun)} not #{verb}"
-            positive: "#{pronoun} #{@present_simple_conjuction(verb, pronoun)}"
-            question: "#{@present_simple_conjuction('do', pronoun)} #{pronoun} #{verb}"
+            active:
+              negative: "#{pronoun} #{@present_simple_conjuction('do', pronoun)} not #{verb}"
+              positive: "#{pronoun} #{@present_simple_conjuction(verb, pronoun)}"
+              question: "#{@present_simple_conjuction('do', pronoun)} #{pronoun} #{verb}"
+            passive:
+              negative: "#{pronoun} #{@present_simple_conjuction('be', pronoun)} not #{@perfect(verb)}"
+              positive: "#{pronoun} #{@present_simple_conjuction('be', pronoun)} #{@perfect(verb)}"
+              question: "#{@present_simple_conjuction('be', pronoun)} #{pronoun} #{@perfect(verb)}"
+              
           modal:
-            negative: "#{pronoun} #{@present_simple_conjuction(verb, pronoun)} not"
-            positive: "#{pronoun} #{@present_simple_conjuction(verb, pronoun)}"
-            question: "#{@present_simple_conjuction(verb)} #{pronoun}"
+            active:
+              negative: "#{pronoun} #{@present_simple_conjuction(verb, pronoun)} not"
+              positive: "#{pronoun} #{@present_simple_conjuction(verb, pronoun)}"
+              question: "#{@present_simple_conjuction(verb)} #{pronoun}"
+            passive: null
 
         continues:
           regular:
-            negative: "#{pronoun} #{@present_simple_be(pronoun)} not #{@gerund(verb)}"
-            positive: "#{pronoun} #{@present_simple_be(pronoun)} #{@gerund(verb)}"
-            question: "#{@present_simple_be(pronoun)} #{pronoun} #{@gerund(verb)}"
-          modal: null
+            active:
+              negative: "#{pronoun} #{@present_simple_be(pronoun)} not #{@gerund(verb)}"
+              positive: "#{pronoun} #{@present_simple_be(pronoun)} #{@gerund(verb)}"
+              question: "#{@present_simple_be(pronoun)} #{pronoun} #{@gerund(verb)}"
+            passive:
+              negative: "#{pronoun} #{@present_simple_be(pronoun)} not being #{@perfect(verb)}"
+              positive: "#{pronoun} #{@present_simple_be(pronoun)} being #{@perfect(verb)}"
+              question: "#{@present_simple_be(pronoun)} #{pronoun} being #{@perfect(verb)}"
+          modal:
+            active: if verb == 'be' && level == 'advanced'
+              negative: "#{pronoun} #{@present_simple_be(pronoun)} not #{@gerund(verb)}"
+              positive: "#{pronoun} #{@present_simple_be(pronoun)} #{@gerund(verb)}"
+              question: "#{@present_simple_be(pronoun)} #{pronoun} #{@gerund(verb)}"
+
+            passive: null
 
         perfect:
           regular:
-            negative: "#{pronoun} have not #{@perfect(verb)}"
-            positive: "#{pronoun} have #{@perfect(verb)}"
-            question: "have #{pronoun} #{@perfect(verb)}"
+            active:
+              negative: "#{pronoun} have not #{@perfect(verb)}"
+              positive: "#{pronoun} have #{@perfect(verb)}"
+              question: "have #{pronoun} #{@perfect(verb)}"
+            passive: null
+
           modal:
-            negative: "#{pronoun} have not #{@perfect(verb)}"
-            positive: "#{pronoun} have #{@perfect(verb)}"
-            question: "have #{pronoun} #{@perfect(verb)}"
+            active:
+              negative: "#{pronoun} have not #{@perfect(verb)}"
+              positive: "#{pronoun} have #{@perfect(verb)}"
+              question: "have #{pronoun} #{@perfect(verb)}"
+            passive: null
         perfect_continues:
           regular:
-            negative: "#{pronoun} have not been #{@gerund(verb)}"
-            positive: "#{pronoun} have been #{@gerund(verb)}"
-            question: "have #{pronoun} been #{@gerund(verb)}"
+            active:
+              negative: "#{pronoun} have not been #{@gerund(verb)}"
+              positive: "#{pronoun} have been #{@gerund(verb)}"
+              question: "have #{pronoun} been #{@gerund(verb)}"
+            passive: null
           modal: null
 
       past:
         simple:
           regular:
-            negative: "#{pronoun} did not #{verb}"
-            positive: "#{pronoun} #{@past(verb, pronoun)}"
-            question: "did #{pronoun} #{verb}"
+            active:
+              negative: "#{pronoun} did not #{verb}"
+              positive: "#{pronoun} #{@past(verb, pronoun)}"
+              question: "did #{pronoun} #{verb}"
+            passive:
+              negative: "#{pronoun} #{@past('be', pronoun)} not #{@perfect(verb)}"
+              positive: "#{pronoun} #{@past('be', pronoun)} #{@perfect(verb)}"
+              question: "#{@past('be', pronoun)} #{pronoun} #{@perfect(verb)}"
+
           modal:
-            negative: "#{pronoun} #{@past(verb, pronoun)} not"
-            positive: "#{pronoun} #{@past(verb, pronoun)}"
-            question: "#{@present_simple_conjuction(verb, pronoun)} #{pronoun}"
+            active:
+              negative: "#{pronoun} #{@past(verb, pronoun)} not"
+              positive: "#{pronoun} #{@past(verb, pronoun)}"
+              question: "#{@present_simple_conjuction(verb, pronoun)} #{pronoun}"
+            passive: null
 
         continues:
           regular:
-            negative: "#{pronoun} #{@past('be', pronoun)} not #{@gerund(verb)}"
-            positive: "#{pronoun} #{@past('be', pronoun)} #{@gerund(verb)}"
-            question: "#{@past('be', pronoun)} #{pronoun} #{@gerund(verb)}"
-          modal: null
+            active:
+              negative: "#{pronoun} #{@past('be', pronoun)} not #{@gerund(verb)}"
+              positive: "#{pronoun} #{@past('be', pronoun)} #{@gerund(verb)}"
+              question: "#{@past('be', pronoun)} #{pronoun} #{@gerund(verb)}"
+            passive:
+              negative: "#{pronoun} #{@past('be', pronoun)} not being #{@perfect(verb)}"
+              positive: "#{pronoun} #{@past('be', pronoun)} being #{@perfect(verb)}"
+              question: "#{@past('be', pronoun)} #{pronoun} being #{@perfect(verb)}"
+          modal:
+            active: if verb == 'be' && level == 'advanced'
+              negative: "#{pronoun} #{@past('be', pronoun)} not #{@gerund(verb)}"
+              positive: "#{pronoun} #{@past('be', pronoun)} #{@gerund(verb)}"
+              question: "#{@past('be', pronoun)} #{pronoun} #{@gerund(verb)}"
+            passive: null
 
         perfect:
           regular:
-            negative: "#{pronoun} had not #{@perfect(verb)}"
-            positive: "#{pronoun} had #{@perfect(verb)}"
-            question: "had #{pronoun} #{@perfect(verb)}"
+            active:
+              negative: "#{pronoun} had not #{@perfect(verb)}"
+              positive: "#{pronoun} had #{@perfect(verb)}"
+              question: "had #{pronoun} #{@perfect(verb)}"
+            passive: null
           modal:
-            negative: "#{pronoun} had not #{@perfect(verb)}"
-            positive: "#{pronoun} had #{@perfect(verb)}"
-            question: "had #{pronoun} #{@perfect(verb)}"
+            active:
+              negative: "#{pronoun} had not #{@perfect(verb)}"
+              positive: "#{pronoun} had #{@perfect(verb)}"
+              question: "had #{pronoun} #{@perfect(verb)}"
+            passive: null
         perfect_continues:
           regular:
-            negative: "#{pronoun} had not been #{@gerund(verb)}"
-            positive: "#{pronoun} had been #{@gerund(verb)}"
-            question: "had #{pronoun} been #{@gerund(verb)}"
+            active:
+              negative: "#{pronoun} had not been #{@gerund(verb)}"
+              positive: "#{pronoun} had been #{@gerund(verb)}"
+              question: "had #{pronoun} been #{@gerund(verb)}"
+            passive: null
           modal: null
 
       future:
         simple:
           regular:
-            negative: "#{pronoun} will not #{verb}"
-            positive: "#{pronoun} will #{verb}"
-            question: "will #{pronoun} #{verb}"
-          modal: if verb == "be"
-            negative: "#{pronoun} will not #{verb}"
-            positive: "#{pronoun} will #{verb}"
-            question: "will #{pronoun} #{verb}"
+            active:
+              negative: "#{pronoun} will not #{verb}"
+              positive: "#{pronoun} will #{verb}"
+              question: "will #{pronoun} #{verb}"
+            passive:
+              negative: "#{pronoun} will not be #{@perfect(verb)}"
+              positive: "#{pronoun} will be #{@perfect(verb)}"
+              question: "will #{pronoun} be #{@perfect(verb)}"
+
+          modal: 
+            active: if verb == "be"
+              negative: "#{pronoun} will not #{verb}"
+              positive: "#{pronoun} will #{verb}"
+              question: "will #{pronoun} #{verb}"
+            passive: null
             
 
         continues:
           regular:
-            negative: "#{pronoun} will not be #{@gerund(verb)}"
-            positive: "#{pronoun} will be #{@gerund(verb)}"
-            question: "will #{pronoun} be #{@gerund(verb)}"
-          modal: null
+            active:
+              negative: "#{pronoun} will not be #{@gerund(verb)}"
+              positive: "#{pronoun} will be #{@gerund(verb)}"
+              question: "will #{pronoun} be #{@gerund(verb)}"
+            passive:
+              negative: "#{pronoun} will not be being #{@perfect(verb)}"
+              positive: "#{pronoun} will be being #{@perfect(verb)}"
+              question: "will #{pronoun} be being #{@perfect(verb)}"
+          modal:
+            active: if verb == 'be' && level == 'advanced'
+              negative: "#{pronoun} will not #{@gerund(verb)}"
+              positive: "#{pronoun} will #{@gerund(verb)}"
+              question: "will #{pronoun} #{@gerund(verb)}"
+            passive: null
 
         perfect:
           regular:
-            negative: "#{pronoun} will not have #{@perfect(verb)}"
-            positive: "#{pronoun} will have #{@perfect(verb)}"
-            question: "will #{pronoun} have #{@perfect(verb)}"
+            active:
+              negative: "#{pronoun} will not have #{@perfect(verb)}"
+              positive: "#{pronoun} will have #{@perfect(verb)}"
+              question: "will #{pronoun} have #{@perfect(verb)}"
+            passive: null
           modal: null
         perfect_continues:
           regular:
-            negative: "#{pronoun} will have not been #{@gerund(verb)}"
-            positive: "#{pronoun} will have been #{@gerund(verb)}"
-            question: "will #{pronoun} have been #{@gerund(verb)}"
+            active:
+              negative: "#{pronoun} will have not been #{@gerund(verb)}"
+              positive: "#{pronoun} will have been #{@gerund(verb)}"
+              question: "will #{pronoun} have been #{@gerund(verb)}"
+            passive: null
           modal: null
 
 
     if result = patterns[tense][completeness][modality]
-      result = result[mark]
-      if shortened
-        result = Grammar.shorten(result)
-      Utils.capitalize(result)
+      if result = result[object]
+        result = result[mark]
+        if shortened
+          result = Grammar.shorten(result)
+        Utils.capitalize(result)
+      else 
+        null
     else
       null
 
@@ -1110,7 +1192,7 @@ App =
     for tense in TENSES
       for completeness in COMPLETENESSES
         string = Grammar.perform($.extend(data, {tense: tense, completeness: completeness}))
-        $(".#{completeness} .#{tense}").html(string)
+        $(".#{completeness} .#{tense}").html(string || '&mdash;')
 
   toggle_button: (element) ->
     group = $(element).parent()
@@ -1135,10 +1217,24 @@ App =
       if $('.js-regular-verbs-control').val() in MODALS
         $('.js-regular-verbs-control').val('live')
 
+  reset_input: (input) ->
+    App.toggle_button($(input).find('button:first'))
+
+  toggle_input: (input, indicator) ->
+    $(input).parent().parent().toggle(indicator)
+    if !indicator
+      @reset_input(input)
+
+
   toggle_level: ->
     level = $('.js-level-input button.active').html()
-    $('.medium').toggle(level in ['Medium', 'Advanced'])
-    $('.advanced').toggle(level in ['Advanced'])
+
+    medium = level in ['Medium', 'Advanced'] 
+    advanced = level in ['Advanced'] 
+    @toggle_input('[data-name=form]', medium)
+    $('.perfect').toggle(medium)
+    $('.perfect_continues').toggle(advanced)
+    @toggle_input('[data-name=object]', advanced)
 
 
 
@@ -1148,7 +1244,7 @@ $('.js-form').submit (event) ->
   App.run()
 
 $('.js-select-control').each ->
-  App.toggle_button($(this).find('button:first'))
+  App.reset_input(this)
 
 $('.js-select-control button').click ->
   App.toggle_button(this)
@@ -1172,7 +1268,7 @@ $ ->
 
 <div class="container-fluid">
   <h1>English Grammar Table</h1>
-  <form role="form" action='#' class='js-form'>
+  <form role="form" action='#' class='js-form config-form '>
     <div class='row'>
 
       <div class="col-md-2"><h5>Level:</h5></div>
@@ -1248,6 +1344,15 @@ $ ->
           <div class="input-group-btn">
             <input type='submit' class="btn btn-primary" value='Pew!'/>
           </div>
+        </div>
+      </div>
+    </div>
+    <div class='row advanced'>
+      <div class="col-md-2"><h5>Object:</h5></div>
+      <div class='col-md-6 form-group'>
+        <div class="btn-group js-select-control" data-name="object">
+          <button type="button" class="btn btn-default">Active</button>
+          <button type="button" class="btn btn-default">Passive</button>
         </div>
       </div>
     </div>
