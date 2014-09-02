@@ -1265,6 +1265,14 @@ $ ->
 
 </head>
 <body>
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+var js, fjs = d.getElementsByTagName(s)[0];
+if (d.getElementById(id)) return;
+js = d.createElement(s); js.id = id;
+js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=354906294546402";
+fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
 
 <div class="container-fluid">
   <h1>English Grammar Table</h1>
@@ -1361,49 +1369,72 @@ $ ->
   </form>
 
   <div class='row'>
-      <div class='col-md-12 form-group'>
-    <table class="table" cellspacing="0" cellpadding="0">
-      <tr>
-        <th>
+    <div class='col-md-12 form-group'>
+      <table class="table" cellspacing="0" cellpadding="0">
+        <tr>
+          <th>
 
-        </th>
-        <th>
-          Present
-        </th>
-        <th>
-          Past
-        </th>
-        <th>
-          Future
-        </th>
-      </tr>
-      <tr class='simple'>
-        <td>Simple</td>
-        <td class='present'>I live</td>
-        <td class='past'>I lived</td>
-        <td class='future'>I will live</td>
-      </tr>
-      <tr class='continues'>
-        <td>Continues</td>
-        <td class='present'>I live</td>
-        <td class='past'>I lived</td>
-        <td class='future'>I will live</td>
-      </tr>
-      <tr class='perfect medium'>
-        <td>Perfect</td>
-        <td class='present'>I live</td>
-        <td class='past'>I lived</td>
-        <td class='future'>I will live</td>
-      </tr>
-      <tr class='perfect_continues advanced'>
-        <td>Perfect Continues</td>
-        <td class='present'></td>
-        <td class='past'></td>
-        <td class='future'></td>
-      </tr>
+          </th>
+          <th>
+            Present
+          </th>
+          <th>
+            Past
+          </th>
+          <th>
+            Future
+          </th>
+        </tr>
+        <tr class='simple'>
+          <td>Simple</td>
+          <td class='present'>I live</td>
+          <td class='past'>I lived</td>
+          <td class='future'>I will live</td>
+        </tr>
+        <tr class='continues'>
+          <td>Continues</td>
+          <td class='present'>I live</td>
+          <td class='past'>I lived</td>
+          <td class='future'>I will live</td>
+        </tr>
+        <tr class='perfect medium'>
+          <td>Perfect</td>
+          <td class='present'>I live</td>
+          <td class='past'>I lived</td>
+          <td class='future'>I will live</td>
+        </tr>
+        <tr class='perfect_continues advanced'>
+          <td>Perfect Continues</td>
+          <td class='present'></td>
+          <td class='past'></td>
+          <td class='future'></td>
+        </tr>
 
-    </table>
+      </table>
+    </div>
   </div>
+  <div class='row'>
+    <div class='col-md-12'>
+      <br>
+      <br>
+      <br>
+      <table class="table">
+        <tr>
+          <td>
+            <div class="fb-like" data-href="/english.html" data-send="false" data-layout="button_count" data-width="25" data-show-faces="true"></div>
+          </td>
+          <td>
+            <div class="reddit-button">
+              <script type="text/javascript" src="http://www.reddit.com/static/button/button1.js"></script>
+            </div>
+          </td>
+          <td>
+            <a href="https://twitter.com/share" class="twitter-share-button" data-lang="en" data-text="The Best English Grammar Table #learnenglish" data-via="bgusiev" data-url="http://gusiev.com/english.html">Tweet</a>
+            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+          </td>
+        </tr>
+      </table>
+    </div>
   </div>
 </div>
 </body>
