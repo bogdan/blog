@@ -11,6 +11,7 @@
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 <script src="http://underscorejs.org/underscore-min.js"></script>
+<title>English Grammar Table</title>
 
 <style>
   .hidden {
@@ -957,9 +958,16 @@ window.Grammar =
     else
       'regular'
 
+  normalize_verb: (verb) ->
+    verb = @normalize_wordcase(verb)
+    for infinitive, conjuctions of IRREGULAR_VERBS
+      if verb in conjuctions
+        return infinitive
+    verb
+
   perform: (options) -> 
     pronoun = options.pronoun
-    verb = options.verb
+    verb = @normalize_verb(options.verb)
     tense = options.tense
     mark = options.mark
     object = options.object
