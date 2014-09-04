@@ -901,12 +901,12 @@ window.Grammar =
   present_simple_conjuction: (verb, pronoun)-> 
     if verb == 'be'
       @present_simple_be(pronoun)
+    if verb == 'have'
+      return @present_simple_have(pronoun)
     else if verb in MODALS
       verb
     else if pronoun == 'he' || pronoun == 'she' || pronoun == 'it'
-      if verb == 'have'
-        return 'has'
-      else if verb.match(/[owsh]$/)
+      if verb.match(/[owsh]$/)
         "#{verb}es"
       else
         "#{verb}s"
@@ -918,6 +918,11 @@ window.Grammar =
       when 'I' then 'am'
       when 'he', 'she', 'it' then 'is'
       else 'are'
+
+  present_simple_have: (pronoun)-> 
+    switch pronoun
+      when 'he', 'she', 'it' then 'has'
+      else 'have'
     
 
 
@@ -1018,23 +1023,23 @@ window.Grammar =
         perfect:
           regular:
             active:
-              negative: "#{pronoun} have not #{@perfect(verb)}"
-              positive: "#{pronoun} have #{@perfect(verb)}"
-              question: "have #{pronoun} #{@perfect(verb)}"
+              negative: "#{pronoun} #{@present_simple_have(pronoun)} not #{@perfect(verb)}"
+              positive: "#{pronoun} #{@present_simple_have(pronoun)} #{@perfect(verb)}"
+              question: "#{@present_simple_have(pronoun)} #{pronoun} #{@perfect(verb)}"
             passive: null
 
           modal:
             active:
-              negative: "#{pronoun} have not #{@perfect(verb)}"
-              positive: "#{pronoun} have #{@perfect(verb)}"
-              question: "have #{pronoun} #{@perfect(verb)}"
+              negative: "#{pronoun} #{@present_simple_have(pronoun)} not #{@perfect(verb)}"
+              positive: "#{pronoun} #{@present_simple_have(pronoun)} #{@perfect(verb)}"
+              question: "#{@present_simple_have(pronoun)} #{pronoun} #{@perfect(verb)}"
             passive: null
         perfect_continues:
           regular:
             active:
-              negative: "#{pronoun} have not been #{@gerund(verb)}"
-              positive: "#{pronoun} have been #{@gerund(verb)}"
-              question: "have #{pronoun} been #{@gerund(verb)}"
+              negative: "#{pronoun} #{@present_simple_have(pronoun)} not been #{@gerund(verb)}"
+              positive: "#{pronoun} #{@present_simple_have(pronoun)} been #{@gerund(verb)}"
+              question: "#{@present_simple_have(pronoun)} #{pronoun} been #{@gerund(verb)}"
             passive: null
           modal: null
 
