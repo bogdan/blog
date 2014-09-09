@@ -31,7 +31,7 @@ MODALS = ['be', 'may', 'might', 'can', 'could', 'shall', 'should', 'must']
 SHORTABLE_NOT = _.union(['was', 'were', 'do', 'did', 'have', 'had', 'are', 'is', 'have'], MODALS)
 
 TENSES = ['present', 'past', 'future']
-COMPLETENESSES = ['simple', 'continues', 'perfect', 'perfect_continues']
+COMPLETENESSES = ['simple', 'continuous', 'perfect', 'perfect_continuous']
 NOUNS = ['I', 'you', 'he', 'she', 'it', 'we', 'they']
 NOUN_REGEXP = "(#{NOUNS.join('|')})"
 
@@ -1021,7 +1021,7 @@ window.Grammar =
               negative_question: "#{present_verb} #{pronoun} not"
             passive: null
 
-        continues:
+        continuous:
           regular:
             active:
               negative: "#{pronoun} #{present_be} not #{gerund_verb}"
@@ -1058,7 +1058,7 @@ window.Grammar =
               question: "#{present_have} #{pronoun} #{perfect_verb}"
               negative_question: "#{present_have} #{pronoun} not #{perfect_verb}"
             passive: null
-        perfect_continues:
+        perfect_continuous:
           regular:
             active:
               negative: "#{pronoun} #{present_have} not been #{gerund_verb}"
@@ -1090,7 +1090,7 @@ window.Grammar =
               negative_question: "#{past_verb} #{pronoun} not"
             passive: null
 
-        continues:
+        continuous:
           regular:
             active:
               negative: "#{pronoun} #{past_be} not #{gerund_verb}"
@@ -1125,7 +1125,7 @@ window.Grammar =
               question: "had #{pronoun} #{perfect_verb}"
               negative_question: "had #{pronoun} not #{perfect_verb}"
             passive: null
-        perfect_continues:
+        perfect_continuous:
           regular:
             active:
               negative: "#{pronoun} had not been #{gerund_verb}"
@@ -1158,7 +1158,7 @@ window.Grammar =
             passive: null
             
 
-        continues:
+        continuous:
           regular:
             active:
               negative: "#{pronoun} will not be #{gerund_verb}"
@@ -1187,7 +1187,7 @@ window.Grammar =
               negative_question: "will #{pronoun} not have #{perfect_verb}"
             passive: null
           modal: null
-        perfect_continues:
+        perfect_continuous:
           regular:
             active:
               negative: "#{pronoun} will have not been #{gerund_verb}"
@@ -1291,8 +1291,12 @@ App =
     advanced = level in ['Advanced'] 
     @toggle_input('[data-name=form]', medium)
     $('.perfect').toggle(medium)
-    $('.perfect_continues').toggle(advanced)
+    $('.perfect_continuous').toggle(advanced)
+    $('.js-negative-question').toggle(advanced)
     @toggle_input('[data-name=object]', advanced)
+    if !advanced
+      @reset_input('[data-name=mark]')
+
 
 
 
@@ -1366,13 +1370,13 @@ fjs.parentNode.insertBefore(js, fjs);
       
     <div class='row'>
       <div class="col-md-2"><h5>Type:</h5></div>
-      <div class='col-md-7 form-group'>
+      <div class='col-md-8 form-group'>
 
         <div class="btn-group js-select-control" data-name="mark">
           <button type="button" class="btn btn-default">Positive</button>
           <button type="button" class="btn btn-default">Negative</button>
           <button type="button" class="btn btn-default">Question</button>
-          <button type="button" data-value="negative_question" class="btn btn-default">Negative Question</button>
+          <button type="button" data-value="negative_question" class="js-negative-question btn btn-default">Negative Question</button>
         </div>
       </div>
     </div>
@@ -1450,8 +1454,8 @@ fjs.parentNode.insertBefore(js, fjs);
           <td class='past'>I lived</td>
           <td class='future'>I will live</td>
         </tr>
-        <tr class='continues'>
-          <td>Continues</td>
+        <tr class='continuous'>
+          <td>Continuous</td>
           <td class='present'>I live</td>
           <td class='past'>I lived</td>
           <td class='future'>I will live</td>
@@ -1462,8 +1466,8 @@ fjs.parentNode.insertBefore(js, fjs);
           <td class='past'>I lived</td>
           <td class='future'>I will live</td>
         </tr>
-        <tr class='perfect_continues advanced'>
-          <td>Perfect Continues</td>
+        <tr class='perfect_continuous advanced'>
+          <td>Perfect Continuous</td>
           <td class='present'></td>
           <td class='past'></td>
           <td class='future'></td>
