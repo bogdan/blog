@@ -1060,7 +1060,12 @@ window.Grammar =
             passive: null
 
           modal:
-            active:
+            active: if verb == 'be'
+              negative: "#{pronoun} #{present_have} not #{perfect_verb}"
+              positive: "#{pronoun} #{present_have} #{perfect_verb}"
+              question: "#{present_have} #{pronoun} #{perfect_verb}"
+              negative_question: "#{perfect_verb} #{pronoun} not #{present_have}"
+            else
               negative: "#{pronoun} #{perfect_verb} not #{present_have}"
               positive: "#{pronoun} #{perfect_verb} #{present_have}"
               question: "#{perfect_verb} #{pronoun} #{present_have}"
@@ -1127,7 +1132,12 @@ window.Grammar =
               negative_question: "had #{pronoun} not #{perfect_verb}"
             passive: null
           modal:
-            active:
+            active: if verb == "be"
+              negative: "#{pronoun} had not been"
+              positive: "#{pronoun} had been"
+              question: "had #{pronoun} been"
+              negative_question: "had #{pronoun} not been"
+            else
               negative: "#{pronoun} #{perfect_verb} had not"
               positive: "#{pronoun} #{perfect_verb} had"
               question: "#{perfect_verb} #{pronoun} had"
@@ -1406,7 +1416,7 @@ fjs.parentNode.insertBefore(js, fjs);
       </div>
     </div>
     <div class='row'>
-      <div class="col-md-2">&nbsp;</div>
+      <div class="col-md-2">Irregular:</div>
       <div class='col-md-8 form-group'>
         <div class="btn-group js-select-control js-powerfull-verbs" data-name="verb">
           <button type="button" class="btn btn-default">be</button>
@@ -1418,6 +1428,7 @@ fjs.parentNode.insertBefore(js, fjs);
         </div>
       </div>
     </div>
+
     <div class='row medium'>
       <div class="col-md-2"><h5>Form:</h5></div>
       <div class='col-md-7 form-group'>
