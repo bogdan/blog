@@ -1198,7 +1198,13 @@ window.Grammar =
               question: "will #{pronoun} have #{perfect_verb}"
               negative_question: "will #{pronoun} not have #{perfect_verb}"
             passive: null
-          modal: null
+          modal:
+            active: if verb == 'be'
+              negative: "#{pronoun} will not have #{perfect_verb}"
+              positive: "#{pronoun} will have #{perfect_verb}"
+              question: "will #{pronoun} have #{perfect_verb}"
+              negative_question: "will #{pronoun} not have #{perfect_verb}"
+            passive: null
         perfect_continuous:
           regular:
             active:
