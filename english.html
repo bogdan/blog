@@ -27,8 +27,8 @@
 
 
 <script type='text/coffeescript'>
-MODALS = ['be', 'may', 'might', 'can', 'could', 'shall', 'should', 'must']
-SHORTABLE_NOT = _.union(['was', 'were', 'do', 'did', 'have', 'had', 'are', 'is', 'have'], MODALS)
+POWERFULL = ['be', 'may', 'might', 'can', 'could', 'shall', 'shall', 'should', 'must', 'will', 'would']
+DEFAULT_NOT_SHORTENING = ['are', 'is', 'was', 'were', 'do', 'did', 'have', 'had', 'are', 'is', 'have', 'could', 'should', 'must', 'will', 'would']
 
 TENSES = ['present', 'past', 'future']
 COMPLETENESSES = ['simple', 'continuous', 'perfect', 'perfect_continuous']
@@ -43,8 +43,8 @@ SHORTENINGS = [
   [/will (\w+) not/, "won't $1"],
   [/can not/, "can't"],
   [/can (\w+) not/, "can't $1"],
-  ["(#{SHORTABLE_NOT.join('|')}) not", "$1n't"],
-  ["(#{SHORTABLE_NOT.join('|')}) #{NOUN_REGEXP} not", "$1n't $2"],
+  ["(#{DEFAULT_NOT_SHORTENING.join('|')}) not", "$1n't"],
+  ["(#{DEFAULT_NOT_SHORTENING.join('|')}) #{NOUN_REGEXP} not", "$1n't $2"],
   [/(\w+) have (\w+)/, "$1've $2"],
   [/have (\w+) not (\w+)/, "haven't $1 $2"],
   [/\swill/, "'ll"]
@@ -602,6 +602,10 @@ IRREGULAR_VERBS =
     "shod",
     "shod"
   ],
+  "shall" : [
+    "should",
+    "should"
+  ],
   "shoot" : [
     "shot",
     "shot"
@@ -890,6 +894,10 @@ IRREGULAR_VERBS =
     "withstood",
     "withstood"
   ],
+  "would" : [
+    "would",
+    "would"
+  ],
   "wring" : [
     "wrung",
     "wrung"
@@ -912,7 +920,7 @@ window.Grammar =
       return @present_simple_be(pronoun)
     if verb == 'have'
       return @present_simple_have(pronoun)
-    if verb in MODALS
+    if verb in POWERFULL
       return verb
     if pronoun == 'he' || pronoun == 'she' || pronoun == 'it'
       if verb.match(/[owsh]$/)
@@ -967,7 +975,7 @@ window.Grammar =
       @change_ending(verb, 'ed')
 
   modality: (verb) ->
-    if verb in MODALS
+    if verb in POWERFULL
       'modal'
     else
       'regular'
@@ -1053,10 +1061,10 @@ window.Grammar =
 
           modal:
             active:
-              negative: "#{pronoun} #{present_have} not #{perfect_verb}"
-              positive: "#{pronoun} #{present_have} #{perfect_verb}"
-              question: "#{present_have} #{pronoun} #{perfect_verb}"
-              negative_question: "#{present_have} #{pronoun} not #{perfect_verb}"
+              negative: "#{pronoun} #{perfect_verb} not #{present_have}"
+              positive: "#{pronoun} #{perfect_verb} #{present_have}"
+              question: "#{perfect_verb} #{pronoun} #{present_have}"
+              negative_question: "#{perfect_verb} #{pronoun} not #{present_have}"
             passive: null
         perfect_continuous:
           regular:
@@ -1120,10 +1128,10 @@ window.Grammar =
             passive: null
           modal:
             active:
-              negative: "#{pronoun} had not #{perfect_verb}"
-              positive: "#{pronoun} had #{perfect_verb}"
-              question: "had #{pronoun} #{perfect_verb}"
-              negative_question: "had #{pronoun} not #{perfect_verb}"
+              negative: "#{pronoun} #{perfect_verb} had not"
+              positive: "#{pronoun} #{perfect_verb} had"
+              question: "#{perfect_verb} #{pronoun} had"
+              negative_question: "#{perfect_verb} #{pronoun} not had"
             passive: null
         perfect_continuous:
           regular:
@@ -1170,13 +1178,7 @@ window.Grammar =
               positive: "#{pronoun} will be being #{perfect_verb}"
               question: "will #{pronoun} be being #{perfect_verb}"
               negative_question: "will #{pronoun} not be being #{perfect_verb}"
-          modal:
-            active: if verb == 'be' && level == 'advanced'
-              negative: "#{pronoun} will not #{gerund_verb}"
-              positive: "#{pronoun} will #{gerund_verb}"
-              question: "will #{pronoun} #{gerund_verb}"
-              negative_question: "will #{pronoun} not #{gerund_verb}"
-            passive: null
+          modal: null
 
         perfect:
           regular:
@@ -1242,14 +1244,17 @@ Utils =
     text[0].toUpperCase() + text.substring(1)
     
 
-App =
+window.App =
+  state: {}
   run: ->
-    this.toggle_level()
+    new_state = Utils.serializeHash($('.js-form').serializeArray())
+    if @state.level != new_state.level
+      this.toggle_level()
     this.toggle_verb_inputs()
-    data = Utils.serializeHash($('.js-form').serializeArray())
+    @state = new_state
     for tense in TENSES
       for completeness in COMPLETENESSES
-        string = Grammar.perform($.extend(data, {tense: tense, completeness: completeness}))
+        string = Grammar.perform($.extend(@state, {tense: tense, completeness: completeness}))
         $(".#{completeness} .#{tense}").html(string || '&mdash;')
 
   toggle_button: (element) ->
@@ -1266,17 +1271,10 @@ App =
       input.val(value)
 
   toggle_verb_inputs: ->
-    modal = $('.js-verb-type-control button.active').html() == "Modal"
-    $('.js-modal-verbs-control').toggle(modal)
-    $('.js-regular-verbs-control').parent().toggle(!modal)
-    if modal 
-      $('.js-regular-verbs-control').val($('.js-modal-verbs-control button.active').html())
-    else
-      if $('.js-regular-verbs-control').val() in MODALS
-        $('.js-regular-verbs-control').val('live')
 
   reset_input: (input) ->
-    App.toggle_button($(input).find('button:first'))
+    button = $(input).find('button:first')
+    App.toggle_button(button)
 
   toggle_input: (input, indicator) ->
     $(input).parent().parent().toggle(indicator)
@@ -1301,23 +1299,27 @@ App =
 
 
 
-$('.js-form').submit (event) ->
-  event.preventDefault()
-  App.run()
-
-$('.js-select-control').each ->
-  App.reset_input(this)
-
-$('.js-select-control button').click ->
-  App.toggle_button(this)
-  App.run()
-
-
-$('.js-verb-type-control button').click ->
-  App.run()
-
 
 $ ->
+  $('.js-form').submit (event) ->
+    event.preventDefault()
+    App.run()
+
+  $('.js-select-control').each ->
+    App.reset_input(this)
+
+  $('.js-select-control button').click ->
+    App.toggle_button(this)
+    App.run()
+
+
+  $('.js-verb-type-control button').click ->
+    App.run()
+
+  $('.js-regular-verbs-control').focus ->
+    console.log('zz');
+    $('.js-powerfull-verbs').find('button').removeClass('active');
+
   App.run()
   
 
@@ -1327,6 +1329,7 @@ $ ->
 
 </head>
 <body>
+
 <div id="fb-root"></div>
 <script>(function(d, s, id) {
 var js, fjs = d.getElementsByTagName(s)[0];
@@ -1381,30 +1384,37 @@ fjs.parentNode.insertBefore(js, fjs);
       </div>
     </div>
 
-    <div class='row'>
-      <div class="col-md-2"><h5>Conjuction:</h5></div>
-      <div class='col-md-7 form-group'>
-        <div class="btn-group js-select-control js-verb-type-control" data-name="verb_type">
-          <button type="button" class="btn btn-default">Regular</button>
-          <button type="button" class="btn btn-default">Modal</button>
-        </div>
-      </div>
-    </div>
+    <!--<div class='row'>-->
+      <!--<div class="col-md-2"><h5>Conjuction:</h5></div>-->
+      <!--<div class='col-md-7 form-group'>-->
+        <!--<div class="btn-group js-select-control js-verb-type-control" data-name="verb_type">-->
+          <!--<button type="button" class="btn btn-default">Regular</button>-->
+          <!--<button type="button" class="btn btn-default">Modal</button>-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--</div>-->
 
     <div class='row'>
       <div class="col-md-2"><h5>Verb:</h5></div>
-      <div class='col-md-6 form-group'>
-        <div class="btn-group js-select-control js-modal-verbs-control" data-name="verb">
-          <button type="button" class="btn btn-default">be</button>
-          <button type="button" class="btn btn-default">can</button>
-          <button type="button" class="btn btn-default">may</button>
-          <button type="button" class="btn btn-default">must</button>
-        </div>
+      <div class='col-md-7 form-group'>
         <div class="input-group">
           <input class="form-control js-regular-verbs-control" type='text' name='verb' placeholder='verb' value='like'>
           <div class="input-group-btn">
             <input type='submit' class="btn btn-primary" value='Pew!'/>
           </div>
+        </div>
+      </div>
+    </div>
+    <div class='row'>
+      <div class="col-md-2">&nbsp;</div>
+      <div class='col-md-8 form-group'>
+        <div class="btn-group js-select-control js-powerfull-verbs" data-name="verb">
+          <button type="button" class="btn btn-default">be</button>
+          <button type="button" class="btn btn-default">can</button>
+          <button type="button" class="btn btn-default">may</button>
+          <button type="button" class="btn btn-default">must</button>
+          <button type="button" class="btn btn-default">should</button>
+          <button type="button" class="btn btn-default">would</button>
         </div>
       </div>
     </div>
