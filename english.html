@@ -915,7 +915,15 @@ IRREGULAR_VERBS =
 
 
 window.Grammar = 
+
+  infinitive: (verb) ->
+    #TODO: improve
+    "to #{verb}"
+
   present_simple_conjuction: (verb, pronoun)-> 
+    unless pronoun
+      # Adding -s by default
+      pronoun = 'it'
     if verb == 'be'
       return @present_simple_be(pronoun)
     if verb == 'have'
@@ -945,6 +953,9 @@ window.Grammar =
 
 
   gerund: (verb)-> 
+    if verb in POWERFULL && verb != 'be'
+      return verb
+    verb = verb.replace(/ie$/, 'y')
     @change_ending(verb, 'ing')
 
   change_ending: (verb, ending)-> 
@@ -1272,6 +1283,9 @@ window.App =
       for completeness in COMPLETENESSES
         string = Grammar.perform($.extend(@state, {tense: tense, completeness: completeness}))
         $(".#{completeness} .#{tense}").html(string || '&mdash;')
+    $('.js-verb-conjugation').each (i, element) =>
+      conjugation = Grammar[$(element).data('method')](@state.verb)
+      $(element).html(conjugation)
 
   toggle_button: (element) ->
     group = $(element).parent()
@@ -1499,7 +1513,26 @@ fjs.parentNode.insertBefore(js, fjs);
           <td class='past'></td>
           <td class='future'></td>
         </tr>
-
+      </table>
+    </div>
+  </div>
+  <div class='row'>
+    <div class='col-md-12'>
+      <table class='table' cellpadding='0' cellspacing='0'>
+        <tr>
+          <th>Infinitive</th>
+          <th>Present -s</th>
+          <th>Past</th>
+          <th>Perfect</th>
+          <th>Progressive</th>
+        </tr>
+        <tr>
+          <td class='js-verb-conjugation' data-method='infinitive'>to live</td>
+          <td class='js-verb-conjugation' data-method='present_simple_conjuction'>lives</td>
+          <td class='js-verb-conjugation' data-method='past'>lived</td>
+          <td class='js-verb-conjugation' data-method='perfect'>lived</td>
+          <td class='js-verb-conjugation' data-method='gerund'>living</td>
+        </tr>
       </table>
     </div>
   </div>
