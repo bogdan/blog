@@ -1292,7 +1292,7 @@ window.App =
     group.find('button').removeClass('active');
     $(element).addClass('active')
     name = group.data('name')
-    input = $("input[name=#{name}")
+    input = $("input[name=#{name}]")
     value = $(element).data('value') || Grammar.normalize_wordcase($(element).html())
     if input.length == 0
 
