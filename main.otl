@@ -6,12 +6,13 @@ Home
 	Katishki
 	Oven basket
 		30x40
-	Large ceramic knife
 	Kran
 	Tolkalka
 	drums
 	umbrella
 	Toschi
+	Termal screen
+	Schetnaya mashinka
 	Trade Center
 		Dreamtown
 		OceanPlaza
@@ -58,7 +59,6 @@ OSS
 		http://afreshcup.com/
 	Accept values for
 		Rewrite discover article in blog
-		Move discover to its separated gem
 	Liquid
 		Exception handling for humans
 		Interpolation syntax support
@@ -100,8 +100,8 @@ OSS
 
 			AR::Base#can_be_deleted?
 			has_many :tags, :accepts_nested_attributes => true
+			DateTime.now.end_of_day.to_yaml # => "--- !ruby/object:DateTime 2014-10-13 23:59:59.000000000 +03:00\n...\n"
 			Resolve changelog merge problem
-			#update_column to support hash argument
 		rake db:migrate:down STEP=
 		as_json(:id, :email, :active) api
 		Minify backtrace for exceptions in rails console
@@ -122,13 +122,11 @@ OSS
 		Sqlite millisecond hunting
 			where(:created_at => Date.today.beginning_of_day)
 		Rollback changes on transaction rollback
-		select with nil choices
-			https://github.com/rails/rails/blob/master/actionview/lib/action_view/helpers/tags/select.rb#L36
 		User.order(:id).last(3) don't use SQL limiting
 		class Model < ActiveRecord::Base
 		change_table should execute alter table only once
 		Inverse scope like Campaign.not(:active)
-		VisitorOffer.joins(:offer).where(offers: { campaign_id: Site.first.campaigns }).to_sql
+		ViewCommit.where(target: [view_setup, theme_customization]) 
 
 	Rspec-rails
 		Subshell on rake spec
@@ -148,10 +146,6 @@ Get a new idea
 	Investigate kickstarter
 		May be it needs to be investigated again?
 	Text editor with AST support
-	Norka
-		Investigate screen scrapping compatibilities
-		Invent UI
-		Ask Dmitra about what people at Miraline are doing
 	Bug tracker with tree support
 	Reporting service
 		Ask Allan about his friend that doing data analysis software
@@ -168,7 +162,7 @@ Blog
 		* Logic free
 		* Frontend rendering
 		* Sandbox mode
-		* Minimalistic
+		* Minimalistic/HTML compatible
 	Undocumented Rails Principles
 		ActiveBasecamp
 		Self-similarity

@@ -12,7 +12,7 @@ tags:
 
 If you ever find yourself renaming a core class or method in the application you should think about some process automation tools. In case when class name or method name is unique - **Substitute** is the best choice. 
 
-Running sever find/sed commands in console will cover almost all use cases. In case of Rails there is not only one ClassName you need to rename, but also some it's modifications  (under score name, plural/singular form). In order to not touch plural form while working with singular form start from plural form first.
+Running sever find/sed commands in console will cover almost all use cases. In case of Rails there is not only one ClassName you need to rename, but also some it's modifications  (underscore\_name, plural/singular form). In order to not touch plural form while working with singular form start from plural form first.
 Also there must be some model/controller relationships you might need to cover.
 
 <!--more-->

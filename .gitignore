@@ -1,4 +1,5 @@
 css/*.css
+css/*.map
 build
 _site/
 ./tags/

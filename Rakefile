@@ -1,5 +1,7 @@
 require 'rubygems'
 require 'bundler'
+require "yaml"
+#require "syck"
 Bundler.setup
 require 'jekyll'
 require "fileutils"
@@ -44,7 +46,7 @@ task :dev => :build do
     end
   end
   j = Thread.new do
-    `ejekyll --server --auto`
+    `jekyll serve --watch`
   end
   sleep(1)
   c.join
@@ -57,7 +59,7 @@ task :build => [ "build:clean", :tags, :cloud, :sass] do
     FileUtils.mkdir_p(path("tmp"))
     FileUtils.rm_rf(path("tmp/.git"))
     FileUtils.mv(path("build/.git"), path("tmp"))
-    puts `ejekyll --no-auto build`
+    puts `jekyll build`
   ensure
     unless File.exists?(path("build/.git"))
       FileUtils.mv(path("tmp/.git"), path("build"))

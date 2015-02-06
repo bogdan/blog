@@ -1,7 +1,6 @@
 rdiscount: true
-pygments: true
-auto: true
-lsi: true
+highlighter: pygments
+#lsi: true
 paginate: 10
 permalink: "/:year/:month/:title"
 url: "http://gusiev.com"
