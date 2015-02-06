@@ -59,7 +59,7 @@ task :build => [ "build:clean", :tags, :cloud, :sass] do
     FileUtils.mkdir_p(path("tmp"))
     FileUtils.rm_rf(path("tmp/.git"))
     FileUtils.mv(path("build/.git"), path("tmp"))
-    puts `jekyll build`
+    puts `jekyll build --destination #{path("build")}`
   ensure
     unless File.exists?(path("build/.git"))
       FileUtils.mv(path("tmp/.git"), path("build"))
