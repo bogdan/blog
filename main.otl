@@ -11,7 +11,8 @@ Home
 	drums
 	umbrella
 	Toschi
-	Termal screen
+	Frier
+	Termal screen close to the battery
 	Schetnaya mashinka
 	Trade Center
 		Dreamtown
@@ -28,12 +29,6 @@ Home
 		Dubki
 		Dorogozhichi
 
-
-	daily
-		Grelka
-		Hot water
-		masg
-		dfi
 	
 
 OSS
@@ -63,9 +58,6 @@ OSS
 		Exception handling for humans
 		Interpolation syntax support
 	datagrid
-		exlicit columns order
-		batch size option
-		datagrid row for data and html view
 		inline html usage
 	AjaxSubmit
 		ajaxsubmit-rails
@@ -97,11 +89,11 @@ OSS
 			Make rails raise exception if asset is used directly but not precompiled
 			Move mass assignment attributes to activemodel
 			Make increment thread safe
-
 			AR::Base#can_be_deleted?
 			has_many :tags, :accepts_nested_attributes => true
 			DateTime.now.end_of_day.to_yaml # => "--- !ruby/object:DateTime 2014-10-13 23:59:59.000000000 +03:00\n...\n"
 			Resolve changelog merge problem
+			class Model < ActiveRecord::Base
 		rake db:migrate:down STEP=
 		as_json(:id, :email, :active) api
 		Minify backtrace for exceptions in rails console
@@ -122,11 +114,12 @@ OSS
 		Sqlite millisecond hunting
 			where(:created_at => Date.today.beginning_of_day)
 		Rollback changes on transaction rollback
-		User.order(:id).last(3) don't use SQL limiting
-		class Model < ActiveRecord::Base
 		change_table should execute alter table only once
 		Inverse scope like Campaign.not(:active)
 		ViewCommit.where(target: [view_setup, theme_customization]) 
+		#reverse_order to raise IrreversibleOrderException when it can not reverse with easy algorithm
+		Rescue IrreversibleOrderException from Relation#last
+		Remove missing NameError#missing_name and simply use #name instead
 
 	Rspec-rails
 		Subshell on rake spec
@@ -147,7 +140,7 @@ Get a new idea
 		May be it needs to be investigated again?
 	Text editor with AST support
 	Bug tracker with tree support
-	Reporting service
+	Reporting service         
 		Ask Allan about his friend that doing data analysis software
 	Bees or Ants strategy game
 
@@ -168,6 +161,7 @@ Blog
 		Self-similarity
 		Break through abstraction level
 
+
 	
 	Ajax debug article
 		javascriptshow
@@ -180,7 +174,7 @@ Invent new interview tasks
 	Lines
 	Tetris
 	Haml
-
+	Tic-Tac-Toe
 
 The art of programming
 	Prepare Rspec master class

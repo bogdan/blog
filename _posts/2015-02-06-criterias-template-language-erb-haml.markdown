@@ -12,6 +12,7 @@ Whenever you are serious about choosing the frontend template engine to generate
 more effective. There are too many template languages right now, but there are only a few main criteria how you can limit your selection to 2-3 of them before
 getting into details.
 
+
 <!--more-->
 
 Here they are:

@@ -8,8 +8,9 @@ tags:
 - class
 ---
 
-JavaScript initialization process is a pain in the ass since dynamic HTML and AJAX became popular. We need to take care all the time about what we need to initialize after every change in DOM. Thanks to `jQuery#live` and `jQuery#on` that is not so right but still very effective solution. It allows to fix the problem with initialization of typical events.
-But initialization is not always about binding DOM events. In more advanced cases it could be wrapping widget class over an element or custom jQuery method call like date-picker.
+The JavaScript initialization process is a pain in the ass since dynamic HTML and AJAX became popular. We need to take care all the time about what we need to initialize after every change in DOM. 
+Thanks to `jQuery#live` and `jQuery#on`: We have a not-so-right but still very effective solution. It allows us to fix the problem with initialization of typical events.
+But initialization is not always about binding DOM events. In more advanced cases, it could be wrapping widget class over an element or a custom jQuery method call like a `date-picker`.
 
 <!--more-->
 
@@ -17,8 +18,8 @@ Here is an example:
 
 {% highlight js %}
 // This line will be required not only on `$(docuemnt).ready` 
-// but every time an update in DOM occur that adds some new date input on page.
-$(".data-picker").datePicker();
+// but every time an update in DOM occurs that adds some new date input on a page.
+$(".date-picker").datePicker();
 {% endhighlight %}
 
 Or advanced example:
@@ -32,10 +33,10 @@ $(".image-gallery").each(function(element){
 });
 {% endhighlight %}
 
-In example above is split into two sections: definition and initialization.
-This fact makes code hard to follow as moving from class to DOM element in HTML template require at least two transitions in your editor.
+In the example above, we see two sections: definition and initialization.
+This fact makes code hard to follow as moving from class to DOM element in HTML template requires at least two transitions in your editor.
 
-And when large page update comes after ajax query this is getting even worth. All initializer should called again:
+And when a large page update comes after an AJAX query, this problem is getting even worse. All initializers should called again:
 
 {% highlight js %}
 $.get("/profile/edit", data, function(response) {
@@ -47,13 +48,13 @@ $.get("/profile/edit", data, function(response) {
 {% endhighlight %}
 
 
-### Tired to handle things like this? 
+### Tired of handling things like this? 
 
 ## Change the way of thinking about initialization
 
-Initialization code is a bridge where between actual JS class and DOM element.
-In 99% of cases it has one to one or one to many relation.
-Than, why do we always need that intermediate initialization code?
+Initialization code is a bridge between actual JS class and DOM element.
+In 99% of cases, it has one-to-one or one-to-many relation.
+Then why do we always need that intermediate initialization code?
 
 The DOM element could have the class itself:
 
@@ -62,8 +63,9 @@ The DOM element could have the class itself:
 <div class="profile-image-gallery" data-class="ImageGallery">
 {% endhighlight %}
 
-Now your way from DOM element to JS class require only one transition.
-Moreover all DOM elements could be initialized with one call. It needs to run over DOM and find all elements with `data-class` attributes that are not initialized and wrap them with a specified class:
+Now your way from DOM element to JS class requires only one transition.
+Moreover, all DOM elements could be initialized with one call. It needs to run over DOM and find all elements with `data-class` attributes 
+that are not initialized and wrap them with a specified class:
 
 {% highlight js %}
 var Initializer = {
@@ -78,14 +80,14 @@ var Initializer = {
 };
 {% endhighlight %}
 
-This code bit will probably require some additional functionality to support an options but general idea is strong enough to handle all possible complexity in a future.
-Now, whenever DOM changes everything we need to do is call:
+This code bit will probably require some additional functionality to support options, but the general idea is strong enough to handle all possible complexity in the future.
+Now, whenever DOM changes, everything we need to do is call:
 
 {% highlight js %}
 Initializer.perform();
 {% endhighlight %}
 
-In order to attach third-party libraries to this initialization process we need to create a simple wrapping class around them:
+In order to attach third-party libraries to this initialization process, we need to create a simple wrapping class around them:
 
 {% highlight js %}
 var DatePicker = function (element) {
@@ -93,7 +95,7 @@ var DatePicker = function (element) {
 }
 {% endhighlight %}
 
-Now we are able to convert inputs to date pickers with unified initialization process:
+Now we are able to convert inputs to date pickers with a unified initialization process:
 
 {% highlight html %}
 <input type="text" name="profile[birth_date]" data-class="DatePicker">
@@ -102,9 +104,9 @@ Now we are able to convert inputs to date pickers with unified initialization pr
 
 ## Conclusion
 
-JavaScript coding is annoying for most people that came from other languages because it keeps fragmented things that should be bound together.
-In order to avoid this problem we need to invent conventions to follow, so that every person in a team understand that.
-But the cost of convention described here is not that much and makes code move clean and easy to follow.
+JavaScript coding is annoying for most people who came from other languages because it keeps things fragmented that should be bound together.
+In order to avoid this problem, we need to invent conventions to follow, so that every person in a team understands that.
+But the cost of convention described here is not that much and makes code more clean and easier to follow.
 
 
 
