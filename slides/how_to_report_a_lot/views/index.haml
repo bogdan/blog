@@ -1,0 +1,350 @@
+<!doctype html>
+%html{:lang => "en"}
+  %head
+    %meta{:charset => "utf-8"}/
+    %title How to report a lot?
+    %meta{:content => "", :name => "description"}/
+    %meta{:content => "Bogdan Gusiev", :name => "author"}/
+    %meta{:content => "yes", :name => "apple-mobile-web-app-capable"}/
+    %meta{:content => "black-translucent", :name => "apple-mobile-web-app-status-bar-style"}/
+    %meta{:content => "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no", :name => "viewport"}/
+    %link{:href => "http://lab.hakim.se/reveal-js/css/reveal.css", :rel => "stylesheet"}/
+    %link{:href => "http://lab.hakim.se/reveal-js/css/theme/night.css", :rel => "stylesheet"}/
+    / For syntax highlighting
+    %link{:href => "http://lab.hakim.se/reveal-js/lib/css/zenburn.css", :rel => "stylesheet"}/
+    / If the query includes 'print-pdf', use the PDF print sheet
+    :javascript
+      document.write( '<link rel="stylesheet" href="http://lab.hakim.se/reveal-js/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+    :sass
+      .yellow
+        color: yellow
+      .reveal
+        pre
+          code
+            padding: 20px 5px
+            font-size: 1.80em
+            line-height: 1.3em
+        ul
+          min-width: 50%
+        .red
+          color: #ff2c2d
+        .green
+          color: #17ff2e
+        .blue
+          color: #1b91ff
+  %body
+    .reveal
+      .slides
+        %section
+          %h1 How To Report a LOT?
+          %h3 Bogdan Gusiev
+          %h3 October 2013
+
+        %section
+          %h1 Report?
+        %section
+          %h3 Why to Report?
+          
+          %h2 Activity.where("created_at &gt; ?", 1.day.ago).count # =&gt; ?
+
+          %ul
+            %li 10
+            %li 1000
+            %li 100000
+
+        %section
+          %h1 You can know will all data happening in your application every day
+
+
+        %section
+          %h2 a LOT?
+
+          %pre
+            %code
+              User.that_wants_reporting.count # =&gt; ?
+
+          %ul
+            %li 3
+            %li 10
+          
+        %section
+          %h1 Plan
+
+          %ul
+            %li Basic Operations 
+            %li Problems as number of metrics growth
+            %li What is even a metric?
+            %li What is a filter?
+            %li Data Model
+            %li Live examples
+
+
+        %section
+          %h3 Basic Data Operations in Reporting
+
+          %ul
+            %li aggregate (sql: "group by")
+            %li count
+            %li sum
+        
+        %section
+          %h3 Business never speaks in that language
+
+          %ul
+            %li Graph
+            %li How many new users do we aquire a month at average?
+            %li table
+
+        %section
+          %h3 The basic model of doing all that
+
+          [you are doing the work in a middle]
+        %section
+          %h3 Stages
+
+          %ul
+            %li At first you learn: SQL, CSV, Graphs, S3 file uploading
+            %li Then you feel like an Reporting Machine
+            %li No thanks...
+
+        %section
+          %h3 No automation centralized automation problems:
+          
+        %section
+          %h3 Let the machine do the work
+          %h4 Let you become a software developer again
+
+          [machine in a middle graph]
+
+        %section 
+          %h3 Problems:
+
+          %h5 Same metric can be calculated differently in different parts of project
+
+          %h3 Total Sales = ?
+          %pre
+            %code
+              :preserve
+                # file1.rb
+                Purchase.group("month(created_at)").sum(:subtotal)
+                # file2.rb
+                Purchase.group(:marketing_campaign).sum(:subtotal)
+
+          %pre
+            %code
+              :preserve
+                Purchase.group(:marketing_campaign).successfully_delivered.sum(:subtotal)
+
+          
+          %h3 Does it include a returned sales or not?
+          %img{src: "http://monosnap.com/image/8mWPDzrlTJaQEaY9jMR6b9me8yz4zs.png"}
+
+        %section
+          %h3 
+            Each time person wants to see "Total Sales" there should be only one way of calculating it.
+          %h3
+            If there is a place where sales number needs to include "returned sales", it should be named differently
+
+        %section
+          %h3 "One ring to rule them all!"
+            
+
+          [Total Sales queries from one place diagram]
+
+
+        %section
+          %h3 We need to organize aggregation and multiple filters for the same metric:
+
+          Purchase.where(created_at: ?)
+
+        %section
+
+          %h3 Answer to more advanced queries
+
+          %h4 What is total sales for each marketing campaigns in February?
+
+          %pre
+            %code
+              :preserve
+                Purchase.where(created_at: '2015-02-01'..'2015-03-01').
+                  group(:marketing_campaign).sum(:subtotal)
+
+          %h4 What is total sales for each week of February in the given marketing campaign?
+
+          %pre
+            %code
+              :preserve
+                Purchase.where(created_at: '2015-02-01'..'2015-03-01', marketing_campaign: id).
+                  group('week_of_month(created_at)').sum(:subtotal)
+          
+          
+          %section
+
+            %h3 Compile all requirements and concerns together
+
+
+          
+
+          %section
+
+            %h2 one query =&gt; one number
+            %h2
+              %strike
+                GROUP BY
+
+          %section
+            %pre
+              %code
+                :preserve
+                  marketing_campaigns.map do |campaign|
+                    total_sales(created_at: february_month, marketing_campaign: campaign)
+                  end
+
+                  weeks_of_february.map do |week|
+                    total_sales(created_at: week, marketing_campaign: selected_campaign)
+                  end
+
+                  result = []
+                  marketing_campaigns.each do |campaign|
+                    weeks_of_february.each do |week|
+                      result &lt;&lt; [ campaign, week, total_sales(created_at: week, marketing_campaign: campaign), total_purchases(created_at: week, marketing_campaign: campaign) ]
+                    end
+                  end
+
+          %section
+
+            %h3 Introduce object oriented design
+            %h4 (optional)
+
+            %pre
+              %code
+                :preserve
+                  def total_sales(filters = {})
+                    ApplicationMetrics.new(filters).total_sales
+                    # sum(:subtotal)
+                  end
+
+                  def total_purchases(filters = {})
+                    ApplicationMetrics.new(filters).total_purchases
+                    # count
+                  end
+
+                  def new_customers(filters = {})
+                    ApplicationMetrics.new(filters).new_customers
+                    # count("DISTINCT user_id")
+                  end
+
+          %section
+
+            %h3 Advantages
+
+            %ul
+              %li Any report aggregation and combination possible
+              %li SQL is kept simple: code is easier to write
+              %li All numbers across all your project are consistent
+              %li Single point of control
+              %li Better code reuse: You never start new report from scratch
+              %li Front-end is now decoupled from back-end
+
+          %section
+
+            %table
+              %thead
+                %tr
+                  %th
+                    Campaign
+                  %th
+                    \# Total Sales
+                  %th
+                    $ Total Sales
+                  %th New Customers
+              %tbody
+                %tr
+                  %td
+                    SFLY 15Q1 SA | Live 03/26/15
+                  %td
+                    545
+                  %td
+                    $13,183.17
+                  %td 
+                    238
+                %tr
+                  %td
+                    SFLY 15Q2 PP | Live 03/26/15
+                  %td
+                    247
+                  %td
+                    $10,424.52
+                  %td 184
+          %section
+            %h3 Disadvantages
+
+            %h2 Performance is going down
+
+          %section
+            
+            %h2 Cache is unmaintainable
+
+            %h3 10 * 1095 * 20 * 10 &asymp; 2_000_000 variants
+            %h3 Exponential growth
+            %h3 There are more numbers you can generate than data in your database
+
+          %section
+            %h3 Caching in reporting
+
+            %ul
+              %li 10 marking campaigns
+              %li 3 years = 1095 days
+              %li 20 product categories
+              %li 10 metrics
+
+          %section
+            %h3 Fighting performance concerns
+            %ul
+              %li Better to get accurate numbers slowly than random numbers fast
+              %li Unlike "GROUP BY" this technique is easier to parallelize
+              %li You are still not using SSD hard drive or what?
+
+          %section
+            %h3 Simplified Terminology
+
+            %ul
+              %li Filter
+              %li Metric
+              %li 
+                Operations
+                %ul
+                  %li count
+                  %li count + distinct
+                  %li sum
+                  %li average
+
+
+                
+
+          
+    %script{:src => "http://lab.hakim.se/reveal-js/lib/js/head.min.js"}
+    %script{:src => "http://lab.hakim.se/reveal-js/js/reveal.js"}
+    :javascript
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+      	controls: true,
+      	progress: true,
+      	history: true,
+      	center: true,
+
+      	theme: Reveal.getQueryHash().theme || 'simple', // available themes are in /css/theme
+      	transition: Reveal.getQueryHash().transition || 'fade', // default/cube/page/concave/zoom/linear/fade/none
+
+      	// Optional libraries used to extend on reveal.js
+      	dependencies: [
+      		// { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+      		{ src: 'http://lab.hakim.se/reveal-js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      		{ src: 'http://lab.hakim.se/reveal-js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      		{ src: 'http://lab.hakim.se/reveal-js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+      		// { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+      		// { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+      		// { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
+      		// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+      	]
+      });

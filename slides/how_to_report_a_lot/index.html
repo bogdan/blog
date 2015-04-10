@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang='en'>
+  <head>
+    <meta charset='utf-8'>
+    <title>Parsers</title>
+    <meta content='' name='description'>
+    <meta content='Bogdan Gusiev' name='author'>
+    <meta content='yes' name='apple-mobile-web-app-capable'>
+    <meta content='black-translucent' name='apple-mobile-web-app-status-bar-style'>
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' name='viewport'>
+    <link href='http://lab.hakim.se/reveal-js/css/reveal.css' rel='stylesheet'>
+    <link href='http://lab.hakim.se/reveal-js/css/theme/night.css' rel='stylesheet'>
+    <!-- For syntax highlighting -->
+    <link href='http://lab.hakim.se/reveal-js/lib/css/zenburn.css' rel='stylesheet'>
+    <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+    <script>
+      document.write( '<link rel="stylesheet" href="http://lab.hakim.se/reveal-js/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+    </script>
+    <style>
+      .yellow {
+        color: yellow; }
+      
+      .reveal pre code {
+        padding: 20px 5px;
+        font-size: 1.8em;
+        line-height: 1.3em; }
+      .reveal ul {
+        min-width: 50%; }
+      .reveal .red {
+        color: #ff2c2d; }
+      .reveal .green {
+        color: #17ff2e; }
+      .reveal .blue {
+        color: #1b91ff; }
+    </style>
+  </head>
+  <body>
+    <div class='reveal'>
+      <div class='slides'>
+        <section>
+          <h1>Parsers</h1>
+          <h4>Rails Router Example</h4>
+          <h3>Bogdan Gusiev</h3>
+          <h3>October 2013</h3>
+        </section>
+        <section>
+          <h1>P-A-R-S-E-R-S</h1>
+        </section>
+        <section>
+          <h3>Why?</h3>
+          <h3>Because best way to pass data from one App to another is</h3>
+          <h2 class='fragment highlight green'>Serialization</h2>
+          <h5>
+            <strike>COM</strike>
+            <strike>RMI</strike>
+          </h5>
+        </section>
+        <section>
+          <h3>One more less obvious reason</h3>
+          <h2 style='font-family: arial'>
+            ... сейчас обсуждаем возможность сделать конфу более технической.
+          </h2>
+          <h2>So this talk required to be</h2>
+          <h1 class='fragment highlight red'>hardcore</h1>
+        </section>
+        <section>
+          <h1>Plan</h1>
+          <ul>
+            <li>Easy Part</li>
+            <li>Classification</li>
+            <li>Parsers Theory</li>
+            <li>Simple examples</li>
+            <li>Live examples</li>
+          </ul>
+        </section>
+        <section>
+          <h3>The easiest way to build parser</h3>
+          <pre class='fragment'><code>bogdan@example.com&#x000A;</code></pre>
+          <div class='fragment'>
+            <h3>Regular Expression</h3>
+            <pre><code>\w+@\w+(\.\w+)+</code></pre>
+          </div>
+          <div class='fragment'>
+            <pre><code>/\A[^@]+@([^@\.]+\.)+[^@\.]+\z/ &#x000A;</code></pre>
+            <p>etc.</p>
+          </div>
+        </section>
+        <section>
+          <h3>Each regular expression can parse particular grammar</h3>
+          <h2>
+            What is a
+            <div class='highlight green'>grammar?</div>
+          </h2>
+        </section>
+        <section>
+          <h3>Regular expressions are great!</h3>
+          <h3>Their power is huge.</h3>
+          <h2>
+            But what is the
+            <div class='highlight red'>limit?</div>
+          </h2>
+        </section>
+        <section>
+          <h3>
+            Regular expressions can only be used to parse
+            <span class='green'>Regular grammars</span>
+          </h3>
+          <h2>
+            But what about
+            <span class='red'>Non-regular?</span>
+          </h2>
+        </section>
+        <section>
+          <h3>Regular expression can only parse something that could be parsed with one iteration</h3>
+          <br>
+          <br>
+          <br>
+          <div class='fragment'>
+            <h4>in other words</h4>
+            <h2>From Left to Right</h2>
+          </div>
+        </section>
+        <section>
+          <h3>Several obvious examples</h3>
+          <pre><code>+380(67)222-33-00&#x000A;bogdan@example.com&#x000A;192.168.0.1</code></pre>
+        </section>
+        <section>
+          <h2>In order to understand why</h2>
+          <h2>we need to get into the most boring part</h2>
+          <h1>The Theory</h1>
+        </section>
+        <section>
+          <h3>Grammar in Math is described via Generators concept.</h3>
+          Each generator represents a transformation from one symbol to group of other symbols
+        </section>
+        <section>
+          <h3>Regular Grammars</h3>
+          <pre><code>ab&#x000A;aab&#x000A;abb&#x000A;abbb&#x000A;aabb&#x000A;aaab</code></pre>
+          <h5>Regexp: a+b+</h5>
+          <pre><code class='ruby'>S -> aS&#x000A;S -> aR&#x000A;R -> bR&#x000A;R -> b</code></pre>
+          <ul>
+            <li>S,R - non-deterministic symbols</li>
+            <li>a,b - deterministic symbols</li>
+            <li>string is not considered final if it contains non-deterministic symbols</li>
+          </ul>
+        </section>
+        <section>
+          <h3>Regular grammar that describes an Email</h3>
+          <h5>(almost)</h5>
+          <pre><code>S -> [0-z]N&#x000A;N -> [0-z]N&#x000A;N -> @D&#x000A;D -> [0-z]D&#x000A;D -> [0-z].Z&#x000A;Z -> [0-z]Z&#x000A;Z -> [0-z]</code></pre>
+          <ul>
+            <li>S - start</li>
+            <li>N - name</li>
+            <li>D - domain</li>
+            <li>Z - zone</li>
+          </ul>
+        </section>
+        <section>
+          <h3>Is there a regular expression that parses this?</h3>
+          <pre><code class='ruby'>S -> aSb&#x000A;S -> ab</code></pre>
+          <pre><code>ab&#x000A;aabb&#x000A;aaabbb&#x000A;aaaabbbb&#x000A;</code></pre>
+        </section>
+        <section>
+          <h2>The answer is NO.</h2>
+          <h3>We can not parse such a simple case with regular expressions.</h3>
+        </section>
+        <section>
+          <h2>Regularity Criteria</h2>
+          <h3>Grammar is regular if it don't contain "recursive" generators.</h3>
+        </section>
+        <section>
+          <h3>So what to do?</h3>
+          <h2>Not sure</h2>
+          <h4>the only one thing we know is that regular expressions will not help</h4>
+          <pre style='font-size: 0.4em'><code class='ruby'>def match_aabb_pattern?(string)&#x000A;  string.each_char.with_index.each do |c, i|&#x000A;    case c&#x000A;    when 'a'&#x000A;      count_a += 1&#x000A;    when 'b'&#x000A;      return count_a == string.size - i - 1&#x000A;    else&#x000A;      return false&#x000A;    end&#x000A;  end&#x000A;  return false&#x000A;end&#x000A;</code></pre>
+        </section>
+        <section>
+          <h2>Regular Expressions</h2>
+          <h1>
+            <span class='highlight green'>Powers</span>
+            <span>&amp;</span>
+            <span class='highlight red'>Limits</span>
+          </h1>
+        </section>
+        <section>
+          <h2>Grammars/Parsers can be</h2>
+          <h1>
+            <span class='highlight green'>Regular</span>
+            <span>&amp;</span>
+            <span class='highlight red'>Recursive</span>
+          </h1>
+        </section>
+        <section>
+          <h2>Getting close to real world examples</h2>
+          <img src='http://monosnap.com/image/1BfsQy5LwfhC4khKNTLjvTvnx2M58A.png'>
+          <h2>Regex are still possible</h2>
+        </section>
+        <section>
+          <h2>But not really in the long term</h2>
+          <img src='http://monosnap.com/image/7wOQJ9xYqaX6oxeCvOUZGDjT4Gq8Ve.png'>
+        </section>
+        <section>
+          <h2>Start from Tokenizing</h2>
+          <pre><code>"12*(2+8/(13.5+7))" =>&#x000A;[&#x000A;  '12', '*', '(', '2', '+', '8' '/', &#x000A;  '(', '13.5', '+', '7', ')', ')'&#x000A;]&#x000A;&#x000A;</code></pre>
+        </section>
+        <section>
+          <h2>Builing Abstract Syntax Tree (AST)</h2>
+          <h4>The Hardest Part</h4>
+          <pre>['12', <span class='highlight yellow'>'*'</span>, <span class='highlight green'>[</span><span class='highlight red'>'('</span>, '2', '+', '8' '/', '(', '13.5', '+', '7', ')', <span class='highlight red'>')'</span><span class='highlight green'>]</span> ]&#x000A;[left = '12', <span class='highlight yellow'>operator</span>, right = <span class='highlight green'>[</span>...<span class='highlight green'>]</span>]&#x000A;&#x000A;['12', '*', [ '2', '+', '8' '/', '(', '13.5', '+', '7', ')'] ]&#x000A;Cleanup useless brackets <span class="highlight red">( )</span>&#x000A;&#x000A;&#x000A;['12', '*', [ '2', <span class="highlight yellow">'+'</span>, <span class="highlight green">[</span> '8' '/', '(', '13.5', '+', '7', ')' <span class="highlight green">]</span> ] ]&#x000A;# Repeat for right and left node&#x000A;&#x000A;['12', '*', [ '2', '+', [ '8', <span class="highlight yellow">'/'</span>, <span class="highlight green">[</span> '13.5', '+', '7', <span class="highlight green">]</span> ]]]&#x000A;# Repeat for right and left node</pre>
+          <ol>
+            <li>Find lowest priority operator</li>
+            <li>Split Array into 3 parts: left operand, operator, right operand</li>
+            <li>Repeat 1-3 for before part and after part</li>
+          </ol>
+        </section>
+        <section>
+          <h2>Work with AST is easy</h2>
+          <pre><code class='ruby'>def evaluate(ast)&#x000A;  if ast.is_a?(Array)&#x000A;    left, operator, right = ast&#x000A;    evaluate(left).send(operator, evaluate(right))&#x000A;  else&#x000A;    ast.to_f&#x000A;  end&#x000A;end&#x000A;</code></pre>
+        </section>
+        <section>
+          <h2>After such a heavy infrastructure</h2>
+          <h2>it is easies to support</h2>
+          <img src='http://monosnap.com/image/7wOQJ9xYqaX6oxeCvOUZGDjT4Gq8Ve.png'>
+        </section>
+        <section>
+          <h2>Building AST</h2>
+          <h2>is Hard problem</h2>
+          <h2>But you are able to use tools</h2>
+        </section>
+        <section>
+          <h2>Recursive parsers library</h2>
+          <ul>
+            <li>treetop - a little easier, a bit slower</li>
+            <li>racc - more hard core, used in Rails Router</li>
+          </ul>
+        </section>
+        <section>
+          <h2>Rails router sytax</h2>
+          <pre><code>/users/:id(.:format)&#x000A;(/locale/:locale)/users/:id(.:format)&#x000A;(/locale/:locale(/currency/:currency))/users/:id(.:format)&#x000A;</code></pre>
+          <h3>Regularity criteria can be broken.</h3>
+        </section>
+        <section>
+          <h3>This is a huge problem and require router to be parsed by recursive parser.</h3>
+        </section>
+        <section>
+          <h2>Route tokenizer:</h2>
+          <pre><code>/users/:id(.:format)</code></pre>
+          <table>
+            <tr>
+              <th>Token</th>
+              <th>Type</th>
+            </tr>
+            <tr>
+              <td>/</td>
+              <td>SLASH</td>
+            </tr>
+            <tr>
+              <td>users</td>
+              <td>LITERAL</td>
+            </tr>
+            <tr>
+              <td>/</td>
+              <td>SLASH</td>
+            </tr>
+            <tr>
+              <td>:id</td>
+              <td>SYMBOL</td>
+            </tr>
+            <tr>
+              <td>(</td>
+              <td>LPAREN</td>
+            </tr>
+            <tr>
+              <td>.</td>
+              <td>DOT</td>
+            </tr>
+            <tr>
+              <td>:format</td>
+              <td>SYMBOL</td>
+            </tr>
+            <tr>
+              <td>)</td>
+              <td>RPAREN</td>
+            </tr>
+          </table>
+        </section>
+        <section>
+          <h2>Fragments from parser</h2>
+          <a href='https://github.com/rails/rails/blob/master/actionpack/lib/action_dispatch/journey/parser.y'>
+            github.com/rails/rails/blob/master/actionpack/lib/action_dispatch/journey/parser.y
+          </a>
+          <h4>They are so severe that created their own syntax</h4>
+          <pre><div class='fragment'>
+            &nbsp;
+            group
+            : LPAREN expressions RPAREN { ... }
+            ;
+          </div>
+          <div class='fragment'>
+            expressions
+            : expressions expression  { ... }
+            | expression              { ... }
+            | or
+            ;
+          </div>
+          <div class='fragment'>
+            # Simplied!
+            expression
+            : symbol
+            | literal
+            | slash
+            | dot
+            | group
+            | star
+            ;
+          </div></pre>
+        </section>
+        <section>
+          <h2>Parser markup is compiled to ruby</h2>
+          <pre><code>racc -l -o parser.rb parser.y&#x000A;</code></pre>
+          <h3>
+            <a href='https://github.com/tenderlove/racc'>github.com/tenderlove/racc</a>
+          </h3>
+          <a href='https://github.com/rails/rails/blob/master/actionpack/lib/action_dispatch/journey/parser.rb'>
+            github.com/rails/rails/blob/master/actionpack/lib/action_dispatch/journey/parser.rb
+          </a>
+        </section>
+        <section>
+          <h2>Ukraine is having a hard time</h2>
+          <p>
+            Software developers have unique opportunity to support economics of our country.
+            We are the only one that can really bring money to Ukraine.
+          </p>
+          <h2>So, lets do our work better</h2>
+          <h5>And waste less money on new Smart Phones</h5>
+        </section>
+        <section>
+          <h2>Thanks for your attension</h2>
+          <h3>
+            <a href='http://gusiev.com'>http://gusiev.com</a>
+          </h3>
+          <h3>
+            <a href='http://github.com/bogdan'>http://github.com/bogdan</a>
+          </h3>
+          <h3>
+            <a href='http://gusiev.com/slides/parsers'>http://gusiev.com/slides/parsers</a>
+          </h3>
+        </section>
+      </div>
+    </div>
+    <script src='http://lab.hakim.se/reveal-js/lib/js/head.min.js'></script>
+    <script src='http://lab.hakim.se/reveal-js/js/reveal.js'></script>
+    <script>
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+      	controls: true,
+      	progress: true,
+      	history: true,
+      	center: true,
+      
+      	theme: Reveal.getQueryHash().theme || 'simple', // available themes are in /css/theme
+      	transition: Reveal.getQueryHash().transition || 'fade', // default/cube/page/concave/zoom/linear/fade/none
+      
+      	// Optional libraries used to extend on reveal.js
+      	dependencies: [
+      		// { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+      		{ src: 'http://lab.hakim.se/reveal-js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      		{ src: 'http://lab.hakim.se/reveal-js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      		{ src: 'http://lab.hakim.se/reveal-js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+      		// { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+      		// { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+      		// { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
+      		// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+      	]
+      });
+    </script>
+  </body>
+</html>
