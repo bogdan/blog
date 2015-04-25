@@ -22,7 +22,7 @@
         pre
           code
             padding: 20px 5px
-            font-size: 1.80em
+            font-size: 1.00em
             line-height: 1.3em
         ul
           min-width: 50%
@@ -38,22 +38,24 @@
         %section
           %h1 How To Report a LOT?
           %h3 Bogdan Gusiev
-          %h3 October 2013
+          %h3 May 2015
 
         %section
           %h1 Report?
         %section
           %h3 Why to Report?
           
-          %h2 Activity.where("created_at &gt; ?", 1.day.ago).count # =&gt; ?
-
-          %ul
-            %li 10
-            %li 1000
-            %li 100000
-
+          %pre
+            %code
+              :preserve
+                Activity.where(
+                  "created_at &gt; ?", 1.day.ago
+                ).count # =&gt; ?
         %section
-          %h1 You can know will all data happening in your application every day
+          %h2 At some point
+          %h3 You can know about every single event happening in your application every day
+          %h2 At another point you can't
+
 
 
         %section
@@ -63,10 +65,9 @@
             %code
               User.that_wants_reporting.count # =&gt; ?
 
-          %ul
-            %li 3
-            %li 10
-          
+          %h3 At some point you can pull all all requierd number as they are needed
+          %h3 At some point you can't
+
         %section
           %h1 Plan
 
@@ -80,20 +81,26 @@
 
 
         %section
+          %h3 Business speaks with you like this:
+
+          %p Good ones
+          %ul
+            %li How many new users do we aquire a month at average?
+            %li How much sales did we get from this advertising campaign?
+
+          %p And bad ones
+          %ul
+            %li Please visualise the data.
+            %li Can I see how we are performing overall in the last time?
+
+        %section
           %h3 Basic Data Operations in Reporting
 
           %ul
             %li aggregate (sql: "group by")
+            %li filter (sql: "where")
             %li count
             %li sum
-        
-        %section
-          %h3 Business never speaks in that language
-
-          %ul
-            %li Graph
-            %li How many new users do we aquire a month at average?
-            %li table
 
         %section
           %h3 The basic model of doing all that
@@ -102,60 +109,83 @@
         %section
           %h3 Stages
 
-          %ul
+          %ol
             %li At first you learn: SQL, CSV, Graphs, S3 file uploading
             %li Then you feel like an Reporting Machine
-            %li No thanks...
+            %li And then you say: No thanks...
 
-        %section
-          %h3 No automation centralized automation problems:
-          
         %section
           %h3 Let the machine do the work
           %h4 Let you become a software developer again
 
           [machine in a middle graph]
 
+        %section
+          %h2 Requirement to unification and code reuse
+          
         %section 
           %h3 Problems:
-
-          %h5 Same metric can be calculated differently in different parts of project
 
           %h3 Total Sales = ?
           %pre
             %code
               :preserve
-                # file1.rb
-                Purchase.group("month(created_at)").sum(:subtotal)
-                # file2.rb
-                Purchase.group(:marketing_campaign).sum(:subtotal)
-
-          %pre
+                Purchase.group("month(created_at)").
+                  sum(:subtotal)
+          %pre.fragment
             %code
               :preserve
-                Purchase.group(:marketing_campaign).successfully_delivered.sum(:subtotal)
+                Purchase.group(:marketing_campaign).
+                  successfully_delivered.sum(:subtotal)
+          %pre.fragment
+            %code
+              :preserve
+                Purchase.
+                  group(:marketing_campaign, "month(completed_at)").
+                  successfully_delivered.
+                  sum(:subtotal)
 
-          
+
+        %section
           %h3 Does it include a returned sales or not?
           %img{src: "http://monosnap.com/image/8mWPDzrlTJaQEaY9jMR6b9me8yz4zs.png"}
+
+        %section
+          %h5 Same metric can be calculated differently in different parts of project
 
         %section
           %h3 
             Each time person wants to see "Total Sales" there should be only one way of calculating it.
           %h3
-            If there is a place where sales number needs to include "returned sales", it should be named differently
+            If there is a place where sales number needs to be calculated differently, 
+          
+          %h2 it should be named differently
 
         %section
           %h3 "One ring to rule them all!"
             
 
-          [Total Sales queries from one place diagram]
+          %pre
+            %code.ruby
+              :preserve
+                {
+                  identifier: 'total_sales',
+                  name: 'Total Sales',
+                  description: 'Number of successfully delivered sales'
+                  how_to_calculate: -> () { 
+                    # I'll tell a little later
+                  } 
+                }
+
 
 
         %section
           %h3 We need to organize aggregation and multiple filters for the same metric:
 
-          Purchase.where(created_at: ?)
+          %pre
+            %code.ruby
+              :preserve
+                Purchase.where(created_at: ?)
 
         %section
 
@@ -166,161 +196,174 @@
           %pre
             %code
               :preserve
-                Purchase.where(created_at: '2015-02-01'..'2015-03-01').
-                  group(:marketing_campaign).sum(:subtotal)
-
+                Purchase.where(
+                  created_at: '2015-02-01'..'2015-03-01'
+                ).group(:marketing_campaign).sum(:subtotal)
+        %section
           %h4 What is total sales for each week of February in the given marketing campaign?
 
           %pre
             %code
               :preserve
-                Purchase.where(created_at: '2015-02-01'..'2015-03-01', marketing_campaign: id).
-                  group('week_of_month(created_at)').sum(:subtotal)
+                Purchase.where(
+                  created_at: '2015-02-01'..'2015-03-01', 
+                  marketing_campaign: id,
+                ).group('week(created_at)').sum(:subtotal)
           
           
-          %section
-
-            %h3 Compile all requirements and concerns together
-
-
           
+        %section
 
-          %section
+          %h3 Compile all requirements and concerns together
 
-            %h2 one query =&gt; one number
-            %h2
-              %strike
-                GROUP BY
 
-          %section
-            %pre
-              %code
-                :preserve
-                  marketing_campaigns.map do |campaign|
-                    total_sales(created_at: february_month, marketing_campaign: campaign)
+        
+
+        %section
+
+          %h2 one query =&gt; one number
+          %h2
+            %strike
+              GROUP BY
+
+        %section
+          %pre
+            %code
+              :preserve
+                marketing_campaigns.map do |campaign|
+                  total_sales(created_at: february_month, marketing_campaign: campaign)
+                end
+
+                weeks_of_february.map do |week|
+                  total_sales(created_at: week, marketing_campaign: selected_campaign)
+                end
+
+        %section
+          %pre
+            %code.ruby
+              :preserve
+                result = []
+                marketing_campaigns.each do |campaign|
+                  weeks_of_february.each do |week|
+                    result &lt;&lt; [ 
+                      campaign,
+                      week, 
+                      total_purchases(created_at: week, marketing_campaign: campaign) 
+                      total_sales(created_at: week, marketing_campaign: campaign),
+                      new_customers(created_at: week, marketing_campaign: campaign)
+                    ]
+                  end
+                end
+
+        %section
+
+          %table
+            %thead
+              %tr
+                %th Week
+                %th
+                  Campaign
+                %th
+                  \# Total Sales
+                %th
+                  $ Total Sales
+                %th New Customers
+            %tbody
+              - ['1st', '2nd', '3rd'].each do |week|
+                - ['SF 15Q1 SA', 'SF 25Q2 PP '].each do |cmp|
+                  %tr
+                    %td=week
+                    %td
+                      %nobr= cmp
+                    %td
+                      = a = rand(1000)
+                    %td= "$#{((a * rand(3)/100) +1).to_i},#{100+ rand(900)}.#{rand(100)}"
+                    %td 
+                      = (a * 0.8).to_i
+        %section
+
+          %h3 Introduce object oriented design
+
+          %pre
+            %code.ruby
+              :preserve
+                class ApplicationMetrics
+                  def initialize(filters)
+                    @filters = filters
                   end
 
-                  weeks_of_february.map do |week|
-                    total_sales(created_at: week, marketing_campaign: selected_campaign)
+                  def purchases_scope
+                    Purchases.successfully_delivered.
+                      where(delivered_at: @filters[:period]).
+                      where(marketing_campaign_id: @filters[:marketing_campaign])
                   end
 
-                  result = []
-                  marketing_campaigns.each do |campaign|
-                    weeks_of_february.each do |week|
-                      result &lt;&lt; [ campaign, week, total_sales(created_at: week, marketing_campaign: campaign), total_purchases(created_at: week, marketing_campaign: campaign) ]
-                    end
+                  def total_sales
+                    purchases_scope.sum(:subtotal)
                   end
-
-          %section
-
-            %h3 Introduce object oriented design
-            %h4 (optional)
-
-            %pre
-              %code
-                :preserve
-                  def total_sales(filters = {})
-                    ApplicationMetrics.new(filters).total_sales
-                    # sum(:subtotal)
+                  def total_purchases
+                    purchases_scope.count
                   end
-
-                  def total_purchases(filters = {})
-                    ApplicationMetrics.new(filters).total_purchases
-                    # count
+                  def new_customers
+                    purchases_scope.count("DISTINCT user_id")
                   end
+        %section
 
-                  def new_customers(filters = {})
-                    ApplicationMetrics.new(filters).new_customers
-                    # count("DISTINCT user_id")
-                  end
+          %h3 Advantages
 
-          %section
+          %ul
+            %li Any report aggregation and combination possible
+            %li SQL is kept simple: code is easier to write
+            %li All numbers across all your project are consistent
+            %li Single point of control
+            %li Better code reuse: You never start new report from scratch
+            %li Front-end is now decoupled from back-end
 
-            %h3 Advantages
+        %section
+          %h3 Disadvantages
 
-            %ul
-              %li Any report aggregation and combination possible
-              %li SQL is kept simple: code is easier to write
-              %li All numbers across all your project are consistent
-              %li Single point of control
-              %li Better code reuse: You never start new report from scratch
-              %li Front-end is now decoupled from back-end
+          %h2 Performance is going down
 
-          %section
+        %section
+          
+          %h2 Cache is unmaintainable
 
-            %table
-              %thead
-                %tr
-                  %th
-                    Campaign
-                  %th
-                    \# Total Sales
-                  %th
-                    $ Total Sales
-                  %th New Customers
-              %tbody
-                %tr
-                  %td
-                    SFLY 15Q1 SA | Live 03/26/15
-                  %td
-                    545
-                  %td
-                    $13,183.17
-                  %td 
-                    238
-                %tr
-                  %td
-                    SFLY 15Q2 PP | Live 03/26/15
-                  %td
-                    247
-                  %td
-                    $10,424.52
-                  %td 184
-          %section
-            %h3 Disadvantages
+          %h3 10 * 1095 * 20 * 10 &asymp; 2_000_000 variants
+          %h3 Exponential growth
+          %h3 There are more numbers you can generate than data in your database
 
-            %h2 Performance is going down
+        %section
+          %h3 Caching in reporting
 
-          %section
-            
-            %h2 Cache is unmaintainable
+          %ul
+            %li 10 marking campaigns
+            %li 3 years = 1095 days
+            %li 20 product categories
+            %li 10 metrics
 
-            %h3 10 * 1095 * 20 * 10 &asymp; 2_000_000 variants
-            %h3 Exponential growth
-            %h3 There are more numbers you can generate than data in your database
+        %section
+          %h3 Fighting performance concerns
+          %ul
+            %li Better to get accurate numbers slowly than random numbers fast
+            %li Unlike "GROUP BY" this technique is easier to parallelize
+            %li You are still not using SSD hard drive or what?
 
-          %section
-            %h3 Caching in reporting
+        %section
+          %h3 Simplified Terminology
 
-            %ul
-              %li 10 marking campaigns
-              %li 3 years = 1095 days
-              %li 20 product categories
-              %li 10 metrics
-
-          %section
-            %h3 Fighting performance concerns
-            %ul
-              %li Better to get accurate numbers slowly than random numbers fast
-              %li Unlike "GROUP BY" this technique is easier to parallelize
-              %li You are still not using SSD hard drive or what?
-
-          %section
-            %h3 Simplified Terminology
-
-            %ul
-              %li Filter
-              %li Metric
-              %li 
-                Operations
-                %ul
-                  %li count
-                  %li count + distinct
-                  %li sum
-                  %li average
+          %ul
+            %li Filter
+            %li Metric
+            %li 
+              Operations
+              %ul
+                %li count
+                %li count + distinct
+                %li sum
+                %li average
 
 
-                
+              
 
           
     %script{:src => "http://lab.hakim.se/reveal-js/lib/js/head.min.js"}
