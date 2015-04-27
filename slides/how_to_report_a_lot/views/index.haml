@@ -36,9 +36,9 @@
     .reveal
       .slides
         %section
-          %h1 How To Report a LOT?
+          %h2 How To Report 
+          %h1 a LOT?
           %h3 Bogdan Gusiev
-          %h3 May 2015
 
         %section
           %h1 Report?
@@ -48,23 +48,28 @@
           %pre
             %code
               :preserve
-                Activity.where(
-                  "created_at &gt; ?", 1.day.ago
-                ).count # =&gt; ?
+                ActiveRecord::Base.send(:subclasses).map do |klass|
+                  klass.where(
+                    "created_at &gt; ?", 1.day.ago
+                  ).count
+                end.sum
         %section
           %h2 At some point
           %h3 You can know about every single event happening in your application every day
-          %h2 At another point you can't
+
+        %section
+          %h1 At another point you can't
 
 
 
         %section
-          %h2 a LOT?
+          %h2.red a LOT?
+              
 
-          %pre
-            %code
-              User.that_wants_reporting.count # =&gt; ?
+          %h2 How many people want reports?
 
+    
+        %section
           %h3 At some point you can pull all all requierd number as they are needed
           %h3 At some point you can't
 
@@ -121,22 +126,26 @@
           [machine in a middle graph]
 
         %section
-          %h2 Requirement to unification and code reuse
+          %h2 Requirement of unification and code reuse
           
         %section 
           %h3 Problems:
 
           %h3 Total Sales = ?
+          
+          Junior Developer:
           %pre
             %code
               :preserve
                 Purchase.group("month(created_at)").
                   sum(:subtotal)
+          Middle Developer:
           %pre.fragment
             %code
               :preserve
                 Purchase.group(:marketing_campaign).
                   successfully_delivered.sum(:subtotal)
+          Senior Developer:
           %pre.fragment
             %code
               :preserve
@@ -151,7 +160,8 @@
           %img{src: "http://monosnap.com/image/8mWPDzrlTJaQEaY9jMR6b9me8yz4zs.png"}
 
         %section
-          %h5 Same metric can be calculated differently in different parts of project
+          %h3 Same metric can be calculated differently 
+          %h3 in different parts of project
 
         %section
           %h3 
@@ -173,10 +183,17 @@
                   name: 'Total Sales',
                   description: 'Number of successfully delivered sales'
                   how_to_calculate: -> () { 
-                    # I'll tell a little later
+                    # comming soon
                   } 
                 }
 
+        %section
+          %h2 How to Calculate a metric?
+
+          %ul
+            %li Be Reusable
+            %li Support Multiple Filters
+            %li Support all basic operations
 
 
         %section
@@ -185,7 +202,14 @@
           %pre
             %code.ruby
               :preserve
-                Purchase.where(created_at: ?)
+                Purchase.where(
+                  created_at: ?,
+                  marketing_campaign: ?,
+                  users: {gender: ?},
+                  status: ?,         
+                  first_time_buyer: ?,
+                  items: { product_category: ? }
+                ).joins(...)
 
         %section
 
@@ -211,6 +235,11 @@
                 ).group('week(created_at)').sum(:subtotal)
           
           
+        %section
+          %h4 How many first time buyers does that campaign bring?
+          %h4 How offten women buy men's clothes?
+          %h4 How much did we sell for each product category this black friday comparing to previous one?
+          %h4 What is the average order value of first time buyers in non-first time buyers?
           
         %section
 
