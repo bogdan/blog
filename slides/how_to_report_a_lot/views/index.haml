@@ -54,11 +54,12 @@
                   ).count
                 end.sum
         %section
-          %h2 At some point
-          %h3 You can know about every single event happening in your application every day
+          %h2 At some point you know everything
+          %aside.notes
+            You know about every single event happening in your application every day.
 
         %section
-          %h1 At another point you can't
+          %h2 At another point you can't do it anymore
 
 
 
@@ -68,10 +69,19 @@
 
           %h2 How many people want reports?
 
+          %aside.notes
+            %ul
+              %li not how big numbers are
+              %li not how often needed
+
     
         %section
-          %h3 At some point you can pull all all requierd number as they are needed
-          %h3 At some point you can't
+          %h3 How many people 
+          %h3 would it be hard to support?
+
+          %aside.notes
+            %p At some point you can pull all required number as they are needed
+            %p At some point you can't
 
         %section
           %h1 Plan
@@ -102,10 +112,18 @@
           %h3 Basic Data Operations in Reporting
 
           %ul
-            %li aggregate (sql: "group by")
-            %li filter (sql: "where")
-            %li count
-            %li sum
+            %li How many ...?
+            %li What is a total amount of ...?
+            %li ... in this scope/date range
+            %li ... for each period/category
+          .fragment
+            %br
+            %h4 In the SQL
+            %ul
+              %li count(...)
+              %li sum(...)
+              %li group by ...
+              %li where ...
 
         %section
           %h3 The basic model of doing all that
@@ -126,7 +144,8 @@
           [machine in a middle graph]
 
         %section
-          %h2 Requirement of unification and code reuse
+          %h2 Requirement of unification 
+          %h2 and code reuse
           
         %section 
           %h3 Problems:
@@ -150,7 +169,7 @@
             %code
               :preserve
                 Purchase.
-                  group(:marketing_campaign, "month(completed_at)").
+                  group(:marketing_campaign, "month(paid_at)").
                   successfully_delivered.
                   sum(:subtotal)
 
@@ -160,16 +179,20 @@
           %img{src: "http://monosnap.com/image/8mWPDzrlTJaQEaY9jMR6b9me8yz4zs.png"}
 
         %section
+
           %h3 Same metric can be calculated differently 
           %h3 in different parts of project
 
+
         %section
-          %h3 
-            Each time person wants to see "Total Sales" there should be only one way of calculating it.
-          %h3
-            If there is a place where sales number needs to be calculated differently, 
-          
-          %h2 it should be named differently
+          %h3 Same Name =&gt; Same Logic
+          %h3 Different Logic =&gt; Different Name
+          %h3 No per-person names and reports
+          %aside.notes
+            %p Each time person wants to see "Total Sales" there should be only one way of calculating it.
+            %p If there is a place where sales number needs to be calculated differently, 
+            
+            %p it should be named differently
 
         %section
           %h3 "One ring to rule them all!"
@@ -181,7 +204,7 @@
                 {
                   identifier: 'total_sales',
                   name: 'Total Sales',
-                  description: 'Number of successfully delivered sales'
+                  description: 'Amount ($) of successfully delivered sales'
                   how_to_calculate: -> () { 
                     # comming soon
                   } 
@@ -197,7 +220,7 @@
 
 
         %section
-          %h3 We need to organize aggregation and multiple filters for the same metric:
+          %h3 How to Be organized?
 
           %pre
             %code.ruby
@@ -210,6 +233,7 @@
                   first_time_buyer: ?,
                   items: { product_category: ? }
                 ).joins(...)
+          %aside.notes We need to organize aggregation and multiple filters for the same metric:
 
         %section
 
@@ -239,7 +263,7 @@
           %h4 How many first time buyers does that campaign bring?
           %h4 How offten women buy men's clothes?
           %h4 How much did we sell for each product category this black friday comparing to previous one?
-          %h4 What is the average order value of first time buyers in non-first time buyers?
+          %h4 What is the average order value of first time buyers and non-first time buyers?
           
         %section
 
@@ -311,6 +335,13 @@
                       = (a * 0.8).to_i
         %section
 
+          %h2 Tables are your friends
+
+          %aside.notes
+            Any data you pull could be put into a table.
+
+        %section
+
           %h3 Introduce object oriented design
 
           %pre
@@ -349,17 +380,18 @@
             %li Front-end is now decoupled from back-end
 
         %section
+          %h3 Being consistent = Gain Trust
+
+          %h3 Spring = March + April + May
+          %h3 Week = Sn + Mn + Ts + Wd + Th + Fr + St
+
+          %aside.notes
+            If DST would happen within a week...
+            Users will not trust you unless you gonna be accurate.
+        %section
           %h3 Disadvantages
 
           %h2 Performance is going down
-
-        %section
-          
-          %h2 Cache is unmaintainable
-
-          %h3 10 * 1095 * 20 * 10 &asymp; 2_000_000 variants
-          %h3 Exponential growth
-          %h3 There are more numbers you can generate than data in your database
 
         %section
           %h3 Caching in reporting
@@ -371,11 +403,23 @@
             %li 10 metrics
 
         %section
+          
+          %h2 Cache is unmaintainable
+
+          %h3 10  * 1095 * 20 * 10 &asymp; 2_000_000 variants
+
+          %aside.notes
+            %p Exponential growth
+            %p There are more numbers you can generate than data in your database
+
+        %section
           %h3 Fighting performance concerns
           %ul
             %li Better to get accurate numbers slowly than random numbers fast
             %li Unlike "GROUP BY" this technique is easier to parallelize
             %li You are still not using SSD hard drive or what?
+          %aside.note
+            Your customers will not trust your software if you would change number by 1
 
         %section
           %h3 Simplified Terminology
@@ -396,7 +440,7 @@
 
           
     %script{:src => "http://lab.hakim.se/reveal-js/lib/js/head.min.js"}
-    %script{:src => "http://lab.hakim.se/reveal-js/js/reveal.js"}
+    %script{:src => "/reveal.js"}
     :javascript
       // https://github.com/hakimel/reveal.js#configuration
       Reveal.initialize({
@@ -414,8 +458,8 @@
       		{ src: 'http://lab.hakim.se/reveal-js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
       		{ src: 'http://lab.hakim.se/reveal-js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
       		{ src: 'http://lab.hakim.se/reveal-js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+          { src: '/plugin/notes/notes.js', async: true }
       		// { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
-      		// { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
       		// { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
       		// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
       	]
