@@ -32,6 +32,13 @@
           color: #17ff2e
         .blue
           color: #1b91ff
+        .left
+          float: left
+        .right
+          float: right
+        .clearfix
+          overflow: hidden
+        
   %body
     .reveal
       .slides
@@ -39,9 +46,34 @@
           %h2 How To Report 
           %h1 a LOT?
           %h3 Bogdan Gusiev
+        %section
+          %h3 Bogdan G.
+
+          %ul
+            %li.fragment in IT for ~ 8 years
+            %li.fragment 6 of them with Ruby and Rails
+            %li.fragment 3 of them in Talkable Inc.
+        %section
+          %h2 Talkable Inc.
+            
+          .clearfix
+            .left
+              %img{style: 'width: 450px', src: "http://take.ms/7KhUZ"}
+              %br
+              %img{style: 'width: 450px', src: "http://take.ms/TZ8UV"}
+            .right
+              %img{style: 'width: 450px', src: "http://take.ms/s1pvm"}
+              %br
+              %img{style: 'width: 450px', src: "http://take.ms/i2EFe"}
+
+            
+
 
         %section
           %h1 Report?
+        
+          %aside.notes
+            Let's have a quick overview on what is a report
         %section
           %h3 Why to Report?
           
@@ -100,7 +132,7 @@
 
           %p Good ones
           %ul
-            %li How many new users do we aquire a month at average?
+            %li How many new users do we acquire a month at average?
             %li How much sales did we get from this advertising campaign?
 
           %p And bad ones
@@ -152,19 +184,19 @@
 
           %h3 Total Sales = ?
           
-          Junior Developer:
-          %pre
-            %code
-              :preserve
-                Purchase.group("month(created_at)").
-                  sum(:subtotal)
-          Middle Developer:
+          1st Developer:
           %pre.fragment
             %code
               :preserve
                 Purchase.group(:marketing_campaign).
+                  sum(:subtotal)
+          2nd Developer:
+          %pre.fragment
+            %code
+              :preserve
+                Purchase.group("month(created_at)").
                   successfully_delivered.sum(:subtotal)
-          Senior Developer:
+          3rd Developer:
           %pre.fragment
             %code
               :preserve
@@ -173,6 +205,9 @@
                   successfully_delivered.
                   sum(:subtotal)
 
+        %section
+          %h3 No one database knows about
+          %h2 Daylight Saving Time
 
         %section
           %h3 Does it include a returned sales or not?
@@ -265,6 +300,9 @@
           %h4 How much did we sell for each product category this black friday comparing to previous one?
           %h4 What is the average order value of first time buyers and non-first time buyers?
           
+          %aside.notes
+            All these term rotate around in your head like a snowball of mess at some point.
+
         %section
 
           %h3 Compile all requirements and concerns together
@@ -287,10 +325,31 @@
                   total_sales(created_at: february_month, marketing_campaign: campaign)
                 end
 
-                weeks_of_february.map do |week|
+                february_month.each_week.map do |week|
                   total_sales(created_at: week, marketing_campaign: selected_campaign)
                 end
 
+
+        %section
+          %h3 Filter: 
+          %h3 detailed (for each) or overall (scope) 
+
+          %pre
+            %code.ruby
+              :preserve
+                campaigns = Campaign.where(id: [22,81,74]) #selected by user
+                total_sales(marketing_campaigns: campaigns)
+
+                campaigns.map do |campaign|
+                  total_sales(marketing_campaigns: campaign)
+                end
+          %aside.notes
+            %p Example: 
+            %p For each of selected campaigns 
+            %p vs 
+            %p in the scope of selected campaigns
+
+                
         %section
           %pre
             %code.ruby
@@ -303,7 +362,7 @@
                       week, 
                       total_purchases(created_at: week, marketing_campaign: campaign) 
                       total_sales(created_at: week, marketing_campaign: campaign),
-                      new_customers(created_at: week, marketing_campaign: campaign)
+                      unique_buyers(created_at: week, marketing_campaign: campaign)
                     ]
                   end
                 end
@@ -320,7 +379,7 @@
                   \# Total Sales
                 %th
                   $ Total Sales
-                %th New Customers
+                %th Number of Buyers
             %tbody
               - ['1st', '2nd', '3rd'].each do |week|
                 - ['SF 15Q1 SA', 'SF 25Q2 PP '].each do |cmp|
@@ -342,7 +401,8 @@
 
         %section
 
-          %h3 Introduce object oriented design
+          %h2 Implementation
+          %h4 OO Design is optional
 
           %pre
             %code.ruby
@@ -351,33 +411,42 @@
                   def initialize(filters)
                     @filters = filters
                   end
-
-                  def purchases_scope
-                    Purchases.successfully_delivered.
-                      where(delivered_at: @filters[:period]).
-                      where(marketing_campaign_id: @filters[:marketing_campaign])
-                  end
-
                   def total_sales
                     purchases_scope.sum(:subtotal)
                   end
                   def total_purchases
                     purchases_scope.count
                   end
-                  def new_customers
+                  def unique_buyers
                     purchases_scope.count("DISTINCT user_id")
                   end
+                  private
+                  def purchases_scope
+                    Purchases.successfully_delivered.
+                      where(paid_at: @filters[:period]).
+                      where(marketing_campaign_id: @filters[:marketing_campaign])
+                  end
+
         %section
 
           %h3 Advantages
 
           %ul
-            %li Any report aggregation and combination possible
-            %li SQL is kept simple: code is easier to write
-            %li All numbers across all your project are consistent
+            %li Flexibility
+            %li Code is simple
+            %li Consistency
             %li Single point of control
-            %li Better code reuse: You never start new report from scratch
-            %li Front-end is now decoupled from back-end
+            %li Code reuse
+            %li Front-end is decoupeled
+          %aside.notes
+            
+            %ul
+              %li Any report aggregation and combination possible
+              %li SQL is kept simple: code is easier to write
+              %li All numbers across all your project are consistent
+              %li Single point of control
+              %li Better code reuse: You never start new report from scratch
+              %li Front-end is now decoupled from back-end
 
         %section
           %h3 Being consistent = Gain Trust
@@ -386,6 +455,9 @@
           %h3 Week = Sn + Mn + Ts + Wd + Th + Fr + St
 
           %aside.notes
+            Customers can be very captious.
+            If you show them numbers they do not like, 
+            even small mistake 0.1% can break their trust.
             If DST would happen within a week...
             Users will not trust you unless you gonna be accurate.
         %section
@@ -415,12 +487,16 @@
         %section
           %h3 Fighting performance concerns
           %ul
-            %li Better to get accurate numbers slowly than random numbers fast
-            %li Unlike "GROUP BY" this technique is easier to parallelize
-            %li You are still not using SSD hard drive or what?
-          %aside.note
-            Your customers will not trust your software if you would change number by 1
+            %li Accurate numbers slowly are better than random numbers fast
+            %li Parallel execution
+            %li SSD harddrive
 
+
+          %aside.notes
+            %ul
+              %li Accurate numbers
+              %li Unlike "GROUP BY" this technique is easier to parallelize
+              %li Do you still not use SSD hard drive or what?
         %section
           %h3 Simplified Terminology
 
@@ -434,6 +510,12 @@
                 %li count + distinct
                 %li sum
                 %li average
+        %section
+          %h3 Same Name =&gt; Same Login
+          %h3 Different Name =&g; Different Logic
+          %h3 Unified Metrics Database
+          %h3 One query =&gt; One number
+
 
 
               
