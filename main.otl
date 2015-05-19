@@ -120,6 +120,7 @@ OSS
 		#reverse_order to raise IrreversibleOrderException when it can not reverse with easy algorithm
 		Rescue IrreversibleOrderException from Relation#last
 		Remove missing NameError#missing_name and simply use #name instead
+		Handle content_tag(:div, 'test', style: {width: '100%'}) correctly
 
 	Rspec-rails
 		Subshell on rake spec
