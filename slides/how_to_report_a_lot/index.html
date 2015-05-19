@@ -30,6 +30,8 @@
         color: #ff2c2d; }
       .reveal .green {
         color: #17ff2e; }
+      .reveal .yellow {
+        color: yellow; }
       .reveal .blue {
         color: #1b91ff; }
       .reveal .left {
@@ -44,10 +46,6 @@
     <div class='reveal'>
       <div class='slides'>
         <section>
-          Consistent capitlisation
-          login =&gt; logic
-        </section>
-        <section>
           <h2>How to Report</h2>
           <h1>a LOT?</h1>
           <h3>Bogdan Gusiev</h3>
@@ -56,7 +54,7 @@
           <h3>Bogdan G.</h3>
           <ul>
             <li class='fragment'>in IT for ~ 8 years</li>
-            <li class='fragment'>6 of them with Ruby and Rails</li>
+            <li class='fragment'>5 of them with Ruby and Rails</li>
             <li class='fragment'>3 of them in Talkable Inc.</li>
           </ul>
         </section>
@@ -199,6 +197,7 @@
           <h3>in different parts of project</h3>
         </section>
         <section>
+          <h2 class='yellow'>Conclusion:</h2>
           <h3>Same Name =&gt; Same Logic</h3>
           <h3>Different Logic =&gt; Different Name</h3>
           <h3>No per-person names and reports</h3>
@@ -226,27 +225,26 @@
           <aside class='notes'>We need to organize aggregation and multiple filters for the same metric:</aside>
         </section>
         <section>
-          <h3>Answer to more advanced queries</h3>
+          <h3>Words snowball</h3>
           <h4>What is total sales for each marketing campaigns in February?</h4>
-          <pre><code>Purchase.where(&#x000A;  created_at: '2015-02-01'..'2015-03-01'&#x000A;).group(:marketing_campaign).sum(:subtotal)</code></pre>
-        </section>
-        <section>
+          <pre><code>Purchase.where(&#x000A;  created_at: '2015-02-01'..'2015-03-01'&#x000A;).group(:marketing_campaign).sum(:subtotal)&#x000A;</code></pre>
           <h4>What is total sales for each week of February in the given marketing campaign?</h4>
           <pre><code>Purchase.where(&#x000A;  created_at: '2015-02-01'..'2015-03-01', &#x000A;  marketing_campaign: id,&#x000A;).group('week(created_at)').sum(:subtotal)&#x000A;&#x000A;</code></pre>
         </section>
         <section>
           <h4>How many first time buyers does that campaign bring?</h4>
-          <h4>How offten women buy men's clothes?</h4>
+          <h4>What is purchases ditribution by hour of a day for each state?</h4>
           <h4>How much did we sell for each product category this black friday comparing to previous one?</h4>
-          <h4>What is the average order value of first time buyers and non-first time buyers?</h4>
+          <h4>What is the average order value of first time buyers compared to non-first time buyers?</h4>
           <aside class='notes'>
             All these term rotate around in your head like a snowball of mess at some point.
           </aside>
         </section>
         <section>
-          <h3>Compile all requirements and concerns together</h3>
+          <h3>How to share code between all those requests?</h3>
         </section>
         <section>
+          <h2 class='yellow'>Conclusion:</h2>
           <h2>one query =&gt; one number</h2>
           <h2>
             <strike>
@@ -259,8 +257,11 @@
         </section>
         <section>
           <h3>Filter:</h3>
-          <h3>detailed (for each) or overall (scope)</h3>
-          <pre><code class='ruby'>campaigns = Campaign.where(id: [22,81,74]) #selected by user&#x000A;total_sales(marketing_campaigns: campaigns)&#x000A;&#x000A;campaigns.map do |campaign|&#x000A;  total_sales(marketing_campaigns: campaign)&#x000A;end</code></pre>
+          <pre><code class='ruby'>campaigns = Campaign.where(id: [22,81,74]) #selected by user</code></pre>
+          <h3>Overall (in the scope)</h3>
+          <pre><code class='ruby'>total_sales(marketing_campaigns: campaigns)&#x000A;</code></pre>
+          <h3>Detailed (for each)</h3>
+          <pre><code class='ruby'>campaigns.map do |campaign|&#x000A;  total_sales(marketing_campaigns: campaign)&#x000A;end</code></pre>
           <aside class='notes'>
             <p>Example:</p>
             <p>For each of selected campaigns</p>
@@ -295,11 +296,11 @@
                   <nobr>SF 15Q1 SA</nobr>
                 </td>
                 <td>
-                  986
+                  530
                 </td>
-                <td>$10,929.38</td>
+                <td>$6,239.43</td>
                 <td>
-                  788
+                  424
                 </td>
               </tr>
               <tr>
@@ -308,11 +309,11 @@
                   <nobr>SF 25Q2 PP</nobr>
                 </td>
                 <td>
-                  110
+                  387
                 </td>
-                <td>$1,795.90</td>
+                <td>$4,226.47</td>
                 <td>
-                  88
+                  309
                 </td>
               </tr>
               <tr>
@@ -321,11 +322,11 @@
                   <nobr>SF 15Q1 SA</nobr>
                 </td>
                 <td>
-                  337
+                  557
                 </td>
-                <td>$1,290.23</td>
+                <td>$1,297.20</td>
                 <td>
-                  269
+                  445
                 </td>
               </tr>
               <tr>
@@ -334,11 +335,11 @@
                   <nobr>SF 25Q2 PP</nobr>
                 </td>
                 <td>
-                  278
+                  424
                 </td>
-                <td>$1,310.71</td>
+                <td>$9,497.53</td>
                 <td>
-                  222
+                  339
                 </td>
               </tr>
               <tr>
@@ -347,11 +348,11 @@
                   <nobr>SF 15Q1 SA</nobr>
                 </td>
                 <td>
-                  378
+                  217
                 </td>
-                <td>$4,196.78</td>
+                <td>$3,443.42</td>
                 <td>
-                  302
+                  173
                 </td>
               </tr>
               <tr>
@@ -360,18 +361,20 @@
                   <nobr>SF 25Q2 PP</nobr>
                 </td>
                 <td>
-                  849
+                  500
                 </td>
-                <td>$17,836.36</td>
+                <td>$1,893.61</td>
                 <td>
-                  679
+                  400
                 </td>
               </tr>
             </tbody>
           </table>
         </section>
         <section>
+          <h2 class='yellow'>Conclusion:</h2>
           <h2>Tables are your friends</h2>
+          <h2>Numbers =&gt; Table =&gt; Graph</h2>
           <aside class='notes'>
             Any data you pull could be put into a table.
           </aside>
@@ -379,7 +382,11 @@
         <section>
           <h2>Implementation</h2>
           <h4>OO Design is optional</h4>
-          <pre><code class='ruby'>class ApplicationMetrics&#x000A;  def initialize(filters)&#x000A;    @filters = filters&#x000A;  end&#x000A;  def total_sales&#x000A;    purchases_scope.sum(:subtotal)&#x000A;  end&#x000A;  def total_purchases&#x000A;    purchases_scope.count&#x000A;  end&#x000A;  def unique_buyers&#x000A;    purchases_scope.count("DISTINCT user_id")&#x000A;  end&#x000A;  private&#x000A;  def purchases_scope&#x000A;    Purchases.successfully_delivered.&#x000A;      where(paid_at: @filters[:period]).&#x000A;      where(marketing_campaign_id: @filters[:marketing_campaign])&#x000A;  end&#x000A;</code></pre>
+          <pre><code class='ruby'>class ApplicationMetrics&#x000A;  def initialize(filters)&#x000A;    @filters = filters&#x000A;  end&#x000A;  def total_sales&#x000A;    purchases_scope.sum(:subtotal)&#x000A;  end&#x000A;  def total_purchases&#x000A;    purchases_scope.count&#x000A;  end&#x000A;  def unique_buyers&#x000A;    purchases_scope.count("DISTINCT user_id")&#x000A;  end&#x000A;  private&#x000A;  def purchases_scope&#x000A;    Purchases.successfully_delivered.&#x000A;      where(paid_at: @filters[:period]).&#x000A;      where(marketing_campaign_id: @filters[:marketing_campaign])&#x000A;  end</code></pre>
+        </section>
+        <section>
+          <h3>And a metadata:</h3>
+          <pre><code class='ruby'>def self.metric(name, metadata = {})&#x000A;  @metrics ||= {}&#x000A;  @metrics[name] = metadata&#x000A;  define_method(name) do&#x000A;    yield&#x000A;  end&#x000A;end&#x000A;&#x000A;metric(:total_sales, name: 'Total Sales $', description: '...') do&#x000A;  purchases_scope.sum(:subtotal)&#x000A;end</code></pre>
         </section>
         <section>
           <h3>Advantages</h3>
@@ -403,7 +410,7 @@
           </aside>
         </section>
         <section>
-          <h3>Being Consistent = Gain Trust</h3>
+          <h2>Consistency:</h2>
           <h3>Spring = March + April + May</h3>
           <h3>Week = Su + Mo + Tu + We + Th + Fr + Sa</h3>
           <aside class='notes'>
@@ -413,6 +420,10 @@
             If DST would happen within a week...
             Users will not trust you unless you gonna be accurate.
           </aside>
+        </section>
+        <section>
+          <h2 class='yellow'>Conclusion:</h2>
+          <h3>Being Consistent = Gain Trust</h3>
         </section>
         <section>
           <h3>Disadvantages</h3>
@@ -436,12 +447,16 @@
           </aside>
         </section>
         <section>
-          <h3>Fighting performance concerns</h3>
-          <ul>
-            <li>Accurate numbers slowly are better than random numbers fast</li>
-            <li>Parallel execution</li>
-            <li>SSD harddrive</li>
-          </ul>
+          <h3>Improve performance with</h3>
+          <h2>Parallel execution &amp;</h2>
+          <h2>SSD harddrive</h2>
+          <h3>Google for: Array parallel map</h3>
+        </section>
+        <section>
+          <h3>
+            Accurate numbers slowly are better
+          </h3>
+          <h3>than random numbers fast</h3>
           <aside class='notes'>
             <ul>
               <li>Accurate numbers</li>
@@ -451,26 +466,39 @@
           </aside>
         </section>
         <section>
-          <h3>Simplified Terminology</h3>
+          <h3 class='yellow'>Summing Up</h3>
+        </section>
+        <section>
+          <h3>Same Name =&gt; Same Logic</h3>
+          <h3>Different Logic =&gt; Different Name</h3>
+        </section>
+        <section>
+          <h3>How to reuse code?</h3>
+          <h3>One Query =&gt; One Number</h3>
+        </section>
+        <section>
+          <h3>Unified Report Definition</h3>
           <ul>
-            <li>Filter</li>
-            <li>Metric</li>
+            <li>
+              Metrics: Name, Description, ...
+            </li>
+            <li>Filters</li>
             <li>
               Operations
               <ul>
                 <li>count</li>
-                <li>count + distinct</li>
                 <li>sum</li>
-                <li>average</li>
               </ul>
             </li>
           </ul>
         </section>
         <section>
-          <h3>Same Name =&gt; Same Login</h3>
-          <h3>Different Name =&g; Different Logic</h3>
-          <h3>Unified Metrics Database</h3>
-          <h3>One query =&gt; One number</h3>
+          <h2>Thanks for your attention!</h2>
+          <ul>
+            <li>My blog: gusiev.com</li>
+            <li>My code: github.com/bogdan</li>
+            <li>My company: talkable.com</li>
+          </ul>
         </section>
       </div>
     </div>
