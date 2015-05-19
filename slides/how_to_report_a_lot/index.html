@@ -2,7 +2,7 @@
 <html lang='en'>
   <head>
     <meta charset='utf-8'>
-    <title>Parsers</title>
+    <title>How to report a lot?</title>
     <meta content='' name='description'>
     <meta content='Bogdan Gusiev' name='author'>
     <meta content='yes' name='apple-mobile-web-app-capable'>
@@ -22,7 +22,7 @@
       
       .reveal pre code {
         padding: 20px 5px;
-        font-size: 1.8em;
+        font-size: 1em;
         line-height: 1.3em; }
       .reveal ul {
         min-width: 50%; }
@@ -32,324 +32,450 @@
         color: #17ff2e; }
       .reveal .blue {
         color: #1b91ff; }
+      .reveal .left {
+        float: left; }
+      .reveal .right {
+        float: right; }
+      .reveal .clearfix {
+        overflow: hidden; }
     </style>
   </head>
   <body>
     <div class='reveal'>
       <div class='slides'>
         <section>
-          <h1>Parsers</h1>
-          <h4>Rails Router Example</h4>
+          Consistent capitlisation
+          login =&gt; logic
+        </section>
+        <section>
+          <h2>How to Report</h2>
+          <h1>a LOT?</h1>
           <h3>Bogdan Gusiev</h3>
-          <h3>October 2013</h3>
         </section>
         <section>
-          <h1>P-A-R-S-E-R-S</h1>
+          <h3>Bogdan G.</h3>
+          <ul>
+            <li class='fragment'>in IT for ~ 8 years</li>
+            <li class='fragment'>6 of them with Ruby and Rails</li>
+            <li class='fragment'>3 of them in Talkable Inc.</li>
+          </ul>
         </section>
         <section>
-          <h3>Why?</h3>
-          <h3>Because best way to pass data from one App to another is</h3>
-          <h2 class='fragment highlight green'>Serialization</h2>
-          <h5>
-            <strike>COM</strike>
-            <strike>RMI</strike>
-          </h5>
+          <h2>Talkable Inc.</h2>
+          <div class='clearfix'>
+            <div class='left'>
+              <img src='http://take.ms/7KhUZ' style='width: 450px'>
+              <br>
+              <img src='http://take.ms/TZ8UV' style='width: 450px'>
+            </div>
+            <div class='right'>
+              <img src='http://take.ms/s1pvm' style='width: 450px'>
+              <br>
+              <img src='http://take.ms/i2EFe' style='width: 450px'>
+            </div>
+          </div>
         </section>
         <section>
-          <h3>One more less obvious reason</h3>
-          <h2 style='font-family: arial'>
-            ... сейчас обсуждаем возможность сделать конфу более технической.
-          </h2>
-          <h2>So this talk required to be</h2>
-          <h1 class='fragment highlight red'>hardcore</h1>
+          <h1>Report?</h1>
+          <aside class='notes'>
+            Let's have a quick overview on what is a report
+          </aside>
+        </section>
+        <section>
+          <h3>Why to Report?</h3>
+          <pre><code>ActiveRecord::Base.send(:subclasses).map do |klass|&#x000A;  klass.where(&#x000A;    "created_at &gt; ?", 1.day.ago&#x000A;  ).count&#x000A;end.sum</code></pre>
+        </section>
+        <section>
+          <h2>At some point you know everything</h2>
+          <aside class='notes'>
+            You know about every single event happening in your application every day.
+          </aside>
+        </section>
+        <section>
+          <h2>At another point you can't do it anymore</h2>
+        </section>
+        <section>
+          <h2 class='red'>a LOT?</h2>
+          <h2>How many people want reports?</h2>
+          <aside class='notes'>
+            <ul>
+              <li>not how big numbers are</li>
+              <li>not how often needed</li>
+            </ul>
+          </aside>
+        </section>
+        <section>
+          <h3>How many people</h3>
+          <h3>would it be hard to support?</h3>
+          <aside class='notes'>
+            <p>At some point you can pull all required number as they are needed</p>
+            <p>At some point you can't</p>
+          </aside>
         </section>
         <section>
           <h1>Plan</h1>
           <ul>
-            <li>Easy Part</li>
-            <li>Classification</li>
-            <li>Parsers Theory</li>
-            <li>Simple examples</li>
+            <li>Basic Operations</li>
+            <li>Problems as number of metrics growth</li>
+            <li>What is even a metric?</li>
+            <li>What is a filter?</li>
+            <li>Data Model</li>
             <li>Live examples</li>
           </ul>
         </section>
         <section>
-          <h3>The easiest way to build parser</h3>
-          <pre class='fragment'><code>bogdan@example.com&#x000A;</code></pre>
-          <div class='fragment'>
-            <h3>Regular Expression</h3>
-            <pre><code>\w+@\w+(\.\w+)+</code></pre>
-          </div>
-          <div class='fragment'>
-            <pre><code>/\A[^@]+@([^@\.]+\.)+[^@\.]+\z/ &#x000A;</code></pre>
-            <p>etc.</p>
-          </div>
-        </section>
-        <section>
-          <h3>Each regular expression can parse particular grammar</h3>
-          <h2>
-            What is a
-            <div class='highlight green'>grammar?</div>
-          </h2>
-        </section>
-        <section>
-          <h3>Regular expressions are great!</h3>
-          <h3>Their power is huge.</h3>
-          <h2>
-            But what is the
-            <div class='highlight red'>limit?</div>
-          </h2>
-        </section>
-        <section>
-          <h3>
-            Regular expressions can only be used to parse
-            <span class='green'>Regular grammars</span>
-          </h3>
-          <h2>
-            But what about
-            <span class='red'>Non-regular?</span>
-          </h2>
-        </section>
-        <section>
-          <h3>Regular expression can only parse something that could be parsed with one iteration</h3>
-          <br>
-          <br>
-          <br>
-          <div class='fragment'>
-            <h4>in other words</h4>
-            <h2>From Left to Right</h2>
-          </div>
-        </section>
-        <section>
-          <h3>Several obvious examples</h3>
-          <pre><code>+380(67)222-33-00&#x000A;bogdan@example.com&#x000A;192.168.0.1</code></pre>
-        </section>
-        <section>
-          <h2>In order to understand why</h2>
-          <h2>we need to get into the most boring part</h2>
-          <h1>The Theory</h1>
-        </section>
-        <section>
-          <h3>Grammar in Math is described via Generators concept.</h3>
-          Each generator represents a transformation from one symbol to group of other symbols
-        </section>
-        <section>
-          <h3>Regular Grammars</h3>
-          <pre><code>ab&#x000A;aab&#x000A;abb&#x000A;abbb&#x000A;aabb&#x000A;aaab</code></pre>
-          <h5>Regexp: a+b+</h5>
-          <pre><code class='ruby'>S -> aS&#x000A;S -> aR&#x000A;R -> bR&#x000A;R -> b</code></pre>
+          <h3>Business speaks with you like this:</h3>
+          <p>Good ones</p>
           <ul>
-            <li>S,R - non-deterministic symbols</li>
-            <li>a,b - deterministic symbols</li>
-            <li>string is not considered final if it contains non-deterministic symbols</li>
+            <li>How many new users do we acquire a month at average?</li>
+            <li>How much sales did we get from this advertising campaign?</li>
+          </ul>
+          <p>And bad ones</p>
+          <ul>
+            <li>Please visualise the data.</li>
+            <li>Can I see how we are performing overall in the last time?</li>
           </ul>
         </section>
         <section>
-          <h3>Regular grammar that describes an Email</h3>
-          <h5>(almost)</h5>
-          <pre><code>S -> [0-z]N&#x000A;N -> [0-z]N&#x000A;N -> @D&#x000A;D -> [0-z]D&#x000A;D -> [0-z].Z&#x000A;Z -> [0-z]Z&#x000A;Z -> [0-z]</code></pre>
+          <h3>Basic Data Operations in Reporting</h3>
           <ul>
-            <li>S - start</li>
-            <li>N - name</li>
-            <li>D - domain</li>
-            <li>Z - zone</li>
+            <li>How many ...?</li>
+            <li>What is a total amount of ...?</li>
+            <li>... in this scope/date range</li>
+            <li>... for each period/category</li>
           </ul>
+          <div class='fragment'>
+            <br>
+            <h4>In the SQL</h4>
+            <ul>
+              <li>count(...)</li>
+              <li>sum(...)</li>
+              <li>group by ...</li>
+              <li>where ...</li>
+            </ul>
+          </div>
         </section>
         <section>
-          <h3>Is there a regular expression that parses this?</h3>
-          <pre><code class='ruby'>S -> aSb&#x000A;S -> ab</code></pre>
-          <pre><code>ab&#x000A;aabb&#x000A;aaabbb&#x000A;aaaabbbb&#x000A;</code></pre>
+          <h3>The basic model of doing all that</h3>
+          [you are doing the work in a middle]
         </section>
         <section>
-          <h2>The answer is NO.</h2>
-          <h3>We can not parse such a simple case with regular expressions.</h3>
-        </section>
-        <section>
-          <h2>Regularity Criteria</h2>
-          <h3>Grammar is regular if it don't contain "recursive" generators.</h3>
-        </section>
-        <section>
-          <h3>So what to do?</h3>
-          <h2>Not sure</h2>
-          <h4>the only one thing we know is that regular expressions will not help</h4>
-          <pre style='font-size: 0.4em'><code class='ruby'>def match_aabb_pattern?(string)&#x000A;  string.each_char.with_index.each do |c, i|&#x000A;    case c&#x000A;    when 'a'&#x000A;      count_a += 1&#x000A;    when 'b'&#x000A;      return count_a == string.size - i - 1&#x000A;    else&#x000A;      return false&#x000A;    end&#x000A;  end&#x000A;  return false&#x000A;end&#x000A;</code></pre>
-        </section>
-        <section>
-          <h2>Regular Expressions</h2>
-          <h1>
-            <span class='highlight green'>Powers</span>
-            <span>&amp;</span>
-            <span class='highlight red'>Limits</span>
-          </h1>
-        </section>
-        <section>
-          <h2>Grammars/Parsers can be</h2>
-          <h1>
-            <span class='highlight green'>Regular</span>
-            <span>&amp;</span>
-            <span class='highlight red'>Recursive</span>
-          </h1>
-        </section>
-        <section>
-          <h2>Getting close to real world examples</h2>
-          <img src='http://monosnap.com/image/1BfsQy5LwfhC4khKNTLjvTvnx2M58A.png'>
-          <h2>Regex are still possible</h2>
-        </section>
-        <section>
-          <h2>But not really in the long term</h2>
-          <img src='http://monosnap.com/image/7wOQJ9xYqaX6oxeCvOUZGDjT4Gq8Ve.png'>
-        </section>
-        <section>
-          <h2>Start from Tokenizing</h2>
-          <pre><code>"12*(2+8/(13.5+7))" =>&#x000A;[&#x000A;  '12', '*', '(', '2', '+', '8' '/', &#x000A;  '(', '13.5', '+', '7', ')', ')'&#x000A;]&#x000A;&#x000A;</code></pre>
-        </section>
-        <section>
-          <h2>Builing Abstract Syntax Tree (AST)</h2>
-          <h4>The Hardest Part</h4>
-          <pre>['12', <span class='highlight yellow'>'*'</span>, <span class='highlight green'>[</span><span class='highlight red'>'('</span>, '2', '+', '8' '/', '(', '13.5', '+', '7', ')', <span class='highlight red'>')'</span><span class='highlight green'>]</span> ]&#x000A;[left = '12', <span class='highlight yellow'>operator</span>, right = <span class='highlight green'>[</span>...<span class='highlight green'>]</span>]&#x000A;&#x000A;['12', '*', [ '2', '+', '8' '/', '(', '13.5', '+', '7', ')'] ]&#x000A;Cleanup useless brackets <span class="highlight red">( )</span>&#x000A;&#x000A;&#x000A;['12', '*', [ '2', <span class="highlight yellow">'+'</span>, <span class="highlight green">[</span> '8' '/', '(', '13.5', '+', '7', ')' <span class="highlight green">]</span> ] ]&#x000A;# Repeat for right and left node&#x000A;&#x000A;['12', '*', [ '2', '+', [ '8', <span class="highlight yellow">'/'</span>, <span class="highlight green">[</span> '13.5', '+', '7', <span class="highlight green">]</span> ]]]&#x000A;# Repeat for right and left node</pre>
+          <h3>Stages</h3>
           <ol>
-            <li>Find lowest priority operator</li>
-            <li>Split Array into 3 parts: left operand, operator, right operand</li>
-            <li>Repeat 1-3 for before part and after part</li>
+            <li>At first you learn: SQL, CSV, Graphs, S3 file uploading</li>
+            <li>Then you feel like an Reporting Machine</li>
+            <li>And then you say: No thanks...</li>
           </ol>
         </section>
         <section>
-          <h2>Work with AST is easy</h2>
-          <pre><code class='ruby'>def evaluate(ast)&#x000A;  if ast.is_a?(Array)&#x000A;    left, operator, right = ast&#x000A;    evaluate(left).send(operator, evaluate(right))&#x000A;  else&#x000A;    ast.to_f&#x000A;  end&#x000A;end&#x000A;</code></pre>
+          <h3>Let the machine do the work</h3>
+          <h4>Let you become a software developer again</h4>
+          [machine in a middle graph]
         </section>
         <section>
-          <h2>After such a heavy infrastructure</h2>
-          <h2>it is easies to support</h2>
-          <img src='http://monosnap.com/image/7wOQJ9xYqaX6oxeCvOUZGDjT4Gq8Ve.png'>
+          <h2>Requirement of unification</h2>
+          <h2>and code reuse</h2>
         </section>
         <section>
-          <h2>Building AST</h2>
-          <h2>is Hard problem</h2>
-          <h2>But you are able to use tools</h2>
+          <h3>Problems:</h3>
+          <h3>Total Sales = ?</h3>
+          1st Developer:
+          <pre class='fragment'><code>Purchase.group(:marketing_campaign).&#x000A;  sum(:subtotal)</code></pre>
+          2nd Developer:
+          <pre class='fragment'><code>Purchase.group("month(created_at)").&#x000A;  successfully_delivered.sum(:subtotal)</code></pre>
+          3rd Developer:
+          <pre class='fragment'><code>Purchase.&#x000A;  group(:marketing_campaign, "month(paid_at)").&#x000A;  successfully_delivered.&#x000A;  sum(:subtotal)&#x000A;</code></pre>
         </section>
         <section>
-          <h2>Recursive parsers library</h2>
+          <h3>No one database knows about</h3>
+          <h2>Daylight Saving Time</h2>
+        </section>
+        <section>
+          <h3>Does it include a returned sales or not?</h3>
+          <img src='http://monosnap.com/image/8mWPDzrlTJaQEaY9jMR6b9me8yz4zs.png'>
+        </section>
+        <section>
+          <h3>Same metric can be calculated differently</h3>
+          <h3>in different parts of project</h3>
+        </section>
+        <section>
+          <h3>Same Name =&gt; Same Logic</h3>
+          <h3>Different Logic =&gt; Different Name</h3>
+          <h3>No per-person names and reports</h3>
+          <aside class='notes'>
+            <p>Each time person wants to see "Total Sales" there should be only one way of calculating it.</p>
+            <p>If there is a place where sales number needs to be calculated differently,</p>
+            <p>it should be named differently</p>
+          </aside>
+        </section>
+        <section>
+          <h3>"One ring to rule them all!"</h3>
+          <pre><code class='ruby'>{&#x000A;  identifier: 'total_sales',&#x000A;  name: 'Total Sales',&#x000A;  description: 'Amount ($) of successfully delivered sales'&#x000A;  how_to_calculate: -> () { &#x000A;    # comming soon&#x000A;  } &#x000A;}&#x000A;</code></pre>
+        </section>
+        <section>
+          <h2>How to Calculate a metric?</h2>
           <ul>
-            <li>treetop - a little easier, a bit slower</li>
-            <li>racc - more hard core, used in Rails Router</li>
+            <li>Be Reusable</li>
+            <li>Support Multiple Filters</li>
+            <li>Support all basic operations</li>
           </ul>
         </section>
         <section>
-          <h2>Rails router sytax</h2>
-          <pre><code>/users/:id(.:format)&#x000A;(/locale/:locale)/users/:id(.:format)&#x000A;(/locale/:locale(/currency/:currency))/users/:id(.:format)&#x000A;</code></pre>
-          <h3>Regularity criteria can be broken.</h3>
+          <h3>How to Be organized?</h3>
+          <pre><code class='ruby'>Purchase.where(&#x000A;  created_at: ?,&#x000A;  marketing_campaign: ?,&#x000A;  users: {gender: ?},&#x000A;  status: ?,         &#x000A;  first_time_buyer: ?,&#x000A;  items: { product_category: ? }&#x000A;).joins(...)</code></pre>
+          <aside class='notes'>We need to organize aggregation and multiple filters for the same metric:</aside>
         </section>
         <section>
-          <h3>This is a huge problem and require router to be parsed by recursive parser.</h3>
+          <h3>Answer to more advanced queries</h3>
+          <h4>What is total sales for each marketing campaigns in February?</h4>
+          <pre><code>Purchase.where(&#x000A;  created_at: '2015-02-01'..'2015-03-01'&#x000A;).group(:marketing_campaign).sum(:subtotal)</code></pre>
         </section>
         <section>
-          <h2>Route tokenizer:</h2>
-          <pre><code>/users/:id(.:format)</code></pre>
+          <h4>What is total sales for each week of February in the given marketing campaign?</h4>
+          <pre><code>Purchase.where(&#x000A;  created_at: '2015-02-01'..'2015-03-01', &#x000A;  marketing_campaign: id,&#x000A;).group('week(created_at)').sum(:subtotal)&#x000A;&#x000A;</code></pre>
+        </section>
+        <section>
+          <h4>How many first time buyers does that campaign bring?</h4>
+          <h4>How offten women buy men's clothes?</h4>
+          <h4>How much did we sell for each product category this black friday comparing to previous one?</h4>
+          <h4>What is the average order value of first time buyers and non-first time buyers?</h4>
+          <aside class='notes'>
+            All these term rotate around in your head like a snowball of mess at some point.
+          </aside>
+        </section>
+        <section>
+          <h3>Compile all requirements and concerns together</h3>
+        </section>
+        <section>
+          <h2>one query =&gt; one number</h2>
+          <h2>
+            <strike>
+              GROUP BY
+            </strike>
+          </h2>
+        </section>
+        <section>
+          <pre><code>marketing_campaigns.map do |campaign|&#x000A;  total_sales(created_at: february_month, marketing_campaign: campaign)&#x000A;end&#x000A;&#x000A;february_month.each_week.map do |week|&#x000A;  total_sales(created_at: week, marketing_campaign: selected_campaign)&#x000A;end&#x000A;&#x000A;</code></pre>
+        </section>
+        <section>
+          <h3>Filter:</h3>
+          <h3>detailed (for each) or overall (scope)</h3>
+          <pre><code class='ruby'>campaigns = Campaign.where(id: [22,81,74]) #selected by user&#x000A;total_sales(marketing_campaigns: campaigns)&#x000A;&#x000A;campaigns.map do |campaign|&#x000A;  total_sales(marketing_campaigns: campaign)&#x000A;end</code></pre>
+          <aside class='notes'>
+            <p>Example:</p>
+            <p>For each of selected campaigns</p>
+            <p>vs</p>
+            <p>in the scope of selected campaigns</p>
+          </aside>
+        </section>
+        <section>
+          <pre><code class='ruby'>result = []&#x000A;marketing_campaigns.each do |campaign|&#x000A;  weeks_of_february.each do |week|&#x000A;    result &lt;&lt; [ &#x000A;      campaign,&#x000A;      week, &#x000A;      total_purchases(created_at: week, marketing_campaign: campaign) &#x000A;      total_sales(created_at: week, marketing_campaign: campaign),&#x000A;      unique_buyers(created_at: week, marketing_campaign: campaign)&#x000A;    ]&#x000A;  end&#x000A;end&#x000A;</code></pre>
+        </section>
+        <section>
           <table>
-            <tr>
-              <th>Token</th>
-              <th>Type</th>
-            </tr>
-            <tr>
-              <td>/</td>
-              <td>SLASH</td>
-            </tr>
-            <tr>
-              <td>users</td>
-              <td>LITERAL</td>
-            </tr>
-            <tr>
-              <td>/</td>
-              <td>SLASH</td>
-            </tr>
-            <tr>
-              <td>:id</td>
-              <td>SYMBOL</td>
-            </tr>
-            <tr>
-              <td>(</td>
-              <td>LPAREN</td>
-            </tr>
-            <tr>
-              <td>.</td>
-              <td>DOT</td>
-            </tr>
-            <tr>
-              <td>:format</td>
-              <td>SYMBOL</td>
-            </tr>
-            <tr>
-              <td>)</td>
-              <td>RPAREN</td>
-            </tr>
+            <thead>
+              <tr>
+                <th>Week</th>
+                <th>
+                  Campaign
+                </th>
+                <th>
+                  # Total Sales
+                </th>
+                <th>
+                  $ Total Sales
+                </th>
+                <th>Number of Buyers</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1st</td>
+                <td>
+                  <nobr>SF 15Q1 SA</nobr>
+                </td>
+                <td>
+                  986
+                </td>
+                <td>$10,929.38</td>
+                <td>
+                  788
+                </td>
+              </tr>
+              <tr>
+                <td>1st</td>
+                <td>
+                  <nobr>SF 25Q2 PP</nobr>
+                </td>
+                <td>
+                  110
+                </td>
+                <td>$1,795.90</td>
+                <td>
+                  88
+                </td>
+              </tr>
+              <tr>
+                <td>2nd</td>
+                <td>
+                  <nobr>SF 15Q1 SA</nobr>
+                </td>
+                <td>
+                  337
+                </td>
+                <td>$1,290.23</td>
+                <td>
+                  269
+                </td>
+              </tr>
+              <tr>
+                <td>2nd</td>
+                <td>
+                  <nobr>SF 25Q2 PP</nobr>
+                </td>
+                <td>
+                  278
+                </td>
+                <td>$1,310.71</td>
+                <td>
+                  222
+                </td>
+              </tr>
+              <tr>
+                <td>3rd</td>
+                <td>
+                  <nobr>SF 15Q1 SA</nobr>
+                </td>
+                <td>
+                  378
+                </td>
+                <td>$4,196.78</td>
+                <td>
+                  302
+                </td>
+              </tr>
+              <tr>
+                <td>3rd</td>
+                <td>
+                  <nobr>SF 25Q2 PP</nobr>
+                </td>
+                <td>
+                  849
+                </td>
+                <td>$17,836.36</td>
+                <td>
+                  679
+                </td>
+              </tr>
+            </tbody>
           </table>
         </section>
         <section>
-          <h2>Fragments from parser</h2>
-          <a href='https://github.com/rails/rails/blob/master/actionpack/lib/action_dispatch/journey/parser.y'>
-            github.com/rails/rails/blob/master/actionpack/lib/action_dispatch/journey/parser.y
-          </a>
-          <h4>They are so severe that created their own syntax</h4>
-          <pre><div class='fragment'>
-            &nbsp;
-            group
-            : LPAREN expressions RPAREN { ... }
-            ;
-          </div>
-          <div class='fragment'>
-            expressions
-            : expressions expression  { ... }
-            | expression              { ... }
-            | or
-            ;
-          </div>
-          <div class='fragment'>
-            # Simplied!
-            expression
-            : symbol
-            | literal
-            | slash
-            | dot
-            | group
-            | star
-            ;
-          </div></pre>
+          <h2>Tables are your friends</h2>
+          <aside class='notes'>
+            Any data you pull could be put into a table.
+          </aside>
         </section>
         <section>
-          <h2>Parser markup is compiled to ruby</h2>
-          <pre><code>racc -l -o parser.rb parser.y&#x000A;</code></pre>
-          <h3>
-            <a href='https://github.com/tenderlove/racc'>github.com/tenderlove/racc</a>
-          </h3>
-          <a href='https://github.com/rails/rails/blob/master/actionpack/lib/action_dispatch/journey/parser.rb'>
-            github.com/rails/rails/blob/master/actionpack/lib/action_dispatch/journey/parser.rb
-          </a>
+          <h2>Implementation</h2>
+          <h4>OO Design is optional</h4>
+          <pre><code class='ruby'>class ApplicationMetrics&#x000A;  def initialize(filters)&#x000A;    @filters = filters&#x000A;  end&#x000A;  def total_sales&#x000A;    purchases_scope.sum(:subtotal)&#x000A;  end&#x000A;  def total_purchases&#x000A;    purchases_scope.count&#x000A;  end&#x000A;  def unique_buyers&#x000A;    purchases_scope.count("DISTINCT user_id")&#x000A;  end&#x000A;  private&#x000A;  def purchases_scope&#x000A;    Purchases.successfully_delivered.&#x000A;      where(paid_at: @filters[:period]).&#x000A;      where(marketing_campaign_id: @filters[:marketing_campaign])&#x000A;  end&#x000A;</code></pre>
         </section>
         <section>
-          <h2>Ukraine is having a hard time</h2>
-          <p>
-            Software developers have unique opportunity to support economics of our country.
-            We are the only one that can really bring money to Ukraine.
-          </p>
-          <h2>So, lets do our work better</h2>
-          <h5>And waste less money on new Smart Phones</h5>
+          <h3>Advantages</h3>
+          <ul>
+            <li>Flexibility</li>
+            <li>Code is simple</li>
+            <li>Consistency</li>
+            <li>Single point of control</li>
+            <li>Code reuse</li>
+            <li>Front-end is decoupeled</li>
+          </ul>
+          <aside class='notes'>
+            <ul>
+              <li>Any report aggregation and combination possible</li>
+              <li>SQL is kept simple: code is easier to write</li>
+              <li>All numbers across all your project are consistent</li>
+              <li>Single point of control</li>
+              <li>Better code reuse: You never start new report from scratch</li>
+              <li>Front-end is now decoupled from back-end</li>
+            </ul>
+          </aside>
         </section>
         <section>
-          <h2>Thanks for your attension</h2>
-          <h3>
-            <a href='http://gusiev.com'>http://gusiev.com</a>
-          </h3>
-          <h3>
-            <a href='http://github.com/bogdan'>http://github.com/bogdan</a>
-          </h3>
-          <h3>
-            <a href='http://gusiev.com/slides/parsers'>http://gusiev.com/slides/parsers</a>
-          </h3>
+          <h3>Being Consistent = Gain Trust</h3>
+          <h3>Spring = March + April + May</h3>
+          <h3>Week = Su + Mo + Tu + We + Th + Fr + Sa</h3>
+          <aside class='notes'>
+            Customers can be very captious.
+            If you show them numbers they do not like,
+            even small mistake 0.1% can break their trust.
+            If DST would happen within a week...
+            Users will not trust you unless you gonna be accurate.
+          </aside>
+        </section>
+        <section>
+          <h3>Disadvantages</h3>
+          <h2>Performance is going down</h2>
+        </section>
+        <section>
+          <h3>Caching in reporting</h3>
+          <ul>
+            <li>10 marking campaigns</li>
+            <li>3 years = 1095 days</li>
+            <li>20 product categories</li>
+            <li>10 metrics</li>
+          </ul>
+        </section>
+        <section>
+          <h2>Cache is unmaintainable</h2>
+          <h3>10  * 1095 * 20 * 10 &asymp; 2_000_000 variants</h3>
+          <aside class='notes'>
+            <p>Exponential growth</p>
+            <p>There are more numbers you can generate than data in your database</p>
+          </aside>
+        </section>
+        <section>
+          <h3>Fighting performance concerns</h3>
+          <ul>
+            <li>Accurate numbers slowly are better than random numbers fast</li>
+            <li>Parallel execution</li>
+            <li>SSD harddrive</li>
+          </ul>
+          <aside class='notes'>
+            <ul>
+              <li>Accurate numbers</li>
+              <li>Unlike "GROUP BY" this technique is easier to parallelize</li>
+              <li>Do you still not use SSD hard drive or what?</li>
+            </ul>
+          </aside>
+        </section>
+        <section>
+          <h3>Simplified Terminology</h3>
+          <ul>
+            <li>Filter</li>
+            <li>Metric</li>
+            <li>
+              Operations
+              <ul>
+                <li>count</li>
+                <li>count + distinct</li>
+                <li>sum</li>
+                <li>average</li>
+              </ul>
+            </li>
+          </ul>
+        </section>
+        <section>
+          <h3>Same Name =&gt; Same Login</h3>
+          <h3>Different Name =&g; Different Logic</h3>
+          <h3>Unified Metrics Database</h3>
+          <h3>One query =&gt; One number</h3>
         </section>
       </div>
     </div>
     <script src='http://lab.hakim.se/reveal-js/lib/js/head.min.js'></script>
-    <script src='http://lab.hakim.se/reveal-js/js/reveal.js'></script>
+    <script src='/javascripts/reveal/reveal.js'></script>
     <script>
       // https://github.com/hakimel/reveal.js#configuration
       Reveal.initialize({
@@ -367,8 +493,8 @@
       		{ src: 'http://lab.hakim.se/reveal-js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
       		{ src: 'http://lab.hakim.se/reveal-js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
       		{ src: 'http://lab.hakim.se/reveal-js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+          { src: '/javascripts/reveal/plugin/notes/notes.js', async: true }
       		// { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
-      		// { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
       		// { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
       		// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
       	]
