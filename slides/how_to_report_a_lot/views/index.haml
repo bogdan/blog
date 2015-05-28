@@ -85,7 +85,7 @@
               :preserve
                 ActiveRecord::Base.send(:subclasses).map do |klass|
                   klass.where(
-                    "created_at &gt; ?", 1.day.ago
+                    "updated_at &gt; ?", 1.day.ago
                   ).count
                 end.sum
         %section
@@ -434,7 +434,7 @@
                   end
                   private
                   def purchases_scope
-                    Purchases.successfully_delivered.
+                    Purchase.successfully_delivered.
                       where(paid_at: @filters[:period]).
                       where(marketing_campaign_id: @filters[:marketing_campaign])
                   end
@@ -478,9 +478,36 @@
 
         %section
 
-          %h2 Consistency:
+          %h2 Consistency?
+
+          %table
+            %tr
+              %th Month
+              %th Total Sales $
+            %tr
+              %td March
+              %td $1881
+            %tr
+              %td April
+              %td $1001
+            %tr
+              %td May
+              %td $2074
+            %tr
+              %td Total
+              %td ?
+
+
+        %section
+          
+          %h2.red Consistency!
+
           %h3 Spring = March + April + May
           %h3 Week = Su + Mo + Tu + We + Th + Fr + Sa
+          %br
+          .fragment
+            %h3 DST is your enemy!
+            %h3 because DB can not do it correctly
 
           %aside.notes
             Customers can be very captious.
