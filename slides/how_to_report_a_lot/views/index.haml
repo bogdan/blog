@@ -148,7 +148,7 @@
 
           %ul
             %li How many ...?
-            %li What is a total amount of ...?
+            %li What is the total amount of ...?
             %li ... in this scope/date range
             %li ... for each period/category
           .fragment
@@ -163,7 +163,9 @@
         %section
           %h3 The basic model of doing all that
 
-          [you are doing the work in a middle]
+          -#%img{src: "/slide_A.png"}
+          %h3
+            %img{src: "/slide_A_black.png", width: '70%'}
         %section
           %h3 Stages
 
@@ -174,9 +176,8 @@
 
         %section
           %h3 Let the machine do the work
-          %h4 Let you become a software developer again
-
-          [machine in a middle graph]
+          %h3
+            %img{src: "/slide_B_black.png", width: '70%'}
 
         %section
           %h2 Requirement of unification 
@@ -213,7 +214,7 @@
           %h2 Daylight Saving Time
 
         %section
-          %h3 Does it include a returned sales or not?
+          %h3 Does it include returned sales or not?
           %img{src: "http://monosnap.com/image/8mWPDzrlTJaQEaY9jMR6b9me8yz4zs.png"}
 
         %section
@@ -314,7 +315,7 @@
         %section
 
           %h2.yellow Conclusion:
-          %h2 one query =&gt; one number
+          %h2  one number =&gt; one query 
           %h2
             %strike
               GROUP BY
@@ -439,7 +440,7 @@
                       where(marketing_campaign_id: @filters[:marketing_campaign])
                   end
         %section
-          %h3 And a metadata:
+          %h3 And the metadata:
 
           %pre
             %code.ruby
@@ -510,7 +511,7 @@
             %h3 because DB can not do it correctly
 
           %aside.notes
-            Customers can be very captious.
+            Customers can be very fault-finding.
             If you show them numbers they do not like, 
             even small mistake 0.1% can break their trust.
             If DST would happen within a week...
@@ -529,7 +530,7 @@
           %h3 Caching in reporting
 
           %ul
-            %li 10 marking campaigns
+            %li 10 marketing campaigns
             %li 3 years = 1095 days
             %li 20 product categories
             %li 10 metrics
@@ -569,17 +570,17 @@
 
         %section
           %h3 How to reuse code?
-          %h3 One Query =&gt; One Number
+          %h3  One Number =&gt; One Query
 
         %section
-          %h3 Unified Report Definition
+          %h3 Unified Metric Definition
 
           %ul
             %li 
               Metrics: Name, Description, ...
             %li Filters
             %li 
-              Operations
+              Operation
               %ul
                 %li count
                 %li sum
