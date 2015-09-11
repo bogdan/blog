@@ -1,5 +1,5 @@
 GEM
-  remote: http://rubygems.org/
+  remote: https://rubygems.org/
   specs:
     haml (4.0.3)
       tilt
@@ -23,3 +23,6 @@ DEPENDENCIES
   sass
   shotgun
   sinatra
+
+BUNDLED WITH
+   1.10.6
