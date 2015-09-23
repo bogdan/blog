@@ -46,7 +46,7 @@ task :dev => :build do
     end
   end
   j = Thread.new do
-    `jekyll serve --watch`
+    `jekyll serve --watch --host 0.0.0.0`
   end
   sleep(1)
   c.join

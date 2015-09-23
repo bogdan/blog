@@ -95,12 +95,10 @@
         %section
           %h2 At another point you can't do it anymore
 
-
-
         %section
-          %h2.red a LOT?
+          %h2.red Modularity and Architecture
               
-
+          %h3 The need of them comes from an answer:
           %h2 How many people want reports?
 
           %aside.notes
@@ -112,6 +110,9 @@
         %section
           %h3 How many people 
           %h3 would it be hard to support?
+
+          .fragment
+            %h2 Around 5
 
           %aside.notes
             %p At some point you can pull all required number as they are needed
@@ -161,7 +162,7 @@
           %h3 Stages
 
           %ol
-            %li At first you learn: SQL, CSV, Graphs, S3 file uploading
+            %li At first you learn: SQL, CSV, Visualisation, S3 file uploading
             %li Then you feel like an Reporting Machine
             %li And then you say: No thanks...
 
@@ -200,18 +201,20 @@
                   sum(:subtotal)
 
         %section
-          %h3 No one database knows about
-          %h2 Daylight Saving Time
-
-        %section
           %h3 Does it include returned sales or not?
           %img{src: "http://monosnap.com/image/8mWPDzrlTJaQEaY9jMR6b9me8yz4zs.png"}
-
+          
         %section
 
           %h3.red Problem:
           %h3 Same metric can be calculated differently 
           %h3 in different parts of project
+
+
+        %section
+          %h3.red Problem:
+          %h3 No one database knows about
+          %h2 Daylight Saving Time
 
 
         %section
@@ -237,7 +240,7 @@
                   name: 'Total Sales',
                   description: 'Amount ($) of successfully delivered sales'
                   how_to_calculate: -> () { 
-                    # comming soon
+                    # coming soon
                   } 
                 }
 
@@ -263,7 +266,7 @@
                   status: ?,         
                   first_time_buyer: ?,
                   items: { product_category: ? }
-                ).joins(...)
+                ).sum(:subtotal)
           %aside.notes We need to organize aggregation and multiple filters for the same metric:
 
         %section
@@ -289,16 +292,56 @@
                   marketing_campaign: id,
                 ).group('week(created_at)').sum(:subtotal)
           
+
+
           
         %section
           %h4 How many first time buyers does that campaign bring?
-          %h4 What is purchases ditribution by hour of a day for each state?
+          %h4 What is purchases distribution by hour of a day for each state?
           %h4 How much did we sell for each product category this black friday comparing to previous one?
           %h4 What is the average order value of first time buyers compared to non-first time buyers?
           
           %aside.notes
             All these term rotate around in your head like a snowball of mess at some point.
 
+        %section
+
+          %h2 Is it a code duplication or not?
+
+          %pre
+            %code.ruby
+              :preserve
+                Purchase.
+                  where(merchant: merchant)
+                  where( paid_at: '2015-02-01'..'2015-03-01').
+                  joins(:payment)
+                  group(:marketing_campaign).
+                  successfully_delivered.
+                  sum(:subtotal)
+                
+
+          %pre
+            %code.ruby
+              :preserve
+                Purchase.
+                  where(merchant: merchant)
+                  where(marketing_campaign: marketing_campaign).
+                  group("month(paid_at)").
+                  joins(:payment)
+                  successfully_delivered.
+                  sum(:subtotal)
+
+
+          %h3.fragment Not yet....
+
+        %section
+          %pre
+            %code.ruby
+              :preserve
+                joins(:user).
+                where(users: {gender: gender}).
+                by_category(product_categories)
+                
         %section
 
           %h3 How to share code between all those requests?
@@ -374,19 +417,21 @@
           %table
             %thead
               %tr
-                %th Week
+                %th Week&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 %th
                   Campaign
                 %th
                   \# Total Sales
                 %th
                   $ Total Sales
-                %th Number of Buyers
+                %th Unique Buyers
             %tbody
-              - ['1st', '2nd', '3rd'].each do |week|
-                - ['SF 15Q1 SA', 'SF 25Q2 PP '].each do |cmp|
+              - ['1st', '2nd', '3rd', '4th'].each do |week|
+                - ['15Q1 SA', '25Q2 PP '].each do |cmp|
                   %tr
-                    %td=week
+                    %td
+                      Feb
+                      =week
                     %td
                       %nobr= cmp
                     %td
@@ -406,7 +451,7 @@
         %section
 
           %h2 Implementation
-          %h4 OO Design is optional
+          %h4 OO Design is recommended
 
           %pre
             %code.ruby
@@ -457,7 +502,7 @@
             %li Consistency
             %li Single point of control
             %li Code reuse
-            %li Front-end is decoupeled
+            %li Front-end is decoupled
           %aside.notes
             
             %ul
@@ -532,10 +577,14 @@
 
           %h3 10  * 1095 * 20 * 10 &asymp; 2_000_000 variants
 
+          %h4 It is easy to cache a dashboard that 
+          %h4 displays the same information for all users
+          %h4 But personal reports are not like that.
           %aside.notes
             %p Exponential growth
             %p There are more numbers you can generate than data in your database
 
+        %section
         %section
           %h3 Improve performance with
           %h2 Parallel execution
@@ -585,10 +634,33 @@
 
 
 
+        %section
 
-              
+          %h2 Implementation
+          %h4 OO Design is recommended
 
-          
+          %pre
+            %code.ruby
+              :preserve
+                class ApplicationMetrics
+                  def initialize(filters)
+                    @filters = filters
+                  end
+                  def total_sales
+                    purchases_scope.sum(:subtotal)
+                  end
+                  def total_purchases
+                    purchases_scope.count
+                  end
+                  def unique_buyers
+                    purchases_scope.count("DISTINCT user_id")
+                  end
+                  private
+                  def purchases_scope
+                    Purchase.successfully_delivered.
+                      where(paid_at: @filters[:period]).
+                      where(marketing_campaign_id: @filters[:marketing_campaign])
+                  end
     %script{:src => "http://lab.hakim.se/reveal-js/lib/js/head.min.js"}
     %script{:src => "/javascripts/reveal/reveal.js"}
     :javascript
