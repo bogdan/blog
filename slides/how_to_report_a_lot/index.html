@@ -2,7 +2,7 @@
 <html lang='en'>
   <head>
     <meta charset='utf-8'>
-    <title>How to report a lot?</title>
+    <title>Modular Reporting Architecture</title>
     <meta content='' name='description'>
     <meta content='Bogdan Gusiev' name='author'>
     <meta content='yes' name='apple-mobile-web-app-capable'>
@@ -22,12 +22,12 @@
       
       .reveal pre code {
         padding: 20px 5px;
-        font-size: 1em;
+        font-size: 1.3em;
         line-height: 1.3em; }
       .reveal ul {
         min-width: 50%; }
       .reveal .red {
-        color: #ff2c2d; }
+        color: #e02c2d; }
       .reveal .green {
         color: #17ff2e; }
       .reveal .yellow {
@@ -46,8 +46,7 @@
     <div class='reveal'>
       <div class='slides'>
         <section>
-          <h2>How to Report</h2>
-          <h1>a LOT?</h1>
+          <h2>Modular Reporting Architecture</h2>
           <h3>Bogdan Gusiev</h3>
         </section>
         <section>
@@ -81,7 +80,7 @@
         </section>
         <section>
           <h3>Why to Report?</h3>
-          <pre><code>ActiveRecord::Base.send(:subclasses).map do |klass|&#x000A;  klass.where(&#x000A;    "created_at &gt; ?", 1.day.ago&#x000A;  ).count&#x000A;end.sum</code></pre>
+          <pre><code>ActiveRecord::Base.send(:subclasses).map do |klass|&#x000A;  klass.where(&#x000A;    "updated_at &gt; ?", 1.day.ago&#x000A;  ).count&#x000A;end.sum</code></pre>
         </section>
         <section>
           <h2>At some point you know everything</h2>
@@ -93,8 +92,8 @@
           <h2>At another point you can't do it anymore</h2>
         </section>
         <section>
-          <h2 class='red'>a LOT?</h2>
-          <h2>How many people want reports?</h2>
+          <h2 class='red'>Why Modularity and Architecture?</h2>
+          <h2 class='fragment'>How many people want reports?</h2>
           <aside class='notes'>
             <ul>
               <li>not how big numbers are</li>
@@ -105,6 +104,9 @@
         <section>
           <h3>How many people</h3>
           <h3>would it be hard to support?</h3>
+          <div class='fragment'>
+            <h2>Around 5</h2>
+          </div>
           <aside class='notes'>
             <p>At some point you can pull all required number as they are needed</p>
             <p>At some point you can't</p>
@@ -122,23 +124,17 @@
           </ul>
         </section>
         <section>
-          <h3>Business speaks with you like this:</h3>
-          <p>Good ones</p>
-          <ul>
-            <li>How many new users do we acquire a month at average?</li>
-            <li>How much sales did we get from this advertising campaign?</li>
-          </ul>
-          <p>And bad ones</p>
+          <h3 class='red'>People Language</h3>
           <ul>
             <li>Please visualise the data.</li>
             <li>Can I see how we are performing overall in the last time?</li>
           </ul>
         </section>
         <section>
-          <h3>Basic Data Operations in Reporting</h3>
+          <h3>Being More Formal</h3>
           <ul>
             <li>How many ...?</li>
-            <li>What is a total amount of ...?</li>
+            <li>What is the total amount of ...?</li>
             <li>... in this scope/date range</li>
             <li>... for each period/category</li>
           </ul>
@@ -154,28 +150,27 @@
           </div>
         </section>
         <section>
-          <h3>The basic model of doing all that</h3>
-          [you are doing the work in a middle]
+          <h3>What to start from</h3>
+          <img src='/slide_A_black.png'>
         </section>
         <section>
           <h3>Stages</h3>
           <ol>
-            <li>At first you learn: SQL, CSV, Graphs, S3 file uploading</li>
+            <li>At first you learn: SQL, CSV, Visualisation, S3 file uploading</li>
             <li>Then you feel like an Reporting Machine</li>
             <li>And then you say: No thanks...</li>
           </ol>
         </section>
         <section>
           <h3>Let the machine do the work</h3>
-          <h4>Let you become a software developer again</h4>
-          [machine in a middle graph]
+          <img src='/slide_B_black.png'>
         </section>
         <section>
           <h2>Requirement of unification</h2>
           <h2>and code reuse</h2>
         </section>
         <section>
-          <h3>Problems:</h3>
+          <h3 class='red'>Naming Problem</h3>
           <h3>Total Sales = ?</h3>
           1st Developer:
           <pre class='fragment'><code>Purchase.group(:marketing_campaign).&#x000A;  sum(:subtotal)</code></pre>
@@ -185,16 +180,18 @@
           <pre class='fragment'><code>Purchase.&#x000A;  group(:marketing_campaign, "month(paid_at)").&#x000A;  successfully_delivered.&#x000A;  sum(:subtotal)&#x000A;</code></pre>
         </section>
         <section>
-          <h3>No one database knows about</h3>
-          <h2>Daylight Saving Time</h2>
-        </section>
-        <section>
-          <h3>Does it include a returned sales or not?</h3>
+          <h3>Does it include returned sales or not?</h3>
           <img src='http://monosnap.com/image/8mWPDzrlTJaQEaY9jMR6b9me8yz4zs.png'>
         </section>
         <section>
+          <h3 class='red'>Problem:</h3>
           <h3>Same metric can be calculated differently</h3>
           <h3>in different parts of project</h3>
+        </section>
+        <section>
+          <h3 class='red'>Problem:</h3>
+          <h3>No one database knows about</h3>
+          <h2>Daylight Saving Time</h2>
         </section>
         <section>
           <h2 class='yellow'>Conclusion:</h2>
@@ -209,7 +206,7 @@
         </section>
         <section>
           <h3>"One ring to rule them all!"</h3>
-          <pre><code class='ruby'>{&#x000A;  identifier: 'total_sales',&#x000A;  name: 'Total Sales',&#x000A;  description: 'Amount ($) of successfully delivered sales'&#x000A;  how_to_calculate: -> () { &#x000A;    # comming soon&#x000A;  } &#x000A;}&#x000A;</code></pre>
+          <pre><code class='ruby'>{&#x000A;  identifier: 'total_sales',&#x000A;  name: 'Total Sales',&#x000A;  description: 'Amount ($) of successfully delivered sales'&#x000A;  how_to_calculate: -> () { &#x000A;    # coming soon&#x000A;  } &#x000A;}&#x000A;</code></pre>
         </section>
         <section>
           <h2>How to Calculate a metric?</h2>
@@ -221,19 +218,19 @@
         </section>
         <section>
           <h3>How to Be organized?</h3>
-          <pre><code class='ruby'>Purchase.where(&#x000A;  created_at: ?,&#x000A;  marketing_campaign: ?,&#x000A;  users: {gender: ?},&#x000A;  status: ?,         &#x000A;  first_time_buyer: ?,&#x000A;  items: { product_category: ? }&#x000A;).joins(...)</code></pre>
+          <pre><code class='ruby'>Purchase.where(&#x000A;  created_at: ?,&#x000A;  marketing_campaign: ?,&#x000A;  users: {gender: ?},&#x000A;  status: ?,         &#x000A;  first_time_buyer: ?,&#x000A;  items: { product_category: ? }&#x000A;).sum(:subtotal)</code></pre>
           <aside class='notes'>We need to organize aggregation and multiple filters for the same metric:</aside>
         </section>
         <section>
-          <h3>Words snowball</h3>
+          <h3 class='red'>Words snowball</h3>
           <h4>What is total sales for each marketing campaigns in February?</h4>
           <pre><code>Purchase.where(&#x000A;  created_at: '2015-02-01'..'2015-03-01'&#x000A;).group(:marketing_campaign).sum(:subtotal)&#x000A;</code></pre>
           <h4>What is total sales for each week of February in the given marketing campaign?</h4>
-          <pre><code>Purchase.where(&#x000A;  created_at: '2015-02-01'..'2015-03-01', &#x000A;  marketing_campaign: id,&#x000A;).group('week(created_at)').sum(:subtotal)&#x000A;&#x000A;</code></pre>
+          <pre><code>Purchase.where(&#x000A;  created_at: '2015-02-01'..'2015-03-01', &#x000A;  marketing_campaign: id,&#x000A;).group('week(created_at)').sum(:subtotal)&#x000A;&#x000A;&#x000A;&#x000A;</code></pre>
         </section>
         <section>
           <h4>How many first time buyers does that campaign bring?</h4>
-          <h4>What is purchases ditribution by hour of a day for each state?</h4>
+          <h4>What is purchases ditribution by hour of a day for each country we sell in?</h4>
           <h4>How much did we sell for each product category this black friday comparing to previous one?</h4>
           <h4>What is the average order value of first time buyers compared to non-first time buyers?</h4>
           <aside class='notes'>
@@ -241,11 +238,17 @@
           </aside>
         </section>
         <section>
+          <h2>Is it a code duplication or not?</h2>
+          <pre><code class='ruby'>Purchase.&#x000A;  where(merchant: merchant)&#x000A;  where( paid_at: '2015-02-01'..'2015-03-01').&#x000A;  joins(:payment)&#x000A;  group(:marketing_campaign).&#x000A;  successfully_delivered.&#x000A;  sum(:subtotal)&#x000A;&#x000A;</code></pre>
+          <pre><code class='ruby'>Purchase.&#x000A;  where(merchant: merchant)&#x000A;  where(marketing_campaign: marketing_campaign).&#x000A;  group("month(paid_at)").&#x000A;  joins(:payment)&#x000A;  successfully_delivered.&#x000A;  sum(:subtotal)&#x000A;&#x000A;</code></pre>
+          <h3 class='fragment'>Not yet....</h3>
+        </section>
+        <section>
           <h3>How to share code between all those requests?</h3>
         </section>
         <section>
           <h2 class='yellow'>Conclusion:</h2>
-          <h2>one query =&gt; one number</h2>
+          <h2>one number =&gt; one query</h2>
           <h2>
             <strike>
               GROUP BY
@@ -253,7 +256,7 @@
           </h2>
         </section>
         <section>
-          <pre><code>marketing_campaigns.map do |campaign|&#x000A;  total_sales(created_at: february_month, marketing_campaign: campaign)&#x000A;end&#x000A;&#x000A;february_month.each_week.map do |week|&#x000A;  total_sales(created_at: week, marketing_campaign: selected_campaign)&#x000A;end&#x000A;&#x000A;</code></pre>
+          <pre><code>marketing_campaigns.map do |campaign|&#x000A;  total_sales(&#x000A;    created_at: february_month, &#x000A;    marketing_campaign: campaign,&#x000A;  )&#x000A;end&#x000A;&#x000A;february_month.each_week.map do |week|&#x000A;  total_sales(&#x000A;    created_at: week, &#x000A;    marketing_campaign: selected_campaign,&#x000A;  )&#x000A;end&#x000A;&#x000A;</code></pre>
         </section>
         <section>
           <h3>Filter:</h3>
@@ -270,13 +273,13 @@
           </aside>
         </section>
         <section>
-          <pre><code class='ruby'>result = []&#x000A;marketing_campaigns.each do |campaign|&#x000A;  weeks_of_february.each do |week|&#x000A;    result &lt;&lt; [ &#x000A;      campaign,&#x000A;      week, &#x000A;      total_purchases(created_at: week, marketing_campaign: campaign) &#x000A;      total_sales(created_at: week, marketing_campaign: campaign),&#x000A;      unique_buyers(created_at: week, marketing_campaign: campaign)&#x000A;    ]&#x000A;  end&#x000A;end&#x000A;</code></pre>
+          <pre><code class='ruby'>result = []&#x000A;marketing_campaigns.each do |campaign|&#x000A;weeks_of_february.each do |week|&#x000A;  result &lt;&lt; [ &#x000A;    campaign,&#x000A;    week, &#x000A;    total_purchases(created_at: week, marketing_campaign: campaign) &#x000A;    total_sales(created_at: week, marketing_campaign: campaign),&#x000A;    unique_buyers(created_at: week, marketing_campaign: campaign)&#x000A;  ]&#x000A;end&#x000A;end&#x000A;</code></pre>
         </section>
         <section>
           <table>
             <thead>
               <tr>
-                <th>Week</th>
+                <th>Week&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
                 <th>
                   Campaign
                 </th>
@@ -286,86 +289,136 @@
                 <th>
                   $ Total Sales
                 </th>
-                <th>Number of Buyers</th>
+                <th>Unique Buyers</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>1st</td>
                 <td>
-                  <nobr>SF 15Q1 SA</nobr>
+                  Feb
+                  1st
                 </td>
                 <td>
-                  530
-                </td>
-                <td>$6,239.43</td>
-                <td>
-                  424
-                </td>
-              </tr>
-              <tr>
-                <td>1st</td>
-                <td>
-                  <nobr>SF 25Q2 PP</nobr>
+                  <nobr>15Q1 SA</nobr>
                 </td>
                 <td>
-                  387
+                  26
                 </td>
-                <td>$4,226.47</td>
+                <td>$1,460.49</td>
                 <td>
-                  309
+                  20
                 </td>
               </tr>
               <tr>
-                <td>2nd</td>
                 <td>
-                  <nobr>SF 15Q1 SA</nobr>
+                  Feb
+                  1st
                 </td>
                 <td>
-                  557
-                </td>
-                <td>$1,297.20</td>
-                <td>
-                  445
-                </td>
-              </tr>
-              <tr>
-                <td>2nd</td>
-                <td>
-                  <nobr>SF 25Q2 PP</nobr>
+                  <nobr>25Q2 PP</nobr>
                 </td>
                 <td>
-                  424
+                  993
                 </td>
-                <td>$9,497.53</td>
+                <td>$10,231.6</td>
                 <td>
-                  339
+                  794
                 </td>
               </tr>
               <tr>
-                <td>3rd</td>
                 <td>
-                  <nobr>SF 15Q1 SA</nobr>
+                  Feb
+                  2nd
                 </td>
                 <td>
-                  217
+                  <nobr>15Q1 SA</nobr>
                 </td>
-                <td>$3,443.42</td>
                 <td>
-                  173
+                  655
+                </td>
+                <td>$14,299.70</td>
+                <td>
+                  524
                 </td>
               </tr>
               <tr>
-                <td>3rd</td>
                 <td>
-                  <nobr>SF 25Q2 PP</nobr>
+                  Feb
+                  2nd
                 </td>
                 <td>
-                  500
+                  <nobr>25Q2 PP</nobr>
                 </td>
-                <td>$1,893.61</td>
                 <td>
-                  400
+                  15
+                </td>
+                <td>$1,103.25</td>
+                <td>
+                  12
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  Feb
+                  3rd
+                </td>
+                <td>
+                  <nobr>15Q1 SA</nobr>
+                </td>
+                <td>
+                  652
+                </td>
+                <td>$7,997.83</td>
+                <td>
+                  521
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  Feb
+                  3rd
+                </td>
+                <td>
+                  <nobr>25Q2 PP</nobr>
+                </td>
+                <td>
+                  599
+                </td>
+                <td>$12,663.7</td>
+                <td>
+                  479
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  Feb
+                  4th
+                </td>
+                <td>
+                  <nobr>15Q1 SA</nobr>
+                </td>
+                <td>
+                  338
+                </td>
+                <td>$7,163.44</td>
+                <td>
+                  270
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  Feb
+                  4th
+                </td>
+                <td>
+                  <nobr>25Q2 PP</nobr>
+                </td>
+                <td>
+                  690
+                </td>
+                <td>$1,488.10</td>
+                <td>
+                  552
                 </td>
               </tr>
             </tbody>
@@ -381,11 +434,11 @@
         </section>
         <section>
           <h2>Implementation</h2>
-          <h4>OO Design is optional</h4>
-          <pre><code class='ruby'>class ApplicationMetrics&#x000A;  def initialize(filters)&#x000A;    @filters = filters&#x000A;  end&#x000A;  def total_sales&#x000A;    purchases_scope.sum(:subtotal)&#x000A;  end&#x000A;  def total_purchases&#x000A;    purchases_scope.count&#x000A;  end&#x000A;  def unique_buyers&#x000A;    purchases_scope.count("DISTINCT user_id")&#x000A;  end&#x000A;  private&#x000A;  def purchases_scope&#x000A;    Purchases.successfully_delivered.&#x000A;      where(paid_at: @filters[:period]).&#x000A;      where(marketing_campaign_id: @filters[:marketing_campaign])&#x000A;  end</code></pre>
+          <h4>OO Design is recommended</h4>
+          <pre><code class='ruby'>class ApplicationMetrics&#x000A;  def initialize(@filters)&#x000A;  def total_sales&#x000A;    purchases_scope.sum(:subtotal)&#x000A;  end&#x000A;  def total_purchases&#x000A;    purchases_scope.count&#x000A;  end&#x000A;  def unique_buyers&#x000A;    purchases_scope.count("DISTINCT user_id")&#x000A;  end&#x000A;  def purchases_scope&#x000A;    Purchase.successfully_delivered.&#x000A;      where(paid_at: @filters[:period]).&#x000A;      where(marketing_campaign_id: @filters[:marketing_campaign])&#x000A;  end</code></pre>
         </section>
         <section>
-          <h3>And a metadata:</h3>
+          <h3>And the metadata:</h3>
           <pre><code class='ruby'>def self.metric(name, metadata = {})&#x000A;  @metrics ||= {}&#x000A;  @metrics[name] = metadata&#x000A;  define_method(name) do&#x000A;    yield&#x000A;  end&#x000A;end&#x000A;&#x000A;metric(:total_sales, name: 'Total Sales $', description: '...') do&#x000A;  purchases_scope.sum(:subtotal)&#x000A;end</code></pre>
         </section>
         <section>
@@ -396,7 +449,7 @@
             <li>Consistency</li>
             <li>Single point of control</li>
             <li>Code reuse</li>
-            <li>Front-end is decoupeled</li>
+            <li>Front-end is decoupled</li>
           </ul>
           <aside class='notes'>
             <ul>
@@ -410,11 +463,41 @@
           </aside>
         </section>
         <section>
-          <h2>Consistency:</h2>
+          <h2>Consistency?</h2>
+          <table>
+            <tr>
+              <th>Month</th>
+              <th>Total Sales $</th>
+            </tr>
+            <tr>
+              <td>March</td>
+              <td>$1881</td>
+            </tr>
+            <tr>
+              <td>April</td>
+              <td>$1001</td>
+            </tr>
+            <tr>
+              <td>May</td>
+              <td>$2074</td>
+            </tr>
+            <tr>
+              <td>Total</td>
+              <td>?</td>
+            </tr>
+          </table>
+        </section>
+        <section>
+          <h2 class='red'>Consistency!</h2>
           <h3>Spring = March + April + May</h3>
           <h3>Week = Su + Mo + Tu + We + Th + Fr + Sa</h3>
+          <br>
+          <div class='fragment'>
+            <h3>DST is your enemy!</h3>
+            <h3>because DB can not do it correctly</h3>
+          </div>
           <aside class='notes'>
-            Customers can be very captious.
+            Customers can be very fault-finding.
             If you show them numbers they do not like,
             even small mistake 0.1% can break their trust.
             If DST would happen within a week...
@@ -426,13 +509,13 @@
           <h3>Being Consistent = Gain Trust</h3>
         </section>
         <section>
-          <h3>Disadvantages</h3>
+          <h3 class='red'>Disadvantages</h3>
           <h2>Performance is going down</h2>
         </section>
         <section>
           <h3>Caching in reporting</h3>
           <ul>
-            <li>10 marking campaigns</li>
+            <li>10 marketing campaigns</li>
             <li>3 years = 1095 days</li>
             <li>20 product categories</li>
             <li>10 metrics</li>
@@ -440,17 +523,23 @@
         </section>
         <section>
           <h2>Cache is unmaintainable</h2>
-          <h3>10  * 1095 * 20 * 10 &asymp; 2_000_000 variants</h3>
+          <h3>
+            10  * 1095 * 20 * 10 &asymp;
+            <div class='red'>2_000_000 variants</div>
+          </h3>
+          <h4>It is easy to cache a dashboard that</h4>
+          <h4>displays the same information for all users</h4>
+          <h4>But personal reports are not like that.</h4>
           <aside class='notes'>
             <p>Exponential growth</p>
             <p>There are more numbers you can generate than data in your database</p>
           </aside>
         </section>
+        <section></section>
         <section>
           <h3>Improve performance with</h3>
-          <h2>Parallel execution &amp;</h2>
-          <h2>SSD harddrive</h2>
-          <h3>Google for: Array parallel map</h3>
+          <h2 class='yellow'>Parallel execution</h2>
+          <h3 class='fragment'>Google for: Array parallel map</h3>
         </section>
         <section>
           <h3>
@@ -469,22 +558,24 @@
           <h3 class='yellow'>Summing Up</h3>
         </section>
         <section>
+          <h2 class='yellow'>Consistent Naming</h2>
           <h3>Same Name =&gt; Same Logic</h3>
           <h3>Different Logic =&gt; Different Name</h3>
         </section>
         <section>
           <h3>How to reuse code?</h3>
-          <h3>One Query =&gt; One Number</h3>
+          <h3 class='yellow'>One Number =&gt; One Query</h3>
         </section>
         <section>
-          <h3>Unified Report Definition</h3>
+          <h3 class='yellow'>Unified Definition</h3>
           <ul>
             <li>
-              Metrics: Name, Description, ...
+              Name, Description, ...
             </li>
+            <li>Base query</li>
             <li>Filters</li>
             <li>
-              Operations
+              Operation
               <ul>
                 <li>count</li>
                 <li>sum</li>
@@ -493,12 +584,21 @@
           </ul>
         </section>
         <section>
+          <h3 class='yellow'>And remember:</h3>
+          <h3>This is more about DATA</h3>
+          <h3>than anything else</h3>
+        </section>
+        <section>
           <h2>Thanks for your attention!</h2>
+          <h3>And Remember</h3>
           <ul>
             <li>My blog: gusiev.com</li>
             <li>My code: github.com/bogdan</li>
             <li>My company: talkable.com</li>
           </ul>
+        </section>
+        <section>
+          <pre><code class='ruby'>  def initialize(@filters)&#x000A;  metric(:total_sales, name: "Total Sales $") do&#x000A;    purchases_scope.sum(:subtotal)&#x000A;  end&#x000A;  metric(:total_purchases, name: "Total Sales #") do&#x000A;    purchases_scope.count&#x000A;  end&#x000A;  metric(:unique_buyers, name: "Unique Buyers") do&#x000A;    purchases_scope.count("DISTINCT user_id")&#x000A;  end&#x000A;  def purchases_scope&#x000A;    Purchase.successfully_delivered.&#x000A;      where(paid_at: @filters[:period]).&#x000A;      where(marketing_campaign_id: @filters[:marketing_campaign])&#x000A;  end</code></pre>
         </section>
       </div>
     </div>
