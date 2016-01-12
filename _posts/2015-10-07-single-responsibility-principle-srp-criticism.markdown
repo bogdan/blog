@@ -10,7 +10,7 @@ tags:
 
 I've never been a fan of Single Responsibility Principle aka SRP
 
-It is pretty controversial because any object in the universe including elementary particles has multiple responsibilities.
+If any physical thing I used has multiple responsibilities, why would software should be built from SRP things?
 
 <!--more-->
 
@@ -28,6 +28,8 @@ Well, in fact even common instruments are usually multifunctional.
 It feels like hammer should be a perfect example of SRP, but it is not. 
 Hint: Pay attention to what is on opposite sides of the handle: these are two different ends designed to do completely different job.
 It is a good example how solution is done based on the process but not on SRP. SRP is too idealistic even for a hammer.
+Convinience requires to merge two instruments into one to make it easy to switch from rriving in to pulling out.
+It always requires in depth integration of functions into processes. 
 
 And this multi-functionality factor expands as we move to more complex and famous devices. Like:
 
@@ -35,7 +37,7 @@ And this multi-functionality factor expands as we move to more complex and famou
 
 
 Moving into another direction: none of two things on the image below follows SRP.
-Both of them are carrying not just an electrical charge, but some mass and spin as well. It tells that their behaviour is described by their electromagnetic and gravitational responsibilities. See, two is still not one.
+Both of them are carrying not just an electrical charge, but some mass and spin as well. It tells that their behaviour is described by their electromagnetic and gravitational responsibilities. See that two is still not one.
 
 <img src="http://science.jrank.org/article_images/ep201102/science/science982.jpg"/>
 
@@ -45,7 +47,7 @@ So next time you blame ActiveRecord::Base for having 200+ methods, try to think 
 
 ### Summary
 
-Principles discusses in software development always were very hot mainly because all engineering principles are controversial. But I can definitely say that SRP is one of the most controversial among them.
+Principles discusses in software development always were very hot mainly because all engineering principles are pretty controversial. But I can definitely say that SRP is one of the most controversial among them.
 
 
 

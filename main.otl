@@ -121,6 +121,10 @@ OSS
 		Rescue IrreversibleOrderException from Relation#last
 		Remove missing NameError#missing_name and simply use #name instead
 		Handle content_tag(:div, 'test', style: {width: '100%'}) correctly
+		Fix partial preloading bug:
+			unpreloaded = campaign.locale_entries.reject {|l| l.split_test_variants.loaded?}
+			ActiveRecord::Associations::Preloader.new.preload(unpreloaded, :split_test_variants)
+		  
 
 	Rspec-rails
 		Subshell on rake spec
