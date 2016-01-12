@@ -1,7 +1,6 @@
 ---
 layout: post
 title: Something is wrong with Single Reponsibility Principle
-published: false
 tags: 
 - srp
 - criticism
@@ -10,11 +9,11 @@ tags:
 
 I've never been a fan of Single Responsibility Principle aka SRP
 
-If any physical thing I used has multiple responsibilities, why would software should be built from SRP things?
+If any physical thing I used has multiple responsibilities, why would software be built from SRP things?
 
 <!--more-->
 
-The role of information technology software is to simulate the outer world. But is there many things in real world that follow SRP?
+The role of information technology software is to build a model of the outer world. But is there many things in real world that follow SRP?
 
 SRP feels so elegant from the first glance: why isn't it wonderful that every tool you have does only one specific job. And all your tools are always sharp and you know exactly which tool is designed for what kind of job.
 
@@ -28,8 +27,11 @@ Well, in fact even common instruments are usually multifunctional.
 It feels like hammer should be a perfect example of SRP, but it is not. 
 Hint: Pay attention to what is on opposite sides of the handle: these are two different ends designed to do completely different job.
 It is a good example how solution is done based on the process but not on SRP. SRP is too idealistic even for a hammer.
-Convinience requires to merge two instruments into one to make it easy to switch from rriving in to pulling out.
+Convenience requires to merge two instruments into one to make it easy to switch from riving in to pulling out.
 It always requires in depth integration of functions into processes. 
+
+The pliers show even deeper integration in their design, allowing many processes associated with a wire to be done with using a single tool:
+
 
 And this multi-functionality factor expands as we move to more complex and famous devices. Like:
 
