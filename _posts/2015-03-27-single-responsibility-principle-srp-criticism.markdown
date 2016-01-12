@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Something is wrong with Single Reponsibility Principle
-published: true
+published: false
 tags: 
 - srp
 - criticism

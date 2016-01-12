@@ -22,7 +22,7 @@
         pre
           code
             padding: 20px 5px
-            font-size: 1.00em
+            font-size: 1.30em
             line-height: 1.3em
         ul
           min-width: 50%
@@ -96,10 +96,9 @@
           %h2 At another point you can't do it anymore
 
         %section
-          %h2.red Modularity and Architecture
+          %h2.red Why Modularity and Architecture?
               
-          %h3 The need of them comes from an answer:
-          %h2 How many people want reports?
+          %h2.fragment How many people want reports?
 
           %aside.notes
             %ul
@@ -175,7 +174,7 @@
           %h2 and code reuse
           
         %section 
-          %h3 Problems:
+          %h3.red Naming Problem
 
           %h3 Total Sales = ?
           
@@ -297,7 +296,7 @@
           
         %section
           %h4 How many first time buyers does that campaign bring?
-          %h4 What is purchases distribution by hour of a day for each state?
+          %h4 What is purchases ditribution by hour of a day for each country we sell in?
           %h4 How much did we sell for each product category this black friday comparing to previous one?
           %h4 What is the average order value of first time buyers compared to non-first time buyers?
           
@@ -334,7 +333,7 @@
 
           %h3.fragment Not yet....
 
-        %section
+        -#%section
           %pre
             %code.ruby
               :preserve
@@ -359,11 +358,17 @@
             %code
               :preserve
                 marketing_campaigns.map do |campaign|
-                  total_sales(created_at: february_month, marketing_campaign: campaign)
+                  total_sales(
+                    created_at: february_month, 
+                    marketing_campaign: campaign,
+                  )
                 end
 
                 february_month.each_week.map do |week|
-                  total_sales(created_at: week, marketing_campaign: selected_campaign)
+                  total_sales(
+                    created_at: week, 
+                    marketing_campaign: selected_campaign,
+                  )
                 end
 
 
@@ -401,15 +406,15 @@
               :preserve
                 result = []
                 marketing_campaigns.each do |campaign|
-                  weeks_of_february.each do |week|
-                    result &lt;&lt; [ 
-                      campaign,
-                      week, 
-                      total_purchases(created_at: week, marketing_campaign: campaign) 
-                      total_sales(created_at: week, marketing_campaign: campaign),
-                      unique_buyers(created_at: week, marketing_campaign: campaign)
-                    ]
-                  end
+                weeks_of_february.each do |week|
+                  result &lt;&lt; [ 
+                    campaign,
+                    week, 
+                    total_purchases(created_at: week, marketing_campaign: campaign) 
+                    total_sales(created_at: week, marketing_campaign: campaign),
+                    unique_buyers(created_at: week, marketing_campaign: campaign)
+                  ]
+                end
                 end
 
         %section
@@ -457,9 +462,7 @@
             %code.ruby
               :preserve
                 class ApplicationMetrics
-                  def initialize(filters)
-                    @filters = filters
-                  end
+                  def initialize(@filters)
                   def total_sales
                     purchases_scope.sum(:subtotal)
                   end
@@ -469,7 +472,6 @@
                   def unique_buyers
                     purchases_scope.count("DISTINCT user_id")
                   end
-                  private
                   def purchases_scope
                     Purchase.successfully_delivered.
                       where(paid_at: @filters[:period]).
@@ -575,7 +577,9 @@
           
           %h2 Cache is unmaintainable
 
-          %h3 10  * 1095 * 20 * 10 &asymp; 2_000_000 variants
+          %h3 
+            10  * 1095 * 20 * 10 &asymp; 
+            .red 2_000_000 variants
 
           %h4 It is easy to cache a dashboard that 
           %h4 displays the same information for all users
@@ -587,7 +591,7 @@
         %section
         %section
           %h3 Improve performance with
-          %h2 Parallel execution
+          %h2.yellow Parallel execution
 
           %h3.fragment Google for: Array parallel map
 
@@ -604,15 +608,16 @@
         %section
           %h3.yellow Summing Up
         %section
+          %h2.yellow Consistent Naming
           %h3 Same Name =&gt; Same Logic
           %h3 Different Logic =&gt; Different Name
 
         %section
           %h3 How to reuse code?
-          %h3  One Number =&gt; One Query
+          %h3.yellow  One Number =&gt; One Query
 
         %section
-          %h3.yellow Unified Report Definition
+          %h3.yellow Unified Definition
 
 
           %ul
@@ -626,36 +631,30 @@
                 %li count
                 %li sum
         %section
+          %h3.yellow And remember:
+          %h3 This is more about DATA 
+          %h3 than anything else
+        %section
           %h2 Thanks for your attention!
+          %h3 And Remember
           %ul
             %li My blog: gusiev.com
             %li My code: github.com/bogdan
             %li My company: talkable.com
-
-
-
         %section
-
-          %h2 Implementation
-          %h4 OO Design is recommended
-
           %pre
             %code.ruby
               :preserve
-                class ApplicationMetrics
-                  def initialize(filters)
-                    @filters = filters
-                  end
-                  def total_sales
+                  def initialize(@filters)
+                  metric(:total_sales, name: "Total Sales $") do
                     purchases_scope.sum(:subtotal)
                   end
-                  def total_purchases
+                  metric(:total_purchases, name: "Total Sales #") do
                     purchases_scope.count
                   end
-                  def unique_buyers
+                  metric(:unique_buyers, name: "Unique Buyers") do
                     purchases_scope.count("DISTINCT user_id")
                   end
-                  private
                   def purchases_scope
                     Purchase.successfully_delivered.
                       where(paid_at: @filters[:period]).
