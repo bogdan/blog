@@ -1,31 +1,44 @@
-!SLIDE 
+!SLIDE[bg=techtalk_bg.png] 
+
+<img src="/file/techtalk_main.png" style=""/>
+!SLIDE[bg=techtalk_bg.png] 
+<img src="/file/techtalk_corner.png" style="position: absolute; top: 0; left: 0"/>
+<img src="/file/techtalk_bottom.png" style="position: absolute; bottom: 0; left: 0; width: 100%;"/>
+
+!SLIDE[bg=techtalk_bg.png]
+
 
 # Fighting with fat models
 ##### and many other problems
 ## Bogdan Gusiev
 
-!SLIDE 
+!SLIDE[bg=techtalk_bg.png] 
 
 
 ## Bogdan G.
 
 * is 7 years in IT, 3 years with Ruby and Rails
+* Work for a small startup http://talkable.com
+
 * Long Run Rails Contributor
-* Some of my gems
-  * [Datagrid](https://github.com/bogdan/datagrid)
-  * [js-routes](https://github.com/railsware/js-routes)
 
-* http://github.com/bogdan
+!SLIDE[bg=techtalk_bg.png] 
 
 
+# Some of my gems
 
-!SLIDE 
+* [Datagrid](https://github.com/bogdan/datagrid)
+* [js-routes](https://github.com/railsware/js-routes)
+* [http://github.com/bogdan](http://github.com/bogdan)
+
+
+!SLIDE[bg=techtalk_bg.png] 
 
 ## Why the problem appears?
 
 ## All business logic code goes to *model by default*.
 
-!SLIDE
+!SLIDE[bg=techtalk_bg.png]
 
 ## Why it should not be in controller or view?
 
@@ -37,7 +50,7 @@ Because **controller is hard** to
 
 
 
-!SLIDE 
+!SLIDE[bg=techtalk_bg.png] 
 
 
 ## A definition of being fat
@@ -49,7 +62,7 @@ But it depends on:
 * Whitespace
 * Comments
 
-!SLIDE 
+!SLIDE[bg=techtalk_bg.png] 
 
     @@@ text
 
@@ -66,7 +79,7 @@ But it depends on:
        14924 total
 
 
-!SLIDE 
+!SLIDE[bg=techtalk_bg.png] 
 
 ## Existing techniques
 
@@ -79,7 +92,7 @@ The problem is to **understand** which one *fit best* for you.
 
 
 
-!SLIDE 
+!SLIDE[bg=techtalk_bg.png] 
 
 ## What do we expect?
 
@@ -96,7 +109,7 @@ Specific:
 * Make the data  **safe**
 
 
-!SLIDE 
+!SLIDE[bg=techtalk_bg.png] 
 ### The need of Services
 
 #####When amount of utils that supports Model goes higher 
@@ -113,7 +126,7 @@ Specific:
     (3) FacebookService.create_user
 
 ### Move class methods between files is cheap
-!SLIDE 
+!SLIDE[bg=techtalk_bg.png] 
 
 
 ## Organise services by *process* 
@@ -122,7 +135,7 @@ Specific:
 ### Otherwise at some moment UserService would not be enough
 
 
-!SLIDE 
+!SLIDE[bg=techtalk_bg.png] 
 
 ## Services
 
@@ -141,12 +154,12 @@ Service is separated utility class.
 #### "Я знаю откуда что берется"
 
 
-!SLIDE 
+!SLIDE[bg=techtalk_bg.png] 
 
 #### The problem of services
 ### Services **don't** provide *default behavior*
 
-!SLIDE 
+!SLIDE[bg=techtalk_bg.png] 
 
 ## Need of Default Behavior
 
@@ -162,7 +175,7 @@ Object should incapsulate behavior:
 
 (Circles here)
 
-!SLIDE 
+!SLIDE[bg=techtalk_bg.png] 
 
 # What is a model?
 
@@ -173,7 +186,7 @@ Object should incapsulate behavior:
 
 ##### Wikipedia
 
-!SLIDE 
+!SLIDE[bg=techtalk_bg.png] 
 
 ## Implementation
 
@@ -186,7 +199,7 @@ Have the following benefits:
 * Reduce number of conventions
 * Suits to common knowledge - nothing more than Rails
 
-!SLIDE 
+!SLIDE[bg=techtalk_bg.png] 
 
 ## Hooks in models
 
@@ -200,7 +213,7 @@ Example: Comment can not be created without notification.
     end
 
 
-!SLIDE 
+!SLIDE[bg=techtalk_bg.png] 
 
 ## API comparision
 
@@ -212,14 +225,14 @@ Example: Comment can not be created without notification.
 #### Reimplement other person's API 
 #### has more wisdom than invent new one.
 
-!SLIDE 
+!SLIDE[bg=techtalk_bg.png] 
 
 # **Edge cases**
 
 ### In all cases data created in regular way
 ### In one edge cases special rules applied
 
-!SLIDE 
+!SLIDE[bg=techtalk_bg.png] 
 
 ## Service with options
 
@@ -231,12 +244,10 @@ Plan A:
       def self.create(attrs)
     end
 
-Maintenance problems:
-
 * Hard to keep all team informed about all services in the App
 * Hard to support as number of options goes higher
 
-!SLIDE 
+!SLIDE[bg=techtalk_bg.png] 
 
 ## Services with options
 
@@ -253,12 +264,10 @@ Plan B:
   * As many functions as possible
 
 
-!SLIDE 
+!SLIDE[bg=techtalk_bg.png] 
 
 # *Default behavior* and **edge cases**
 
-
-The property of default behavior in this example:
 
 * Hey model, create my comment.
   * Ok
@@ -268,7 +277,7 @@ The property of default behavior in this example:
   * Ok
 
 
-!SLIDE 
+!SLIDE[bg=techtalk_bg.png] 
 ### Support parameter in model
 
 
@@ -286,18 +295,22 @@ The property of default behavior in this example:
 
 
 
-!SLIDE 
+!SLIDE[bg=techtalk_bg.png] 
 
 
-###Model stands for *should*
+<br/>
+<br/>
+# Model stands for *should*
 
-###Service stands for *could*
+# Service stands for *could*
 
-!SLIDE 
+## Please do not confuse *should* with **must**
+
+!SLIDE[bg=techtalk_bg.png] 
 ## The model is still **fat**. 
 ## What to do?
 
-!SLIDE 
+!SLIDE[bg=techtalk_bg.png] 
 
 ## Use traits
 
@@ -308,7 +321,7 @@ The property of default behavior in this example:
 
 `Notification` module encapsulates a feature
 
-!SLIDE 
+!SLIDE[bg=techtalk_bg.png] 
 ### *Vertical slicing* stands for
 
 ## Split things by features 
@@ -318,7 +331,7 @@ The property of default behavior in this example:
 #### **Unlike MVC** which is horizontal slicing.
 
 
-!SLIDE 
+!SLIDE[bg=techtalk_bg.png] 
 
 ### Vertical slicing
 
@@ -344,7 +357,7 @@ Split model into *Traits*
       def disabled?
     end
 
-!SLIDE 
+!SLIDE[bg=techtalk_bg.png] 
 
 
 ## Ex.1 User + Facebook
@@ -355,7 +368,7 @@ Split model into *Traits*
 * `connected_to_facebook?`  => Model
   * Every user should know if it is connected to facebook or not
 
-!SLIDE 
+!SLIDE[bg=techtalk_bg.png] 
 
 ## Ex.2 Deliver comment notification
 
@@ -363,7 +376,7 @@ Split model into *Traits*
   * Default Behaviour
   * Even if exceptions exist
 
-!SLIDE 
+!SLIDE[bg=techtalk_bg.png] 
 
 ### Basic application architecture
 
@@ -388,7 +401,7 @@ Split model into *Traits*
 
 </table>
 
-!SLIDE 
+!SLIDE[bg=techtalk_bg.png] 
 
 ## This is OOP
 
@@ -396,7 +409,7 @@ Split model into *Traits*
 
 
 
-!SLIDE
+!SLIDE[bg=techtalk_bg.png]
 
 
 ### Dependencies appear
@@ -431,7 +444,7 @@ As number of traits grow:
 
 <!--</table>-->
 
-!SLIDE 
+!SLIDE[bg=techtalk_bg.png] 
 
 ## Associations and Traits
 
@@ -442,14 +455,14 @@ Associations is a base for Traits technique.
 * *`has_many`* is usually *better* to create a slice
   * Methods with this associations is usually independent from each other.
 
-!SLIDE 
+!SLIDE[bg=techtalk_bg.png] 
 
 #### How to not get lost?
 
 ## If *A* depends on *B* 
 ## then **B** should not depend on **A**
 
-!SLIDE 
+!SLIDE[bg=techtalk_bg.png] 
 
 ## Traits best practices
 
@@ -466,7 +479,7 @@ Associations is a base for Traits technique.
   * "name", "subject", "title" => select one
   * "disabled", "inactive", "deleted" => select one
 
-!SLIDE 
+!SLIDE[bg=techtalk_bg.png] 
 
 ## Libraries using traits
 
@@ -479,7 +492,7 @@ Associations is a base for Traits technique.
 <!--##### then it is **easy** for *regular projects*-->
 
 
-!SLIDE 
+!SLIDE[bg=techtalk_bg.png] 
 
 ## *Flow* nature and *Event* nature
 
@@ -501,7 +514,7 @@ Observers and Callbacks have event nature:
 
 
 
-!SLIDE 
+!SLIDE[bg=techtalk_bg.png] 
 
 ## Super advanced logic infrastructure
 
@@ -509,26 +522,26 @@ Observers and Callbacks have event nature:
 
 
 
-!SLIDE 
+!SLIDE[bg=techtalk_bg.png] 
 
 # Summary
 
 
-!SLIDE 
+!SLIDE[bg=techtalk_bg.png] 
 ### *Could?*  => **Service**
 ### *Should?* => **Model**
-!SLIDE 
+!SLIDE[bg=techtalk_bg.png] 
 ## **Fat** models => *Thin* Traits 
 #### and sometimes observers
-!SLIDE 
+!SLIDE[bg=techtalk_bg.png] 
 ### *Reimplement* other person's API 
 ### has more wisdom than **invent new** one.
-!SLIDE 
+!SLIDE[bg=techtalk_bg.png] 
 ### If *A* depends on *B* 
 ### then **B** should not depend on **A**
 
 
-!SLIDE 
+!SLIDE[bg=techtalk_bg.png] 
 
 ### The **End**
 
