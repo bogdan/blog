@@ -1,9 +1,6 @@
-!SLIDE[bg=techtalk_bg.png] 
+!SLIDE[bg=techtalk_main.png] 
 
-<img src="/file/techtalk_main.png" style=""/>
-!SLIDE[bg=techtalk_bg.png] 
-<img src="/file/techtalk_corner.png" style="position: absolute; top: 0; left: 0"/>
-<img src="/file/techtalk_bottom.png" style="position: absolute; bottom: 0; left: 0; width: 100%;"/>
+<!--<img src="/file/techtalk_main.png" style=""/>-->
 
 !SLIDE[bg=techtalk_bg.png]
 
