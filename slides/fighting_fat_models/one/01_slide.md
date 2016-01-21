@@ -1,8 +1,8 @@
 !SLIDE 
+
 # Fighting with fat models
 ##### and many other problems
 ## Bogdan Gusiev
-### September 2011
 
 !SLIDE 
 
@@ -10,53 +10,60 @@
 ## Bogdan G.
 
 * is 7 years in IT, 3 years with Ruby and Rails
-* Contributed to:
-  * Rails 
-    * wait for my features in 3.2
-    * Deeply understands Rails internals
-    * In context of Rails moving direction
-  * Resque and about 5-7 plugins
-    * Knows something about high load
-  * Many others
+* Long Run Rails Contributor
+* Some of my gems
+  * [Datagrid](https://github.com/bogdan/datagrid)
+  * [js-routes](https://github.com/railsware/js-routes)
 
-* Created:
-  * [datagrid](http://github.com/bogdan/datagrid) - 180+ watchers
-  * [js-routes](http://github.com/railsware/js-routes) - 100+ watchers
+* http://github.com/bogdan
+
 
 
 !SLIDE 
-##### Why the problem appear?
 
-####All business logic code goes to *model by default*.
+## Why the problem appears?
 
-<br/>
+## All business logic code goes to *model by default*.
 
-##### Why it should not be in controller?
+!SLIDE
 
-#### Because **controller is hard** to test, maintain and reuse.
+## Why it should not be in controller or view?
 
+Because **controller is hard** to 
 
-<br/>
+* test
+* maintain
+* reuse
 
-##### Why it should not be in **view**?
-
-#### Many reasons
 
 
 !SLIDE 
 
 
-# **250 Lines of code**
+## A definition of being fat
+# **1000 Lines of code**
+
+But it depends on:
+
+* Docs
+* Whitespace
+* Comments
 
 !SLIDE 
 
+    @@@ text
 
-# *Update*
-
-## but not:
-
-# **Select**
-
+    $ wc -l app/models/* | sort -n | tail
+         532 app/models/incentive.rb
+         540 app/models/person.rb
+         544 app/models/visitor_offer.rb
+         550 app/models/reward.rb
+         571 app/models/web_hook.rb
+         786 app/models/site.rb
+         790 app/models/referral.rb
+         943 app/models/campaign.rb
+         998 app/models/offer.rb
+       14924 total
 
 
 !SLIDE 
@@ -65,8 +72,6 @@
 
 * Services 
   * Separated utility class
-* Observers 
-  * Event listeners
 * Traits 
   * Modules that get included to models
 
@@ -101,11 +106,21 @@ Specific:
     @@@ ruby
 
     # move
-    User.create_from_facebook
+    (1) User.create_from_facebook
     # to
-    UserService.create_from_facebook
+    (2) UserService.create_from_facebook
     # or
-    FacebookService.create_user
+    (3) FacebookService.create_user
+
+### Move class methods between files is cheap
+!SLIDE 
+
+
+## Organise services by *process* 
+## rather than **object** they operate on
+
+### Otherwise at some moment UserService would not be enough
+
 
 !SLIDE 
 
@@ -138,23 +153,23 @@ Service is separated utility class.
 Object should incapsulate behavior:
 
 * Data Validation
-  * Set of rules that model should fit at programming level
-    * Comment should have author
-* Business rules
-  * Set of rules that model should fit to exist in real world
-    * Comment should deliver email notification
+  * Set of rules that a model should fit at the programming level
+    * A comment should have an author
+* Business Rules
+  * Set of rules that a model should fit to exist in the real world
+    * A comment should deliver an email notification
 
 
 (Circles here)
 
 !SLIDE 
 
-#### What is a model?
+# What is a model?
 
 
-###The model is an imitation of real object 
-###that reflects some it's behaviors
-###that we are focused on.
+##The model is an imitation of real object 
+##that reflects some it's behaviors
+##that we are focused on.
 
 ##### Wikipedia
 
@@ -162,19 +177,18 @@ Object should incapsulate behavior:
 
 ## Implementation
 
-Using builtin Rails code:
+Using builtin Rails features:
 
-* ActiveModel::Observer
 * ActiveRecord::Callbacks
 
 Have the following benefits:
 
 * Reduce number of conventions
-* Suites to common knowledge - nothing more than Rails
+* Suits to common knowledge - nothing more than Rails
 
 !SLIDE 
 
-##Hooks in models
+## Hooks in models
 
 We create default behavior and our data is safe.
 
@@ -184,22 +198,6 @@ Example: Comment can not be created without notification.
     class Comment < AR::Base
       after_create :send_comment_notification
     end
-
-!SLIDE 
-
-## Observers
-
-Model sends it's events to observer automatically and observer is calling a hook.
-
-    @@@ ruby
-    class CommentObserver < AR::Observer
-      def after_create(comment)
-        send_comment_notification(comment)
-      end
-    end
-
-* *+* Model doesn't depend on the notification code
-* **-** Some folks say: "Observers Not done well in Rails"
 
 
 !SLIDE 
@@ -216,7 +214,7 @@ Model sends it's events to observer automatically and observer is calling a hook
 
 !SLIDE 
 
-## **Edge cases**
+# **Edge cases**
 
 ### In all cases data created in regular way
 ### In one edge cases special rules applied
@@ -229,8 +227,8 @@ Plan A:
 
     @@@ ruby
     module CommentService
-      def self.create_with_notification(attributes)
-      def self.create(attributes)
+      def self.create_with_notification(attrs)
+      def self.create(attrs)
     end
 
 Maintenance problems:
@@ -246,7 +244,8 @@ Plan B:
 
     @@@ ruby
     module CommentService
-      def self.create(attributes, skip_notification = false)
+      def self.create(
+        attrs, skip_notification = false)
     end
 
 * Method will be a **mess** as number of options goes higher.
@@ -256,7 +255,7 @@ Plan B:
 
 !SLIDE 
 
-## *Default behavior* and **edge cases**
+# *Default behavior* and **edge cases**
 
 
 The property of default behavior in this example:
@@ -268,28 +267,6 @@ The property of default behavior in this example:
 * Hey model, create model without notification
   * Ok
 
-!SLIDE 
-
-## Observers with option
-
-
-    @@@ ruby
-
-    class Comment < AR::Base
-      attr_accessor :skip_comment_notification
-    end
-
-    class CommentObserver < AR::Observer
-      def after_create(comment)
-        deliver_notification(comment) \
-          unless comment.skip_comment_notification
-      end
-    end
-
-* Hard to access to model internals
-  * Some observer code stays in model
-* Have some problems with testing
-* Makes feature code more fragmented
 
 !SLIDE 
 ### Support parameter in model
@@ -307,20 +284,7 @@ The property of default behavior in this example:
 
 `#skip_comment_notification` is used only in edge cases.
 
-!SLIDE 
 
-### Observers are effective when
-
-##**no direct access** to *observed class*
-
-#### Example: when it is part of some library inside 
-#### a fat enterprise project
-
-
-!SLIDE 
-
-## Observer <=> Trait
-### conversion is *cheap*
 
 !SLIDE 
 
@@ -328,8 +292,6 @@ The property of default behavior in this example:
 ###Model stands for *should*
 
 ###Service stands for *could*
-
-###Observer stands for **big fat enterprise**
 
 !SLIDE 
 ## The model is still **fat**. 
@@ -366,7 +328,6 @@ Split model into *Traits*
     @@@ ruby
     class User < AR::Base
       include Traits::User::Facebook
-      include Traits::User::Linkedin
       include Traits::State::CanBeDisabled
     end
 
@@ -386,18 +347,37 @@ Split model into *Traits*
 !SLIDE 
 
 
+## Ex.1 User + Facebook
+
+* `belongs_to :facebook_profile` => Model
+* `#register_user_from_facebook` => Service
+* `connect_facebook_profile` => Service
+* `connected_to_facebook?`  => Model
+  * Every user should know if it is connected to facebook or not
+
+!SLIDE 
+
+## Ex.2 Deliver comment notification
+
+* Comment `#send_notification` => Model
+  * Default Behaviour
+  * Even if exceptions exist
+
+!SLIDE 
+
 ### Basic application architecture
 
 
 <table>
 <tr>
-  <td colspan="3">View</td>
+  <td colspan="100%">View</td>
 </tr>
 <tr>
-  <td colspan="3">Controller</td>
+  <td colspan="100%">Controller</td>
 </tr>
 <tr>
   <td colspan="3" style="padding-top: 0px; padding-bottom: 0px">Thin model</td>
+  <td rowspan="2" style="padding-top: 0px; padding-bottom: 0px">Services</td>
 </tr>
 
 <tr>
@@ -491,7 +471,7 @@ Associations is a base for Traits technique.
 ## Libraries using traits
 
 * ActiveRecord
-* Authlogic
+* ActiveModel
 * Devise
 * Datagrid
 
@@ -528,18 +508,6 @@ Observers and Callbacks have event nature:
 ![Architecture](./file/architechture.png)
 
 
-!SLIDE 
-
-### There is only one 100% reason 
-### when this can be broken.
-
-
-
-!SLIDE 
-
-### Of course this is 
-## Perfomance
-#### Others are doubtful
 
 !SLIDE 
 
