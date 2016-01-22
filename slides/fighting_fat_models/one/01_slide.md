@@ -100,18 +100,19 @@ Standard:
 * Easy to *test*
 
 
-Specific:
 
 * *MORE* FEATURES PER SECOND
 * Make the data  **safe**
 
 
 !SLIDE[bg=techtalk_bg.png] 
-### The need of Services
+## The need of Services
 
-#####When amount of utils that supports Model goes higher 
+###When amount of utils that supports Model goes higher 
 
-#####extract them to service is good idea.
+###extract them to service is good idea.
+
+!SLIDE 
 
     @@@ ruby
 
@@ -170,8 +171,6 @@ Object should incapsulate behavior:
     * A comment should deliver an email notification
 
 
-(Circles here)
-
 !SLIDE[bg=techtalk_bg.png] 
 
 # What is a model?
@@ -206,7 +205,7 @@ Example: Comment can not be created without notification.
 
     @@@ ruby
     class Comment < AR::Base
-      after_create :send_comment_notification
+      after_create :send_notification
     end
 
 
@@ -282,7 +281,7 @@ Plan B:
     class Comment < AR::Base
       attr_accessor :skip_comment_notification
       after_create do
-        send_comment_notification \
+        send_notification \
           unless self.skip_comment_notification
       end
     end
