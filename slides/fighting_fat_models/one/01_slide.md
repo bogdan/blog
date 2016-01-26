@@ -6,7 +6,6 @@
 
 
 # Fighting with fat models
-##### and many other problems
 ## Bogdan Gusiev
 
 !SLIDE[bg=techtalk_bg.png] 
@@ -39,7 +38,7 @@
 
 ## Why it should not be in controller or view?
 
-Because **controller is hard** to 
+Because **a controller is hard** to 
 
 * test
 * maintain
@@ -95,22 +94,35 @@ The problem is to **understand** which one *fit best* for you.
 
 Standard:
 
-* *Agile*
-* *Reusable* 
+* *Reusable* code
 * Easy to *test*
+* Good API
 
 
 
+* Single Origin Principle
 * *MORE* FEATURES PER SECOND
 * Make the data  **safe**
 
+!SLIDE 
+
+# Good API
+
+Is a user connected to facebook?
+
+    @@@ ruby
+    user.connected_to_facebook?
+    # OR
+    thing_that_knows_about_facebook.
+      is_user_connected_to_me?(user)
 
 !SLIDE[bg=techtalk_bg.png] 
-## The need of Services
 
-###When amount of utils that supports Model goes higher 
+# The need of Services
 
-###extract them to service is good idea.
+## When amount of utils that supports Model goes higher 
+
+## extract them to service is good idea.
 
 !SLIDE 
 
@@ -124,6 +136,7 @@ Standard:
     (3) FacebookService.create_user
 
 ### Move class methods between files is cheap
+
 !SLIDE[bg=techtalk_bg.png] 
 
 
@@ -135,9 +148,8 @@ Standard:
 
 !SLIDE[bg=techtalk_bg.png] 
 
-## Services
+## The problem of services
 
-The most common way to extract logic from model is create a service.
 
 Service is separated utility class.
 
@@ -154,14 +166,14 @@ Service is separated utility class.
 
 !SLIDE[bg=techtalk_bg.png] 
 
-#### The problem of services
-### Services **don't** provide *default behavior*
+# Services **don't** 
+# provide *default behavior*
 
 !SLIDE[bg=techtalk_bg.png] 
 
-## Need of Default Behavior
+## The Need of Default Behavior
 
-Object should incapsulate behavior:
+Object should encapsulate behavior:
 
 * Data Validation
   * Set of rules that a model should fit at the programming level
@@ -186,7 +198,7 @@ Object should incapsulate behavior:
 
 ## Implementation
 
-Using builtin Rails features:
+Using built-in Rails features:
 
 * ActiveRecord::Callbacks
 
@@ -211,7 +223,7 @@ Example: Comment can not be created without notification.
 
 !SLIDE[bg=techtalk_bg.png] 
 
-## API comparision
+## API comparison
 
     @@@ ruby
     Comment.create
@@ -274,7 +286,8 @@ Plan B:
 
 
 !SLIDE[bg=techtalk_bg.png] 
-### Support parameter in model
+
+# Support parameter in model
 
 
     @@@ ruby
@@ -292,7 +305,6 @@ Plan B:
 
 
 !SLIDE[bg=techtalk_bg.png] 
-
 
 <br/>
 <br/>
@@ -329,28 +341,22 @@ Plan B:
 
 !SLIDE[bg=techtalk_bg.png] 
 
-### Vertical slicing
 
 
-Split model into *Traits*
+# Split model into *Traits*
 
     @@@ ruby
     class User < AR::Base
-      include Traits::User::Facebook
-      include Traits::State::CanBeDisabled
+      include FacebookProfile
     end
 
-    module Facebook
+    # Hybrid trait that provides 
+    # instance and class methods
+    module FacebookProfile
       has_one :facebook_profile
       def connected_to_facebook?
-      ...
-    end
-
-    module CanBeDisabled
-      scope :disabled
-      scope :enabled
-      def disable!
-      def disabled?
+      def self.register_from_facebook(attributes)
+      def self.connect_facebook_profile(user, attributes)
     end
 
 !SLIDE[bg=techtalk_bg.png] 
