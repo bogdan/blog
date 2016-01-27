@@ -25,11 +25,19 @@
 
 * [Datagrid](https://github.com/bogdan/datagrid)
 * [js-routes](https://github.com/railsware/js-routes)
+* [accepts_values_for](https://github.com/bogdan/accepts_values_for)
 * [http://github.com/bogdan](http://github.com/bogdan)
 
 
+!SLIDE 
+
+## My Blog
+
+# http://gusiev.com
+
 !SLIDE[bg=techtalk_bg.png] 
 
+# Fat Models 
 ## Why the problem appears?
 
 ## All business logic code goes to *model by default*.
@@ -230,15 +238,44 @@ Example: Comment can not be created without notification.
     # or
     CommentService.create
 
-#### Reimplement other person's API 
-#### has more wisdom than invent new one.
+!SLIDE 
 
+## Successful Projects tend to do 
+# one thing 
+## in many different ways
+## rather than a lot of things
+
+* Comment on a web site
+* Comment in native mobile iOS app
+* Comment in native mobile Android app
+* Create a comment by replying to an email letter
+* Automatically generated comments
+
+
+!SLIDE 
+
+# Team Growth Problem
+## How would you deliver a knowledge that comment should be made like this to 50 people?
+
+    @@@ ruby
+    CommentService.create(...)
+
+!SLIDE 
+
+## Reimplement other person's API 
+## has more wisdom than invent new one.
+
+    @@@ ruby
+    Comment.create(...)
+    
 !SLIDE[bg=techtalk_bg.png] 
 
 # **Edge cases**
 
 ### In all cases data created in regular way
 ### In one edge cases special rules applied
+
+
 
 !SLIDE[bg=techtalk_bg.png] 
 
@@ -303,6 +340,14 @@ Plan B:
 `#skip_comment_notification` is used only in edge cases.
 
 
+!SLIDE
+
+## What is the difference?
+    @@@ ruby
+    FacebookService.register_user(...)
+    
+    Comment.after_create :send_notification
+
 
 !SLIDE[bg=techtalk_bg.png] 
 
@@ -324,7 +369,9 @@ Plan B:
 
     @@@ ruby
     class Comment < AR::Base
-      include Traits::Comment::Notification
+      include CommentNotification
+      include FeedActivityGeneration
+      include Archivable
     end
 
 `Notification` module encapsulates a feature
@@ -364,7 +411,7 @@ Plan B:
 
 ## Ex.1 User + Facebook
 
-* `belongs_to :facebook_profile` => Model
+* `has_one :facebook_profile` => Model
 * `#register_user_from_facebook` => Service
 * `connect_facebook_profile` => Service
 * `connected_to_facebook?`  => Model
@@ -414,37 +461,19 @@ Plan B:
 !SLIDE[bg=techtalk_bg.png]
 
 
-### Dependencies appear
+# Traits Base
 
-As number of traits grow:
+* Attributes
+* Associations
+  * `has_one`
+  * `has_many`
+  * `has_and_belongs_to_many`
 
-* associations
-* attributes
+## But rarely
 
-#### Dependency tree
+* `belongs_to`
 
-![Model dependency](./file/model_dependency.png)
 
-<!--<table>-->
-<!--<tr>-->
-<!--<td colspan="4">Model</td>-->
-<!--</tr>-->
-<!--<tr>-->
-<!--<td colspan="2">belongs_to :model1</td> -->
-<!--<td colspan="2">belongs_to :model2</td>-->
-<!--</tr>-->
-<!--<tr>-->
-<!--<td>attribute1</td>-->
-<!--<td>attribute2</td>-->
-<!--<td>attribute3</td>-->
-<!--<td>attribute4</td>-->
-<!--</tr>-->
-<!--<tr>-->
-<!--<td colspan="2">has_many :models3</td>-->
-<!--<td colspan="2">has_many :models4</td>-->
-<!--</tr>-->
-
-<!--</table>-->
 
 !SLIDE[bg=techtalk_bg.png] 
 
@@ -457,29 +486,18 @@ Associations is a base for Traits technique.
 * *`has_many`* is usually *better* to create a slice
   * Methods with this associations is usually independent from each other.
 
-!SLIDE[bg=techtalk_bg.png] 
-
-#### How to not get lost?
-
-## If *A* depends on *B* 
-## then **B** should not depend on **A**
 
 !SLIDE[bg=techtalk_bg.png] 
 
 ## Traits best practices
 
 * Apply pattern to *multifunctional models* only
-  * `User`
-* Traits name space with the same name as model
-  * `Traits::User::Facebook`
 
 * Use *OOP*:
   * Abstract method
   * `super` is super
 
-* Api *consistency*
-  * "name", "subject", "title" => select one
-  * "disabled", "inactive", "deleted" => select one
+* 
 
 !SLIDE[bg=techtalk_bg.png] 
 
@@ -528,26 +546,29 @@ Observers and Callbacks have event nature:
 
 # Summary
 
+!SLIDE 
+
+# Inject Service between Model and Controller
+## if you need them
 
 !SLIDE[bg=techtalk_bg.png] 
-### *Could?*  => **Service**
-### *Should?* => **Model**
-!SLIDE[bg=techtalk_bg.png] 
-## **Fat** models => *Thin* Traits 
-#### and sometimes observers
-!SLIDE[bg=techtalk_bg.png] 
-### *Reimplement* other person's API 
-### has more wisdom than **invent new** one.
-!SLIDE[bg=techtalk_bg.png] 
-### If *A* depends on *B* 
-### then **B** should not depend on **A**
-
+# *Could?*  => **Service**
+# *Should?* => **Model**
 
 !SLIDE[bg=techtalk_bg.png] 
+# **Fat** models => *Thin* Traits 
 
-### The **End**
+!SLIDE[bg=techtalk_bg.png] 
+## *Reimplement* other person's API 
+## has more wisdom than **invent new** one.
 
-#### Thanks for *watching*
 
-##### [http://gusiev.com](http://gusiev.com)
-##### [https://github.com/bogdan](https://github.com/bogdan)
+
+!SLIDE[bg=techtalk_bg.png] 
+
+# The **End**
+
+## Thanks for *your time*
+
+### [http://gusiev.com](http://gusiev.com)
+### [https://github.com/bogdan](https://github.com/bogdan)
