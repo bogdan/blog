@@ -44,9 +44,10 @@
 
 !SLIDE[bg=techtalk_bg.png]
 
+# In the MVC:
 ## Why it should not be in controller or view?
 
-Because **a controller is hard** to 
+Because they are hard to 
 
 * test
 * maintain
@@ -89,7 +90,7 @@ But it depends on:
 
 * Services 
   * Separated utility class
-* Traits 
+* Concerns
   * Modules that get included to models
 
 The problem is to **understand** which one *fit best* for you.
@@ -365,7 +366,7 @@ Plan B:
 
 !SLIDE[bg=techtalk_bg.png] 
 
-## Use traits
+## Use Concerns
 
     @@@ ruby
     class Comment < AR::Base
@@ -390,7 +391,7 @@ Plan B:
 
 
 
-# Split model into *Traits*
+# Split model into *Concerns*
 
     @@@ ruby
     class User < AR::Base
@@ -454,14 +455,14 @@ Plan B:
 
 ## This is OOP
 
-### Traits include all staff that can be defined in model
+### Concerns include all staff that can be defined in model
 
 
 
 !SLIDE[bg=techtalk_bg.png]
 
 
-# Traits Base
+# Concerns Base
 
 * Attributes
 * Associations
@@ -477,9 +478,9 @@ Plan B:
 
 !SLIDE[bg=techtalk_bg.png] 
 
-## Associations and Traits
+## Associations and Concerns
 
-Associations is a base for Traits technique.
+Associations is a base for Concerns technique.
 
 * *`belongs_to`* is a *core* of a model 
   * This associations is used in almost all methods.
@@ -489,7 +490,7 @@ Associations is a base for Traits technique.
 
 !SLIDE[bg=techtalk_bg.png] 
 
-## Traits best practices
+## Concerns best practices
 
 * Apply pattern to *multifunctional models* only
 
@@ -501,7 +502,7 @@ Associations is a base for Traits technique.
 
 !SLIDE[bg=techtalk_bg.png] 
 
-## Libraries using traits
+## Libraries using Concerns
 
 * ActiveRecord
 * ActiveModel
@@ -556,7 +557,7 @@ Observers and Callbacks have event nature:
 # *Should?* => **Model**
 
 !SLIDE[bg=techtalk_bg.png] 
-# **Fat** models => *Thin* Traits 
+# **Fat** models => *Thin* Concerns 
 
 !SLIDE[bg=techtalk_bg.png] 
 ## *Reimplement* other person's API 
