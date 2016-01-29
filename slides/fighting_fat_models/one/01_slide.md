@@ -242,21 +242,23 @@ Example: Comment can not be created without notification.
 !SLIDE 
 
 ## Successful Projects tend to do 
-# one thing 
+# *one thing* 
 ## in many different ways
 ## rather than a lot of things
+
+!SLIDE 
 
 * Comment on a web site
 * Comment in native mobile iOS app
 * Comment in native mobile Android app
-* Create a comment by replying to an email letter
-* Automatically generated comments
+* comment by replying to an email letter
+* Automatically generate comments
 
 
 !SLIDE 
 
 # Team Growth Problem
-## How would you deliver a knowledge that comment should be made like this to 50 people?
+## How would you deliver a knowledge that comment should be made like this to 10 people?
 
     @@@ ruby
     CommentService.create(...)
@@ -341,6 +343,12 @@ Plan B:
 `#skip_comment_notification` is used only in edge cases.
 
 
+!SLIDE 
+
+## Default Behaviour is hard to make
+## But it solves communication problem
+## that will only increase over time
+
 !SLIDE
 
 ## What is the difference?
@@ -375,7 +383,8 @@ Plan B:
       include Archivable
     end
 
-`Notification` module encapsulates a feature
+`app/models/concerns/*`
+
 
 !SLIDE[bg=techtalk_bg.png] 
 ### *Vertical slicing* stands for
@@ -398,7 +407,7 @@ Plan B:
       include FacebookProfile
     end
 
-    # Hybrid trait that provides 
+    # Hybrid Concern that provides 
     # instance and class methods
     module FacebookProfile
       has_one :facebook_profile
@@ -431,7 +440,7 @@ Plan B:
 ### Basic application architecture
 
 
-<table>
+<table class="full-border">
 <tr>
   <td colspan="100%">View</td>
 </tr>
@@ -439,24 +448,17 @@ Plan B:
   <td colspan="100%">Controller</td>
 </tr>
 <tr>
-  <td colspan="3" style="padding-top: 0px; padding-bottom: 0px">Thin model</td>
-  <td rowspan="2" style="padding-top: 0px; padding-bottom: 0px">Services</td>
+  <td colspan="3" style="">Model</td>
+  <td rowspan="2" style="">Services</td>
 </tr>
 
 <tr>
-  <td style="padding-top: 40px; padding-bottom: 40px">Trait</td>
-  <td>Trait</td>
-  <td>Trait</td>
+  <td style="padding-top: 40px; padding-bottom: 40px">Concern</td>
+  <td>Concern</td>
+  <td>Concern</td>
 </tr>
 
 </table>
-
-!SLIDE[bg=techtalk_bg.png] 
-
-## This is OOP
-
-### Concerns include all staff that can be defined in model
-
 
 
 !SLIDE[bg=techtalk_bg.png]

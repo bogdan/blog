@@ -98,17 +98,17 @@ em {
   color: green;
   font-style: normal; }
 
-/*table {*/
+table.full-border {
   /*border: 1px solid black;*/
-  /*border-collapse: collapse;*/
-  /*text-align: center;*/
-  /*margin: 15px auto;*/
-/*}*/
-/*td {*/
-  /*border: 1px solid black;*/
-  /*border-collapse: collapse;*/
-  /*padding: 15px*/
-/*}*/
+  border-collapse: collapse;
+  text-align: center;
+  margin: 15px auto;
+}
+table.full-border tr td {
+  border: 1px solid black !important;
+  border-collapse: collapse;
+  padding: 20px
+}
 
 /*img {*/
   /*margin: 10px auto;*/
