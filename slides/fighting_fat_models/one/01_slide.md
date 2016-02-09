@@ -13,10 +13,9 @@
 
 ## Bogdan G.
 
-* is 7 years in IT, 3 years with Ruby and Rails
-* Work for a small startup http://talkable.com
-
-* Long Run Rails Contributor
+* is 9 years in IT
+* 6 years with Ruby and Rails
+  * Long Run Rails Contributor
 
 !SLIDE[bg=techtalk_bg.png] 
 
@@ -26,14 +25,25 @@
 * [Datagrid](https://github.com/bogdan/datagrid)
 * [js-routes](https://github.com/railsware/js-routes)
 * [accepts_values_for](https://github.com/bogdan/accepts_values_for)
+* [furi](https://github.com/bogdan/furi)
 * [http://github.com/bogdan](http://github.com/bogdan)
 
 
-!SLIDE 
+!SLIDE[bg=techtalk_bg.png]
 
 ## My Blog
 
 # http://gusiev.com
+
+!SLIDE[bg=techtalk_bg.png] 
+
+
+# ![Talkable](http://d2jjzw81hqbuqv.cloudfront.net/assets/static/logo-dark-large.png)
+
+## http://talkable.com
+
+## A small startup is a great place 
+## to move from middle to senior and above
 
 !SLIDE[bg=techtalk_bg.png] 
 
@@ -47,7 +57,7 @@
 # In the MVC:
 ## Why it should not be in controller or view?
 
-Because they are hard to 
+Because they are hard to: 
 
 * test
 * maintain
@@ -93,7 +103,6 @@ But it depends on:
 * Concerns
   * Modules that get included to models
 
-The problem is to **understand** which one *fit best* for you.
 
 
 
@@ -107,13 +116,14 @@ Standard:
 * Easy to *test*
 * Good API
 
+Advanced:
 
 
 * Single Origin Principle
-* *MORE* FEATURES PER SECOND
-* Make the data  **safe**
+* *MORE* features per second
+* Data Safety
 
-!SLIDE 
+!SLIDE[bg=techtalk_bg.png]
 
 # Good API
 
@@ -122,8 +132,11 @@ Is a user connected to facebook?
     @@@ ruby
     user.connected_to_facebook?
     # OR
-    thing_that_knows_about_facebook.
-      is_user_connected_to_me?(user)
+    FacebookService.connected_to_facebook?(user)
+    # OR
+    FacebookWrapper.new(user)
+      .connected_to_facebook?
+
 
 !SLIDE[bg=techtalk_bg.png] 
 
@@ -133,7 +146,7 @@ Is a user connected to facebook?
 
 ## extract them to service is good idea.
 
-!SLIDE 
+!SLIDE[bg=techtalk_bg.png]
 
     @@@ ruby
 
@@ -196,7 +209,6 @@ Object should encapsulate behavior:
 
 # What is a model?
 
-
 ##The model is an imitation of real object 
 ##that reflects some it's behaviors
 ##that we are focused on.
@@ -239,23 +251,23 @@ Example: Comment can not be created without notification.
     # or
     CommentService.create
 
-!SLIDE 
+!SLIDE[bg=techtalk_bg.png]
 
 ## Successful Projects tend to do 
 # *one thing* 
 ## in many different ways
 ## rather than a lot of things
 
-!SLIDE 
+!SLIDE[bg=techtalk_bg.png]
 
 * Comment on a web site
 * Comment in native mobile iOS app
 * Comment in native mobile Android app
-* comment by replying to an email letter
+* Comment by replying to an email letter
 * Automatically generate comments
 
 
-!SLIDE 
+!SLIDE[bg=techtalk_bg.png]
 
 # Team Growth Problem
 ## How would you deliver a knowledge that comment should be made like this to 10 people?
@@ -263,7 +275,7 @@ Example: Comment can not be created without notification.
     @@@ ruby
     CommentService.create(...)
 
-!SLIDE 
+!SLIDE[bg=techtalk_bg.png]
 
 ## Reimplement other person's API 
 ## has more wisdom than invent new one.
@@ -292,12 +304,6 @@ Plan A:
       def self.create(attrs)
     end
 
-* Hard to keep all team informed about all services in the App
-* Hard to support as number of options goes higher
-
-!SLIDE[bg=techtalk_bg.png] 
-
-## Services with options
 
 Plan B:
 
@@ -307,14 +313,11 @@ Plan B:
         attrs, skip_notification = false)
     end
 
-* Method will be a **mess** as number of options goes higher.
-* Don't respect functional paradigm
-  * As many functions as possible
-
 
 !SLIDE[bg=techtalk_bg.png] 
 
-# *Default behavior* and **edge cases**
+# *Default behavior* 
+# and **edge cases**
 
 
 * Hey model, create my comment.
@@ -334,8 +337,9 @@ Plan B:
     class Comment < AR::Base
       attr_accessor :skip_comment_notification
       after_create do
-        send_notification \
-          unless self.skip_comment_notification
+        unless self.skip_comment_notification
+          send_notification
+        end
       end
     end
 
@@ -343,7 +347,7 @@ Plan B:
 `#skip_comment_notification` is used only in edge cases.
 
 
-!SLIDE 
+!SLIDE[bg=techtalk_bg.png]
 
 ## Default Behaviour is hard to make
 ## But it solves communication problem
@@ -385,6 +389,46 @@ Plan B:
 
 `app/models/concerns/*`
 
+!SLIDE[bg=techtalk_bg.png]
+
+# Attention! 
+## People with high pressure or propensity to suicide
+## Better close your eyes and ears
+
+!SLIDE[bg=techtalk_bg.png]
+
+## Single Reponsibility Principle 
+# SUCKS
+## The proof follows
+
+!SLIDE[bg=techtalk_bg.png]
+
+## There is no a single thing 
+## in the universe that follows the SRP
+
+<div class="right">
+
+<img src="http://science.jrank.org/article_images/ep201102/science/science982.jpg"/>
+<!--![Proton](http://science.jrank.org/article_images/ep201102/science/science982.jpg)-->
+
+</div>
+
+    @@@ ruby
+    class Proton
+      include Gravitation
+      include ElectroMagnetism
+      include StrongNuclearForce
+      include WeekNuclearForce
+    end
+
+<div class="clear"></div>
+
+
+!SLIDE[bg=techtalk_bg.png]
+
+# Why man made things should?
+## The world is unreasonably complext to follow SRP
+
 
 !SLIDE[bg=techtalk_bg.png] 
 ### *Vertical slicing* stands for
@@ -410,7 +454,7 @@ Plan B:
     # Hybrid Concern that provides 
     # instance and class methods
     module FacebookProfile
-      has_one :facebook_profile
+      has_one :facebook_profile # simplified
       def connected_to_facebook?
       def self.register_from_facebook(attributes)
       def self.connect_facebook_profile(user, attributes)
@@ -487,7 +531,7 @@ Associations is a base for Concerns technique.
 * *`belongs_to`* is a *core* of a model 
   * This associations is used in almost all methods.
 * *`has_many`* is usually *better* to create a slice
-  * Methods with this associations is usually independent from each other.
+  * Methods with this associations is usually independent.
 
 
 !SLIDE[bg=techtalk_bg.png] 
@@ -500,7 +544,6 @@ Associations is a base for Concerns technique.
   * Abstract method
   * `super` is super
 
-* 
 
 !SLIDE[bg=techtalk_bg.png] 
 
@@ -517,31 +560,8 @@ Associations is a base for Concerns technique.
 
 !SLIDE[bg=techtalk_bg.png] 
 
-## *Flow* nature and *Event* nature
-
-
-Service has flow nature:
-
-* goes step by step
-  * order can matter
-* call each other
-  * dependent
-
-Observers and Callbacks have event nature:
-
-* one can spawn more than one other events
-  * can be parallelized 
-* don't call each other
-  * can be backgrounded
-  
-
-
-
-!SLIDE[bg=techtalk_bg.png] 
-
-## Super advanced logic infrastructure
-
-![Architecture](./file/architechture.png)
+## *Flow* nature of a Service
+## *Event* nature of a Callback
 
 
 
@@ -549,7 +569,7 @@ Observers and Callbacks have event nature:
 
 # Summary
 
-!SLIDE 
+!SLIDE[bg=techtalk_bg.png]
 
 # Inject Service between Model and Controller
 ## if you need them
@@ -558,12 +578,20 @@ Observers and Callbacks have event nature:
 # *Could?*  => **Service**
 # *Should?* => **Model**
 
+!SLIDE 
+
+# SRP is a misleading principle
+
+## It should not inhibit you from having
+## a Better Application Model
 !SLIDE[bg=techtalk_bg.png] 
 # **Fat** models => *Thin* Concerns 
 
 !SLIDE[bg=techtalk_bg.png] 
 ## *Reimplement* other person's API 
 ## has more wisdom than **invent new** one.
+
+
 
 
 

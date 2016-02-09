@@ -80,10 +80,11 @@ ol, ul {
   ol ol, ol ul, ul ol, ul ul {
     margin: 0px; }
 
-/*pre {*/
-  /*padding-left: 20px; */
-  /*font-size: 1em;*/
-/*}*/
+pre {
+  padding: 0; 
+  font-size: 2.5em !important;
+  margin: 30px 0;
+}
 
 
 /*code {*/
@@ -120,18 +121,18 @@ table.full-border tr td {
   /*display:none;*/
 /*}*/
 
-/*.left {*/
-  /*float: left;*/
-  /*overflow: hidden; }*/
-  /*.left pre {*/
-    /*margin: 0; }*/
+.left {
+  float: left;
+  overflow: hidden; }
+  .left pre {
+    margin: 0; }
 
-/*.right {*/
-  /*float: right;*/
-  /*overflow: hidden; }*/
+.right {
+  float: right;
+  overflow: hidden; }
 
-/*.clear {*/
-  /*clear: both; }*/
+.clear {
+  clear: both; }
 
   @media screen {
     #preso, .slide {
@@ -145,3 +146,8 @@ table.full-border tr td {
   max-width: 1024px;
 }
 
+
+a, a:visited {
+  color: blue;
+  text-decoration: none;
+}
