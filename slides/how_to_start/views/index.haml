@@ -291,8 +291,6 @@
           %br
           %h3 Person -&gt; Model1,Model2 &lt;- Person
 
-          %h2 Only if they are related in some way
-                
         %section
           %h3 Communicating to a different person via a different tool
           
@@ -324,7 +322,7 @@
           %pre
             %code.ruby
               :preserve
-                class User
+                class Person
                   include Advocate
                   include Friend
                 end
@@ -332,15 +330,15 @@
           %pre
             %code.ruby
               :preserve
-                
-
-                Advocate -> Share -> Visitor -> Referral &gt;- Purchase &gt;- Friend
-                Advocate -> Share -> Visitor -> ? &gt;- Purchase &gt;- ?
+                class Referral
+          %pre
+            %code.ruby
+              :preserve
+                Advocate -> Share -> Visitor -> Referral &lt;- Purchase &lt;- Friend
           
           %pre
             %code.ruby
               :preserve
-                
                 Advocate.has_many :shares
                   Share.has_many :visitors
                     Visitor.has_many :referrals
@@ -348,12 +346,8 @@
                 Friend.has_many :purchases
                   Purchase.has_one :referral
 
-          Advocate#referred_friends
-          Friend#referred_by
-            
-
-
-
+                Advocate#referred_friends
+                Friend#referred_by
 
     %script{:src => "http://lab.hakim.se/reveal-js/lib/js/head.min.js"}
     %script{:src => "http://lab.hakim.se/reveal-js/js/reveal.js"}
