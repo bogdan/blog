@@ -12,6 +12,7 @@
     <link href='http://lab.hakim.se/reveal-js/css/theme/night.css' rel='stylesheet'>
     <!-- For syntax highlighting -->
     <link href='http://lab.hakim.se/reveal-js/lib/css/zenburn.css' rel='stylesheet'>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
     <!-- If the query includes 'print-pdf', use the PDF print sheet -->
     <script>
       document.write( '<link rel="stylesheet" href="http://lab.hakim.se/reveal-js/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
@@ -25,15 +26,37 @@
       
       .red {
         color: red !important; }
+      
+      .first-slide {
+        width: 100% !important;
+        height: 100% !important;
+        top: 0 !important;
+        position: absolute !important;
+        max-width: 100% !important;
+        max-height: 100% !important;
+        background-color: white !important; }
     </style>
   </head>
   <body>
+    <div class='all-slides'>
+      <img src='/techtalk_bottom.png' style='position: absolute; bottom: 0; left:0'>
+      <img src='/techtalk_corner.png' style='position: absolute; top: 0; left:0'>
+    </div>
+    <img class='first-slide' src='/techtalk_main.png' style='z-index: 10000'>
     <div class='reveal'>
       <div class='slides'>
+        <section></section>
         <section>
           <h2>How to build a project</h2>
           <h2>architecture in 3 days</h2>
           <h3>Bogdan Gusiev</h3>
+        </section>
+        <section>
+          <h3>Bogdan Gusiev:</h3>
+          <ul>
+            <li>Working for startups for 7 years</li>
+            <li>Ruby on Rails for 7 years</li>
+          </ul>
         </section>
         <section>
           <h2>Start a project</h2>
@@ -91,6 +114,7 @@
           </ul>
         </section>
         <section>
+          <h3>Example:</h3>
           <h1>Talkable</h1>
           <h3 class='fragment'>"Driving Ecommerce Growth With Customer Referrals"</h3>
         </section>
@@ -116,7 +140,7 @@
           </div>
         </section>
         <section>
-          <h1>WTF?</h1>
+          <h1>What did we get?</h1>
           <h2 class='fragment'>2 years of corrupt production data</h2>
           <h2 class='fragment'>3 month to fix an issue</h2>
         </section>
@@ -174,6 +198,7 @@
           </h2>
           <h3 class='fragment'>
             <nobr>Customer -> Order -> Order Item <- Product</nobr>
+            Order == Cart
           </h3>
         </section>
         <section data-markdown=''>
@@ -213,21 +238,17 @@
         </section>
         <section>
           <h2>How does it look like in code?</h2>
-          <h3>
-            Hint: Author &amp; Subscriber
-            <br>
-            are the same person
-          </h3>
-          <br>
-          <pre><code class='ruby'># The Basics&#x000A;User.has_many :subscriptions, :foreign_key => :subscriber_id&#x000A;User.has_many :subscribed_entries, :foreign_key => :author_id, &#x000A;  :class_name => "Subscription"&#x000A;User.has_many :likes, :photos, :activities&#x000A;&#x000A;Like.has_one :activity, :as => :target&#x000A;Photo.has_one :activity, :as => :target&#x000A;Comment.has_one :activity, :as => :target&#x000A;</code></pre>
-          <pre class='fragment'><code class='ruby'># The Core&#x000A;class User&#x000A;  def authored_activities&#x000A;    ?&#x000A;  end&#x000A;  def subscribed_activities&#x000A;    ?&#x000A;  end&#x000A;end</code></pre>
+          <pre><code class='ruby'># The Basics&#x000A;User.includes Subscriber&#x000A;User.includes Author&#x000A;</code></pre>
+          <pre class='fragment'><code class='ruby'>Subscriber.has_many :subscriptions, :foreign_key => :subscriber_id&#x000A;&#x000A;Author.has_many :subscribed_entries, :foreign_key => :author_id, &#x000A;  :class_name => "Subscription"&#x000A;Author.has_many :likes, :photos, :activities&#x000A;</code></pre>
+          <pre class='fragment'><code class='ruby'>Like.has_one :activity, :as => :target&#x000A;Photo.has_one :activity, :as => :target&#x000A;Comment.has_one :activity, :as => :target&#x000A;</code></pre>
+          <pre class='fragment'><code class='ruby'># The Core&#x000A;module Author&#x000A;  def authored_activities&#x000A;    ?&#x000A;  end&#x000A;end&#x000A;module Subscriber&#x000A;  def subscribed_activities&#x000A;    ?&#x000A;  end&#x000A;end</code></pre>
         </section>
         <section>
-          <h4>The most complicated part</h4>
+          <h3>The most complicated part</h3>
           <h3 class='fragment'>
             implement
             <br>
-            <code class='highlight-red'> User#subscribed_activities </code>
+            <code class='highlight-red'> Subscriber#subscribed_activities </code>
           </h3>
           <div class="fragment">
           <img src="https://api.monosnap.com/image/download?id=c3qOtt5uMSSGnpHTf3Oa2pScm" />
@@ -310,7 +331,15 @@
           <pre><code class='ruby'>class Person&#x000A;  include Advocate&#x000A;  include Friend&#x000A;end&#x000A;</code></pre>
           <pre><code class='ruby'>class Referral</code></pre>
           <pre><code class='ruby'>Advocate -> Share -> Visitor -> Referral &lt;- Purchase &lt;- Friend&#x000A;</code></pre>
-          <pre><code class='ruby'>Advocate.has_many :shares&#x000A;  Share.has_many :visitors&#x000A;    Visitor.has_many :referrals&#x000A;&#x000A;Friend.has_many :purchases&#x000A;  Purchase.has_one :referral&#x000A;&#x000A;Advocate#referred_friends&#x000A;Friend#referred_by&#x000A;</code></pre>
+          <pre><code class='ruby'>Advocate.has_many :shares&#x000A;  Share.has_many :visitors&#x000A;    Visitor.has_many :referrals&#x000A;&#x000A;Friend.has_many :purchases&#x000A;  Purchase.has_one :referral&#x000A;&#x000A;Advocate#referred_friends&#x000A;Friend#referred_by</code></pre>
+        </section>
+        <section>
+          <h2>Thank You</h2>
+          <br>
+          <ul>
+            <li>http://github.com/bogdan</li>
+            <li>http://gusiev.com</li>
+          </ul>
         </section>
       </div>
     </div>
@@ -340,6 +369,9 @@
       // { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
       ]
       });
+      Reveal.addEventListener( 'slidechanged', function( event ) {
+        $('.first-slide').hide()
+      } );
     </script>
   </body>
 </html>
