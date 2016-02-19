@@ -12,7 +12,15 @@
     %link{:href => "http://lab.hakim.se/reveal-js/css/theme/night.css", :rel => "stylesheet"}/
     / For syntax highlighting
     %link{:href => "http://lab.hakim.se/reveal-js/lib/css/zenburn.css", :rel => "stylesheet"}/
+    
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    - if params[:'print-pdf']
+      :sass
+        body .reveal
+          color: black !important
+          h1, h2, h3, h4, h5
+            color: black !important
+
     / If the query includes 'print-pdf', use the PDF print sheet
     :javascript
       document.write( '<link rel="stylesheet" href="http://lab.hakim.se/reveal-js/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
