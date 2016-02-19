@@ -1,14 +1,28 @@
-!SLIDE[bg=techtalk_main.png] 
 
-<!--<img src="/file/techtalk_main.png" style=""/>-->
 
-!SLIDE[bg=techtalk_bg.png]
+
+!SLIDE
+
+
+<script type='text/javascript'>
+
+function reloadSlides () {
+  loadSlides(loadSlidesBool, loadSlidesPrefix, true);
+  showSlide();
+}
+</script>
+
+<style>
+ .smbullets > ul {
+    list-style: none !important;
+   }
+</style>
 
 
 # Fighting with fat models
 ## Bogdan Gusiev
 
-!SLIDE[bg=techtalk_bg.png] 
+!SLIDE
 
 
 ## Bogdan G.
@@ -17,7 +31,7 @@
 * 6 years with Ruby and Rails
   * Long Run Rails Contributor
 
-!SLIDE[bg=techtalk_bg.png] 
+!SLIDE
 
 
 # Some of my gems
@@ -29,30 +43,32 @@
 * [http://github.com/bogdan](http://github.com/bogdan)
 
 
-!SLIDE[bg=techtalk_bg.png]
+!SLIDE
 
 ## My Blog
 
 # http://gusiev.com
 
-!SLIDE[bg=techtalk_bg.png] 
+!SLIDE bullets incremental
+
 
 
 # ![Talkable](http://d2jjzw81hqbuqv.cloudfront.net/assets/static/logo-dark-large.png)
 
 ## http://talkable.com
 
-## A small startup is a great place 
-## to move from middle to senior and above
+* A small startup is a great place 
+  to move from middle to senior and above
 
-!SLIDE[bg=techtalk_bg.png] 
+!SLIDE smbullets incremental
 
 # Fat Models 
+
 ## Why the problem appears?
 
-## All business logic code goes to *model by default*.
+* All business logic code goes to *model by default*.
 
-!SLIDE[bg=techtalk_bg.png]
+!SLIDE
 
 # In the MVC:
 ## Why it should not be in controller or view?
@@ -65,19 +81,19 @@ Because they are hard to:
 
 
 
-!SLIDE[bg=techtalk_bg.png] 
+!SLIDE smbullets incremental
 
 
 ## A definition of being fat
 # **1000 Lines of code**
 
-But it depends on:
+* But it depends on:
 
-* Docs
-* Whitespace
-* Comments
+  * Docs
+  * Whitespace
+  * Comments
 
-!SLIDE[bg=techtalk_bg.png] 
+!SLIDE
 
     @@@ text
 
@@ -94,7 +110,7 @@ But it depends on:
        14924 total
 
 
-!SLIDE[bg=techtalk_bg.png] 
+!SLIDE
 
 ## Existing techniques
 
@@ -106,24 +122,22 @@ But it depends on:
 
 
 
-!SLIDE[bg=techtalk_bg.png] 
+!SLIDE smbullets incremental
 
 ## What do we expect?
 
-Standard:
+* Standard:
 
-* *Reusable* code
-* Easy to *test*
-* Good API
+  * *Reusable* code
+  * Easy to *test*
+  * Good API
 
-Advanced:
+* Advanced:
+  * Single Origin Principle
+  * *MORE* features per second
+  * Data Safety
 
-
-* Single Origin Principle
-* *MORE* features per second
-* Data Safety
-
-!SLIDE[bg=techtalk_bg.png]
+!SLIDE
 
 # Good API
 
@@ -138,15 +152,18 @@ Is a user connected to facebook?
       .connected_to_facebook?
 
 
-!SLIDE[bg=techtalk_bg.png] 
+!SLIDE
 
 # The need of Services
 
-## When amount of utils that supports Model goes higher 
+## When amount of utils 
+## that supports Model goes higher 
 
 ## extract them to service is good idea.
 
-!SLIDE[bg=techtalk_bg.png]
+!SLIDE
+
+## Move class methods between files is cheap
 
     @@@ ruby
 
@@ -157,18 +174,17 @@ Is a user connected to facebook?
     # or
     (3) FacebookService.create_user
 
-### Move class methods between files is cheap
 
-!SLIDE[bg=techtalk_bg.png] 
+!SLIDE smbullets incremental
 
 
 ## Organise services by *process* 
 ## rather than **object** they operate on
 
-### Otherwise at some moment UserService would not be enough
+* Otherwise at some moment UserService would not be enough
 
 
-!SLIDE[bg=techtalk_bg.png] 
+!SLIDE
 
 ## The problem of services
 
@@ -186,12 +202,12 @@ Service is separated utility class.
 #### "Я знаю откуда что берется"
 
 
-!SLIDE[bg=techtalk_bg.png] 
+!SLIDE
 
 # Services **don't** 
 # provide *default behavior*
 
-!SLIDE[bg=techtalk_bg.png] 
+!SLIDE bullets incremental
 
 ## The Need of Default Behavior
 
@@ -205,7 +221,7 @@ Object should encapsulate behavior:
     * A comment should deliver an email notification
 
 
-!SLIDE[bg=techtalk_bg.png] 
+!SLIDE
 
 # What is a model?
 
@@ -215,9 +231,14 @@ Object should encapsulate behavior:
 
 ##### Wikipedia
 
-!SLIDE[bg=techtalk_bg.png] 
+!SLIDE 
 
-## Implementation
+# Model
+## is a best place for *default behaviour*
+
+!SLIDE
+
+# Implementation
 
 Using built-in Rails features:
 
@@ -228,7 +249,7 @@ Have the following benefits:
 * Reduce number of conventions
 * Suits to common knowledge - nothing more than Rails
 
-!SLIDE[bg=techtalk_bg.png] 
+!SLIDE
 
 ## Hooks in models
 
@@ -242,7 +263,7 @@ Example: Comment can not be created without notification.
     end
 
 
-!SLIDE[bg=techtalk_bg.png] 
+!SLIDE
 
 ## API comparison
 
@@ -251,14 +272,14 @@ Example: Comment can not be created without notification.
     # or
     CommentService.create
 
-!SLIDE[bg=techtalk_bg.png]
+!SLIDE
 
 ## Successful Projects tend to do 
 # *one thing* 
 ## in many different ways
 ## rather than a lot of things
 
-!SLIDE[bg=techtalk_bg.png]
+!SLIDE
 
 * Comment on a web site
 * Comment in native mobile iOS app
@@ -267,7 +288,7 @@ Example: Comment can not be created without notification.
 * Automatically generate comments
 
 
-!SLIDE[bg=techtalk_bg.png]
+!SLIDE
 
 # Team Growth Problem
 ## How would you deliver a knowledge that comment should be made like this to 10 people?
@@ -275,7 +296,7 @@ Example: Comment can not be created without notification.
     @@@ ruby
     CommentService.create(...)
 
-!SLIDE[bg=techtalk_bg.png]
+!SLIDE
 
 ## Reimplement other person's API 
 ## has more wisdom than invent new one.
@@ -283,7 +304,7 @@ Example: Comment can not be created without notification.
     @@@ ruby
     Comment.create(...)
     
-!SLIDE[bg=techtalk_bg.png] 
+!SLIDE
 
 # **Edge cases**
 
@@ -292,7 +313,7 @@ Example: Comment can not be created without notification.
 
 
 
-!SLIDE[bg=techtalk_bg.png] 
+!SLIDE
 
 ## Service with options
 
@@ -314,7 +335,7 @@ Plan B:
     end
 
 
-!SLIDE[bg=techtalk_bg.png] 
+!SLIDE
 
 # *Default behavior* 
 # and **edge cases**
@@ -328,7 +349,7 @@ Plan B:
   * Ok
 
 
-!SLIDE[bg=techtalk_bg.png] 
+!SLIDE
 
 # Support parameter in model
 
@@ -347,7 +368,7 @@ Plan B:
 `#skip_comment_notification` is used only in edge cases.
 
 
-!SLIDE[bg=techtalk_bg.png]
+!SLIDE
 
 ## Default Behaviour is hard to make
 ## But it solves communication problem
@@ -362,7 +383,7 @@ Plan B:
     Comment.after_create :send_notification
 
 
-!SLIDE[bg=techtalk_bg.png] 
+!SLIDE
 
 <br/>
 <br/>
@@ -372,11 +393,11 @@ Plan B:
 
 ## Please do not confuse *should* with **must**
 
-!SLIDE[bg=techtalk_bg.png] 
+!SLIDE
 ## The model is still **fat**. 
 ## What to do?
 
-!SLIDE[bg=techtalk_bg.png] 
+!SLIDE
 
 ## Use Concerns
 
@@ -389,19 +410,19 @@ Plan B:
 
 `app/models/concerns/*`
 
-!SLIDE[bg=techtalk_bg.png]
+!SLIDE
 
 # Attention! 
 ## People with high pressure or propensity to suicide
 ## Better close your eyes and ears
 
-!SLIDE[bg=techtalk_bg.png]
+!SLIDE
 
 ## Single Reponsibility Principle 
-# SUCKS
+# **SUCKS**
 ## The proof follows
 
-!SLIDE[bg=techtalk_bg.png]
+!SLIDE
 
 ## There is no a single thing 
 ## in the universe that follows the SRP
@@ -424,13 +445,19 @@ Plan B:
 <div class="clear"></div>
 
 
-!SLIDE[bg=techtalk_bg.png]
+!SLIDE
 
 # Why man made things should?
 ## The world is unreasonably complext to follow SRP
 
 
-!SLIDE[bg=techtalk_bg.png] 
+!SLIDE 
+
+## How a model that suppose to simulate those things
+## can have a single responsibility?
+# It can't!
+
+!SLIDE
 ### *Vertical slicing* stands for
 
 ## Split things by features 
@@ -440,7 +467,7 @@ Plan B:
 #### **Unlike MVC** which is horizontal slicing.
 
 
-!SLIDE[bg=techtalk_bg.png] 
+!SLIDE
 
 
 
@@ -460,7 +487,7 @@ Plan B:
       def self.connect_facebook_profile(user, attributes)
     end
 
-!SLIDE[bg=techtalk_bg.png] 
+!SLIDE
 
 
 ## Ex.1 User + Facebook
@@ -471,7 +498,7 @@ Plan B:
 * `connected_to_facebook?`  => Model
   * Every user should know if it is connected to facebook or not
 
-!SLIDE[bg=techtalk_bg.png] 
+!SLIDE
 
 ## Ex.2 Deliver comment notification
 
@@ -479,7 +506,7 @@ Plan B:
   * Default Behaviour
   * Even if exceptions exist
 
-!SLIDE[bg=techtalk_bg.png] 
+!SLIDE
 
 ### Basic application architecture
 
@@ -505,7 +532,7 @@ Plan B:
 </table>
 
 
-!SLIDE[bg=techtalk_bg.png]
+!SLIDE
 
 
 # Concerns Base
@@ -522,7 +549,7 @@ Plan B:
 
 
 
-!SLIDE[bg=techtalk_bg.png] 
+!SLIDE
 
 ## Associations and Concerns
 
@@ -534,7 +561,7 @@ Associations is a base for Concerns technique.
   * Methods with this associations is usually independent.
 
 
-!SLIDE[bg=techtalk_bg.png] 
+!SLIDE
 
 ## Concerns best practices
 
@@ -545,7 +572,7 @@ Associations is a base for Concerns technique.
   * `super` is super
 
 
-!SLIDE[bg=techtalk_bg.png] 
+!SLIDE
 
 ## Libraries using Concerns
 
@@ -558,23 +585,23 @@ Associations is a base for Concerns technique.
 <!--##### then it is **easy** for *regular projects*-->
 
 
-!SLIDE[bg=techtalk_bg.png] 
+!SLIDE
 
 ## *Flow* nature of a Service
 ## *Event* nature of a Callback
 
 
 
-!SLIDE[bg=techtalk_bg.png] 
+!SLIDE
 
 # Summary
 
-!SLIDE[bg=techtalk_bg.png]
+!SLIDE
 
 # Inject Service between Model and Controller
 ## if you need them
 
-!SLIDE[bg=techtalk_bg.png] 
+!SLIDE
 # *Could?*  => **Service**
 # *Should?* => **Model**
 
@@ -584,10 +611,10 @@ Associations is a base for Concerns technique.
 
 ## It should not inhibit you from having
 ## a Better Application Model
-!SLIDE[bg=techtalk_bg.png] 
+!SLIDE
 # **Fat** models => *Thin* Concerns 
 
-!SLIDE[bg=techtalk_bg.png] 
+!SLIDE
 ## *Reimplement* other person's API 
 ## has more wisdom than **invent new** one.
 
@@ -595,7 +622,7 @@ Associations is a base for Concerns technique.
 
 
 
-!SLIDE[bg=techtalk_bg.png] 
+!SLIDE
 
 # The **End**
 
