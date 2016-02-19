@@ -279,10 +279,11 @@
             %br
             %nobr App2: Message &lt;- Recipient
         %section
-          %h3 Search Engine
+          %h2 Search Engine
 
           
-          %h2!== Page -> Result Item <- Query
+          %h3!== Searcher -> Search Result <- Page Owner
+          %h3.fragment!== Query -> Result Item <- Page
           %img{src: "https://api.monosnap.com/image/download?id=ILHCoxrWnAjawYNokuv7rc1Wi"}
 
         %section
@@ -299,6 +300,11 @@
                 Page.has_many :result_items
                 Query.has_many :result_items, :order =&gt; ?
               
+        %section
+          %h3 How to maintain a
+          %h2
+            %span.yellow< healthy startup
+            ?
         %section
           %h2 Be Focused
           %pre{style: "margin: 0 auto; width: 600px; font-size: 1.2em; text-align: center"}
@@ -321,20 +327,29 @@
           %br
           %h3 Person -&gt; Model1,Model2 &lt;- Person
 
+          %h3.fragment
+            Model1 -&gt; Model2
+
+
         %section
-          %h3 Communicating to a different person via a different tool
+          %h3 One person work space
           
-          %h2 Person1 -&gt; Model1 &lt;- Person2
-          %h2 Person2 -&gt; Model2 &lt;- Person3
+          %h2 Role1 -&gt; Model1 &lt;- Role2
+          %h2.fragment Role2 -&gt; Model2 &lt;- Role3
+
+          %h3.fragment Only 3 days
         %section
-          %h2.yellow
-            A startup should only 
+          %h2
+            A startup MVP should only 
             %br
-            be built for 2 roles
+            be built for 
+            .yellow
+              2 roles and 
+              one model
         %section
           %h3 "Respond to a Change"
           %h3 is OK, but
-          %h2 Basic model should never change
+          %h2.yellow Basic model should never change
           
         %section 
           %h3 Because things are good for
@@ -347,9 +362,11 @@
             %li Build intermediate relations
             %li Implement high level relations
         %section
-          Refer a Friend:
+          %h3 Talkable's refer a friend technology
 
-          %pre
+          Advocate -&gt; Offer -&gt; <span class='red'>Share</span> -&gt; Visitor -&gt; <span class='red'>Referral</span> &lt;- Purchase &lt;- <span class="red">Friend</span>
+          
+          %pre.fragment
             %code.ruby
               :preserve
                 class Person
@@ -357,27 +374,17 @@
                   include Friend
                 end
 
-          %pre
-            %code.ruby
-              :preserve
-                class Referral
-          %pre
-            %code.ruby
-              :preserve
-                Advocate -> Share -> Visitor -> Referral &lt;- Purchase &lt;- Friend
-          
-          %pre
-            %code.ruby
-              :preserve
-                Advocate.has_many :shares
-                  Share.has_many :visitors
-                    Visitor.has_many :referrals
+                Advocate.has_many :offers
+                  Offer.has_many :shares
+                    Share.has_many :visitors
+                      Visitor.has_many :referrals
 
                 Friend.has_many :purchases
                   Purchase.has_one :referral
 
-                Advocate#referred_friends
-                Friend#referred_by
+                # Core Relations
+                Advocate#referrals
+                Friend#referrals
         %section
           %h2 Thank You
 
