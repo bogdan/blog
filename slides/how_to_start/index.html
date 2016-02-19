@@ -271,14 +271,22 @@
           </h2>
         </section>
         <section>
-          <h3>Search Engine</h3>
-          <h2>Page -> Result Item <- Query</h2>
+          <h2>Search Engine</h2>
+          <h3>Searcher -> Search Result <- Page Owner</h3>
+          <h3 class='fragment'>Query -> Result Item <- Page</h3>
           <img src='https://api.monosnap.com/image/download?id=ILHCoxrWnAjawYNokuv7rc1Wi'>
         </section>
         <section>
           <h2>Search Engine</h2>
           <p>Even if RDBMS is last thing you will think about in this scope</p>
           <pre><code>ResultItem.belongs_to :page&#x000A;ResultItem.belongs_to :query&#x000A;Page.has_many :result_items&#x000A;Query.has_many :result_items, :order =&gt; ?&#x000A;</code></pre>
+        </section>
+        <section>
+          <h3>How to maintain a</h3>
+          <h2>
+            <span class='yellow'>healthy startup</span>
+            ?
+          </h2>
         </section>
         <section>
           <h2>Be Focused</h2>
@@ -295,23 +303,31 @@
           <h3>We should have all the market</h3>
           <br>
           <h3>Person -&gt; Model1,Model2 &lt;- Person</h3>
+          <h3 class='fragment'>
+            Model1 -&gt; Model2
+          </h3>
         </section>
         <section>
-          <h3>Communicating to a different person via a different tool</h3>
-          <h2>Person1 -&gt; Model1 &lt;- Person2</h2>
-          <h2>Person2 -&gt; Model2 &lt;- Person3</h2>
+          <h3>One person work space</h3>
+          <h2>Role1 -&gt; Model1 &lt;- Role2</h2>
+          <h2 class='fragment'>Role2 -&gt; Model2 &lt;- Role3</h2>
+          <h3 class='fragment'>Only 3 days</h3>
         </section>
         <section>
-          <h2 class='yellow'>
-            A startup should only
+          <h2>
+            A startup MVP should only
             <br>
-            be built for 2 roles
+            be built for
+            <div class='yellow'>
+              2 roles and
+              one model
+            </div>
           </h2>
         </section>
         <section>
           <h3>"Respond to a Change"</h3>
           <h3>is OK, but</h3>
-          <h2>Basic model should never change</h2>
+          <h2 class='yellow'>Basic model should never change</h2>
         </section>
         <section>
           <h3>Because things are good for</h3>
@@ -327,11 +343,9 @@
           </ol>
         </section>
         <section>
-          Refer a Friend:
-          <pre><code class='ruby'>class Person&#x000A;  include Advocate&#x000A;  include Friend&#x000A;end&#x000A;</code></pre>
-          <pre><code class='ruby'>class Referral</code></pre>
-          <pre><code class='ruby'>Advocate -> Share -> Visitor -> Referral &lt;- Purchase &lt;- Friend&#x000A;</code></pre>
-          <pre><code class='ruby'>Advocate.has_many :shares&#x000A;  Share.has_many :visitors&#x000A;    Visitor.has_many :referrals&#x000A;&#x000A;Friend.has_many :purchases&#x000A;  Purchase.has_one :referral&#x000A;&#x000A;Advocate#referred_friends&#x000A;Friend#referred_by</code></pre>
+          <h3>Talkable's refer a friend technology</h3>
+          Advocate -&gt; Offer -&gt; <span class='red'>Share</span> -&gt; Visitor -&gt; <span class='red'>Referral</span> &lt;- Purchase &lt;- <span class="red">Friend</span>
+          <pre class='fragment'><code class='ruby'>class Person&#x000A;  include Advocate&#x000A;  include Friend&#x000A;end&#x000A;&#x000A;Advocate.has_many :offers&#x000A;  Offer.has_many :shares&#x000A;    Share.has_many :visitors&#x000A;      Visitor.has_many :referrals&#x000A;&#x000A;Friend.has_many :purchases&#x000A;  Purchase.has_one :referral&#x000A;&#x000A;# Core Relations&#x000A;Advocate#referrals&#x000A;Friend#referrals</code></pre>
         </section>
         <section>
           <h2>Thank You</h2>
