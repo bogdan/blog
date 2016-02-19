@@ -6,6 +6,7 @@ GEM
     rack (1.5.2)
     rack-protection (1.5.0)
       rack
+    rake (10.4.2)
     shotgun (0.9)
       rack (>= 1.0)
     sinatra (1.4.3)
@@ -19,5 +20,6 @@ PLATFORMS
 
 DEPENDENCIES
   haml
+  rake
   shotgun
   sinatra
