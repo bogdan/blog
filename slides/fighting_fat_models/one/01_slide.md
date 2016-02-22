@@ -36,11 +36,11 @@ function reloadSlides () {
 
 # Some of my gems
 
-* [Datagrid](https://github.com/bogdan/datagrid)
-* [js-routes](https://github.com/railsware/js-routes)
-* [accepts_values_for](https://github.com/bogdan/accepts_values_for)
-* [furi](https://github.com/bogdan/furi)
 * [http://github.com/bogdan](http://github.com/bogdan)
+  * [Datagrid](https://github.com/bogdan/datagrid)
+  * [js-routes](https://github.com/railsware/js-routes)
+  * [accepts_values_for](https://github.com/bogdan/accepts_values_for)
+  * [furi](https://github.com/bogdan/furi)
 
 
 !SLIDE
@@ -85,7 +85,8 @@ Because they are hard to:
 
 
 ## A definition of being fat
-# **1000 Lines of code**
+
+* **<h2>1000 Lines of code</h2>**
 
 * But it depends on:
 
@@ -110,7 +111,7 @@ Because they are hard to:
        14924 total
 
 
-!SLIDE
+!SLIDE smbullets incremental
 
 ## Existing techniques
 
@@ -118,6 +119,8 @@ Because they are hard to:
   * Separated utility class
 * Concerns
   * Modules that get included to models
+* Presenters/Wrappers
+  * Classes that wrap existing model to plug new methods
 
 
 
@@ -133,7 +136,7 @@ Because they are hard to:
   * Good API
 
 * Advanced:
-  * Single Origin Principle
+  * Effective data model
   * *MORE* features per second
   * Data Safety
 
@@ -157,7 +160,7 @@ Is a user connected to facebook?
 # The need of Services
 
 ## When amount of utils 
-## that supports Model goes higher 
+## that support Model goes higher 
 
 ## extract them to service is good idea.
 
@@ -213,12 +216,12 @@ Service is separated utility class.
 
 Object should encapsulate behavior:
 
-* Data Validation
+* Data Rules
   * Set of rules that a model should fit at the programming level
-    * A comment should have an author
+    * Ex: A comment should have an author
 * Business Rules
   * Set of rules that a model should fit to exist in the real world
-    * A comment should deliver an email notification
+    * Ex: A comment should deliver an email notification
 
 
 !SLIDE
@@ -231,12 +234,14 @@ Object should encapsulate behavior:
 
 ##### Wikipedia
 
-!SLIDE 
+!SLIDE bullets incremental
 
 # Model
 ## is a best place for *default behaviour*
 
-!SLIDE
+* MVC authors meant that
+
+!SLIDE bullets incremental
 
 # Implementation
 
@@ -244,10 +249,6 @@ Using built-in Rails features:
 
 * ActiveRecord::Callbacks
 
-Have the following benefits:
-
-* Reduce number of conventions
-* Suits to common knowledge - nothing more than Rails
 
 !SLIDE
 
@@ -317,16 +318,6 @@ Example: Comment can not be created without notification.
 
 ## Service with options
 
-Plan A:
-
-    @@@ ruby
-    module CommentService
-      def self.create_with_notification(attrs)
-      def self.create(attrs)
-    end
-
-
-Plan B:
 
     @@@ ruby
     module CommentService
@@ -334,11 +325,11 @@ Plan B:
         attrs, skip_notification = false)
     end
 
-
 !SLIDE
 
 # *Default behavior* 
 # and **edge cases**
+
 
 
 * Hey model, create my comment.
@@ -370,11 +361,11 @@ Plan B:
 
 !SLIDE
 
-## Default Behaviour is hard to make
-## But it solves communication problem
+## *Default Behaviour* is hard to make
+## But it solves **communication problems**
 ## that will only increase over time
 
-!SLIDE
+!SLIDE smbullets incremental
 
 ## What is the difference?
     @@@ ruby
@@ -382,6 +373,10 @@ Plan B:
     
     Comment.after_create :send_notification
 
+* Business rules:
+
+  * User could be registered from facebook
+  * Comment should send an email notification
 
 !SLIDE
 
@@ -392,6 +387,128 @@ Plan B:
 # Service stands for *could*
 
 ## Please do not confuse *should* with **must**
+
+!SLIDE 
+
+## Where are presenters?
+
+
+    @@@ ruby
+
+    UserPresenter.new(user)
+    # OR
+    class User
+     include UserPresenter
+    end
+
+## Trade an API for less methods in object
+
+!SLIDE 
+
+# More effective presenters?
+
+
+!SLIDE 
+
+## Example of Service implementation with wrapper
+
+More example at ActiveRecord source code
+
+    @@@ ruby
+    class StiTools
+      def self.run(from_model, to_model)
+        new(from_model, to_model).perform
+      end
+
+      private
+      def initialize(from_model, to_model)
+
+      def perform
+        shift_id_info
+        set_to_model_autoincrement
+        set_from_model_autoincrement
+        shift_id_in_from_model
+      end
+    end
+
+!SLIDE 
+
+## Datagrid Gem
+
+### Example of collection wrapper 
+### https://github.com/bogdan/datagrid
+
+    @@@ ruby
+    UsersGrid.new(
+      last_request: Date.today, 
+      created_at: 1.month.ago..Time.now)
+
+    class UsersGrid
+      scope { User }
+
+      filter(:created_at, :date, range: true)
+      filter(:last_request_at, :datetime, range: true)
+      filter(:ip_address, :string)
+        
+      column(:id)
+      column(:email)
+      column(:last_request_at)
+    end
+
+
+
+!SLIDE 
+
+# Wrapping Data
+
+https://github.com/bogdan/furi
+
+    @@@ ruby
+
+    u = Furi.parse(
+      "http://bogdan.github.com/index.html")
+    u.subdomain # => 'bogdan'
+    u.extension # => 'html'
+    u.ssl?      # => false
+
+    module Furi
+      def self.parse(string)
+        Furi::Uri.new(string)
+      end
+    end
+
+!SLIDE 
+
+## Service usage is inconvinient
+
+### because of validation
+
+
+    @@@ ruby
+    Customer.has_many :purchases
+    Purchase.has_many :ordered_items
+    OrderItem.belongs_to :product
+    
+    ManualOrder.ancestors.include?(
+      ActiveRecord::Base) # => false
+
+    order = ManualOrder.new(attributes)
+    if order.valid?
+      order.save_all_those_records_at_once!
+    else
+      order.errors.to_json
+    end
+
+!SLIDE 
+
+# Wrappers/Presenters
+
+## Very specific use
+
+* Wrapper around collection
+* Parsing serialised object
+* Under-the-hood class inside a service
+* Service usage is inconvinient
 
 !SLIDE
 ## The model is still **fat**. 
@@ -408,17 +525,17 @@ Plan B:
       include Archivable
     end
 
-`app/models/concerns/*`
+Rails default: `app/models/concerns/*`
 
 !SLIDE
 
 # Attention! 
-## People with high pressure or propensity to suicide
-## Better close your eyes and ears
+## People with **high pressure** or **propensity to suicide**
+## Next slide can be considered offensive to your religion
 
 !SLIDE
 
-## Single Reponsibility Principle 
+## Single Responsibility Principle 
 # **SUCKS**
 ## The proof follows
 
@@ -457,12 +574,13 @@ Plan B:
 ## can have a single responsibility?
 # It can't!
 
+!SLIDE 
+
+# *Model Concerns* are unavoidable
+## if you want to have a *good model*
+
 !SLIDE
-### *Vertical slicing* stands for
-
-## Split things by features 
-## but not by objects
-
+## Concerns are *Vertical slicing*
 
 #### **Unlike MVC** which is horizontal slicing.
 
@@ -521,6 +639,7 @@ Plan B:
 <tr>
   <td colspan="3" style="">Model</td>
   <td rowspan="2" style="">Services</td>
+  <td rowspan="2" style="">Presenters</td>
 </tr>
 
 <tr>
@@ -551,29 +670,6 @@ Plan B:
 
 !SLIDE
 
-## Associations and Concerns
-
-Associations is a base for Concerns technique.
-
-* *`belongs_to`* is a *core* of a model 
-  * This associations is used in almost all methods.
-* *`has_many`* is usually *better* to create a slice
-  * Methods with this associations is usually independent.
-
-
-!SLIDE
-
-## Concerns best practices
-
-* Apply pattern to *multifunctional models* only
-
-* Use *OOP*:
-  * Abstract method
-  * `super` is super
-
-
-!SLIDE
-
 ## Libraries using Concerns
 
 * ActiveRecord
@@ -583,12 +679,6 @@ Associations is a base for Concerns technique.
 
 <!--##### If it is *possible* for such a **complicated library** -->
 <!--##### then it is **easy** for *regular projects*-->
-
-
-!SLIDE
-
-## *Flow* nature of a Service
-## *Event* nature of a Callback
 
 
 
@@ -611,6 +701,7 @@ Associations is a base for Concerns technique.
 
 ## It should not inhibit you from having
 ## a Better Application Model
+
 !SLIDE
 # **Fat** models => *Thin* Concerns 
 
@@ -618,8 +709,15 @@ Associations is a base for Concerns technique.
 ## *Reimplement* other person's API 
 ## has more wisdom than **invent new** one.
 
+!SLIDE 
 
+# *Presenters*
+## are pretty **specific**
+## Use them in
 
+* Wrapping the collection
+* "private" class
+* Service usage is inconvenient
 
 
 !SLIDE

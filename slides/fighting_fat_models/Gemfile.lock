@@ -16,6 +16,7 @@ GEM
       mini_portile2 (~> 2.0.0.rc2)
     parslet (1.7.1)
       blankslate (>= 2.0, <= 4.0)
+    pdfkit (0.8.2)
     rack (1.6.4)
     rack-protection (1.5.3)
       rack
@@ -48,4 +49,5 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  pdfkit
   showoff
