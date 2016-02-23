@@ -221,11 +221,16 @@ function reloadSlides () {
 <h1>Some of my gems</h1>
 
 <ul>
+<li>
+<a href="http://github.com/bogdan" target="_blank">http://github.com/bogdan</a>
+
+<ul>
 <li><a href="https://github.com/bogdan/datagrid" target="_blank">Datagrid</a></li>
 <li><a href="https://github.com/railsware/js-routes" target="_blank">js-routes</a></li>
 <li><a href="https://github.com/bogdan/accepts_values_for" target="_blank">accepts_values_for</a></li>
 <li><a href="https://github.com/bogdan/furi" target="_blank">furi</a></li>
-<li><a href="http://github.com/bogdan" target="_blank">http://github.com/bogdan</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -278,9 +283,8 @@ to move from middle to senior and above</li>
 <div class="content smbullets incremental" ref="one/01_slide/8">
 <h2>A definition of being fat</h2>
 
-<h1><strong>1000 Lines of code</strong></h1>
-
 <ul>
+<li><p><strong><h2>1000 Lines of code</h2></strong></p></li>
 <li>
 <p>But it depends on:</p>
 
@@ -309,8 +313,8 @@ $ wc -l app/models/* | sort -n | tail
    14924 total</code></pre>
 </div>
 </div>
-<div id="one_01_slide10" class="slide " data-transition="none">
-<div class="content " ref="one/01_slide/10">
+<div id="one_01_slide10" class="slide smbullets incremental" data-transition="none">
+<div class="content smbullets incremental" ref="one/01_slide/10">
 <h2>Existing techniques</h2>
 
 <ul>
@@ -324,6 +328,12 @@ $ wc -l app/models/* | sort -n | tail
 
 <ul>
 <li>Modules that get included to models</li>
+</ul>
+</li>
+<li>Presenters/Wrappers
+
+<ul>
+<li>Classes that wrap existing model to plug new methods</li>
 </ul>
 </li>
 </ul>
@@ -349,7 +359,7 @@ $ wc -l app/models/* | sort -n | tail
 <p>Advanced:</p>
 
 <ul>
-<li>Single Origin Principle</li>
+<li>Effective data model</li>
 <li>
 <em>MORE</em> features per second</li>
 <li>Data Safety</li>
@@ -378,7 +388,7 @@ FacebookWrapper.new(user)
 
 <h2>When amount of utils</h2>
 
-<h2>that supports Model goes higher</h2>
+<h2>that support Model goes higher</h2>
 
 <h2>extract them to service is good idea.</h2>
 </div>
@@ -440,18 +450,18 @@ end</code></pre>
 <p>Object should encapsulate behavior:</p>
 
 <ul>
-<li>Data Validation
+<li>Data Rules
 
 <ul>
 <li>Set of rules that a model should fit at the programming level</li>
-<li>A comment should have an author</li>
+<li>Ex: A comment should have an author</li>
 </ul>
 </li>
 <li>Business Rules
 
 <ul>
 <li>Set of rules that a model should fit to exist in the real world</li>
-<li>A comment should deliver an email notification</li>
+<li>Ex: A comment should deliver an email notification</li>
 </ul>
 </li>
 </ul>
@@ -470,29 +480,26 @@ end</code></pre>
 <h5>Wikipedia</h5>
 </div>
 </div>
-<div id="one_01_slide20" class="slide " data-transition="none">
-<div class="content " ref="one/01_slide/20">
+<div id="one_01_slide20" class="slide bullets incremental" data-transition="none">
+<div class="content bullets incremental" ref="one/01_slide/20">
 <h1>Model</h1>
 
 <h2>is a best place for <em>default behaviour</em>
 </h2>
+
+<ul>
+<li>MVC authors meant that</li>
+</ul>
 </div>
 </div>
-<div id="one_01_slide21" class="slide " data-transition="none">
-<div class="content " ref="one/01_slide/21">
+<div id="one_01_slide21" class="slide bullets incremental" data-transition="none">
+<div class="content bullets incremental" ref="one/01_slide/21">
 <h1>Implementation</h1>
 
 <p>Using built-in Rails features:</p>
 
 <ul>
 <li>ActiveRecord::Callbacks</li>
-</ul>
-
-<p>Have the following benefits:</p>
-
-<ul>
-<li>Reduce number of conventions</li>
-<li>Suits to common knowledge - nothing more than Rails</li>
 </ul>
 </div>
 </div>
@@ -571,15 +578,6 @@ CommentService.create</code></pre>
 <div class="content " ref="one/01_slide/29">
 <h2>Service with options</h2>
 
-<p>Plan A:</p>
-
-<pre class="highlight"><code class="language-ruby">module CommentService
-  def self.create_with_notification(attrs)
-  def self.create(attrs)
-end</code></pre>
-
-<p>Plan B:</p>
-
 <pre class="highlight"><code class="language-ruby">module CommentService
   def self.create(
     attrs, skip_notification = false)
@@ -633,20 +631,33 @@ end</code></pre>
 </div>
 <div id="one_01_slide32" class="slide " data-transition="none">
 <div class="content " ref="one/01_slide/32">
-<h2>Default Behaviour is hard to make</h2>
+<h2>
+<em>Default Behaviour</em> is hard to make</h2>
 
-<h2>But it solves communication problem</h2>
+<h2>But it solves <strong>communication problems</strong>
+</h2>
 
 <h2>that will only increase over time</h2>
 </div>
 </div>
-<div id="one_01_slide33" class="slide " data-transition="none">
-<div class="content " ref="one/01_slide/33">
+<div id="one_01_slide33" class="slide smbullets incremental" data-transition="none">
+<div class="content smbullets incremental" ref="one/01_slide/33">
 <h2>What is the difference?</h2>
 
 <pre class="highlight"><code class="language-ruby">FacebookService.register_user(...)
 
 Comment.after_create :send_notification</code></pre>
+
+<ul>
+<li>
+<p>Business rules:</p>
+
+<ul>
+<li>User could be registered from facebook</li>
+<li>Comment should send an email notification</li>
+</ul>
+</li>
+</ul>
 </div>
 </div>
 <div id="one_01_slide34" class="slide " data-transition="none">
@@ -666,13 +677,135 @@ Comment.after_create :send_notification</code></pre>
 </div>
 <div id="one_01_slide35" class="slide " data-transition="none">
 <div class="content " ref="one/01_slide/35">
+<h2>Where are presenters?</h2>
+
+<pre class="highlight"><code class="language-ruby">
+UserPresenter.new(user)
+# OR
+class User
+ include UserPresenter
+end</code></pre>
+
+<h2>Trade an API for less methods in object</h2>
+</div>
+</div>
+<div id="one_01_slide36" class="slide " data-transition="none">
+<div class="content " ref="one/01_slide/36">
+<h1>More effective presenters?</h1>
+</div>
+</div>
+<div id="one_01_slide37" class="slide " data-transition="none">
+<div class="content " ref="one/01_slide/37">
+<h2>Example of Service implementation with wrapper</h2>
+
+<p>More example at ActiveRecord source code</p>
+
+<pre class="highlight"><code class="language-ruby">class StiTools
+  def self.run(from_model, to_model)
+    new(from_model, to_model).perform
+  end
+
+  private
+  def initialize(from_model, to_model)
+
+  def perform
+    shift_id_info
+    set_to_model_autoincrement
+    set_from_model_autoincrement
+    shift_id_in_from_model
+  end
+end</code></pre>
+</div>
+</div>
+<div id="one_01_slide38" class="slide " data-transition="none">
+<div class="content " ref="one/01_slide/38">
+<h2>Datagrid Gem</h2>
+
+<h3>Example of collection wrapper</h3>
+
+<h3><a href="https://github.com/bogdan/datagrid" target="_blank">https://github.com/bogdan/datagrid</a></h3>
+
+<pre class="highlight"><code class="language-ruby">UsersGrid.new(
+  last_request: Date.today, 
+  created_at: 1.month.ago..Time.now)
+
+class UsersGrid
+  scope { User }
+
+  filter(:created_at, :date, range: true)
+  filter(:last_request_at, :datetime, range: true)
+  filter(:ip_address, :string)
+
+  column(:id)
+  column(:email)
+  column(:last_request_at)
+end</code></pre>
+</div>
+</div>
+<div id="one_01_slide39" class="slide " data-transition="none">
+<div class="content " ref="one/01_slide/39">
+<h1>Wrapping Data</h1>
+
+<p><a href="https://github.com/bogdan/furi" target="_blank">https://github.com/bogdan/furi</a></p>
+
+<pre class="highlight"><code class="language-ruby">
+u = Furi.parse(
+  "http://bogdan.github.com/index.html")
+u.subdomain # =&gt; 'bogdan'
+u.extension # =&gt; 'html'
+u.ssl?      # =&gt; false
+
+module Furi
+  def self.parse(string)
+    Furi::Uri.new(string)
+  end
+end</code></pre>
+</div>
+</div>
+<div id="one_01_slide40" class="slide " data-transition="none">
+<div class="content " ref="one/01_slide/40">
+<h2>Service usage is inconvinient</h2>
+
+<h3>because of validation</h3>
+
+<pre class="highlight"><code class="language-ruby">Customer.has_many :purchases
+Purchase.has_many :ordered_items
+OrderItem.belongs_to :product
+
+ManualOrder.ancestors.include?(
+  ActiveRecord::Base) # =&gt; false
+
+order = ManualOrder.new(attributes)
+if order.valid?
+  order.save_all_those_records_at_once!
+else
+  order.errors.to_json
+end</code></pre>
+</div>
+</div>
+<div id="one_01_slide41" class="slide " data-transition="none">
+<div class="content " ref="one/01_slide/41">
+<h1>Wrappers/Presenters</h1>
+
+<h2>Very specific use</h2>
+
+<ul>
+<li>Wrapper around collection</li>
+<li>Parsing serialised object</li>
+<li>Under-the-hood class inside a service</li>
+<li>Service usage is inconvinient</li>
+</ul>
+</div>
+</div>
+<div id="one_01_slide42" class="slide " data-transition="none">
+<div class="content " ref="one/01_slide/42">
 <h2>The model is still <strong>fat</strong>.</h2>
 
 <h2>What to do?</h2>
 </div>
 </div>
-<div id="one_01_slide36" class="slide " data-transition="none">
-<div class="content " ref="one/01_slide/36">
+<div id="one_01_slide43" class="slide " data-transition="none">
+<div class="content " ref="one/01_slide/43">
 <h2>Use Concerns</h2>
 
 <pre class="highlight"><code class="language-ruby">class Comment &lt; AR::Base
@@ -681,29 +814,30 @@ Comment.after_create :send_notification</code></pre>
   include Archivable
 end</code></pre>
 
-<p><code>app/models/concerns/*</code></p>
+<p>Rails default: <code>app/models/concerns/*</code></p>
 </div>
 </div>
-<div id="one_01_slide37" class="slide " data-transition="none">
-<div class="content " ref="one/01_slide/37">
+<div id="one_01_slide44" class="slide " data-transition="none">
+<div class="content " ref="one/01_slide/44">
 <h1>Attention!</h1>
 
-<h2>People with high pressure or propensity to suicide</h2>
+<h2>People with <strong>high pressure</strong> or <strong>propensity to suicide</strong>
+</h2>
 
-<h2>Better close your eyes and ears</h2>
+<h2>Next slide can be considered offensive to your religion</h2>
 </div>
 </div>
-<div id="one_01_slide38" class="slide " data-transition="none">
-<div class="content " ref="one/01_slide/38">
-<h2>Single Reponsibility Principle</h2>
+<div id="one_01_slide45" class="slide " data-transition="none">
+<div class="content " ref="one/01_slide/45">
+<h2>Single Responsibility Principle</h2>
 
 <h1><strong>SUCKS</strong></h1>
 
 <h2>The proof follows</h2>
 </div>
 </div>
-<div id="one_01_slide39" class="slide " data-transition="none">
-<div class="content " ref="one/01_slide/39">
+<div id="one_01_slide46" class="slide " data-transition="none">
+<div class="content " ref="one/01_slide/46">
 <h2>There is no a single thing</h2>
 
 <h2>in the universe that follows the SRP</h2>
@@ -725,15 +859,15 @@ end</code></pre>
 <div class="clear"></div>
 </div>
 </div>
-<div id="one_01_slide40" class="slide " data-transition="none">
-<div class="content " ref="one/01_slide/40">
+<div id="one_01_slide47" class="slide " data-transition="none">
+<div class="content " ref="one/01_slide/47">
 <h1>Why man made things should?</h1>
 
 <h2>The world is unreasonably complext to follow SRP</h2>
 </div>
 </div>
-<div id="one_01_slide41" class="slide " data-transition="none">
-<div class="content " ref="one/01_slide/41">
+<div id="one_01_slide48" class="slide " data-transition="none">
+<div class="content " ref="one/01_slide/48">
 <h2>How a model that suppose to simulate those things</h2>
 
 <h2>can have a single responsibility?</h2>
@@ -741,21 +875,26 @@ end</code></pre>
 <h1>It can't!</h1>
 </div>
 </div>
-<div id="one_01_slide42" class="slide " data-transition="none">
-<div class="content " ref="one/01_slide/42">
-<h3>
-<em>Vertical slicing</em> stands for</h3>
+<div id="one_01_slide49" class="slide " data-transition="none">
+<div class="content " ref="one/01_slide/49">
+<h1>
+<em>Model Concerns</em> are unavoidable</h1>
 
-<h2>Split things by features</h2>
-
-<h2>but not by objects</h2>
+<h2>if you want to have a <em>good model</em>
+</h2>
+</div>
+</div>
+<div id="one_01_slide50" class="slide " data-transition="none">
+<div class="content " ref="one/01_slide/50">
+<h2>Concerns are <em>Vertical slicing</em>
+</h2>
 
 <h4>
 <strong>Unlike MVC</strong> which is horizontal slicing.</h4>
 </div>
 </div>
-<div id="one_01_slide43" class="slide " data-transition="none">
-<div class="content " ref="one/01_slide/43">
+<div id="one_01_slide51" class="slide " data-transition="none">
+<div class="content " ref="one/01_slide/51">
 <h1>Split model into <em>Concerns</em>
 </h1>
 
@@ -773,8 +912,8 @@ module FacebookProfile
 end</code></pre>
 </div>
 </div>
-<div id="one_01_slide44" class="slide " data-transition="none">
-<div class="content " ref="one/01_slide/44">
+<div id="one_01_slide52" class="slide " data-transition="none">
+<div class="content " ref="one/01_slide/52">
 <h2>Ex.1 User + Facebook</h2>
 
 <ul>
@@ -794,8 +933,8 @@ end</code></pre>
 </ul>
 </div>
 </div>
-<div id="one_01_slide45" class="slide " data-transition="none">
-<div class="content " ref="one/01_slide/45">
+<div id="one_01_slide53" class="slide " data-transition="none">
+<div class="content " ref="one/01_slide/53">
 <h2>Ex.2 Deliver comment notification</h2>
 
 <ul>
@@ -809,8 +948,8 @@ end</code></pre>
 </ul>
 </div>
 </div>
-<div id="one_01_slide46" class="slide " data-transition="none">
-<div class="content " ref="one/01_slide/46">
+<div id="one_01_slide54" class="slide " data-transition="none">
+<div class="content " ref="one/01_slide/54">
 <h3>Basic application architecture</h3>
 
 <table class="full-border">
@@ -823,6 +962,7 @@ end</code></pre>
 <tr>
   <td colspan="3" style="">Model</td>
   <td rowspan="2" style="">Services</td>
+  <td rowspan="2" style="">Presenters</td>
 </tr>
 
 <tr>
@@ -834,8 +974,8 @@ end</code></pre>
 </table>
 </div>
 </div>
-<div id="one_01_slide47" class="slide " data-transition="none">
-<div class="content " ref="one/01_slide/47">
+<div id="one_01_slide55" class="slide " data-transition="none">
+<div class="content " ref="one/01_slide/55">
 <h1>Concerns Base</h1>
 
 <ul>
@@ -857,50 +997,8 @@ end</code></pre>
 </ul>
 </div>
 </div>
-<div id="one_01_slide48" class="slide " data-transition="none">
-<div class="content " ref="one/01_slide/48">
-<h2>Associations and Concerns</h2>
-
-<p>Associations is a base for Concerns technique.</p>
-
-<ul>
-<li>
-<em><code>belongs_to</code></em> is a <em>core</em> of a model 
-
-<ul>
-<li>This associations is used in almost all methods.</li>
-</ul>
-</li>
-<li>
-<em><code>has_many</code></em> is usually <em>better</em> to create a slice
-
-<ul>
-<li>Methods with this associations is usually independent.</li>
-</ul>
-</li>
-</ul>
-</div>
-</div>
-<div id="one_01_slide49" class="slide " data-transition="none">
-<div class="content " ref="one/01_slide/49">
-<h2>Concerns best practices</h2>
-
-<ul>
-<li><p>Apply pattern to <em>multifunctional models</em> only</p></li>
-<li>
-<p>Use <em>OOP</em>:</p>
-
-<ul>
-<li>Abstract method</li>
-<li>
-<code>super</code> is super</li>
-</ul>
-</li>
-</ul>
-</div>
-</div>
-<div id="one_01_slide50" class="slide " data-transition="none">
-<div class="content " ref="one/01_slide/50">
+<div id="one_01_slide56" class="slide " data-transition="none">
+<div class="content " ref="one/01_slide/56">
 <h2>Libraries using Concerns</h2>
 
 <ul>
@@ -915,29 +1013,20 @@ end</code></pre>
 <!--##### then it is **easy** for *regular projects*-->
 </div>
 </div>
-<div id="one_01_slide51" class="slide " data-transition="none">
-<div class="content " ref="one/01_slide/51">
-<h2>
-<em>Flow</em> nature of a Service</h2>
-
-<h2>
-<em>Event</em> nature of a Callback</h2>
-</div>
-</div>
-<div id="one_01_slide52" class="slide " data-transition="none">
-<div class="content " ref="one/01_slide/52">
+<div id="one_01_slide57" class="slide " data-transition="none">
+<div class="content " ref="one/01_slide/57">
 <h1>Summary</h1>
 </div>
 </div>
-<div id="one_01_slide53" class="slide " data-transition="none">
-<div class="content " ref="one/01_slide/53">
+<div id="one_01_slide58" class="slide " data-transition="none">
+<div class="content " ref="one/01_slide/58">
 <h1>Inject Service between Model and Controller</h1>
 
 <h2>if you need them</h2>
 </div>
 </div>
-<div id="one_01_slide54" class="slide " data-transition="none">
-<div class="content " ref="one/01_slide/54">
+<div id="one_01_slide59" class="slide " data-transition="none">
+<div class="content " ref="one/01_slide/59">
 <h1>
 <em>Could?</em>  =&gt; <strong>Service</strong>
 </h1>
@@ -947,8 +1036,8 @@ end</code></pre>
 </h1>
 </div>
 </div>
-<div id="one_01_slide55" class="slide " data-transition="none">
-<div class="content " ref="one/01_slide/55">
+<div id="one_01_slide60" class="slide " data-transition="none">
+<div class="content " ref="one/01_slide/60">
 <h1>SRP is a misleading principle</h1>
 
 <h2>It should not inhibit you from having</h2>
@@ -956,22 +1045,38 @@ end</code></pre>
 <h2>a Better Application Model</h2>
 </div>
 </div>
-<div id="one_01_slide56" class="slide " data-transition="none">
-<div class="content " ref="one/01_slide/56">
+<div id="one_01_slide61" class="slide " data-transition="none">
+<div class="content " ref="one/01_slide/61">
 <h1>
 <strong>Fat</strong> models =&gt; <em>Thin</em> Concerns</h1>
 </div>
 </div>
-<div id="one_01_slide57" class="slide " data-transition="none">
-<div class="content " ref="one/01_slide/57">
+<div id="one_01_slide62" class="slide " data-transition="none">
+<div class="content " ref="one/01_slide/62">
 <h2>
 <em>Reimplement</em> other person's API</h2>
 
 <h2>has more wisdom than <strong>invent new</strong> one.</h2>
 </div>
 </div>
-<div id="one_01_slide58" class="slide " data-transition="none">
-<div class="content " ref="one/01_slide/58">
+<div id="one_01_slide63" class="slide " data-transition="none">
+<div class="content " ref="one/01_slide/63">
+<h1><em>Presenters</em></h1>
+
+<h2>are pretty <strong>specific</strong>
+</h2>
+
+<h2>Use them in</h2>
+
+<ul>
+<li>Wrapping the collection</li>
+<li>"private" class</li>
+<li>Service usage is inconvenient</li>
+</ul>
+</div>
+</div>
+<div id="one_01_slide64" class="slide " data-transition="none">
+<div class="content " ref="one/01_slide/64">
 <h1>The <strong>End</strong>
 </h1>
 
