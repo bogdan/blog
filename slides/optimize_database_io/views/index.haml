@@ -131,27 +131,24 @@
           * counter_cache
           * has_many :through
         %section
-          %h2 Avoid Queries with business logic
+          %h2 Avoid Queries
 
           %pre
             %code.ruby
               :preserve
-                class Localization &lt; AR::Base
-                  # cols:
-                  # * web_site_id
-                  # * value
-                  # * created_at
-                  has_many :ab_test_variants
+                Coupon.belongs_to :purchase, counter_cache: true
+                class Purhcase &lt; AR::Base
+                  has_many :coupons
                 
-                  def ab_tested?
-                    ab_test_variants.any?
+                  def coupon_codes
+                    coupons.map(&:code)
                   end
                 end
           %pre
             %code.ruby
               :preserve
-                def ab_tested?
-                  value.nil? && ab_test_variants.any?
+                def coupon_codes
+                  coupon_count > 0 ? coupons.map(&:code) : []
                 end
                     
         %section
@@ -161,7 +158,13 @@
           Ex. Comment#post_id is immutable in 99% of projects
 
           Comment.has_one :feed_activity
-          FeedActivity.after_create { self.post_id = comment.post_id}
+          FeedActivity.before_validation do 
+            self.post_id = comment.post_id
+            self.author_id = comment.author_id
+          }
+
+
+
         %section
           %pre
             %code.ruby
@@ -175,19 +178,16 @@
                 +  has_many :site_visitors, ->(traffic_source) { 
                      where(site_id: traffic_source.site_id, traffic_source_id: traffic_source.id) }
         %section
-          %h3 What people do in first 3 days of a project:
-          %ul
-            %li An ultimate 2 years roadmap
-            %li 
-              Technology
-              %ul
-                %li Language
-                %li Framework
-                %li Database
-            %li Forecast scaling
-            %li An ultimate money spend roadmap
+          %h2 Avoid Join
 
-        %section
+          %pre
+            %code.ruby
+              == Coupon.belongs_to :purchase, counter_cache: true
+              == Purchase.scope :used_coupon_from_st_valentine_day, -> {
+              ==  joins(:coupons).
+              ==    where("coupons.code like ?", "ST-VAL-%").
+              ==    <span class="fragment">where("coupons_count &gt; 0")</span>
+              == }
         %section
           %h2 Thank You
 
