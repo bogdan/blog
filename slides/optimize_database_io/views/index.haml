@@ -1,0 +1,432 @@
+<!doctype html>
+%html{:lang => "en"}
+  %head
+    %meta{:charset => "utf-8"}/
+    %title How to start a project?
+    %meta{:content => "How to start a project", :name => "description"}/
+    %meta{:content => "Bogdan Gusiev", :name => "author"}/
+    %meta{:content => "yes", :name => "apple-mobile-web-app-capable"}/
+    %meta{:content => "black-translucent", :name => "apple-mobile-web-app-status-bar-style"}/
+    %meta{:content => "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no", :name => "viewport"}/
+    %link{:href => "http://lab.hakim.se/reveal-js/css/reveal.css", :rel => "stylesheet"}/
+    %link{:href => "http://lab.hakim.se/reveal-js/css/theme/night.css", :rel => "stylesheet"}/
+    / For syntax highlighting
+    %link{:href => "http://lab.hakim.se/reveal-js/lib/css/zenburn.css", :rel => "stylesheet"}/
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    - if params[:'print-pdf']
+      :sass
+        body .reveal
+          color: black !important
+          h1, h2, h3, h4, h5
+            color: black !important
+
+    / If the query includes 'print-pdf', use the PDF print sheet
+    :javascript
+      document.write( '<link rel="stylesheet" href="http://lab.hakim.se/reveal-js/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+      
+
+    :sass
+      .yellow
+        color: yellow !important
+      .green
+        color: #17ff2e !important
+      .red
+        color: red !important
+      .first-slide
+        width: 100% !important
+        height: 100% !important
+        top: 0 !important
+        position: absolute !important
+        max-width: 100% !important
+        max-height: 100% !important
+        background-color: white !important
+  %body
+    .all-slides
+      %img{src: "http://gusiev.com/slides/how_to_start/public/techtalk_bottom.png", style: 'position: absolute; bottom: 0; left:0'}
+      %img{src: "http://gusiev.com/slides/how_to_start/public/techtalk_corner.png", style: 'position: absolute; top: 0; left:0'}
+    %img.first-slide{src: "http://gusiev.com/slides/how_to_start/public/techtalk_main.png", style: 'z-index: 10000'}
+    .reveal
+      .slides
+        %section{}
+        %section
+          %h2 How to build a project
+          %h2 architecture in 3 days
+              
+          %h3 Bogdan Gusiev
+        %section
+          %h3 Bogdan Gusiev:
+        
+          %ul
+            %li Working for startups for 7 years
+            %li Ruby on Rails for 7 years
+
+        %section
+          %h2 Start a project
+
+          %ul
+            %li from scratch
+            %li from someone's code
+
+        %section
+
+          %h2 From Scratch
+
+          %img{src: "http://vignette1.wikia.nocookie.net/powerlisting/images/2/28/God-creation.jpg/revision/latest?cb=20120927140355", style: 'width: 400px'}
+
+        %section
+          %h2
+            What should I do
+          %h2
+            in first 3 days
+          %h2
+            of a project?
+
+        %section
+          %img.fragment{src: "http://img13.deviantart.net/a39e/i/2010/351/e/c/flame_war_warning_sign_by_party9999999-d352f5e.png", style: "width: 400px"}
+          %br
+          %ul
+            %li ERB vs HAML
+            %li Sidekiq vs Resque
+            %li Rspec vs TestUnit
+            %li &lt;your-variant&gt;
+
+        %section{"data-markdown" => ""}
+          %script{:type => "text/template"}
+            \### Most of things getting discussed
+            \### early has no relation to project
+            \### that is about to be built
+        %section
+          %h3 What people do in first 3 days of a project:
+          %ul
+            %li An ultimate 2 years roadmap
+            %li 
+              Technology
+              %ul
+                %li Language
+                %li Framework
+                %li Database
+            %li Forecast scaling
+            %li An ultimate money spend roadmap
+
+ 
+
+        %section
+          %h3 Example:
+          %h1 Talkable
+
+          %h3.fragment "Driving Ecommerce Growth With Customer Referrals"
+
+        %section
+          %h3 Expectation:
+
+          %code 
+            wc -l app/models/referral.rb # =&gt; 1000+
+          %br
+          %br
+
+          .fragment
+            %h3
+              Reality:
+              %br
+            %code 
+              Event.where(:action =&gt; "referral")
+          %br
+          %br
+
+        %section
+          %h3 How?
+          .fragment
+            -#%img{src: "http://1.bp.blogspot.com/_304FEZpyoiw/TCg4rfnhGPI/AAAAAAAAAAU/5iiFLnsTUNo/s1600/DSCN0963-2.jpg"}
+            %img{src: "https://monosnap.com/file/bN4jtIHqsKOfhEO3LBegM0VHUIeVKg.png"}
+        %section 
+          %h1 What did we get?
+          %h2.fragment 2 years of corrupt production data
+          %h2.fragment 3 month to fix an issue 
+
+        %section
+          %h2 3 days &mdash; short period
+          %h2 No time for holywars
+        %section
+          %h2 What differs this project from the rest?
+          %h2.fragment What will be hard to change down the road?
+        %section
+          %h3 First thing
+          %h2.yellow Understand the Technology
+        %section{"data-markdown" => ""}
+          %script{:type => "text/template"}
+            \## Information technology
+            <br/>
+            
+            ``` sh
+            curl "https://wikipedia/Information_technology&printable=yes" | wc -l
+            \# => 1446
+            ```
+            
+            \# ;TLDR
+        %section
+          %h1 Why?
+          .fragment 
+            %h2
+              Because it helps to
+            %h2
+              <span class="fragment highlight-green">share information</span>
+            %h2
+              <span class="fragment highlight-red"> between people </span>
+        %section
+          %h3.green Processing Information
+          %h2.red isn't enough!
+
+        %section
+          %h3 Generic Application Data Model
+          %h2 
+            %nobr== Person -> Model <- Person
+
+        %section
+          
+          %h2 Ecommerce:
+          
+          %h2
+            %nobr==  Customer -> Purchase <- Vendor
+          %h3.fragment
+            %nobr== Customer -> Order -> Order Item <- Product
+            Order == Cart
+        %section{"data-markdown" => ""}
+          %script{:type => "text/template"}
+            \## Add some hierarchy
+            
+            \![Ecommerce1](https://api.monosnap.com/image/download?id=Z5Gwq85LF9XSQM2J0FFHHLo5x)
+        %section{"data-markdown" => ""}
+          %script{:type => "text/template"}
+            \## Be specific
+            \![](https://api.monosnap.com/image/download?id=lSdYobnES6NwUFOrEuAIkyzZb)
+
+        %section
+          %h2 What is the relation?
+          %h1.fragment has_many
+        %section 
+          %h2 "Has Many" and "Belongs To"
+          %h2 are great ways to describe the business logic
+
+        %section
+          %h2 This fact made Relation Databases 
+          %h2 a standard in the industry
+
+
+        %section{"data-markdown" => ""}
+          %script{:type => "text/template"}
+            \## Social Network
+            
+            %h2.fragment
+              <nobr>Author -&gt; Activity &lt;- Subscriber</nobr>
+            
+            <p class="fragment">
+            <img src="https://api.monosnap.com/image/download?id=rNJSrZUqwyYWkayD0FUjC7Bg5" />
+            </p>
+        %section
+          %h2 How does it look like in code?
+          
+          %pre
+            %code.ruby
+              :preserve
+                # The Basics
+                User.includes Subscriber
+                User.includes Author
+
+          %pre.fragment
+            %code.ruby
+              :preserve
+                Subscriber.has_many :subscriptions, :foreign_key => :subscriber_id
+
+                Author.has_many :subscribed_entries, :foreign_key => :author_id, 
+                  :class_name => "Subscription"
+                Author.has_many :likes, :photos, :activities
+
+          %pre.fragment
+            %code.ruby
+              :preserve
+                Like.has_one :activity, :as => :target
+                Photo.has_one :activity, :as => :target
+                Comment.has_one :activity, :as => :target
+                
+          %pre.fragment
+            %code.ruby
+              :preserve
+                # The Core
+                module Author
+                  def authored_activities
+                    ?
+                  end
+                end
+                module Subscriber
+                  def subscribed_activities
+                    ?
+                  end
+                end
+        %section
+          %h3 The most complicated part
+
+          %h3.fragment
+            implement 
+            %br
+            <code class='highlight-red'> Subscriber#subscribed_activities </code>
+          <div class="fragment">
+          <img src="https://api.monosnap.com/image/download?id=c3qOtt5uMSSGnpHTf3Oa2pScm" />
+          </div>
+        %section
+          
+          %h3 Not all of the information technologies
+          %h3 smell like Relational database
+          %h2.fragment But the pattern persists
+        %section
+          %h3 Email Client
+          %h2.fragment
+            %nobr Sender -&gt; Message &lt;- Recipient
+          %h2.fragment
+            %nobr App1: Sender -&gt; Message
+            %br
+            %nobr App2: Message &lt;- Recipient
+        %section
+          %h2 Search Engine
+
+          
+          %h3!== Searcher -> Search Result <- Page Owner
+          %h3.fragment!== Query -> Result Item <- Page
+          %img{src: "https://api.monosnap.com/image/download?id=ILHCoxrWnAjawYNokuv7rc1Wi"}
+
+        %section
+          
+          %h2 Search Engine
+
+          %p Even if RDBMS is last thing you will think about in this scope
+
+          %pre
+            %code
+              :preserve
+                ResultItem.belongs_to :page
+                ResultItem.belongs_to :query
+                Page.has_many :result_items
+                Query.has_many :result_items, :order =&gt; ?
+              
+        %section
+          %h3 How to maintain a
+          %h2
+            %span.yellow< healthy startup
+            ?
+        %section
+          %h2 Be Focused
+          %pre{style: "margin: 0 auto; width: 600px; font-size: 1.2em; text-align: center"}
+            :preserve
+              Role1 → Model ← Role2
+          %pre.fragment{style: "margin: 0 auto; width: 600px; font-size: 1.2em; text-align: center"}
+            :preserve
+              ↑
+              Role3
+            
+        %section{"data-markdown" => ""}
+          %script{:type => "text/template"}
+            \## Personal Organizer:
+            
+            \## Model1 <- Person -> Model2
+
+        %section
+          %h3 We should have all the market
+          
+          %br
+          %h3 Person -&gt; Model1,Model2 &lt;- Person
+
+          %h3.fragment
+            Model1 -&gt; Model2
+
+
+        %section
+          %h3 One person work space
+          
+          %h2 Role1 -&gt; Model1 &lt;- Role2
+          %h2.fragment Role2 -&gt; Model2 &lt;- Role3
+
+          %h3.fragment Only 3 days
+        %section
+          %h2
+            A startup MVP should only 
+            %br
+            be built for 
+            .yellow
+              2 roles and 
+              one model
+        %section
+          %h3 "Respond to a Change"
+          %h3 is OK, but
+          %h2.yellow Basic model should never change
+          
+        %section 
+          %h3 Because things are good for
+          %h3 things they were originally designed for
+        %section
+          %h3 So what should I do in first 3 days?
+          %ol.yellow
+            %li Identify Roles
+            %li Identify the core model 
+            %li Build intermediate relations
+            %li Implement high level relations
+        %section
+          %h3 Talkable's refer a friend technology
+
+          Advocate -&gt; Offer -&gt; <span class='red'>Share</span> -&gt; Visitor -&gt; <span class='red'>Referral</span> &lt;- Purchase &lt;- <span class="red">Friend</span>
+          
+          %pre.fragment
+            %code.ruby
+              :preserve
+                class Person
+                  include Advocate
+                  include Friend
+                end
+
+                Advocate.has_many :offers
+                  Offer.has_many :shares
+                    Share.has_many :visitors
+                      Visitor.has_many :referrals
+
+                Friend.has_many :purchases
+                  Purchase.has_one :referral
+
+                # Core Relations
+                Advocate#referrals
+                Friend#referrals
+        %section
+          %h2 Thank You
+
+          %br
+          %ul
+            %li http://github.com/bogdan
+            %li http://gusiev.com
+
+    %script{:src => "http://lab.hakim.se/reveal-js/lib/js/head.min.js"}
+    %script{:src => "http://lab.hakim.se/reveal-js/js/reveal.js"}
+    :javascript
+      // Full list of configuration options available here:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+      controls: true,
+      progress: true,
+      history: true,
+      center: true,
+
+      theme: Reveal.getQueryHash().theme || 'simple', // available themes are in /css/theme
+      transition: Reveal.getQueryHash().transition || 'fade', // default/cube/page/concave/zoom/linear/fade/none
+
+      // Optional libraries used to extend on reveal.js
+      dependencies: [
+      // { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+      { src: 'http://lab.hakim.se/reveal-js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      { src: 'http://lab.hakim.se/reveal-js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      { src: 'http://lab.hakim.se/reveal-js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+      // { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+      // { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+      // { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
+      // { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+      ]
+      });
+      Reveal.addEventListener( 'slidechanged', function( event ) {
+        $('.first-slide').hide()
+      } );
