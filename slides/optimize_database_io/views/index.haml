@@ -42,15 +42,11 @@
         max-height: 100% !important
         background-color: white !important
   %body
-    .all-slides
-      %img{src: "http://gusiev.com/slides/how_to_start/public/techtalk_bottom.png", style: 'position: absolute; bottom: 0; left:0'}
-      %img{src: "http://gusiev.com/slides/how_to_start/public/techtalk_corner.png", style: 'position: absolute; top: 0; left:0'}
-    %img.first-slide{src: "http://gusiev.com/slides/how_to_start/public/techtalk_main.png", style: 'z-index: 10000'}
     .reveal
       .slides
         %section{}
         %section
-          %h2 How to build a project
+          %h2 Optimize Database Queries
           %h2 architecture in 3 days
               
           %h3 Bogdan Gusiev
@@ -62,40 +58,122 @@
             %li Ruby on Rails for 7 years
 
         %section
-          %h2 Start a project
+          %h3 Ultimate goal
+
+          %h2 Make you app spend time waiting on the query response
+
+        %section
+
+          %h2 Methods
 
           %ul
-            %li from scratch
-            %li from someone's code
-
-        %section
-
-          %h2 From Scratch
-
-          %img{src: "http://vignette1.wikia.nocookie.net/powerlisting/images/2/28/God-creation.jpg/revision/latest?cb=20120927140355", style: 'width: 400px'}
+            %li Avoid queries
+            %li Reduce number of queries
+            %li Make queries faster
+            %li Query from a faster place than DB
 
         %section
           %h2
-            What should I do
-          %h2
-            in first 3 days
-          %h2
-            of a project?
-
-        %section
-          %img.fragment{src: "http://img13.deviantart.net/a39e/i/2010/351/e/c/flame_war_warning_sign_by_party9999999-d352f5e.png", style: "width: 400px"}
-          %br
+            Types of queries
           %ul
-            %li ERB vs HAML
-            %li Sidekiq vs Resque
-            %li Rspec vs TestUnit
-            %li &lt;your-variant&gt;
+            %li Instant - time spent mainly on transfering the data
+            %li Slow - time spent on calculating the data
+        %section
+          %h2 Avoid Queries
+          %pre
+            %code.ruby
+              :preserve
+                Campaign.has_many :offers
+                Offer.belongs_to :campaign
 
-        %section{"data-markdown" => ""}
-          %script{:type => "text/template"}
-            \### Most of things getting discussed
-            \### early has no relation to project
-            \### that is about to be built
+          %pre
+            %code
+              :preserve
+                 >> campaign.offers.first.campaign
+                 Offer Load    (0.3ms)  SELECT  `offers`.* FROM `offers` WHERE `offers`.`campaign_id` = 1  ORDER BY `offers`.`created_at` DESC LIMIT 1
+                 Campaign Load (0.3ms)  SELECT  `campaigns`.* FROM `campaigns` WHERE `campaigns`.`id` = 1 LIMIT 1
+
+        %section
+          %pre
+            %code.haml
+              :preserve
+                = render partial: "offers/offer", collection: campaign.offers
+          %pre
+            %code.haml
+              :preserve
+                # app/views/offers/_offer.html.haml
+                %p= link_to offer.name, campaign_offer_path(offer.campaign, offer)
+
+
+        %section
+          %h1.yellow Solution
+
+          %pre
+            %code.ruby
+              :preserve
+                Campaign.has_many :offers, inverse_of: :campaign
+                Offer.belongs_to :campaign, inverse_of: :offers   
+
+        %section
+          %pre
+            %code.ruby
+              :preserve
+                class UserRole &lt; ARBase
+                  validates_uniqness_of :role_id, scope: [:user_id]
+                end
+          %h2.red Absolutely useless query!
+          %h2.yellow Use unique index instead
+
+        %section
+          Rails built-in avoid queries methods:
+
+          * inverse_of
+          * counter_cache
+          * has_many :through
+        %section
+          %h2 Avoid Queries with business logic
+
+          %pre
+            %code.ruby
+              :preserve
+                class Localization &lt; AR::Base
+                  # cols:
+                  # * web_site_id
+                  # * value
+                  # * created_at
+                  has_many :ab_test_variants
+                
+                  def ab_tested?
+                    ab_test_variants.any?
+                  end
+                end
+          %pre
+            %code.ruby
+              :preserve
+                def ab_tested?
+                  value.nil? && ab_test_variants.any?
+                end
+                    
+        %section
+          %h3 Cache immutable data
+          %h2 Data is immutable from business logic stand point
+
+          Ex. Comment#post_id is immutable in 99% of projects
+
+          Comment.has_one :feed_activity
+          FeedActivity.after_create { self.post_id = comment.post_id}
+        %section
+          %pre
+            %code.ruby
+              :preserve
+                Site.has_many :site_visitors
+                Site.has_many :traffic_sources
+          %pre
+            %code.diff
+              :preserve
+                -  has_many :site_visitors
+                +  has_many :site_visitors, ->(traffic_source) { 
+                     where(site_id: traffic_source.site_id, traffic_source_id: traffic_source.id) }
         %section
           %h3 What people do in first 3 days of a project:
           %ul
@@ -109,290 +187,7 @@
             %li Forecast scaling
             %li An ultimate money spend roadmap
 
- 
-
         %section
-          %h3 Example:
-          %h1 Talkable
-
-          %h3.fragment "Driving Ecommerce Growth With Customer Referrals"
-
-        %section
-          %h3 Expectation:
-
-          %code 
-            wc -l app/models/referral.rb # =&gt; 1000+
-          %br
-          %br
-
-          .fragment
-            %h3
-              Reality:
-              %br
-            %code 
-              Event.where(:action =&gt; "referral")
-          %br
-          %br
-
-        %section
-          %h3 How?
-          .fragment
-            -#%img{src: "http://1.bp.blogspot.com/_304FEZpyoiw/TCg4rfnhGPI/AAAAAAAAAAU/5iiFLnsTUNo/s1600/DSCN0963-2.jpg"}
-            %img{src: "https://monosnap.com/file/bN4jtIHqsKOfhEO3LBegM0VHUIeVKg.png"}
-        %section 
-          %h1 What did we get?
-          %h2.fragment 2 years of corrupt production data
-          %h2.fragment 3 month to fix an issue 
-
-        %section
-          %h2 3 days &mdash; short period
-          %h2 No time for holywars
-        %section
-          %h2 What differs this project from the rest?
-          %h2.fragment What will be hard to change down the road?
-        %section
-          %h3 First thing
-          %h2.yellow Understand the Technology
-        %section{"data-markdown" => ""}
-          %script{:type => "text/template"}
-            \## Information technology
-            <br/>
-            
-            ``` sh
-            curl "https://wikipedia/Information_technology&printable=yes" | wc -l
-            \# => 1446
-            ```
-            
-            \# ;TLDR
-        %section
-          %h1 Why?
-          .fragment 
-            %h2
-              Because it helps to
-            %h2
-              <span class="fragment highlight-green">share information</span>
-            %h2
-              <span class="fragment highlight-red"> between people </span>
-        %section
-          %h3.green Processing Information
-          %h2.red isn't enough!
-
-        %section
-          %h3 Generic Application Data Model
-          %h2 
-            %nobr== Person -> Model <- Person
-
-        %section
-          
-          %h2 Ecommerce:
-          
-          %h2
-            %nobr==  Customer -> Purchase <- Vendor
-          %h3.fragment
-            %nobr== Customer -> Order -> Order Item <- Product
-            Order == Cart
-        %section{"data-markdown" => ""}
-          %script{:type => "text/template"}
-            \## Add some hierarchy
-            
-            \![Ecommerce1](https://api.monosnap.com/image/download?id=Z5Gwq85LF9XSQM2J0FFHHLo5x)
-        %section{"data-markdown" => ""}
-          %script{:type => "text/template"}
-            \## Be specific
-            \![](https://api.monosnap.com/image/download?id=lSdYobnES6NwUFOrEuAIkyzZb)
-
-        %section
-          %h2 What is the relation?
-          %h1.fragment has_many
-        %section 
-          %h2 "Has Many" and "Belongs To"
-          %h2 are great ways to describe the business logic
-
-        %section
-          %h2 This fact made Relation Databases 
-          %h2 a standard in the industry
-
-
-        %section{"data-markdown" => ""}
-          %script{:type => "text/template"}
-            \## Social Network
-            
-            %h2.fragment
-              <nobr>Author -&gt; Activity &lt;- Subscriber</nobr>
-            
-            <p class="fragment">
-            <img src="https://api.monosnap.com/image/download?id=rNJSrZUqwyYWkayD0FUjC7Bg5" />
-            </p>
-        %section
-          %h2 How does it look like in code?
-          
-          %pre
-            %code.ruby
-              :preserve
-                # The Basics
-                User.includes Subscriber
-                User.includes Author
-
-          %pre.fragment
-            %code.ruby
-              :preserve
-                Subscriber.has_many :subscriptions, :foreign_key => :subscriber_id
-
-                Author.has_many :subscribed_entries, :foreign_key => :author_id, 
-                  :class_name => "Subscription"
-                Author.has_many :likes, :photos, :activities
-
-          %pre.fragment
-            %code.ruby
-              :preserve
-                Like.has_one :activity, :as => :target
-                Photo.has_one :activity, :as => :target
-                Comment.has_one :activity, :as => :target
-                
-          %pre.fragment
-            %code.ruby
-              :preserve
-                # The Core
-                module Author
-                  def authored_activities
-                    ?
-                  end
-                end
-                module Subscriber
-                  def subscribed_activities
-                    ?
-                  end
-                end
-        %section
-          %h3 The most complicated part
-
-          %h3.fragment
-            implement 
-            %br
-            <code class='highlight-red'> Subscriber#subscribed_activities </code>
-          <div class="fragment">
-          <img src="https://api.monosnap.com/image/download?id=c3qOtt5uMSSGnpHTf3Oa2pScm" />
-          </div>
-        %section
-          
-          %h3 Not all of the information technologies
-          %h3 smell like Relational database
-          %h2.fragment But the pattern persists
-        %section
-          %h3 Email Client
-          %h2.fragment
-            %nobr Sender -&gt; Message &lt;- Recipient
-          %h2.fragment
-            %nobr App1: Sender -&gt; Message
-            %br
-            %nobr App2: Message &lt;- Recipient
-        %section
-          %h2 Search Engine
-
-          
-          %h3!== Searcher -> Search Result <- Page Owner
-          %h3.fragment!== Query -> Result Item <- Page
-          %img{src: "https://api.monosnap.com/image/download?id=ILHCoxrWnAjawYNokuv7rc1Wi"}
-
-        %section
-          
-          %h2 Search Engine
-
-          %p Even if RDBMS is last thing you will think about in this scope
-
-          %pre
-            %code
-              :preserve
-                ResultItem.belongs_to :page
-                ResultItem.belongs_to :query
-                Page.has_many :result_items
-                Query.has_many :result_items, :order =&gt; ?
-              
-        %section
-          %h3 How to maintain a
-          %h2
-            %span.yellow< healthy startup
-            ?
-        %section
-          %h2 Be Focused
-          %pre{style: "margin: 0 auto; width: 600px; font-size: 1.2em; text-align: center"}
-            :preserve
-              Role1 → Model ← Role2
-          %pre.fragment{style: "margin: 0 auto; width: 600px; font-size: 1.2em; text-align: center"}
-            :preserve
-              ↑
-              Role3
-            
-        %section{"data-markdown" => ""}
-          %script{:type => "text/template"}
-            \## Personal Organizer:
-            
-            \## Model1 <- Person -> Model2
-
-        %section
-          %h3 We should have all the market
-          
-          %br
-          %h3 Person -&gt; Model1,Model2 &lt;- Person
-
-          %h3.fragment
-            Model1 -&gt; Model2
-
-
-        %section
-          %h3 One person work space
-          
-          %h2 Role1 -&gt; Model1 &lt;- Role2
-          %h2.fragment Role2 -&gt; Model2 &lt;- Role3
-
-          %h3.fragment Only 3 days
-        %section
-          %h2
-            A startup MVP should only 
-            %br
-            be built for 
-            .yellow
-              2 roles and 
-              one model
-        %section
-          %h3 "Respond to a Change"
-          %h3 is OK, but
-          %h2.yellow Basic model should never change
-          
-        %section 
-          %h3 Because things are good for
-          %h3 things they were originally designed for
-        %section
-          %h3 So what should I do in first 3 days?
-          %ol.yellow
-            %li Identify Roles
-            %li Identify the core model 
-            %li Build intermediate relations
-            %li Implement high level relations
-        %section
-          %h3 Talkable's refer a friend technology
-
-          Advocate -&gt; Offer -&gt; <span class='red'>Share</span> -&gt; Visitor -&gt; <span class='red'>Referral</span> &lt;- Purchase &lt;- <span class="red">Friend</span>
-          
-          %pre.fragment
-            %code.ruby
-              :preserve
-                class Person
-                  include Advocate
-                  include Friend
-                end
-
-                Advocate.has_many :offers
-                  Offer.has_many :shares
-                    Share.has_many :visitors
-                      Visitor.has_many :referrals
-
-                Friend.has_many :purchases
-                  Purchase.has_one :referral
-
-                # Core Relations
-                Advocate#referrals
-                Friend#referrals
         %section
           %h2 Thank You
 
