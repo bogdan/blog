@@ -94,13 +94,13 @@ OSS
 			DateTime.now.end_of_day.to_yaml # => "--- !ruby/object:DateTime 2014-10-13 23:59:59.000000000 +03:00\n...\n"
 			Resolve changelog merge problem
 			class Model < ActiveRecord::Base
+			Checkout ugly link in bid introduction email 
+				employer_bid_url(@bid)
 		rake db:migrate:down STEP=
 		as_json(:id, :email, :active) api
 		Minify backtrace for exceptions in rails console
 		model.attributes.except(:id, :created_at, :updated_at)
 		Document out resource(s) :as option
-		Checkout ugly link in bid introduction email 
-			employer_bid_url(@bid)
 		Application.yml
 		Filter from log SQL parameters
 		Model.schema
