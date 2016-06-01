@@ -2,14 +2,14 @@
 %html{:lang => "en"}
   %head
     %meta{:charset => "utf-8"}/
-    %title How to start a project?
+    %title Optimize Database IO
     %meta{:content => "How to start a project", :name => "description"}/
     %meta{:content => "Bogdan Gusiev", :name => "author"}/
     %meta{:content => "yes", :name => "apple-mobile-web-app-capable"}/
     %meta{:content => "black-translucent", :name => "apple-mobile-web-app-status-bar-style"}/
     %meta{:content => "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no", :name => "viewport"}/
     %link{:href => "http://lab.hakim.se/reveal-js/css/reveal.css", :rel => "stylesheet"}/
-    %link{:href => "http://lab.hakim.se/reveal-js/css/theme/night.css", :rel => "stylesheet"}/
+    %link{:href => "http://lab.hakim.se/reveal-js/css/theme/white.css", :rel => "stylesheet"}/
     / For syntax highlighting
     %link{:href => "http://lab.hakim.se/reveal-js/lib/css/zenburn.css", :rel => "stylesheet"}/
     
@@ -47,7 +47,6 @@
         %section{}
         %section
           %h2 Optimize Database Queries
-          %h2 architecture in 3 days
               
           %h3 Bogdan Gusiev
         %section
@@ -60,7 +59,7 @@
         %section
           %h3 Ultimate goal
 
-          %h2 Make you app spend time waiting on the query response
+          %h2 Make you app spend less time waiting on the query response
 
         %section
 
@@ -76,8 +75,17 @@
           %h2
             Types of queries
           %ul
-            %li Instant - time spent mainly on transfering the data
-            %li Slow - time spent on calculating the data
+            %li 
+              Instant
+              %ul
+                %li time spent mainly on networking IO and FS read
+                %li There are many of them
+            %li 
+              Slow 
+              %ul
+                %li time spent on calculating the data
+                %li Slow time comes from joins or aggregation or dynamic conditions
+
         %section
           %h2 Avoid Queries
           %pre
@@ -118,18 +126,20 @@
           %pre
             %code.ruby
               :preserve
-                class UserRole &lt; ARBase
+                class UserRole &lt; AR::Base
                   validates_uniqness_of :role_id, scope: [:user_id]
                 end
-          %h2.red Absolutely useless query!
-          %h2.yellow Use unique index instead
+          %h2 Absolutely useless query!
+          %h2 Use unique index instead
 
         %section
-          Rails built-in avoid queries methods:
+          %h3 Rails built-in avoid queries methods:
 
-          * inverse_of
-          * counter_cache
-          * has_many :through
+          %ul
+            %li inverse_of
+            %li counter_cache
+            %li has_many :through
+
         %section
           %h2 Avoid Queries
 
@@ -152,30 +162,77 @@
                 end
                     
         %section
-          %h3 Cache immutable data
-          %h2 Data is immutable from business logic stand point
+          %h2 Cache immutable data
+          %h3 Data is immutable from business logic stand point
 
-          Ex. Comment#post_id is immutable in 99% of projects
+          %pre
+            %code.ruby
+              :preserve
+                create_table :comments do |t|
+                  t.integer :post_id
+                  t.integer :author_id
+                  t.text :body
+                end
 
-          Comment.has_one :feed_activity
-          FeedActivity.before_validation do 
-            self.post_id = comment.post_id
-            self.author_id = comment.author_id
-          }
+            \#body is mutable but #post and #author are not
+          %pre
+            %code.ruby
+              :preserve
+                Comment.has_one :feed_activity
+                FeedActivity.before_validation do 
+                  self.forum = comment.post.forum
+                  self.author = comment.author
+                }
 
+
+
+        %section
+          %h1 Speedup queries
+
+        %section
+          %pre
+            %code.ruby
+              :preserve
+                add_index :users, :email, unique: true
+                add_index :products, :category_id
+
+          %ul
+            %li Become actual after 100_000 records
+            %li Indexes take disk space
+            %li Foreign Key index is almost always a good idea
+
+        %section
+
+          %h2 Index Usage Guide
+
+          %p Index by one column will help you make the related query fast
+          %pre
+            %code.sql
+              :preserve
+                SELECT * FROM users WHERE email = ?
+
+          %p Multi-column index can be used to query by first column, 1st&2nd column etc
+
+          %pre
+            %code.ruby
+              :preserve
+                add_index :users_roles, [:user_id, :role_id], unique: true
+                add_index :users_roles, :role_id
 
 
         %section
           %pre
             %code.ruby
               :preserve
-                Site.has_many :site_visitors
+                Site.has_many :visitors
                 Site.has_many :traffic_sources
+                TrafficSource.belongs_to :site
+                Visitor.doesnt_belong_to :site
           %pre
             %code.diff
               :preserve
-                -  has_many :site_visitors
-                +  has_many :site_visitors, ->(traffic_source) { 
+                -  Site.has_many :visitors
+                +  Site.has_many :visitors, ->(traffic_source) { 
                      where(site_id: traffic_source.site_id, traffic_source_id: traffic_source.id) }
         %section
           %h2 Avoid Join
@@ -183,6 +240,7 @@
           %pre
             %code.ruby
               == Coupon.belongs_to :purchase, counter_cache: true
+              == Purchase.has_many :coupons
               == Purchase.scope :used_coupon_from_st_valentine_day, -> {
               ==  joins(:coupons).
               ==    where("coupons.code like ?", "ST-VAL-%").
