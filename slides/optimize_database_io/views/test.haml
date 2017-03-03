@@ -1,32 +1,20 @@
-<!doctype html>
-%html{:lang => "en"}
+!!!
+%html
   %head
     %meta{:charset => "utf-8"}/
-    %title Optimize Database IO
-    %meta{:content => "How to start a project", :name => "description"}/
-    %meta{:content => "Bogdan Gusiev", :name => "author"}/
-    %meta{:content => "yes", :name => "apple-mobile-web-app-capable"}/
-    %meta{:content => "black-translucent", :name => "apple-mobile-web-app-status-bar-style"}/
     %meta{:content => "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no", :name => "viewport"}/
-    %link{:href => "http://lab.hakim.se/reveal-js/css/reveal.css", :rel => "stylesheet"}/
-    %link{:href => "/white.css", :rel => "stylesheet"}/
-    -#%link{:href => "http://lab.hakim.se/reveal-js/css/theme/white.css", :rel => "stylesheet"}/
-    / For syntax highlighting
-    %link{:href => "http://lab.hakim.se/reveal-js/lib/css/zenburn.css", :rel => "stylesheet"}/
-    
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.js"></script>
-    - if params[:'print-pdf']
-      :sass
-        body .reveal
-          color: black !important
-          h1, h2, h3, h4, h5
-            color: black !important
-
-    / If the query includes 'print-pdf', use the PDF print sheet
+    %title reveal.js
+    %link{:href => "css/reveal.css", :rel => "stylesheet"}/
+    %link{:href => "css/theme/black.css", :rel => "stylesheet"}/
+    / Theme used for syntax highlighting of code
+    %link{:href => "lib/css/zenburn.css", :rel => "stylesheet"}/
+    / Printing and PDF exports
     :javascript
-      document.write( '<link rel="stylesheet" href="http://lab.hakim.se/reveal-js/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
-      
-
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
     :sass
       .yellow
         color: yellow !important
@@ -45,7 +33,6 @@
   %body
     .reveal
       .slides
-        %section{}
         %section
           %h2 Optimize Database Queries
               
@@ -84,7 +71,7 @@
             %li 
               Slow 
               %ul
-                %li time spent on calculating the data
+                %li time spent on calculating or searching the data
                 %li Slow time comes from joins or aggregation or dynamic conditions
 
         %section
@@ -227,13 +214,16 @@
 
           %p 
             If I have a table with N columns, how many indexes do I need to cover 100% of possible where conditions?
+        %section
+          %h3 2**n
+          %h3.fragment How about partial index usage optimization?
 
         %section
           
-          %h3 Well, a lot!
-          %h3 2**(n-1)
+          %h3 Well, a little less
+          %h3.fragment 2**(n-1)
 
-          %p.fragment
+          %div
             %table
               %tr
                 %th Columns
@@ -261,7 +251,6 @@
                 %td 16
                 %td 
                   a-b-c-d-e b-c-d-e a-c-d-e a-b-d-e a-b-c-e a-b-e a-c-e b-c-e b-d-e c-d-e a-d a-e b-d b-e c-e e
-
         %section
           %h3 Indexes are not free 
           %h4 they take the disk space
@@ -290,10 +279,17 @@
               :preserve
                 SELECT * FROM posts p USE INDEX(index_b)
                 WHERE p.forum_id = ? AND p.user_id = ? AND p.created_at = ?
+        %section
+          %h3 
+            Apply indexes to columns that would 
+            .yellow cut signficant amount of data 
+            from the result in where condition
+        %section
+          %h1 Speedup queries
 
         %section
           %h3 Indexes are the best to speed up your queries
-          %h2 By they are not the only one
+          %h2 But they are not the only one
         %section
           %pre
             %code.ruby
@@ -312,19 +308,61 @@
           %h2 Avoid Join
 
           %pre
-            %code
-              == Coupon.belongs_to :purchase, counter_cache: true
-              == Purchase.has_many :coupons
-              == Purchase.scope :used_coupon_from_st_valentine_day, -> {
-              ==  joins(:coupons).
-              ==    where("coupons.code like ?", "ST-VAL-%").
-              == }
+            %code.ruby
+              :preserve
+                Coupon.belongs_to :purchase, counter_cache: true
+                Purchase.has_many :coupons
+
+                Purchase.scope :used_coupon_from_st_valentine_day, -> {
+                 joins(:coupons).
+                   where("coupons.code like ?", "ST-VAL-%").
+                }
 
           %pre.fragment
             %code.ruby
               :preserve
-              where("coupons_count &gt; 0")
-                  
+                where("coupons_count &gt; 0")
+        %section
+          %h2 Query execution mystery
+
+          %pre
+            %code.sql
+              :preserve
+                SELECT * FROM members LEFT JOIN projects ON 
+                members.project_id = projects.id
+                WHERE projects.organization_id = ?
+
+                SELECT * FROM members WHERE project_id in (
+                  SELECT * FROM projects WHERE organization_id = ?)
+
+                SELECT id FROM projects WHERE organization_id = ?
+                -- &lt;some ruby code here&gt;
+                SELECT * FROM members WHERE project_id in (?)
+        %section
+          %h3 "Nested queries are evil" 
+          %h3 (c) My University Teacher 2006
+
+        %section
+          %h2 Nested queries are good when
+
+          %ul
+            %li 
+              The result set has not more than 
+              %span.red 100 records
+            %li
+              They are 
+              %span.red not closures
+              %ul
+                %li  Result is the same of each part query row
+            %li They let you define a stricter query execution plan
+        %section
+          %h3 In most cases, two simple queries will be faster than one complex
+          %h3.fragment if nested query didn't work
+        %section
+          %h2 Query Execution Plan
+          %h3 PostgreSQL explain statement is amazing
+          %h3 MySQL explain statement is useless
+
         %section
           %h2 Thank You
 
@@ -333,32 +371,17 @@
             %li http://github.com/bogdan
             %li http://gusiev.com
 
-    %script{:src => "http://lab.hakim.se/reveal-js/lib/js/head.min.js"}
-    %script{:src => "http://lab.hakim.se/reveal-js/js/reveal.js"}
+    %script{:src => "lib/js/head.min.js"}
+    %script{:src => "js/reveal.js"}
     :javascript
-      // Full list of configuration options available here:
-      // https://github.com/hakimel/reveal.js#configuration
+      // More info https://github.com/hakimel/reveal.js#configuration
       Reveal.initialize({
-      controls: true,
-      progress: true,
       history: true,
-      center: true,
-
-      theme: Reveal.getQueryHash().theme || 'simple', // available themes are in /css/theme
-      transition: Reveal.getQueryHash().transition || 'fade', // default/cube/page/concave/zoom/linear/fade/none
-
-      // Optional libraries used to extend on reveal.js
+      // More info https://github.com/hakimel/reveal.js#dependencies
       dependencies: [
-      // { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
-      { src: 'http://lab.hakim.se/reveal-js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-      { src: 'http://lab.hakim.se/reveal-js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-      { src: 'http://lab.hakim.se/reveal-js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
-      // { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
-      // { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
-      // { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
-      // { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+        { src: 'plugin/markdown/marked.js' },
+        { src: 'plugin/markdown/markdown.js' },
+        { src: 'plugin/notes/notes.js', async: true },
+        { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
       ]
       });
-      Reveal.addEventListener( 'slidechanged', function( event ) {
-        $('.first-slide').hide()
-      } );
