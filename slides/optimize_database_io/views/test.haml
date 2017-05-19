@@ -30,6 +30,18 @@
         max-width: 100% !important
         max-height: 100% !important
         background-color: white !important
+    -#:sass
+      code
+        &.line-numbers
+          counter-reset: line_numbers
+        span
+          &.line-number
+            counter-increment: line_numbers
+            &:before
+              content: counter(line_numbers)
+              color: gray
+          &.highlight-line:before
+            color: yellow
   %body
     .reveal
       .slides
@@ -71,11 +83,11 @@
             %li 
               Slow 
               %ul
-                %li time spent on calculating or searching the data
+                %li time spent on aggregating or searching the data
                 %li Slow time comes from joins or aggregation or dynamic conditions
 
         %section
-          %h2 Avoid Queries
+          %h2 Avoid Instant Queries
           %pre
             %code.ruby
               :preserve
@@ -100,7 +112,8 @@
             %code.haml
               :preserve
                 # app/views/offers/_offer.html.haml
-                %p= link_to offer.name, campaign_offer_path(offer.campaign, offer)
+                %p= link_to offer.name, 
+                  campaign_offer_path(offer.campaign, offer)
 
 
         %section
@@ -119,7 +132,7 @@
                 class UserRole &lt; AR::Base
                   validates_uniqness_of :role_id, scope: [:user_id]
                 end
-          %h2 Absolutely useless query!
+          %h2 Pretty useless query
           %h2 Use unique index instead
 
         %section
@@ -144,7 +157,7 @@
                     coupons.map(&:code)
                   end
                 end
-          %pre
+          %pre.fragment
             %code.ruby
               :preserve
                 def coupon_codes
@@ -152,7 +165,10 @@
                 end
                     
         %section
-          %h2 Cache immutable data
+          %h2 Cache Columns
+          %h3 as a way to avoid queries
+        %section
+          %h2 Cache Columns Strategy
           %h3 Data is immutable from business logic stand point
 
           %pre
@@ -165,7 +181,7 @@
                 end
 
             \#body is mutable but #post and #author are not
-          %pre
+          %pre.fragment
             %code.ruby
               :preserve
                 Comment.has_one :feed_activity
@@ -174,7 +190,17 @@
                   self.author = comment.author
                 }
 
+        %section
+          -#%h2 Cache Columns
 
+          %h3 Pros
+          %ul
+            %li Cheap to make
+            %li Cheap to maintain for immutable data
+          %h3 Cons
+          %ul
+            %li Expensive to maintain for mutable data
+            %li Takes disc space
 
         %section
           %h1 Speedup queries
@@ -201,13 +227,14 @@
               :preserve
                 SELECT * FROM users WHERE email = ?
 
-          %p Multi-column index can be used to query by first column, 1st &amp; 2nd column etc
+          .fragment
+            %p Multi-column index can be used to query by first column, 1st &amp; 2nd column etc
 
-          %pre
-            %code.ruby
-              :preserve
-                add_index :users_roles, [:user_id, :role_id], unique: true
-                add_index :users_roles, :role_id
+            %pre
+              %code.ruby
+                :preserve
+                  add_index :users_roles, [:user_id, :role_id], unique: true
+                  add_index :users_roles, :role_id
 
         %section
           %h3 Some Math
@@ -282,10 +309,8 @@
         %section
           %h3 
             Apply indexes to columns that would 
-            .yellow cut signficant amount of data 
+            .yellow cut significant amount of data 
             from the result in where condition
-        %section
-          %h1 Speedup queries
 
         %section
           %h3 Indexes are the best to speed up your queries
@@ -313,15 +338,35 @@
                 Coupon.belongs_to :purchase, counter_cache: true
                 Purchase.has_many :coupons
 
-                Purchase.scope :used_coupon_from_st_valentine_day, -> {
+                Purchase.scope :with_free_shipping, -> {
                  joins(:coupons).
-                   where("coupons.code like ?", "ST-VAL-%").
+                   where(coupons: {free_shipping: true}).
                 }
 
           %pre.fragment
             %code.ruby
               :preserve
                 where("coupons_count &gt; 0")
+        %section
+
+          %h2 DB is smart on doing JOINS
+
+          %pre
+            %code.ruby
+              :preserve
+                Purchase.
+                  where(created_at: 30.days.ago..Time.now).
+                  with_free_shipping
+
+          %pre
+            %code.sql
+              :preserve
+                SELECT * FROM purchases 
+                INNER JOIN coupons ON purchases.coupon_id = coupons.id
+                WHERE 
+                  (purchases.created_at BETWEEN ? AND ?) AND 
+                  coupons.free_shipping AND 
+                  purchases.coupons_count &gt; 0
         %section
           %h2 Query execution mystery
 
@@ -340,7 +385,7 @@
                 SELECT * FROM members WHERE project_id in (?)
         %section
           %h3 "Nested queries are evil" 
-          %h3 (c) My University Teacher 2006
+          %h3 (c) My University Professor 2006
 
         %section
           %h2 Nested queries are good when
@@ -350,19 +395,163 @@
               The result set has not more than 
               %span.red 100 records
             %li
-              They are 
-              %span.red not closures
+              They is 
+              %span.red no closures
               %ul
-                %li  Result is the same of each part query row
+                %li  Result is the same for each part query row
             %li They let you define a stricter query execution plan
         %section
           %h3 In most cases, two simple queries will be faster than one complex
           %h3.fragment if nested query didn't work
         %section
           %h2 Query Execution Plan
-          %h3 PostgreSQL explain statement is amazing
-          %h3 MySQL explain statement is useless
+          %ul
+            %li PostgreSQL <code>explain</code> statement is amazing
+            %li MySQL <code>explain</code> statement is useless
 
+        %section
+
+          %h2 PostgreSQL Explain
+          %pre
+            %code
+              :preserve
+                tpcc=# explain select (
+                  select count(*) from item where i_id = empty.i_id
+                ) from empty;
+
+                 QUERY PLAN
+                ----------------------------------------------------------------------------------
+                Seq Scan on empty (cost=0.00..19933.22 rows=2400 width=4)
+                  SubPlan
+                    -> Aggregate (cost=8.28..8.29 rows=1 width=0)
+                      -> Index Scan using pk_item on item (cost=0.00..8.28 rows=1 width=0)
+                          Index Cond: (i_id = $0)
+
+          %a{href: "https://wiki.postgresql.org/wiki/File:Explaining_EXPLAIN.pdf"} 
+            wiki.postgresql.org/wiki/File:Explaining_EXPLAIN.pdf
+        %section
+          %h2 Real Example around query execution plan
+
+          %table
+            %tr
+              %th Rank
+              %th Name
+              %th Comments
+            %tr
+              %td 1st
+              %td Aaron Peterson
+              %td 97
+            %tr
+              %td 2nd
+              %td DHH
+              %td 95
+            %tr
+              %td 3rd
+              %td Bogdan Gusiev
+              %td 60
+
+            %tr.fragment
+              %td 15th
+              %td You
+              %td 50
+
+
+
+
+        %section
+          %h2 Manually controlling the query execution plan
+          %pre
+            %code.ruby
+              :preserve
+                find_person_by_id(add_ranking(get_leaderboard), ?)
+          %pre.fragment
+            %code.sql.line-numbers
+              :preserve
+                SELECT people.*, leaderboard.* FROM (
+                  SELECT leaders.*, CAST(@rnk:=@rnk+1 AS UNSIGNED) leaderboard_rank 
+                  FROM (
+                    SELECT  `comments`.`person_id` person_id, 
+                      COUNT(*) AS `leaderboard_count` 
+                    FROM `comments`  
+                    WHERE `comments`.`created_at` BETWEEN ? AND ? 
+                    GROUP BY `comments`.`person_id` 
+                    ORDER BY `leaderboard_count` DESC 
+                    LIMIT ?
+                  ) AS leaders, (SELECT @rnk:=0) AS ranking
+                ) AS leaderboard left join people on people.id = leaderboard.person_id 
+                WHERE people.id = ?
+                ORDER BY leaderboard_rank
+        %section
+          Supercomplex SQL query can be fast
+          %br
+          if you control the execution plan
+          %pre
+            %code.sql
+              :preserve
+                SELECT people.*, leaderboard.* FROM (
+                  SELECT leaders.*, CAST(@rnk:=@rnk+1 AS UNSIGNED) leaderboard_rank FROM (
+                    SELECT `offers`.`person_id` person_id, COUNT(*) AS `leaderboard_count`, SUM(`referrals`.`referred_subtotal`) AS `leaderboard_subtotal` FROM `referrals` 
+                      INNER JOIN `offers` ON `offers`.`id` = `referrals`.`offer_id` 
+                      INNER JOIN `origins` ON `origins`.`id` = `referrals`.`referred_origin_id` AND `origins`.`type` IN ('Event', 'Purchase') 
+                      WHERE `referrals`.`site_id` = 8863 AND `referrals`.`status` IN ('approved', 'unblocked') AND 
+                        (`offers`.`person_id` IS NOT NULL) AND `origins`.`event_category_id` = 17201 AND 
+                        (`referrals`.`status` != 'blocked') AND `referrals`.`campaign_id` = 51710 AND 
+                        (`referrals`.`created_at` BETWEEN '2017-01-26 18:41:00' AND '2017-03-03 12:58:44') 
+                      GROUP BY `offers`.`person_id` 
+                      ORDER BY `leaderboard_count` DESC, `leaderboard_subtotal` DESC, `offers`.`person_id` ASC
+                  ) AS leaders, (SELECT @rnk:=0) AS ranking
+                ) AS leaderboard 
+                LEFT JOIN people on people.id = leaderboard.person_id 
+                WHERE `people`.`site_id` = 8863 AND `people`.`id` = 99443765 
+                ORDER BY leaderboard_rank
+
+        %section
+          %h3 Query a different place
+
+          %h2 KeyValue Database
+        %section
+          %h3 Rails Toolbox
+
+          %pre
+            %code.ruby
+              :preserve
+                Rails.cache.set(key, value)
+                Rails.cache.get(key)
+          %pre
+            %code.ruby
+              :preserve
+                Rails.cache.fetch(key) do
+                  # Heavy calculation
+                end
+        %section
+          %h3 Cache Invalidation
+          %h4 First things first:
+          %h3 Always expire by time
+          %h3 I recommend to expire on deploy
+          %pre
+            %code.ruby
+              :preserve
+                Rails.configuration.cache_store = :redis_store, {
+                  namespace: Deploy.identifier, expires_in: 1.day
+                }
+          %pre
+            %code.ruby
+              :preserve
+                class Site
+                  column :custom_domain, :string
+
+                  def ssl_expires_at
+                    Rails.cache.fetch(["ssl_expires_at", custom_domain]) do
+                      Net::HTTP.start(custom_domain, 443, { use_ssl: true }) do
+                        http.peer_cert.not_after
+                      end
+                    end
+                  end
+                end
+
+
+
+          %h3 Expiration by key
         %section
           %h2 Thank You
 
@@ -382,6 +571,7 @@
         { src: 'plugin/markdown/marked.js' },
         { src: 'plugin/markdown/markdown.js' },
         { src: 'plugin/notes/notes.js', async: true },
+        {src: 'plugin/line-numbers/line-numbers.js', async: false},
         { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
       ]
       });
