@@ -1,32 +1,20 @@
-<!doctype html>
-%html{:lang => "en"}
+!!!
+%html
   %head
     %meta{:charset => "utf-8"}/
-    %title Optimize Database IO
-    %meta{:content => "How to start a project", :name => "description"}/
-    %meta{:content => "Bogdan Gusiev", :name => "author"}/
-    %meta{:content => "yes", :name => "apple-mobile-web-app-capable"}/
-    %meta{:content => "black-translucent", :name => "apple-mobile-web-app-status-bar-style"}/
     %meta{:content => "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no", :name => "viewport"}/
-    %link{:href => "http://lab.hakim.se/reveal-js/css/reveal.css", :rel => "stylesheet"}/
-    %link{:href => "/white.css", :rel => "stylesheet"}/
-    -#%link{:href => "http://lab.hakim.se/reveal-js/css/theme/white.css", :rel => "stylesheet"}/
-    / For syntax highlighting
-    %link{:href => "http://lab.hakim.se/reveal-js/lib/css/zenburn.css", :rel => "stylesheet"}/
-    
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.js"></script>
-    - if params[:'print-pdf']
-      :sass
-        body .reveal
-          color: black !important
-          h1, h2, h3, h4, h5
-            color: black !important
-
-    / If the query includes 'print-pdf', use the PDF print sheet
+    %title reveal.js
+    %link{:href => "css/reveal.css", :rel => "stylesheet"}/
+    %link{:href => "css/theme/black.css", :rel => "stylesheet"}/
+    / Theme used for syntax highlighting of code
+    %link{:href => "lib/css/zenburn.css", :rel => "stylesheet"}/
+    / Printing and PDF exports
     :javascript
-      document.write( '<link rel="stylesheet" href="http://lab.hakim.se/reveal-js/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
-      
-
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
     :sass
       .yellow
         color: yellow !important
@@ -42,10 +30,21 @@
         max-width: 100% !important
         max-height: 100% !important
         background-color: white !important
+    -#:sass
+      code
+        &.line-numbers
+          counter-reset: line_numbers
+        span
+          &.line-number
+            counter-increment: line_numbers
+            &:before
+              content: counter(line_numbers)
+              color: gray
+          &.highlight-line:before
+            color: yellow
   %body
     .reveal
       .slides
-        %section{}
         %section
           %h2 Optimize Database Queries
               
@@ -84,11 +83,11 @@
             %li 
               Slow 
               %ul
-                %li time spent on calculating the data
+                %li time spent on aggregating or searching the data
                 %li Slow time comes from joins or aggregation or dynamic conditions
 
         %section
-          %h2 Avoid Queries
+          %h2 Avoid Instant Queries
           %pre
             %code.ruby
               :preserve
@@ -113,7 +112,8 @@
             %code.haml
               :preserve
                 # app/views/offers/_offer.html.haml
-                %p= link_to offer.name, campaign_offer_path(offer.campaign, offer)
+                %p= link_to offer.name, 
+                  campaign_offer_path(offer.campaign, offer)
 
 
         %section
@@ -132,7 +132,7 @@
                 class UserRole &lt; AR::Base
                   validates_uniqness_of :role_id, scope: [:user_id]
                 end
-          %h2 Absolutely useless query!
+          %h2 Pretty useless query
           %h2 Use unique index instead
 
         %section
@@ -157,7 +157,7 @@
                     coupons.map(&:code)
                   end
                 end
-          %pre
+          %pre.fragment
             %code.ruby
               :preserve
                 def coupon_codes
@@ -165,7 +165,10 @@
                 end
                     
         %section
-          %h2 Cache immutable data
+          %h2 Cache Columns
+          %h3 as a way to avoid queries
+        %section
+          %h2 Cache Columns Strategy
           %h3 Data is immutable from business logic stand point
 
           %pre
@@ -178,7 +181,7 @@
                 end
 
             \#body is mutable but #post and #author are not
-          %pre
+          %pre.fragment
             %code.ruby
               :preserve
                 Comment.has_one :feed_activity
@@ -187,7 +190,17 @@
                   self.author = comment.author
                 }
 
+        %section
+          -#%h2 Cache Columns
 
+          %h3 Pros
+          %ul
+            %li Cheap to make
+            %li Cheap to maintain for immutable data
+          %h3 Cons
+          %ul
+            %li Expensive to maintain for mutable data
+            %li Takes disc space
 
         %section
           %h1 Speedup queries
@@ -214,26 +227,30 @@
               :preserve
                 SELECT * FROM users WHERE email = ?
 
-          %p Multi-column index can be used to query by first column, 1st &amp; 2nd column etc
+          .fragment
+            %p Multi-column index can be used to query by first column, 1st &amp; 2nd column etc
 
-          %pre
-            %code.ruby
-              :preserve
-                add_index :users_roles, [:user_id, :role_id], unique: true
-                add_index :users_roles, :role_id
+            %pre
+              %code.ruby
+                :preserve
+                  add_index :users_roles, [:user_id, :role_id], unique: true
+                  add_index :users_roles, :role_id
 
         %section
           %h3 Some Math
 
           %p 
             If I have a table with N columns, how many indexes do I need to cover 100% of possible where conditions?
+        %section
+          %h3 2**n
+          %h3.fragment How about partial index usage optimization?
 
         %section
           
-          %h3 Well, a lot!
-          %h3 2**(n-1)
+          %h3 Well, a little less
+          %h3.fragment 2**(n-1)
 
-          %p.fragment
+          %div
             %table
               %tr
                 %th Columns
@@ -261,7 +278,6 @@
                 %td 16
                 %td 
                   a-b-c-d-e b-c-d-e a-c-d-e a-b-d-e a-b-c-e a-b-e a-c-e b-c-e b-d-e c-d-e a-d a-e b-d b-e c-e e
-
         %section
           %h3 Indexes are not free 
           %h4 they take the disk space
@@ -290,10 +306,15 @@
               :preserve
                 SELECT * FROM posts p USE INDEX(index_b)
                 WHERE p.forum_id = ? AND p.user_id = ? AND p.created_at = ?
+        %section
+          %h3 
+            Apply indexes to columns that would 
+            .yellow cut significant amount of data 
+            from the result in where condition
 
         %section
           %h3 Indexes are the best to speed up your queries
-          %h2 By they are not the only one
+          %h2 But they are not the only one
         %section
           %pre
             %code.ruby
@@ -312,19 +333,225 @@
           %h2 Avoid Join
 
           %pre
-            %code
-              == Coupon.belongs_to :purchase, counter_cache: true
-              == Purchase.has_many :coupons
-              == Purchase.scope :used_coupon_from_st_valentine_day, -> {
-              ==  joins(:coupons).
-              ==    where("coupons.code like ?", "ST-VAL-%").
-              == }
+            %code.ruby
+              :preserve
+                Coupon.belongs_to :purchase, counter_cache: true
+                Purchase.has_many :coupons
+
+                Purchase.scope :with_free_shipping, -> {
+                 joins(:coupons).
+                   where(coupons: {free_shipping: true}).
+                }
 
           %pre.fragment
             %code.ruby
               :preserve
-              where("coupons_count &gt; 0")
-                  
+                where("coupons_count &gt; 0")
+        %section
+
+          %h2 DB is smart on doing JOINS
+
+          %pre
+            %code.ruby
+              :preserve
+                Purchase.
+                  where(created_at: 30.days.ago..Time.now).
+                  with_free_shipping
+
+          %pre
+            %code.sql
+              :preserve
+                SELECT * FROM purchases 
+                INNER JOIN coupons ON purchases.coupon_id = coupons.id
+                WHERE 
+                  (purchases.created_at BETWEEN ? AND ?) AND 
+                  coupons.free_shipping AND 
+                  purchases.coupons_count &gt; 0
+        %section
+          %h2 Query execution mystery
+
+          %pre
+            %code.sql
+              :preserve
+                SELECT * FROM members LEFT JOIN projects ON 
+                members.project_id = projects.id
+                WHERE projects.organization_id = ?
+
+                SELECT * FROM members WHERE project_id in (
+                  SELECT * FROM projects WHERE organization_id = ?)
+
+                SELECT id FROM projects WHERE organization_id = ?
+                -- &lt;some ruby code here&gt;
+                SELECT * FROM members WHERE project_id in (?)
+        %section
+          %h3 "Nested queries are evil" 
+          %h3 (c) My University Professor 2006
+
+        %section
+          %h2 Nested queries are good when
+
+          %ul
+            %li 
+              The result set has not more than 
+              %span.red 100 records
+            %li
+              They is 
+              %span.red no closures
+              %ul
+                %li  Result is the same for each part query row
+            %li They let you define a stricter query execution plan
+        %section
+          %h3 In most cases, two simple queries will be faster than one complex
+          %h3.fragment if nested query didn't work
+        %section
+          %h2 Query Execution Plan
+          %ul
+            %li PostgreSQL <code>explain</code> statement is amazing
+            %li MySQL <code>explain</code> statement is useless
+
+        %section
+
+          %h2 PostgreSQL Explain
+          %pre
+            %code
+              :preserve
+                tpcc=# explain select (
+                  select count(*) from item where i_id = empty.i_id
+                ) from empty;
+
+                 QUERY PLAN
+                ----------------------------------------------------------------------------------
+                Seq Scan on empty (cost=0.00..19933.22 rows=2400 width=4)
+                  SubPlan
+                    -> Aggregate (cost=8.28..8.29 rows=1 width=0)
+                      -> Index Scan using pk_item on item (cost=0.00..8.28 rows=1 width=0)
+                          Index Cond: (i_id = $0)
+
+          %a{href: "https://wiki.postgresql.org/wiki/File:Explaining_EXPLAIN.pdf"} 
+            wiki.postgresql.org/wiki/File:Explaining_EXPLAIN.pdf
+        %section
+          %h2 Real Example around query execution plan
+
+          %table
+            %tr
+              %th Rank
+              %th Name
+              %th Comments
+            %tr
+              %td 1st
+              %td Aaron Peterson
+              %td 97
+            %tr
+              %td 2nd
+              %td DHH
+              %td 95
+            %tr
+              %td 3rd
+              %td Bogdan Gusiev
+              %td 60
+
+            %tr.fragment
+              %td 15th
+              %td You
+              %td 50
+
+
+
+
+        %section
+          %h2 Manually controlling the query execution plan
+          %pre
+            %code.ruby
+              :preserve
+                find_person_by_id(add_ranking(get_leaderboard), ?)
+          %pre.fragment
+            %code.sql.line-numbers
+              :preserve
+                SELECT people.*, leaderboard.* FROM (
+                  SELECT leaders.*, CAST(@rnk:=@rnk+1 AS UNSIGNED) leaderboard_rank 
+                  FROM (
+                    SELECT  `comments`.`person_id` person_id, 
+                      COUNT(*) AS `leaderboard_count` 
+                    FROM `comments`  
+                    WHERE `comments`.`created_at` BETWEEN ? AND ? 
+                    GROUP BY `comments`.`person_id` 
+                    ORDER BY `leaderboard_count` DESC 
+                    LIMIT ?
+                  ) AS leaders, (SELECT @rnk:=0) AS ranking
+                ) AS leaderboard left join people on people.id = leaderboard.person_id 
+                WHERE people.id = ?
+                ORDER BY leaderboard_rank
+        %section
+          Supercomplex SQL query can be fast
+          %br
+          if you control the execution plan
+          %pre
+            %code.sql
+              :preserve
+                SELECT people.*, leaderboard.* FROM (
+                  SELECT leaders.*, CAST(@rnk:=@rnk+1 AS UNSIGNED) leaderboard_rank FROM (
+                    SELECT `offers`.`person_id` person_id, COUNT(*) AS `leaderboard_count`, SUM(`referrals`.`referred_subtotal`) AS `leaderboard_subtotal` FROM `referrals` 
+                      INNER JOIN `offers` ON `offers`.`id` = `referrals`.`offer_id` 
+                      INNER JOIN `origins` ON `origins`.`id` = `referrals`.`referred_origin_id` AND `origins`.`type` IN ('Event', 'Purchase') 
+                      WHERE `referrals`.`site_id` = 8863 AND `referrals`.`status` IN ('approved', 'unblocked') AND 
+                        (`offers`.`person_id` IS NOT NULL) AND `origins`.`event_category_id` = 17201 AND 
+                        (`referrals`.`status` != 'blocked') AND `referrals`.`campaign_id` = 51710 AND 
+                        (`referrals`.`created_at` BETWEEN '2017-01-26 18:41:00' AND '2017-03-03 12:58:44') 
+                      GROUP BY `offers`.`person_id` 
+                      ORDER BY `leaderboard_count` DESC, `leaderboard_subtotal` DESC, `offers`.`person_id` ASC
+                  ) AS leaders, (SELECT @rnk:=0) AS ranking
+                ) AS leaderboard 
+                LEFT JOIN people on people.id = leaderboard.person_id 
+                WHERE `people`.`site_id` = 8863 AND `people`.`id` = 99443765 
+                ORDER BY leaderboard_rank
+
+        %section
+          %h3 Query a different place
+
+          %h2 KeyValue Database
+        %section
+          %h3 Rails Toolbox
+
+          %pre
+            %code.ruby
+              :preserve
+                Rails.cache.set(key, value)
+                Rails.cache.get(key)
+          %pre
+            %code.ruby
+              :preserve
+                Rails.cache.fetch(key) do
+                  # Heavy calculation
+                end
+        %section
+          %h3 Cache Invalidation
+          %h4 First things first:
+          %h3 Always expire by time
+          %h3 I recommend to expire on deploy
+          %pre
+            %code.ruby
+              :preserve
+                Rails.configuration.cache_store = :redis_store, {
+                  namespace: Deploy.identifier, expires_in: 1.day
+                }
+          %pre
+            %code.ruby
+              :preserve
+                class Site
+                  column :custom_domain, :string
+
+                  def ssl_expires_at
+                    Rails.cache.fetch(["ssl_expires_at", custom_domain]) do
+                      Net::HTTP.start(custom_domain, 443, { use_ssl: true }) do
+                        http.peer_cert.not_after
+                      end
+                    end
+                  end
+                end
+
+
+
+          %h3 Expiration by key
         %section
           %h2 Thank You
 
@@ -333,32 +560,18 @@
             %li http://github.com/bogdan
             %li http://gusiev.com
 
-    %script{:src => "http://lab.hakim.se/reveal-js/lib/js/head.min.js"}
-    %script{:src => "http://lab.hakim.se/reveal-js/js/reveal.js"}
+    %script{:src => "lib/js/head.min.js"}
+    %script{:src => "js/reveal.js"}
     :javascript
-      // Full list of configuration options available here:
-      // https://github.com/hakimel/reveal.js#configuration
+      // More info https://github.com/hakimel/reveal.js#configuration
       Reveal.initialize({
-      controls: true,
-      progress: true,
       history: true,
-      center: true,
-
-      theme: Reveal.getQueryHash().theme || 'simple', // available themes are in /css/theme
-      transition: Reveal.getQueryHash().transition || 'fade', // default/cube/page/concave/zoom/linear/fade/none
-
-      // Optional libraries used to extend on reveal.js
+      // More info https://github.com/hakimel/reveal.js#dependencies
       dependencies: [
-      // { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
-      { src: 'http://lab.hakim.se/reveal-js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-      { src: 'http://lab.hakim.se/reveal-js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-      { src: 'http://lab.hakim.se/reveal-js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
-      // { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
-      // { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
-      // { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
-      // { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+        { src: 'plugin/markdown/marked.js' },
+        { src: 'plugin/markdown/markdown.js' },
+        { src: 'plugin/notes/notes.js', async: true },
+        {src: 'plugin/line-numbers/line-numbers.js', async: false},
+        { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
       ]
       });
-      Reveal.addEventListener( 'slidechanged', function( event ) {
-        $('.first-slide').hide()
-      } );
