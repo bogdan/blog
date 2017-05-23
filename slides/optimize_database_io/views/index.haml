@@ -57,6 +57,11 @@
             %li Ruby on Rails for 7 years
 
         %section
+          
+        -#%section
+          %h4 http://contributors.rubyonrails.org
+          %img{src: "https://monosnap.com/file/54HY4xFLwAt1mdAosSCuvdygoZnfeO.png"}
+        %section
           %h3 Ultimate goal
 
           %h2 Make your app spend less time waiting on the query response
@@ -111,19 +116,21 @@
           %pre
             %code.haml
               :preserve
-                # app/views/offers/_offer.html.haml
-                %p= link_to offer.name, 
-                  campaign_offer_path(offer.campaign, offer)
+                -# app/views/offers/_offer.html.haml
+                %a{href: campaign_offer_path(offer.campaign, offer)}
+                  = offer.name
+                  
 
 
         %section
-          %h1.yellow Solution
+          %h2.yellow Avoid Queries is Possible
 
           %pre
             %code.ruby
               :preserve
                 Campaign.has_many :offers, inverse_of: :campaign
                 Offer.belongs_to :campaign, inverse_of: :offers   
+
 
         %section
           %pre
@@ -132,7 +139,7 @@
                 class UserRole &lt; AR::Base
                   validates_uniqness_of :role_id, scope: [:user_id]
                 end
-          %h2 Pretty useless query
+          %h3 Pretty useless query
           %h2 Use unique index instead
 
         %section
@@ -163,13 +170,22 @@
                 def coupon_codes
                   coupon_count > 0 ? coupons.map(&:code) : []
                 end
+        %section
+          %h3 Rails Feature Proposal
+
+          %p 
+            Faster associations load: 
+            %br
+            avoid SQL query 
+            %br
+            when counter_cache is zero
+
                     
         %section
           %h2 Cache Columns
           %h3 as a way to avoid queries
         %section
-          %h2 Cache Columns Strategy
-          %h3 Data is immutable from business logic stand point
+          %h3 Cache immutable data
 
           %pre
             %code.ruby
@@ -228,7 +244,10 @@
                 SELECT * FROM users WHERE email = ?
 
           .fragment
-            %p Multi-column index can be used to query by first column, 1st &amp; 2nd column etc
+            %p 
+              Multi-column index can be used to query 
+              %br
+                by 1st column, 1st &amp; 2nd column etc
 
             %pre
               %code.ruby
@@ -286,7 +305,7 @@
         %section
           
 
-          %h2 Indexes Optimization
+          %h2 Index Usage Optimization
 
           %pre
             %code.sql
@@ -307,15 +326,16 @@
                 SELECT * FROM posts p USE INDEX(index_b)
                 WHERE p.forum_id = ? AND p.user_id = ? AND p.created_at = ?
         %section
-          %h3 
+          %h4 
             Apply indexes to columns that would 
-            .yellow cut significant amount of data 
-            from the result in where condition
+          %h3.yellow cut significant amount of data 
+          %h4 from the result in where condition
 
         %section
-          %h3 Indexes are the best to speed up your queries
-          %h2 But they are not the only one
+          %h4 Indexes are the best to speed up your queries
+          %h3 But they are not the only one
         %section
+          %h3 Extra Conditions
           %pre
             %code.ruby
               :preserve
@@ -365,8 +385,8 @@
                 INNER JOIN coupons ON purchases.coupon_id = coupons.id
                 WHERE 
                   (purchases.created_at BETWEEN ? AND ?) AND 
-                  coupons.free_shipping AND 
-                  purchases.coupons_count &gt; 0
+                  purchases.coupons_count &gt; 0 AND 
+                  coupons.free_shipping
         %section
           %h2 Query execution mystery
 
@@ -384,6 +404,35 @@
                 -- &lt;some ruby code here&gt;
                 SELECT * FROM members WHERE project_id in (?)
         %section
+          %h3 Nested Query or Join Avoidance
+
+          %pre
+            %code.ruby
+              :preserve
+                Product.where(
+                  category_id: Category.where(archived: false).ids
+                )
+                
+          %pre
+            %code.sql
+              :preserve
+                SELECT id FROM categories WHERE archived = false
+                SELECT * FROM product WHERE category_id in (1,2,3,4,5 ....)
+
+          %pre.fragment
+            %code.sql
+              :preserve
+                SELECT * FROM product WHERE category_id = 1 UNION
+                SELECT * FROM product WHERE category_id = 2 UNION
+                SELECT * FROM product WHERE category_id = 3 UNION ...
+
+          %p.fragment
+            "OR" operator is bad for your performance
+            %br
+            Bevare of "OR" in the hidden form
+
+                
+        %section
           %h3 "Nested queries are evil" 
           %h3 (c) My University Professor 2006
 
@@ -391,14 +440,14 @@
           %h2 Nested queries are good when
 
           %ul
-            %li 
-              The result set has not more than 
-              %span.red 100 records
             %li
               They is 
               %span.red no closures
               %ul
-                %li  Result is the same for each part query row
+                %li  Result is the same for each query row
+            %li 
+              The result set has not more than 
+              %span.red 100 records
             %li They let you define a stricter query execution plan
         %section
           %h3 In most cases, two simple queries will be faster than one complex
@@ -430,7 +479,8 @@
           %a{href: "https://wiki.postgresql.org/wiki/File:Explaining_EXPLAIN.pdf"} 
             wiki.postgresql.org/wiki/File:Explaining_EXPLAIN.pdf
         %section
-          %h2 Real Example around query execution plan
+          %h3 Real Example:
+          %h2 Leaderboard
 
           %table
             %tr
@@ -508,7 +558,7 @@
         %section
           %h3 Query a different place
 
-          %h2 KeyValue Database
+          %h2.fragment KeyValue Database
         %section
           %h3 Rails Toolbox
 
@@ -525,14 +575,14 @@
                 end
         %section
           %h3 Cache Invalidation
-          %h4 First things first:
-          %h3 Always expire by time
-          %h3 I recommend to expire on deploy
+          %ul
+            %li Always expire by time
+            %li I recommend to expire on deploy
           %pre
             %code.ruby
               :preserve
                 Rails.configuration.cache_store = :redis_store, {
-                  namespace: Deploy.identifier, expires_in: 1.day
+                  namespace: ENV['DEPLOY_CACHE_ID'], expires_in: 1.day
                 }
           %pre
             %code.ruby
@@ -550,8 +600,9 @@
                 end
 
 
-
+        %section
           %h3 Expiration by key
+          
         %section
           %h2 Thank You
 
