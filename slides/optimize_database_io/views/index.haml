@@ -39,7 +39,7 @@
         max-width: 100% !important
         max-height: 100% !important
         background-color: white !important
-    -#:sass
+    :sass
       code
         &.line-numbers
           counter-reset: line_numbers
@@ -221,7 +221,11 @@
                 end
         %section
           %pre
-            %code.haml
+            %code.ruby
+              :preserve
+                Comment.belongs_to :post, counter_cache: true
+          %pre
+            %code.haml.line-numbers
               - a = "Comments (\#{@post.comments.count})"
               :preserve
                 - if @post.comments.any?
@@ -235,20 +239,25 @@
             %br
             in the worst case scenario?
                     
+          %h2.fragment 3 Queries
         %section
           %h3 Rails Feature Proposal
 
           %p 
-            Faster associations load: 
             %br
-            avoid SQL query 
+            Make use of `counter_cache` in methods like
+            %ul
+              %li count
+              %li any?
+              %li empty?
             %br
-            when counter_cache is zero
-            %br
-            %br
-            %br
-          .splash-image{style: "right: 0"}
-            %img{style: "width: 50%; right: 0; border: 0; background-color: transparent", src: "https://files.slack.com/files-tmb/T028ZNCBK-F5M5951BR-d68298e5e8/image-without-white-background_720.png"}
+            Avoid loading completely when counter is 0
+          :sass
+            .thumb-up
+              position: absolute
+              right: 0
+              top: 10%
+          %img.thumb-up.fragment.fade-left{style: "width: 50%; right: 0; border: 0; background-color: transparent", src: "https://files.slack.com/files-tmb/T028ZNCBK-F5KPKCBK3-807a914d8f/bogdan_480.png"}
 
         %section
           %h2 Cache Columns
