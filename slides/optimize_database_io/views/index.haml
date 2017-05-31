@@ -226,11 +226,11 @@
                 Comment.belongs_to :post, counter_cache: true
           %pre
             %code.haml.line-numbers
-              - a = "Comments (\#{@post.comments.count})"
+              - a = "Comments (\#{@post.comments.count}):"
               :preserve
                 - if @post.comments.any?
+                  #{a}
                   - @post.comments.each do |comment|
-                    #{a}
                     = render partial: "posts/comment", object: comment
                 - else
                   No Comments Made yet
