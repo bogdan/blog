@@ -16,6 +16,15 @@
       link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
       document.getElementsByTagName( 'head' )[0].appendChild( link );
     :sass
+      .splash-image
+        position: absolute
+        top: 10%
+        left: 0
+        border: 0 !important
+        background-color: transparent !important
+        width: 100%
+        margin: auto
+            
       .yellow
         color: yellow !important
       .green
@@ -56,9 +65,14 @@
           %ul
             %li Working for startups for X years
             %li Contributing to Ruby on Rails X years
+
         %section
+          %h3 2011: Started 
           %img{src: "https://monosnap.com/file/zbsymGAuTXPpwhLrwLf3wmGl0jXBiY.png"}
 
+        %section
+          %h3 2017: Won an argument with DHH
+          %img{src: "https://monosnap.com/file/e7VO7qmiVjqfhyosW5TIYW7cbH2S80.png"}
           
         %section
           %h3 Optimize Your App
@@ -69,8 +83,18 @@
             %li Rack
             %li ActionController
             %li Your code
-
           %h3.fragment.red 90% it is all yours
+
+        %section
+
+          %h3 Top of the mind
+
+          %ul
+            %li Use a different database
+            %li Buy a new hardware
+            %li Use a magic setting
+            %li.fragment.yellow Optimize Slow Parts
+
 
         %section
           %h3 What takes time in the app
@@ -89,16 +113,6 @@
           %h3 Ultimate goal
 
           %h2 Make your app spend less time waiting on the query response
-
-        %section
-
-          %h3 Can we just optimize all at once?
-
-          %ul
-            %li Use a different database
-            %li Buy a new hardware
-            %li Use a magic setting
-            %li.fragment.yellow Optimize Slow Parts
 
         %section
 
@@ -230,6 +244,11 @@
             avoid SQL query 
             %br
             when counter_cache is zero
+            %br
+            %br
+            %br
+          .splash-image{style: "right: 0"}
+            %img{style: "width: 50%; right: 0; border: 0; background-color: transparent", src: "https://files.slack.com/files-tmb/T028ZNCBK-F5M5951BR-d68298e5e8/image-without-white-background_720.png"}
 
         %section
           %h2 Cache Columns
@@ -659,14 +678,36 @@
 
             %a{href: "https://github.com/rails/rails/pull/29092"} 
               Recyclable Cache Keys
-          %h3.fragment Good enough for Basecamp
+
+        %section
+          %h3 Expiration Version Feature
+
+          %pre
+            %code.ruby
+              :preserve
+                Rails.cache.fetch(["post_preview", post]) do
+                  heavy_lifting
+                end
+          %pre
+            %code.ruby
+              :preserve
+                class Post
+                  def cache_key
+                    "post/#{'#{id}'}"
+                  end
+                  def cache_version
+                    updated_at
+                  end
+                end   
+          %img.splash-image.fragment.fade-in{src: "http://www.rizzimichele.it/wp-content/themes/evolve/library/media/images/parallax/Off_topic.gif"}
+          
           
         %section
 
           %h3 Etag Cache Example
 
           A very high level cache that allows to cache HTTP response in the browser
-          And let browser know how this response should expire.
+          and let browser know how that response should expire.
            
           %pre.fragment
             %code.ruby
