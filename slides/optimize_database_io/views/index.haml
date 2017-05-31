@@ -412,19 +412,18 @@
           %h3 But they are not the only one
         %section
           %h3 Extra Conditions
+          
+          %pre
+            %code.sql
+              :preserve
+                SELECT * FROM offers
+                WHERE campaign_id = {campaign.id}
+                AND site_id = {campaign.site.id}
           %pre
             %code.ruby
               :preserve
-                Site.has_many :visitors
-                Site.has_many :traffic_sources
-                TrafficSource.belongs_to :site
-                Visitor.doesnt_belong_to :site
-          %pre
-            %code.diff
-              :preserve
-                -  Site.has_many :visitors
-                +  Site.has_many :visitors, ->(traffic_source) { 
-                     where(site_id: traffic_source.site_id, traffic_source_id: traffic_source.id) }
+                AND created_at between {campaign.created_at} AND {campaign.expired_at}
+                    
 
         %section
           %h3 What about cache tables?
