@@ -341,11 +341,11 @@
         %section
           %h3 2**n
           %h3.fragment How about partial index usage optimization?
+          %h3.fragment 2**(n-1)
 
-        %section
+        -#%section
           
           %h3 Well, a little less
-          %h3.fragment 2**(n-1)
 
           %div
             %table
@@ -377,7 +377,7 @@
                   a-b-c-d-e b-c-d-e a-c-d-e a-b-d-e a-b-c-e a-b-e a-c-e b-c-e b-d-e c-d-e a-d a-e b-d b-e c-e e
         %section
           %h3 Indexes are not free 
-          %h4 they take the disk space
+          %h4 Talkable DB Space Usage in GB
 
           %img{src: "https://monosnap.com/file/uy3gMAu72njmGRyvgTQixzqIzVUrNr.png"}
         %section
@@ -420,13 +420,14 @@
                 WHERE campaign_id = {campaign.id}
                 AND site_id = {campaign.site.id}
           %pre
-            %code.ruby
+            %code.sql
               :preserve
-                AND created_at between {campaign.created_at} AND {campaign.expired_at}
+                AND created_at 
+                  between {campaign.created_at} AND {campaign.deactivated_at}
                     
 
         %section
-          %h3 What about cache tables?
+          %h3 Cache Tables
 
           Store -&gt; Product &lt;- Category
           %pre
@@ -453,8 +454,7 @@
                    where(coupons: {free_shipping: true}).
                 }
 
-          %pre.fragment
-            %code.ruby
+            %code.ruby.fragment
               :preserve
                 where("coupons_count &gt; 0")
         %section
@@ -494,7 +494,19 @@
                 -- &lt;some ruby code here&gt;
                 SELECT * FROM members WHERE project_id in (?)
         %section
-          %h3 Nested Query or Join Avoidance
+          %h4 
+            Queries can be equivalent for 
+            %span.green your data
+          %h4.fragment 
+            but they are not equivalent for 
+            %span.red any data
+          %h4.fragment
+            %br
+            %span.yellow
+              Know your data
+            is a key to performance
+        %section
+          %h3 OR operation
 
           %pre
             %code.ruby
