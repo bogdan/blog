@@ -49,14 +49,38 @@
           %h2 Optimize Database Queries
               
           %h3 Bogdan Gusiev
+          %h3 June 2017
         %section
           %h3 Bogdan Gusiev:
         
           %ul
-            %li Working for startups for 7 years
-            %li Ruby on Rails for 7 years
+            %li Working for startups for X years
+            %li Contributing to Ruby on Rails X years
+        %section
+          %img{src: "https://monosnap.com/file/zbsymGAuTXPpwhLrwLf3wmGl0jXBiY.png"}
+
+          
+        %section
+          %h3 Optimize Your App
+
+          %ul
+            %li Web Server
+            %li Application Container
+            %li Rack
+            %li ActionController
+            %li Your code
+
+          %h3.fragment.red 90% it is all yours
 
         %section
+          %h3 What takes time in the app
+
+          %img{src: "https://monosnap.com/file/c7ZZ3fwZzo5KK2m4R51qIbJTZpl5Lz.png"}
+        %section
+
+          %h3 What takes time in the app
+          %img{src: "https://monosnap.com/file/qKmy2rxT2iJ2vpHqYQez22PLgh9X0q.png"}
+
           
         -#%section
           %h4 http://contributors.rubyonrails.org
@@ -68,13 +92,23 @@
 
         %section
 
+          %h3 Can we just optimize all at once?
+
+          %ul
+            %li Use a different database
+            %li Buy a new hardware
+            %li Use a magic setting
+            %li.fragment.yellow Optimize Slow Parts
+
+        %section
+
           %h2 Methods
 
           %ul
             %li Avoid queries
-            %li Reduce number of queries
             %li Make queries faster
-            %li Query from a faster place than DB
+            %li Merge queries (several simple into one complex)
+            %li Use Cache
 
         %section
           %h2
@@ -85,7 +119,7 @@
               %ul
                 %li time spent mainly on networking IO and FS read
                 %li There are many of them
-            %li 
+            %li.fragment 
               Slow 
               %ul
                 %li time spent on aggregating or searching the data
@@ -137,10 +171,11 @@
             %code.ruby
               :preserve
                 class UserRole &lt; AR::Base
-                  validates_uniqness_of :role_id, scope: [:user_id]
+                  validates_uniqueness_of :role_id, scope: [:user_id]
                 end
-          %h3 Pretty useless query
-          %h2 Use unique index instead
+          %img{src: "https://monosnap.com/file/uZ06k8hdnHqF4rbcWS7xgOuoiuGgaP.png"}
+          .fragment
+            %h2 Use unique index instead
 
         %section
           %h3 Rails built-in avoid queries methods:
@@ -171,6 +206,22 @@
                   coupon_count > 0 ? coupons.map(&:code) : []
                 end
         %section
+          %pre
+            %code.haml
+              - a = "Comments (\#{@post.comments.count})"
+              :preserve
+                - if @post.comments.any?
+                  - @post.comments.each do |comment|
+                    #{a}
+                    = render partial: "posts/comment", object: comment
+                - else
+                  No Comments Made yet
+          %h3 
+            How many queries 
+            %br
+            in the worst case scenario?
+                    
+        %section
           %h3 Rails Feature Proposal
 
           %p 
@@ -180,7 +231,6 @@
             %br
             when counter_cache is zero
 
-                    
         %section
           %h2 Cache Columns
           %h3 as a way to avoid queries
@@ -303,8 +353,6 @@
 
           %img{src: "https://monosnap.com/file/uy3gMAu72njmGRyvgTQixzqIzVUrNr.png"}
         %section
-          
-
           %h2 Index Usage Optimization
 
           %pre
@@ -349,6 +397,21 @@
                 -  Site.has_many :visitors
                 +  Site.has_many :visitors, ->(traffic_source) { 
                      where(site_id: traffic_source.site_id, traffic_source_id: traffic_source.id) }
+
+        %section
+          %h3 What about cache tables?
+
+          Store -&gt; Product &lt;- Category
+          %pre
+            %code.ruby
+              :preserve
+                create_table :stores_categories do |t|
+                  t.integer :product_id
+                  t.integer :category_id
+                end
+          %p.fragment
+            Faster join because of low number of records
+                  
         %section
           %h2 Avoid Join
 
@@ -429,7 +492,7 @@
           %p.fragment
             "OR" operator is bad for your performance
             %br
-            Bevare of "OR" in the hidden form
+            Beware of "OR" in the hidden form
 
                 
         %section
@@ -489,21 +552,24 @@
               %th Comments
             %tr
               %td 1st
-              %td Aaron Peterson
+              %td Jonh
               %td 97
             %tr
               %td 2nd
-              %td DHH
+              %td Rick
               %td 95
             %tr
               %td 3rd
-              %td Bogdan Gusiev
+              %td Aaron
               %td 60
 
+            -#%tr
+              %td{rowspan: '100%'}
+
             %tr.fragment
-              %td 15th
+              %td 95th
               %td You
-              %td 50
+              %td 20
 
 
 
@@ -556,53 +622,87 @@
                 ORDER BY leaderboard_rank
 
         %section
-          %h3 Query a different place
+          %h3 Use Cache
 
-          %h2.fragment KeyValue Database
-        %section
-          %h3 Rails Toolbox
-
-          %pre
-            %code.ruby
-              :preserve
-                Rails.cache.set(key, value)
-                Rails.cache.get(key)
-          %pre
-            %code.ruby
-              :preserve
-                Rails.cache.fetch(key) do
-                  # Heavy calculation
-                end
-        %section
-          %h3 Cache Invalidation
           %ul
-            %li Always expire by time
-            %li I recommend to expire on deploy
+            %li Key-Value Database
+            %li HTTP ETAG cache
+        %section
+          
           %pre
             %code.ruby
               :preserve
-                Rails.configuration.cache_store = :redis_store, {
-                  namespace: ENV['DEPLOY_CACHE_ID'], expires_in: 1.day
-                }
-          %pre
-            %code.ruby
-              :preserve
-                class Site
-                  column :custom_domain, :string
-
-                  def ssl_expires_at
-                    Rails.cache.fetch(["ssl_expires_at", custom_domain]) do
-                      Net::HTTP.start(custom_domain, 443, { use_ssl: true }) do
-                        http.peer_cert.not_after
-                      end
+                class Forum
+                  def comments_leaderboard
+                    Rails.cache.fetch(leaderboard_key) do
+                      all_that_heavy_sql
                     end
                   end
                 end
 
+          %pre.fragment
+            %code.ruby
+              :preserve
+                def leaderboard_key
+                  ["comments_leaderboard", forum.id, 
+                    comments.order(:id).last]
+                end
+        %section
+          %h3 Rails 5.2
+          %h3 
+            .fragment.strike Expiration by key
+            .fragment Expiration by version
+
+          %h3.fragment
+            PR #29092:
+            %br
+
+            %a{href: "https://github.com/rails/rails/pull/29092"} 
+              Recyclable Cache Keys
+          %h3.fragment Good enough for Basecamp
+          
+        %section
+
+          %h3 Etag Cache Example
+
+          A very high level cache that allows to cache HTTP response in the browser
+          And let browser know how this response should expire.
+           
+          %pre.fragment
+            %code.ruby
+              :preserve
+                def show
+                  @product = Product.find(params[:id])
+                  fresh_when \
+                    last_modified: @product.published_at.utc, 
+                    etag: @product # [@product.id, @product.updated_at]
+                end
+        %section
+          %h3 High Level Caching is tough
+
+          %ul
+            %li Cache Hit
+            %li Invalidation
+            %li Invalidation Maintenance
+            %li 
+              Invalidation Bugs
+              %ul.fragment
+                %li Description: "Sometimes..."
+
 
         %section
-          %h3 Expiration by key
-          
+          %h3 Why slow?
+
+          %ol
+            %li Many Queries -&gt; Merge or Avoid Queries
+            %li 
+              Slow Queries -&gt; Optimize Queries
+              %ol
+                %li Figure Out Domain Specifics
+                %li Use Indexes Effectively
+                %li Control Disk Space
+                %li Control Query Execution Plan
+            %li Use Cache
         %section
           %h2 Thank You
 
