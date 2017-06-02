@@ -5,7 +5,8 @@
     %meta{:content => "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no", :name => "viewport"}/
     %title reveal.js
     %link{:href => "css/reveal.css", :rel => "stylesheet"}/
-    %link{:href => "css/theme/black.css", :rel => "stylesheet"}/
+    -#%link{:href => "css/theme/black.css", :rel => "stylesheet"}/
+    %link{:href => "css/theme/simple.css", :rel => "stylesheet"}/
     / Theme used for syntax highlighting of code
     %link{:href => "lib/css/zenburn.css", :rel => "stylesheet"}/
     / Printing and PDF exports
@@ -26,7 +27,8 @@
         margin: auto
             
       .yellow
-        color: yellow !important
+        //background-color: black
+        color:  #F3B521   !important
       .green
         color: #17ff2e !important
       .red
@@ -114,9 +116,8 @@
           %h4 http://contributors.rubyonrails.org
           %img{src: "https://monosnap.com/file/54HY4xFLwAt1mdAosSCuvdygoZnfeO.png"}
         %section
-          %h3 Ultimate goal
 
-          %h2 Make your app spend less time waiting on the query response
+          %h2 Optimize DB queries is important
 
         %section
 
@@ -265,6 +266,7 @@
               position: absolute
               right: 0
               top: 10%
+              box-shadow: 0 0 0 0 !important
           %img.thumb-up.fragment.fade-left{style: "width: 50%; right: 0; border: 0; background-color: transparent", src: "https://files.slack.com/files-tmb/T028ZNCBK-F5KPKCBK3-807a914d8f/bogdan_480.png"}
 
         %section
@@ -348,9 +350,15 @@
           %p 
             If I have a table with N columns, how many indexes do I need to cover 100% of possible where conditions?
         %section
-          %h3 2**n
+          %h2 
+            2
+            %sup
+              %i n
           %h3.fragment How about partial index usage optimization?
-          %h3.fragment 2**(n-1)
+          %h3.fragment 
+            2
+            %sup
+              %i n-1
 
         -#%section
           
@@ -401,7 +409,6 @@
           %ul
             %li Index A: forum_id, created_at
             %li Index B: user_id
-          %h3 Which index
 
         %section
           %h3 But the DB may disagree
@@ -411,30 +418,13 @@
               :preserve
                 SELECT * FROM posts p USE INDEX(index_b)
                 WHERE p.forum_id = ? AND p.user_id = ? AND p.created_at = ?
+          %h3.fragment WHERE conditions are applied one after another
         %section
-          %h3 WHERE conditions are applied one after another
-          .fragment
-            %h4 
-              Apply indexes to columns that would 
-            %h3.yellow cut the most records 
-            %h4 from the result in where condition
+          %h4 
+            Apply indexes to columns that would 
+          %h3.yellow cut the most records 
+          %h4 from the result in where condition
 
-        %section
-          %h3 Extra Conditions
-          
-          %pre
-            %code.swzql
-              :preserve
-                SELECT * FROM offers
-                WHERE campaign_id = {campaign.id}
-            %code.sql.fragment
-              :preserve
-                AND site_id = {campaign.site.id}
-            %code.sql.fragment
-              :preserve
-                AND created_at 
-                  BETWEEN {campaign.created_at} AND {campaign.deactivated_at}
-                    
         %section
           %h4 Indexes are the best to speed up your queries
           %h3 But they are not the only one
@@ -458,6 +448,22 @@
           %p.fragment
             Faster join because of low number of records
                   
+        %section
+          %h3 Extra Conditions
+          
+          %pre
+            %code.swzql
+              :preserve
+                SELECT * FROM offers
+                WHERE campaign_id = {campaign.id}
+            %code.sql.fragment
+              :preserve
+                AND site_id = {campaign.site.id}
+            %code.sql.fragment
+              :preserve
+                AND created_at 
+                  BETWEEN {campaign.created_at} AND {campaign.deactivated_at}
+                    
         %section
           %h2 Avoid Join
 
@@ -794,9 +800,9 @@
           %br
           %ul
             %li 
-              %a{href: "http://github.com/bogdan"} http://github.com/bogdan
+              %a{style: "color: white", href: "http://github.com/bogdan"} http://github.com/bogdan
             %li 
-              %a{href: "http://gusiev.com"} http://gusiev.com
+              %a{style: "color: white", href: "http://gusiev.com"} http://gusiev.com
 
     %script{:src => "lib/js/head.min.js"}
     %script{:src => "js/reveal.js"}
