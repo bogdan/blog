@@ -75,14 +75,18 @@
           %img{src: "https://monosnap.com/file/e7VO7qmiVjqfhyosW5TIYW7cbH2S80.png"}
           
         %section
+          %h3 
+            Why is SQL queries 
+            %br
+            worth to be optimized?
+        %section
           %h3 Optimize Your App
 
           %ul
             %li Web Server
-            %li Application Container
-            %li Rack
-            %li ActionController
-            %li Your code
+            %li Application Container (unicorn etc)
+            %li Rack/Rails
+            %li.fragment Your code
           %h3.fragment.red 90% it is all yours
 
         %section
@@ -129,12 +133,12 @@
             Types of queries
           %ul
             %li 
-              Instant
+              Instant ( &lt; 10ms )
               %ul
                 %li time spent mainly on networking IO and FS read
                 %li There are many of them
             %li.fragment 
-              Slow 
+              Slow  ( &gt; 50ms )
               %ul
                 %li time spent on aggregating or searching the data
                 %li Slow time comes from joins or aggregation or dynamic conditions
@@ -185,6 +189,7 @@
             %code.ruby
               :preserve
                 class UserRole &lt; AR::Base
+                  belongs_to :user
                   validates_uniqueness_of :role_id, scope: [:user_id]
                 end
           %img{src: "https://monosnap.com/file/uZ06k8hdnHqF4rbcWS7xgOuoiuGgaP.png"}
@@ -198,6 +203,7 @@
             %li inverse_of
             %li counter_cache
             %li has_many :through
+            %li preload/includes
 
         %section
           %h2 Avoid Queries
@@ -207,7 +213,7 @@
               :preserve
                 Coupon.belongs_to :purchase, counter_cache: true
                 class Purhcase &lt; AR::Base
-                  has_many :coupons
+                  has_many :coupons, class_name: "DiscountCoupon"
                 
                   def coupon_codes
                     coupons.map(&:code)
@@ -245,13 +251,15 @@
 
           %p 
             %br
-            Make use of `counter_cache` in methods like
+            Make use of `counter_cache` 
+            %br
+            in Association methods like
             %ul
               %li count
               %li any?
               %li empty?
             %br
-            Avoid loading completely when counter is 0
+            .fragment Avoid loading completely when counter is 0
           :sass
             .thumb-up
               position: absolute
@@ -278,14 +286,15 @@
           %pre.fragment
             %code.ruby
               :preserve
-                Comment.has_one :feed_activity
+                Comment.has_one :feed_activity, as: :target
+                FeedActivity.belongs_to :target, polymorphic: true
                 FeedActivity.before_validation do 
                   self.forum = comment.post.forum
                   self.author = comment.author
                 }
 
         %section
-          -#%h2 Cache Columns
+          %h2 Cache Columns
 
           %h3 Pros
           %ul
@@ -392,6 +401,7 @@
           %ul
             %li Index A: forum_id, created_at
             %li Index B: user_id
+          %h3 Which index
 
         %section
           %h3 But the DB may disagree
@@ -402,39 +412,47 @@
                 SELECT * FROM posts p USE INDEX(index_b)
                 WHERE p.forum_id = ? AND p.user_id = ? AND p.created_at = ?
         %section
-          %h4 
-            Apply indexes to columns that would 
-          %h3.yellow cut significant amount of data 
-          %h4 from the result in where condition
+          %h3 WHERE conditions are applied one after another
+          .fragment
+            %h4 
+              Apply indexes to columns that would 
+            %h3.yellow cut the most records 
+            %h4 from the result in where condition
 
-        %section
-          %h4 Indexes are the best to speed up your queries
-          %h3 But they are not the only one
         %section
           %h3 Extra Conditions
           
           %pre
-            %code.sql
+            %code.swzql
               :preserve
                 SELECT * FROM offers
                 WHERE campaign_id = {campaign.id}
+            %code.sql.fragment
+              :preserve
                 AND site_id = {campaign.site.id}
-          %pre
-            %code.sql
+            %code.sql.fragment
               :preserve
                 AND created_at 
-                  between {campaign.created_at} AND {campaign.deactivated_at}
+                  BETWEEN {campaign.created_at} AND {campaign.deactivated_at}
                     
+        %section
+          %h4 Indexes are the best to speed up your queries
+          %h3 But they are not the only one
 
         %section
           %h3 Cache Tables
 
-          Store -&gt; Product &lt;- Category
           %pre
             %code.ruby
               :preserve
+                Product.belongs_to :store
+                Product.belongs_to :category
+                Store.has_many :categories, through: :products
+          %pre.fragment
+            %code.ruby
+              :preserve
                 create_table :stores_categories do |t|
-                  t.integer :product_id
+                  t.integer :store_id
                   t.integer :category_id
                 end
           %p.fragment
@@ -446,17 +464,17 @@
           %pre
             %code.ruby
               :preserve
-                Coupon.belongs_to :purchase, counter_cache: true
-                Purchase.has_many :coupons
+                Purchase.has_many :discount_coupons
+                DiscountCoupon.belongs_to :purchase, counter_cache: true
 
-                Purchase.scope :with_free_shipping, -> {
-                 joins(:coupons).
-                   where(coupons: {free_shipping: true}).
+                Purchase.scope :shipped_for_free, -> {
+                 joins(:discount_coupons).
+                   where(discount_coupons: {free_shipping: true}).
                 }
 
             %code.ruby.fragment
               :preserve
-                where("coupons_count &gt; 0")
+                where("discount_coupons.coupons_count &gt; 0")
         %section
 
           %h2 DB is smart on doing JOINS
@@ -466,17 +484,23 @@
               :preserve
                 Purchase.
                   where(created_at: 30.days.ago..Time.now).
-                  with_free_shipping
+                  shipped_for_free
 
-          %pre
-            %code.sql
+          %pre.fragment
+            %code.sql.line-numbers
               :preserve
                 SELECT * FROM purchases 
+                USE INDEX (index_purchases_created_at)
                 INNER JOIN coupons ON purchases.coupon_id = coupons.id
                 WHERE 
-                  (purchases.created_at BETWEEN ? AND ?) AND 
                   purchases.coupons_count &gt; 0 AND 
+                  (purchases.created_at BETWEEN ? AND ?) AND 
                   coupons.free_shipping
+          .fragment
+            %h4 
+              created_at -> coupons_count -> 
+              %br
+              &nbsp;&nbsp;&nbsp; join coupons -> free_shipping
         %section
           %h2 Query execution mystery
 
@@ -490,9 +514,9 @@
                 SELECT * FROM members WHERE project_id in (
                   SELECT * FROM projects WHERE organization_id = ?)
 
-                SELECT id FROM projects WHERE organization_id = ?
-                -- &lt;some ruby code here&gt;
-                SELECT * FROM members WHERE project_id in (?)
+                -- pseudocode
+                ids = SELECT id FROM projects WHERE organization_id = ?
+                SELECT * FROM members WHERE project_id in (ids)
         %section
           %h4 
             Queries can be equivalent for 
@@ -618,7 +642,7 @@
           %pre
             %code.ruby
               :preserve
-                find_person_by_id(add_ranking(get_leaderboard), ?)
+                find_person_by_id(add_ranking(get_names_and_counts), ?)
           %pre.fragment
             %code.sql.line-numbers
               :preserve
@@ -648,32 +672,33 @@
                     SELECT `offers`.`person_id` person_id, COUNT(*) AS `leaderboard_count`, SUM(`referrals`.`referred_subtotal`) AS `leaderboard_subtotal` FROM `referrals` 
                       INNER JOIN `offers` ON `offers`.`id` = `referrals`.`offer_id` 
                       INNER JOIN `origins` ON `origins`.`id` = `referrals`.`referred_origin_id` AND `origins`.`type` IN ('Event', 'Purchase') 
-                      WHERE `referrals`.`site_id` = 8863 AND `referrals`.`status` IN ('approved', 'unblocked') AND 
+                      WHERE `referrals`.`site_id` = %SITE_ID% AND `referrals`.`status` IN ('approved', 'unblocked') AND 
                         (`offers`.`person_id` IS NOT NULL) AND `origins`.`event_category_id` = 17201 AND 
                         (`referrals`.`status` != 'blocked') AND `referrals`.`campaign_id` = 51710 AND 
-                        (`referrals`.`created_at` BETWEEN '2017-01-26 18:41:00' AND '2017-03-03 12:58:44') 
+                        (`referrals`.`created_at` BETWEEN %STARTED_AT% AND %FINISHED_AT%) 
                       GROUP BY `offers`.`person_id` 
                       ORDER BY `leaderboard_count` DESC, `leaderboard_subtotal` DESC, `offers`.`person_id` ASC
                   ) AS leaders, (SELECT @rnk:=0) AS ranking
                 ) AS leaderboard 
                 LEFT JOIN people on people.id = leaderboard.person_id 
-                WHERE `people`.`site_id` = 8863 AND `people`.`id` = 99443765 
+                WHERE `people`.`site_id` = %SITE_ID% AND `people`.`id` = {person_id} 
                 ORDER BY leaderboard_rank
 
         %section
           %h3 Use Cache
 
-          %ul
-            %li Key-Value Database
-            %li HTTP ETAG cache
+          %ul.fragment
+            %li Key-Value DB
+            %li HTTP ETAG
         %section
           
+          %h2 Key-Value DB
           %pre
             %code.ruby
               :preserve
                 class Forum
-                  def comments_leaderboard
-                    Rails.cache.fetch(leaderboard_key) do
+                  def comments_leaderboard(period)
+                    Rails.cache.fetch(cache_key(period)) do
                       all_that_heavy_sql
                     end
                   end
@@ -682,15 +707,17 @@
           %pre.fragment
             %code.ruby
               :preserve
-                def leaderboard_key
-                  ["comments_leaderboard", forum.id, 
-                    comments.order(:id).last]
+                def cache_key(period)
+                  ["comments_leaderboard", period, 
+                    comments.where(created_at: period).
+                      order(:created_at).last.id]
                 end
         %section
-          %h3 Rails 5.2
           %h3 
             .fragment.strike Expiration by key
-            .fragment Expiration by version
+            .fragment 
+              %h3 Rails 5.2
+              Expiration by version
 
           %h3.fragment
             PR #29092:
@@ -724,23 +751,19 @@
           
         %section
 
-          %h3 Etag Cache Example
+          %h4 Etag Caching
+          %h3.yellow 304 Not Modified
+          .fragment
+            %img{src: "http://mohanraj-nagasamy.github.io/images/posts/etags-rails-3-and-rails-4.png", style: "margin: auto;background-color: white"}
+            %br
+            %a{href: "http://mohanraj-nagasamy.github.io/blog/2014/02/22/browser-cache-how-etags-works-in-rails-3-and-rails-4/"} Original article
+          %img.splash-image.fragment.fade-in{src: "http://www.rizzimichele.it/wp-content/themes/evolve/library/media/images/parallax/Off_topic.gif"}
+        %section
+          %h4 Can't optimize the query?
+          %h3 Cache at higher level!
 
-          A very high level cache that allows to cache HTTP response in the browser
-          and let browser know how that response should expire.
-           
-          %pre.fragment
-            %code.ruby
-              :preserve
-                def show
-                  @product = Product.find(params[:id])
-                  fresh_when \
-                    last_modified: @product.published_at.utc, 
-                    etag: @product # [@product.id, @product.updated_at]
-                end
         %section
           %h3 High Level Caching is tough
-
           %ul
             %li Cache Hit
             %li Invalidation
@@ -752,25 +775,28 @@
 
 
         %section
-          %h3 Why slow?
+          %h3 Optimizing Steps
 
           %ol
             %li Many Queries -&gt; Merge or Avoid Queries
             %li 
-              Slow Queries -&gt; Optimize Queries
+              Slow Queries -&gt; 
+              %span.yellow Optimize Queries
               %ol
                 %li Figure Out Domain Specifics
                 %li Use Indexes Effectively
                 %li Control Disk Space
                 %li Control Query Execution Plan
-            %li Use Cache
+            %li.fragment.red Use High Level Cache
         %section
           %h2 Thank You
 
           %br
           %ul
-            %li http://github.com/bogdan
-            %li http://gusiev.com
+            %li 
+              %a{href: "http://github.com/bogdan"} http://github.com/bogdan
+            %li 
+              %a{href: "http://gusiev.com"} http://gusiev.com
 
     %script{:src => "lib/js/head.min.js"}
     %script{:src => "js/reveal.js"}
