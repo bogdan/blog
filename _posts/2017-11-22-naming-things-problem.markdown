@@ -1,16 +1,17 @@
 ---
 layout: post
-title: "Naming Things" Solution
-tags: 
+published: true
+title: '"Naming Things" Solution'
+date: '2017-11-23'
+tags:
 - principles
 - software
-- it
-- imperfection
+- naming
+- code
 ---
 
-Naming things in software is really a big deal. It gets harder and harder over time when software gets bigger.
-I've never encountered an article that would try to address the issue. Here I will try to define good name criteria as well as 
-naming strategies that appeared to be useful in my experience.
+Naming things in software is really a big deal. It gets harder and harder over time when a code base gets larger.
+I've never encountered an article that would try to address the issue. So here, I will try to define good name criteria as well as naming strategies that appeared to be useful in my experience.
 
 <!--more-->
 
@@ -33,35 +34,38 @@ Human brain tend to simplify the world around us and use the same name for diffe
 
 Here is a good example:
 Suppose your software allows people to subscribe to newsletter and to unsubscribe from email notifications.
-In this case, human brain interprets this two possibilities as logically opposite while they are not: there is actually three states the person can have: subscribed to newsletter, unsubscribed from email notification and undefined (or default). Practically it can even result in 2 separated options with "Yes/No" possibility. Even though all software developers in your team understand the difference, you can not expect all people in the world to understand that.
-In order to avoid the automatic simplification, you'd better call those states: opted in for newsletter (or simply `opted_in` internally) and unsubscribed from email notifications (or simply `unsubscribed` internally).
+In this case, human brain interprets this two possibilities as logically opposite while they are not: there is actually three states the person can have: subscribed to newsletter, unsubscribed from email notifications and undefined (or default); or even 2 independent options with "Yes/No" states. Even though all software developers in your team understand the difference, you can not expect all people in the world to understand that.
+In order to avoid the automatic simplification, you'd better call those states: opted in for newsletter (or simply "opted\_in" internally) and unsubscribed from email notifications (or simply "unsubscribed" internally).
 
 The idea that "Opted In" should stuck as a term for newsletter subscription and "Unsubscribed" should stuck for email notifications. When people speak fast, they will always shorten those terms. It means that through the daily conversation certain verbs will be used instead of describing the entire action. Example: "How many subscribed people do we have?" will have some uncertainty in case "to subscribe" will be used for both: describing newsletter subscription and notification emails subscription instead of just one.
 
 ## Naming Uniqueness
 
 Here is a good example from my practice on how naming uniqueness can be broken:
-English has two words "Company" and "Campaign". In my native tongue they actually translated into a single word: "Компания" /compania/. It is better to just avoid using this both terms for naming in the international team. While this is pretty rare case, it gives the idea on how naming problem appears: Russian conversation don't make a difference between 2 things that pretty different. Same case appears naturally withing single language all the time.
+English has two words "Company" and "Campaign". In my native tongue they actually translated into a single word: "Компания" /compania/. It is better to just avoid using these both terms for naming in the international team. While this is a rare case, it gives the idea on how naming problem appears: Russian conversation don't make a difference between 2 things that are pretty different. Same case appears naturally within a single language all the time.
 
 The other source of naming collision can still be a fast speech between team members.
-Suppose your software can do a "WebPageSnapshot" as well as "ServerSnapshot"
+Suppose your software works with "WebPageSnapshot" as well as "ServerSnapshot"
 When people speak fast, they will tend to use "Snapshot" for both terms. It can lead to misunderstanding in daily conversation.
 The phrase: "I made a patch that touches a snapshot source code, please take a look" doesn't define the actual place to look at. It will almost certainly lead to time waste from people assumptions they understood each other. Either the speaker or the listener could not be aware that both types of snapshot exist and they may feel natural with the assumption that "Snapshot" can only mean one of the types.
-Please only use adjectives to distinguish between terms if they actually same thing at some level of abstraction like:
+Please only use adjectives to distinguish between terms if they are actually same thing at some level of abstraction like:
 "VideoFile" and "ImageFile" are just "File" at some levels in your software (in other words: share code and behaviour).
 
 Using same adjectives to ensure things are connected by their names is a good idea.
 Consider the business rule: "Affiliate Member" can participate in "Affiliate Campaign". 
-We will not make any confusion by using same adjective for both terms. Avoiding adjectives in fast conversation will not be that misleading:
-A business rule like: '"Member Affiliate" can participate in "Campaign Affiliate"' is worse than a weapon of mass destruction for communication inside your team.
+We will not make any confusion by using same adjective for both terms. Avoiding adjectives in fast conversation will not be that misleading: "The member with email 'bogdan@example.com' has joined the campaign 2 days ago"
+A business rule like: '"Member Affiliate" can participate in "Campaign Affiliate"' is worse than a weapon of mass destruction for communication inside your team. 
+The general rule: ensure that shorten versions of names are easy to use in daily conversations.
 
 ## Naming internal objects
 
 What I mean by internal here is a thing that is pretty known inside your software but completely unseen by the end users.
 Examples from Rails: "UsersController" or "UsersHelper"
+
 Note that there is no problem in calling every controller like "WhateverController" (with the same suffix) because all of those controllers actually share code and behaviour, so they are the same thing at some basic level while "WebPageSnapshot" and "ServerSnapshot" were not in the previous example.
-Some subjects are just internal - end users don't interact with them directly. There are some principles that would allow to give them a good name too.
-At first, ensure that internal thing doesn't take a name of the thing that is actually available to the end users. This is very important to do: leave good names for things your users care most.
+Some objects are just internal - end users don't interact with them directly. There are some principles that would allow to give them a good name too.
+
+At first, ensure that internal thing doesn't take a name of the thing that is actually available to the end users. This is very important to do: leave good names for things your users care most and can interact with.
 
 At second,  it is good to give them a longer names to encode more information on what they do. There could be understanding illusion connected to a name. Internals of your software tend to do some specific work. When you give them a short name, software developers tend to assume they understand what they do. It can be a complete illusion. 
 
@@ -81,6 +85,8 @@ There could be 3 types of names:
 Good principles to follow:
 
 1. Follow naming that was already given by software users or community/business overall
-2. Name things uniquely
-3. Avoid naming collision through simplification of terms
+2. Name things uniquely to avoid confusion
+3. Avoid naming collision through simplification of terms and shortening of actions
+4. Give longer names to more complex things 
+5. Give shorter names to things that are frequently used
 

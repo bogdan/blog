@@ -8,7 +8,7 @@ tags:
 - imperfection
 ---
 
-It is becoming popular to talk about software development principles from time to time. The new major concepts appear and die due to the fact that most of them are designed to be perfect but they are not. If you would stay in IT long enough, you encounter articles and talks where people discovered an amazing concept "X" that solved all their development problems and brought their team to inevitable success. Unfortunately permanent success is usually temporary or even a self-deception. The truth is: there is no silver bullets in software development just like in any other engineering process. Engineering of world class products requires precise resources control, trade offs and balance between easy and complex, fast and slow, and beautiful and ugly. Here, I will try to explain my guiding software development principles as well as the why-s.
+It is becoming popular to talk about software development principles from time to time. The new major concepts appear and die due to the fact that most of them are designed to be perfect but they are not. If you would stay in IT long enough, you encounter articles and talks where people discovered an amazing concept "X" that solved all their development problems and brought their team to inevitable success. Unfortunately that "permanent success" is usually temporary or even a self-deception. The truth is: there is no silver bullets in software development just like in any other engineering process. Engineering of world class products requires precise resources control, trade offs and balance between easy and complex, fast and slow, and beautiful and ugly. Here, I will try to explain my guiding software development principles as well as the why-s.
 
 <!--more-->
 
@@ -20,9 +20,9 @@ We often forget that most principles don't match not only with the real solution
 
 ## Less is More 
 
-There should be very limited number of principles to follow. More principles under the same concept just creates more contradiction and leaves less room to be situational and follow additional guidelines that would fit best for given problem. I think the ideal number in you "guiding principles" that apply **almost** to everything in your software should be 3. Higher numbers are possible. 
+There should be very limited number of principles to follow. More principles under the same concept just creates more contradiction and leaves less room to be situational and follow additional guidelines that would fit best for given problem. I think the ideal number in your "guiding principles" that apply **almost** to everything in your software should be 3. Higher numbers are possible. 
 
-Christian God was so kind that he left us with 10 that still have very small contradiction like: should I steal a weapon from a person that wants to kill me tomorrow? That's an amazing result for human moral that is at least 1000x times older than software development. Based on our level of understanding of software engineering, we can effort only 3 at the same time.
+Christian God was so kind that he left us with 12 that still have very small contradiction like: should I steal a weapon from a person that wants to kill me tomorrow? That's an amazing result for human moral that is at least 1000x times older than software development. Based on our level of understanding of software engineering, we can effort only 3 at the same time.
 
 ## Build for Humans
 
@@ -34,7 +34,7 @@ So here are principles that guide me through software development sprints as wel
 
 0. Software should do what it should do.
 1. Model the real world
-2. Reuse Code
+2. Build an Architecture
 3. Track Dependencies
 
 Lets go through them one by one:
@@ -46,8 +46,10 @@ Try to be as close as possible to the piece of world you are modelling in the so
 
 We tend to think that a software is complex. But the complexity comes from several factors. First is the processes being modeled are complex - here you would need to rethink them to make them simpler. But the second reason is software developer didn't model them right. If you model things as they are, you eliminate second factor. If you model things even better than they are, you can even eliminate the first factor. It is worth mentioning that is only possible if you have a power to alter the process or the process you are modeling doesn't exist yet. This is mostly the case for the modern software. If you are about to make a "select your seat" functionality for the plane ticket, there is no way you can simplify plane seat locations. If you make a new e-commerce web site, you are an author of most processes and can make product finding functionality as simple as possible until you reach a fact that it needs to fit not just your needs but also all your users needs which are quite different. 
 
-## 2. Code Reuse
+## 2. Build an Architecture
 
+Architecture is often seen as a luxurius term that can only be understoon and build by an elite part of development team. Sometimes in outsource companies this is given to the team by someone like company CTO that is not even part of the team. But architecture is something more trivial and someone everyone in a team is building. Lets try to define architecture in the most basic way:
+Architecture is the code that is used by your software the most number of times.
 As you model more and more processes, the code base grows. It needs to be generalized and reused. We all know which problems come from unreused code: bug fixes and changes need to be made more than once that inevitably leads to the lack of consistency in software where buttons that would suppose to do the same thing do it in a slightly or not so slightly different way. But code reuse is more than that: architecture is just a code reuse metric. If you have a code that is easy to reuse, the architecture arises on its own because people tend to reuse existing code instead of writing new. From the other hand, you can measure the "architectureness" of any code piece including third party(aka gems) by counting how many times it is used. That definition is well aligned with the popular idea that architecture is hard to change: if you reuse a particular piece more, it gets harder and harder to change it because the change affects more places. Following this principle also requires a good test coverage. The most reused code is usually the most covered by tests. You can not test everything, but you can define your priority based on number of usages of particular module.
 
 ## 3. Track Dependencies
