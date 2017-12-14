@@ -356,8 +356,7 @@ Example: Comment can not be created without notification.
     end
 
 
-`#skip_comment_notification` is used only in edge cases.
-
+`#skip_comment_notification` is used only in edge cases.  
 
 !SLIDE
 

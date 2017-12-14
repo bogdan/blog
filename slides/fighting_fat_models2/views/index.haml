@@ -1,0 +1,859 @@
+<!doctype html>
+%html{:lang => "en"}
+  %head
+    %meta{:charset => "utf-8"}/
+    %title Fighting Fat Models
+    %meta{:content => "", :name => "description"}/
+    %meta{:content => "Bogdan Gusiev", :name => "author"}/
+    %meta{:content => "yes", :name => "apple-mobile-web-app-capable"}/
+    %meta{:content => "black-translucent", :name => "apple-mobile-web-app-status-bar-style"}/
+    %meta{:content => "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no", :name => "viewport"}/
+    %link{:href => "http://lab.hakim.se/reveal-js/css/reveal.css", :rel => "stylesheet"}/
+    %link{:href => "https://rawgithub.com/hakimel/reveal.js/master/css/theme/white.css", :rel => "stylesheet"}/
+    / For syntax highlighting
+    %link{:href => "http://lab.hakim.se/reveal-js/lib/css/zenburn.css", :rel => "stylesheet"}/
+    / If the query includes 'print-pdf', use the PDF print sheet
+    :javascript
+      document.write( '<link rel="stylesheet" href="http://lab.hakim.se/reveal-js/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+    :sass
+      body .reveal
+        font-size: 30px !important
+      .yellow
+        color: yellow
+      .reveal
+        section
+          pre
+            code
+              padding: 20px 5px
+              font-size: 1.30em
+              line-height: 1.3em
+          ul
+            min-width: 50%
+          .red
+            color: #e02c2d
+          .green
+            color: #17cc1e
+          .yellow
+            color: yellow
+          .blue
+            color: #1b91ff
+          .left
+            float: left
+          .right
+            float: right
+          .clearfix
+            overflow: hidden
+          table.full-border
+            border-collapse: collapse
+            td
+              border: 1px solid black
+          img
+            border: 0px
+            box-shadow: 0 0 0 0
+      
+          
+        
+  %body
+    .reveal
+      .slides
+        %section
+          %h1
+            Fighting with fat models
+          %h2
+            Bogdan Gusiev
+        %section
+          %h2
+            Bogdan G.
+          %ul
+            %li is 9 years in IT
+            %li
+              6 years with Ruby and Rails
+              %ul
+                %li Long Run Rails Contributor
+        %section
+          %h1
+            Some of my gems
+          %ul
+            %li
+              %a{:href => "http://github.com/bogdan"} http://github.com/bogdan
+              %ul
+                %li
+                  %a{:href => "https://github.com/bogdan/datagrid"} datagrid
+                %li
+                  %a{:href => "https://github.com/railsware/js-routes"} js-routes
+                %li
+                  %a{:href => "https://github.com/bogdan/accepts_values_for"} accepts_values_for
+                %li
+                  %a{:href => "https://github.com/bogdan/furi"} furi
+        %section
+          %h2
+            My Blog
+          %h2
+            %a{:href => "http://gusiev.com"} http://gusiev.com
+        %section
+          %h1
+            %a{:href => "http://talkable.com"}
+              %img{:alt => "Talkable", style: '', :src => "http://d2jjzw81hqbuqv.cloudfront.net/assets/static/logo-dark-large.png"}/
+          %ul
+            %li
+              7 years old startup
+            %li
+              A lot of code
+            %li
+              Rails version from 2.0 to 5.1
+        %section
+          %h1
+            Fat Models
+          %h2
+            Why the problem appears?
+          %ul
+            %li
+              All business logic code goes to
+              = succeed "." do
+                %span.green model by default
+        %section
+          %h1
+            In the MVC:
+          %h2
+            Why it should not be 
+            %br
+            in controller or view?
+          %p Because they are hard to:
+          %ul
+            %li reuse
+            %li test
+            %li maintain
+        %section
+          %h2
+            A definition of being fat
+          %h2 
+            %span.red 1000 Lines of code
+          %p But it depends on:
+          %ul
+            %li Docs
+            %li Whitespace
+            %li Comments
+        %section
+          %pre{style: "width: 100%"}
+            %code
+              :preserve
+                $ wc -l app/models/* | sort -n | tail
+          %pre.left{style: 'width: 50%'}
+            %code.ruby
+              :preserve
+                   # 2016-01-21
+                   532 app/models/incentive.rb
+                   540 app/models/person.rb
+                   544 app/models/visitor_offer.rb
+                   550 app/models/reward.rb
+                   571 app/models/web_hook.rb
+                   786 app/models/site.rb
+                   790 app/models/referral.rb
+                   943 app/models/campaign.rb
+                   998 app/models/offer.rb
+                 14924 total
+          %pre.right{style: 'width: 50%'}
+            %code.ruby
+              :preserve
+                   # 2017-12-06
+                   585 app/models/reward.rb
+                   588 app/models/incentive.rb
+                   592 app/models/view_setup.rb
+                   597 app/models/web_hook.rb
+                   602 app/models/visitor_offer.rb
+                   627 app/models/referral.rb
+                   637 app/models/site.rb
+                   756 app/models/offer.rb
+                  1193 app/models/campaign.rb
+                 17831 total
+          %h3.fragment TODO: move serialization out of <code>campaign.rb</code>
+        %section
+          %h2
+            Existing techniques
+          %ul
+            %li
+              Services
+              %ul
+                %li Separated utility class
+            %li
+              Concerns
+              %ul
+                %li Modules that get included to models
+            %li
+              Decorators
+              %ul
+                %li Classes that wrap existing model to plug new methods
+        %section
+          %h2
+            What do we expect?
+          %ul
+            %li
+              %p Standard:
+              %ul
+                %li
+                  Reusable
+                  code
+                %li
+                  Easy to
+                  test
+                %li Good API
+            %li.fragment
+              %p Advanced:
+              %ul
+                %li Effective data model
+                %li
+                  %span.green MORE
+                  features per second
+                %li Data Safety
+        %section
+          %h1
+            Good API
+          %p Is a user connected to facebook?
+          %pre
+            %code
+              :preserve
+                user.has_facebook_profile?
+                # OR
+                FacebookService.has_facebook_profile?(user)
+                # OR
+                FacebookWrapper.new(user).has_facebook_profile?
+        %section
+          %h1
+            The need of Services
+          %h2
+            When amount of utils
+          %h2
+            that support Model goes higher
+          %h2
+            extract them to service is good idea.
+        %section
+          %h2
+            Move class methods between files is cheap
+          %pre
+            %code.ruby
+              :preserve
+                # move
+                User.create_from_facebook
+                # to
+                UserService.create_from_facebook
+                # or
+                FacebookService.create_user
+        %section
+          %h2
+            Organise services by
+            %span.green process
+          %h2
+            rather than
+            %span.red object
+            they operate on
+          %ul
+            %li Otherwise at some moment UserService would not be enough
+        %section
+          %h2
+            The problem of services
+          %p Service is separated utility class.
+          %pre
+            %code
+              :preserve
+                module CommentService
+                  def self.create(attributes)
+                    comment = Comment.create!(attributes)
+                    deliver_notification(comment)
+                  end
+                end
+          %h4
+            “Я знаю откуда что берется”
+        %section
+          %h1
+            Services
+            %span.red don’t
+          %h1
+            provide
+            %span.green default behavior
+        %section
+          %h2
+            The Need of Default Behavior
+          %p Object should encapsulate behavior:
+          %ul
+            %li
+              Data Rules
+              %ul
+                %li
+                  Set of rules that a model should fit at the programming level
+                  %ul
+                    %li Ex: A comment should have an author
+            %li
+              Business Rules
+              %ul
+                %li
+                  Set of rules that a model should fit to exist in the real world
+                  %ul
+                    %li Ex: A comment should deliver an email notification
+        %section
+          %h2
+            What is a model?
+          %h3 The model is an imitation of real object
+          %h3 that reflects some it’s behaviors
+          %h3 that we are focused on.
+          %h5
+            Wikipedia
+        %section
+          %h1
+            Model
+          %h2
+            is a best place for
+            %span.green default behaviour
+          %h4 MVC authors meant that
+        %section
+          %h1
+            Implementation
+          %p Using built-in Rails features:
+          %ul
+            %li ActiveRecord::Callbacks
+        %section
+          %h2
+            Hooks in models
+          %p We create default behavior and our data is safe.
+          %p Example: Comment can not be created without notification.
+          %pre
+            %code
+              :preserve
+                class Comment &lt; AR::Base
+                  after_create :send_notification
+                end
+        %section
+          %h2
+            API comparison
+          %p
+            A comment should be made like this:
+          %pre
+            %code
+              :preserve
+                Comment.create
+                # or
+                CommentService.create
+          %p 
+            How to deliver the knowledge to 
+            %span.red XXX
+            team members?
+        %section
+          %h2
+            Successful Projects tend to do
+          %h1
+            %span.green one thing
+          %h2
+            in many different ways
+          %h2
+            rather than a lot of things
+        %section
+          %ul
+            %li Comment on a web site
+            %li Comment in native mobile iOS app
+            %li Comment in native mobile Android app
+            %li Comment by replying to an email letter
+            %li Automatically generate comments
+        -#%section
+          %h2
+            Reimplement other person’s API
+          %h2
+            has more wisdom than invent new one.
+          %pre
+            %code
+              :preserve
+                Comment.create(...)
+        %section
+          %h1
+            %span.red Edge cases
+          %h3
+            In all cases data created in regular way
+          %h3
+            In one edge cases special rules applied
+        %section
+          %h2
+            Service with options
+          %pre
+            %code
+              :preserve
+                module CommentService
+                  def self.create(
+                    attrs, skip_notification = false)
+                end
+        %section
+          %h1
+            Default behavior
+          %h1
+            and
+            %span.red edge cases
+          %ul
+            %li
+              Hey model, create my comment.
+              %ul
+                %li Ok
+            %li
+              Hey model, why did you send the notification?
+              %ul
+                %li Because you didn't say you don't need it
+            %li
+              Hey model, create model without notification
+              %ul
+                %li Ok
+        %section
+          %h1
+            Support parameter in model
+          %pre
+            %code
+              :preserve
+                class Comment &lt; AR::Base
+                  attr_accessor :skip_comment_notification
+                  after_create do
+                    unless self.skip_comment_notification
+                      send_notification
+                    end
+                  end
+                end
+          %p
+            %code #skip_comment_notification
+            is used only in edge cases.
+        %section
+          %h2
+            %span.green Default Behaviour
+            is hard to make
+          %h2
+            But it solves
+            %span.red communication problems
+        %section
+          %h2
+            Good Service Example
+          %pre
+            %code
+              :preserve
+                Customer.has_many :purchases
+                Purchase.has_many :ordered_items
+                OrderItem.belongs_to :product
+          %pre.fragment
+            %code.ruby
+              :preserve
+                class PhoneOrder
+                  includes ActiveModel::Validation
+                  includes ActiveModel::AttributesAssignment
+                  def initialize(attributes)
+                  def save!
+                end
+          %p.fragment
+            PhoneOrder is only different from on-site one only by 
+            %br
+            how its made not by how it behaves afterwards.
+        %section
+          %h2
+            What is the difference?
+          %pre
+            %code
+              :preserve
+                PhoneOrder.new(...).save!
+                
+                Comment.after_create :send_notification
+          %ul
+            %li
+              %p Business rules:
+              %ul
+                %li An Order could be created by phone call
+                %li A Comment should send an email notification
+        %section
+          %p
+            %br
+            %br/
+            %br/
+          %h1
+            Model stands for
+            %span.green should
+          %h1
+            Service stands for
+            %span.green could
+          %h2.fragment
+            Please do not confuse
+            %br
+            %span.green should
+            with
+            %span.red must
+        %section
+          %table
+            %tr
+              %th Service
+              %th Model
+            %tr
+              %td Builder
+              %td Holder
+            %tr
+              %td Workflow
+              %td Static
+            %tr
+              %td Opportunity
+              %td Protection
+            %tr
+              %td Custom
+              %td Universal
+        %section
+          %h2
+            The model is still
+            = succeed "." do
+              %span.red fat
+          %h2
+            What to do?
+        %section
+          %h2
+            Use Concerns
+          %pre
+            %code
+              :preserve
+                class Comment &lt; AR::Base
+                  include CommentNotification
+                  include FeedActivityGeneration
+                  include Archivable
+                end
+          %p
+            Rails default:
+            %code app/models/concerns/*
+        %section
+          %h2
+            You may think of
+          %h2
+            Concerns
+            %span.red  violate 
+            SRP
+          %h2.fragment
+            And you are right!
+        %section
+          %h2
+            Single Responsibility Principle
+          %h1
+            doesn't work
+          %h2.fragment
+            for real world models
+        %section
+          %h2
+            There is no a single thing
+          %h2
+            in the universe that follows the SRP
+          .clearfix
+            %p.right{style: 'width: 30%'}
+              %img{:alt => "Proton", style: 'width: 200px', :src => "http://science.jrank.org/article_images/ep201102/science/science982.jpg"}>/
+            %pre.left{style: 'width: 70%'}
+              %code
+                :preserve
+                  class Proton
+                    include Gravitation
+                    include ElectroMagnetism
+                    include StrongNuclearForce
+                    include WeekNuclearForce
+                  end
+                
+        %section
+          %h2
+            Where are decorators?
+          %pre
+            %code
+              :preserve
+                FacebookWrapper.new(user)
+                # OR
+                class User
+                  include FacebookProfile
+                end
+          %p
+            Trade an API for less methods in object
+        %section
+          %h1
+            When decoration is effective?
+          %ul
+            %li Situational API 
+            %li Wrapping around multiple objects
+            %li Wrapping around collection of objects
+            %li Under-the-hood class
+
+        %section
+          %h2
+            Datagrid Gem
+          %h3
+            Example of collection wrapper
+          %p
+            %a{:href => "https://github.com/bogdan/datagrid"} https://github.com/bogdan/datagrid
+          %pre
+            %code
+              :preserve
+                UsersGrid.new(
+                  last_request: Date.today, 
+                  created_at: 1.month.ago..Time.now)
+                
+                class UsersGrid
+                  scope { User }
+                
+                  filter(:created_at, :date, range: true)
+                  filter(:last_request_at, :datetime, range: true)
+                  filter(:ip_address, :string)
+                    
+                  column(:id)
+                  column(:email)
+                  column(:last_request_at)
+                end
+        %section
+          %h1
+            Wrapping Around Built-in object
+          %p
+            %a{:href => "https://github.com/bogdan/furi"} https://github.com/bogdan/furi
+          %pre
+            %code
+              :preserve
+                u = Furi.parse(
+                  "http://bogdan.github.com/index.html")
+                u.subdomain # => 'bogdan'
+                u.extension # => 'html'
+                u.ssl?      # => false
+                
+                module Furi
+                  def self.parse(string)
+                    Furi::Uri.new(string).parse
+                  end
+                end
+        -#%section
+          %h2 Wrapping around multiple objects
+
+          %pre
+            %code.ruby
+              :preserve
+                renderer = TemplateRenderer.new(markup, data)
+                renderer.render # => html
+                renderer.errors # => Array of errors appeared
+                renderer.timing # => how much time did it take?
+        %section
+          %h1
+            Why man made things should?
+          %h2
+            The world is unreasonably complext to follow SRP
+        %section
+          %h2
+            How a model that suppose to simulate those things
+          %h2
+            can have a single responsibility?
+          %h1
+            It can’t!
+        %section
+          %h1
+            .green Model Concerns
+            are 
+            unavoidable
+          %h2
+            if you want to follow 
+            .green MVC ideas
+        %section
+          %h2
+            Concerns are
+            %span.green Vertical slicing
+          %h4
+            %span.red Unlike MVC
+            which is horizontal slicing.
+        %section
+          %h1
+            Split model into
+            %span.green Concerns
+          %pre
+            %code
+              :preserve
+                class User < AR::Base
+                  include FacebookProfile
+                end
+                
+                # Hybrid Concern that provides 
+                # instance and class methods
+                module FacebookProfile
+                  has_one :facebook_profile # simplified
+                  def connected_to_facebook?
+                end
+        %section
+          %h2
+            Ex.1 User + Facebook
+          %table
+            %tr
+              %td
+                %code{style: 'width: 70%'} has_one :facebook_profile
+              %td
+                Should
+              %td
+                \=> Model
+            %tr
+              %td
+                %code{style: 'width: 70%'} register_user_from_facebook
+              %td
+                Could
+              %td
+                \=> Service
+            %tr
+              %td
+                %code{style: 'width: 70%'} connect_facebook_profile
+              %td
+                Could
+              %td
+                \=> Service
+            %tr
+              %td
+                %code{style: 'width: 70%'} connected_to_facebook?
+              %td
+                Should
+              %td
+                \=> Model
+          %ul
+            %li Every user should know if it is connected to facebook or not
+        %section
+          %h2
+            Ex.2 Deliver comment notification
+          %ul
+            %li
+              Comment
+              %code #send_notification
+              \=> Model
+              %ul
+                %li Default Behaviour
+                %li Even if exceptions exist
+        %section
+          %h3
+            Basic application architecture
+          %p
+            %table.full-border
+              %tr
+                %td{:colspan => "100%"} View
+              %tr
+                %td{:colspan => "100%"} Controller
+              %tr
+                %td{:colspan => "2", :style => ""} Services
+                %td{:colspan => "2", :style => ""} Decorators
+              %tr
+                %td{:colspan => "100%", :style => ""} Model
+              %tr
+                %td Concern
+                %td Concern
+                %td Concern
+                %td Concern
+        %section
+          %h1
+            Concerns Base
+          %ul
+            %li Attributes
+            %li
+              Associations
+              %ul
+                %li
+                  %code has_one
+                %li
+                  %code has_many
+                %li
+                  %code has_and_belongs_to_many
+          %h2
+            But rarely
+          %ul
+            %li
+              %code belongs_to
+        %section
+          %h2
+            Libraries using Concerns
+          %ul
+            %li ActiveRecord
+            %li ActiveModel
+            %li Devise
+            %li Datagrid
+          %h5
+            If it is
+            %span.green possible
+            for such a
+            %span.red complicated library
+            %br/
+          %h5
+            then it is
+            %span.red easy
+            for
+            = succeed "\u{2013}>" do
+              %span.green regular projects
+        %section
+          %h1
+            Summary
+        %section
+          %h1
+            Inject Service between Model and Controller
+          %h2
+            if you need them
+        %section
+          %h1
+            %span.green Could?
+            \=&gt;
+            %span.red Service
+          %h1
+            %span.green Should?
+            \=&gt;
+            %span.red Model
+        %section
+          %h1
+            SRP is a misleading principle
+          %h2
+            It should not inhibit you from having
+          %h2
+            a Better Application Model
+        %section
+          %h1
+            %span.red Fat
+            models =&gt;
+            %span.green Thin
+            Concerns
+        %section
+          %h2
+            %span.green Reimplement
+            other person’s API
+          %h2
+            has more wisdom than
+            %span.red invent new
+            one.
+        %section
+          %h1
+            %span.green Decorators
+          %h2
+            are pretty
+            %span.red specific
+          %h2
+            Use them in
+          %ul
+            %li Wrapping the collection
+            %li “private” class
+            %li Service usage is inconvenient
+        %section
+          %h1
+            The
+            %span.red End
+          %h2
+            Thanks for
+            %span.green your time
+          %h3
+            %a{:href => "http://gusiev.com"} http://gusiev.com
+          %h3
+            %a{:href => "https://github.com/bogdan"} https://github.com/bogdan
+          
+    %script{:src => "http://lab.hakim.se/reveal-js/lib/js/head.min.js"}
+    %script{:src => "/javascripts/reveal/reveal.js"}
+    :javascript
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+      	controls: true,
+      	progress: true,
+      	history: true,
+      	center: true,
+
+      	theme: Reveal.getQueryHash().theme || 'simple', // available themes are in /css/theme
+      	transition: Reveal.getQueryHash().transition || 'fade', // default/cube/page/concave/zoom/linear/fade/none
+
+      	// Optional libraries used to extend on reveal.js
+      	dependencies: [
+      		// { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+      		{ src: 'http://lab.hakim.se/reveal-js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      		{ src: 'http://lab.hakim.se/reveal-js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      		{ src: 'http://lab.hakim.se/reveal-js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+          { src: '/javascripts/reveal/plugin/notes/notes.js', async: true }
+      		// { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+      		// { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
+      		// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+      	]
+      });

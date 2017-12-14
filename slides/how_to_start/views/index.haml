@@ -18,6 +18,7 @@
       :sass
         body .reveal
           color: black !important
+          font-size: 30px !important
           h1, h2, h3, h4, h5
             color: black !important
 
@@ -100,12 +101,7 @@
           %h3 What people do in first 3 days of a project:
           %ul
             %li An ultimate 2 years roadmap
-            %li 
-              Technology
-              %ul
-                %li Language
-                %li Framework
-                %li Database
+            %li Technology
             %li Forecast scaling
             %li An ultimate money spend roadmap
 
@@ -186,16 +182,14 @@
           
           %h2 Ecommerce:
           
-          %h2
+          %h3
             %nobr==  Customer -> Purchase <- Vendor
-          %h3.fragment
-            %nobr== Customer -> Order -> Order Item <- Product
-            Order == Cart
-        %section{"data-markdown" => ""}
-          %script{:type => "text/template"}
-            \## Add some hierarchy
-            
-            \![Ecommerce1](https://api.monosnap.com/image/download?id=Z5Gwq85LF9XSQM2J0FFHHLo5x)
+          %h4.fragment
+            %nobr== Customer -> Cart -> Cart Item <- Product
+        %section
+          %h2 Add some hierarchy
+          %img{src: "https://api.monosnap.com/image/download?id=Z5Gwq85LF9XSQM2J0FFHHLo5x"}
+          %h4 Order == Cart
         %section{"data-markdown" => ""}
           %script{:type => "text/template"}
             \## Be specific
@@ -249,7 +243,8 @@
                 Photo.has_one :activity, :as => :target
                 Comment.has_one :activity, :as => :target
                 
-          %pre.fragment
+        %section
+          %pre
             %code.ruby
               :preserve
                 # The Core
@@ -266,7 +261,7 @@
         %section
           %h3 The most complicated part
 
-          %h3.fragment
+          %h4.fragment
             implement 
             %br
             <code class='highlight-red'> Subscriber#subscribed_activities </code>
@@ -280,9 +275,9 @@
           %h2.fragment But the pattern persists
         %section
           %h3 Email Client
-          %h2.fragment
+          %h3.fragment
             %nobr Sender -&gt; Message &lt;- Recipient
-          %h2.fragment
+          %h3.fragment
             %nobr App1: Sender -&gt; Message
             %br
             %nobr App2: Message &lt;- Recipient
@@ -318,7 +313,7 @@
           %pre{style: "margin: 0 auto; width: 600px; font-size: 1.2em; text-align: center"}
             :preserve
               Role1 → Model ← Role2
-          %pre.fragment{style: "margin: 0 auto; width: 600px; font-size: 1.2em; text-align: center"}
+          -#%pre.fragment{style: "margin: 0 auto; width: 600px; font-size: 1.2em; text-align: center"}
             :preserve
               ↑
               Role3
