@@ -85,7 +85,7 @@
                   %a{:href => "https://github.com/bogdan/accepts_values_for"} accepts_values_for
                 %li
                   %a{:href => "https://github.com/bogdan/furi"} furi
-        %section
+        -#%section
           %h2
             My Blog
           %h2
@@ -113,11 +113,11 @@
                 %span.green model by default
         %section
           %h1
-            In the MVC:
+            In the <span class='green'>MVC</span>:
           %h2
             Why it should not be 
             %br
-            in controller or view?
+            in <span class='red'>controller or view</span>?
           %p Because they are hard to:
           %ul
             %li reuse
@@ -130,9 +130,8 @@
             %span.red 1000 Lines of code
           %p But it depends on:
           %ul
+            %li Project Size
             %li Docs
-            %li Whitespace
-            %li Comments
         %section
           %pre{style: "width: 100%"}
             %code
@@ -202,7 +201,7 @@
               %ul
                 %li Effective data model
                 %li
-                  %span.green MORE
+                  %span.green More
                   features per second
                 %li Data Safety
         %section
@@ -584,13 +583,20 @@
           %h2
             Where are decorators?
           %pre
-            %code
+            %code.ruby
               :preserve
-                FacebookWrapper.new(user)
+                user = FacebookWrapper.new(user)
                 # OR
                 class User
                   include FacebookProfile
                 end
+
+          %pre
+            %code
+              :preserve
+                #connected_to_facebook?
+                #facebook_image
+                #profile_url
           %p
             Trade an API for less methods in object
         %section
@@ -716,25 +722,6 @@
                 %li Default Behaviour
                 %li Even if exceptions exist
         %section
-          %h2
-            Basic application architecture
-          %p
-            %table.full-border
-              %tr
-                %td{:colspan => "100%"} View
-              %tr
-                %td{:colspan => "100%"} Controller
-              %tr
-                %td{:colspan => "2", :style => ""} Services
-                %td{:colspan => "2", :style => ""} Decorators
-              %tr
-                %td{:colspan => "100%", :style => ""} Model
-              %tr
-                %td Concern
-                %td Concern
-                %td Concern
-                %td Concern
-        %section
           %h1
             Concerns Base
           %ul
@@ -780,8 +767,29 @@
           %h1
             Summary
         %section
+          %h2
+            Basic application architecture
+          %p
+            %table.full-border
+              %tr
+                %td{:colspan => "100%"} View
+              %tr
+                %td{:colspan => "100%"} Controller
+              %tr
+                %td{:colspan => "2", :style => ""} Services
+                %td{:colspan => "2", :style => ""} Decorators
+              %tr
+                %td{:colspan => "100%", :style => ""} Model
+              %tr
+                %td Concern
+                %td Concern
+                %td Concern
+                %td Concern
+        %section
           %h1
-            Inject Service between Model and Controller
+            Inject 
+            %span.green Service 
+            between Model and Controller
           %h2
             if you need them
         %section
@@ -818,11 +826,22 @@
             one.
         %section
           %h1
-            %span.green Decorators
+            Decorators
           %h2
             are for 
-            %span.red really large 
-            projects
+            %span.green situaltional APIs 
+            %br
+            in
+            %span.red really large projects
+        %section
+          %h2 
+            %span.green Ruby 
+            is all you need
+          %p 
+            All 
+            %span.red promising gems 
+            don't do much
+          %p ActiveModel is the only real helper
         %section
           %h1
             The
