@@ -46,7 +46,7 @@
           table.full-border
             border-collapse: collapse
             td
-              border: 1px solid black
+              border: 1px solid black !important
           img
             border: 0px
             box-shadow: 0 0 0 0
@@ -228,7 +228,9 @@
             extract them to service is good idea.
         %section
           %h2
-            Move class methods between files is cheap
+            Move class methods 
+            %br
+            between files is cheap
           %pre
             %code.ruby
               :preserve
@@ -246,8 +248,7 @@
             rather than
             %span.red object
             they operate on
-          %ul
-            %li Otherwise at some moment UserService would not be enough
+          %p Otherwise at some moment UserService would not be enough
         %section
           %h2
             The problem of services
@@ -344,7 +345,7 @@
           %h2
             in many different ways
           %h2
-            rather than a lot of things
+            rather than <span class='red'>a lot of</span> things
         %section
           %ul
             %li Comment on a web site
@@ -440,7 +441,7 @@
                   def save!
                 end
           %p.fragment
-            PhoneOrder is only different from on-site one only by 
+            PhoneOrder is only different from online one only by 
             %br
             how its made not by how it behaves afterwards.
         %section
@@ -491,6 +492,9 @@
               %td Protection
             %tr
               %td Custom
+              %td Default
+            %tr
+              %td Local
               %td Universal
         %section
           %h2
@@ -499,6 +503,21 @@
               %span.red fat
           %h2
             What to do?
+        %section
+          %h1
+            Split model into
+            %span.green Concerns
+          %pre
+            %code
+              :preserve
+                class User &lt; AR::Base
+                  include FacebookProfile
+                end
+                
+                module FacebookProfile
+                  has_one :facebook_profile # simplified
+                  def connected_to_facebook?
+                end
         %section
           %h2
             Use Concerns
@@ -518,15 +537,14 @@
             You may think of
           %h2
             Concerns
-            %span.red  violate 
-            SRP
+            %span.red  violate SRP
           %h2.fragment
             And you are right!
         %section
           %h2
             Single Responsibility Principle
           %h1
-            doesn't work
+            does not work
           %h2.fragment
             for real world models
         %section
@@ -547,6 +565,21 @@
                     include WeekNuclearForce
                   end
                 
+        %section
+          %h2
+            .green Model Concerns
+            are 
+            unavoidable
+          %h3
+            if you want to follow 
+            .green MVC ideas
+        %section
+          %h2
+            Concerns are
+            %span.green Vertical slicing
+          %h4
+            %span.red Unlike MVC
+            which is horizontal slicing.
         %section
           %h2
             Where are decorators?
@@ -596,7 +629,9 @@
                 end
         %section
           %h1
-            Wrapping Around Built-in object
+            Wrapping Around 
+            %br
+            Built-in object
           %p
             %a{:href => "https://github.com/bogdan/furi"} https://github.com/bogdan/furi
           %pre
@@ -623,50 +658,18 @@
                 renderer.render # => html
                 renderer.errors # => Array of errors appeared
                 renderer.timing # => how much time did it take?
-        %section
+        -#%section
           %h1
             Why man made things should?
           %h2
             The world is unreasonably complext to follow SRP
-        %section
+        -#%section
           %h2
             How a model that suppose to simulate those things
           %h2
             can have a single responsibility?
           %h1
             It can’t!
-        %section
-          %h1
-            .green Model Concerns
-            are 
-            unavoidable
-          %h2
-            if you want to follow 
-            .green MVC ideas
-        %section
-          %h2
-            Concerns are
-            %span.green Vertical slicing
-          %h4
-            %span.red Unlike MVC
-            which is horizontal slicing.
-        %section
-          %h1
-            Split model into
-            %span.green Concerns
-          %pre
-            %code
-              :preserve
-                class User < AR::Base
-                  include FacebookProfile
-                end
-                
-                # Hybrid Concern that provides 
-                # instance and class methods
-                module FacebookProfile
-                  has_one :facebook_profile # simplified
-                  def connected_to_facebook?
-                end
         %section
           %h2
             Ex.1 User + Facebook
@@ -675,7 +678,7 @@
               %td
                 %code{style: 'width: 70%'} has_one :facebook_profile
               %td
-                Should
+                Easy
               %td
                 \=> Model
             %tr
@@ -713,7 +716,7 @@
                 %li Default Behaviour
                 %li Even if exceptions exist
         %section
-          %h3
+          %h2
             Basic application architecture
           %p
             %table.full-border
@@ -745,11 +748,13 @@
                   %code has_many
                 %li
                   %code has_and_belongs_to_many
-          %h2
+          %p
             But rarely
           %ul
             %li
-              %code belongs_to
+              %ul
+                %li 
+                  %code belongs_to
         %section
           %h2
             Libraries using Concerns
@@ -758,17 +763,18 @@
             %li ActiveModel
             %li Devise
             %li Datagrid
-          %h5
-            If it is
-            %span.green possible
-            for such a
-            %span.red complicated library
-            %br/
-          %h5
-            then it is
-            %span.red easy
-            for
-            = succeed "\u{2013}>" do
+          .fragment
+            %br
+            %h5
+              If it is
+              %span.green possible
+              for such a
+              %span.red complicated library
+              %br/
+            %h4
+              then it is
+              %span.red easy
+              for
               %span.green regular projects
         %section
           %h1
@@ -789,18 +795,20 @@
             %span.red Model
         %section
           %h1
-            SRP is a misleading principle
+            %span.red SRP 
+            is a misleading principle in the 
+            %span.green MVC
           %h2
             It should not inhibit you from having
           %h2
             a Better Application Model
         %section
-          %h1
+          %h2
             %span.red Fat
             models =&gt;
             %span.green Thin
             Concerns
-        %section
+        -#%section
           %h2
             %span.green Reimplement
             other person’s API
@@ -812,14 +820,9 @@
           %h1
             %span.green Decorators
           %h2
-            are pretty
-            %span.red specific
-          %h2
-            Use them in
-          %ul
-            %li Wrapping the collection
-            %li “private” class
-            %li Service usage is inconvenient
+            are for 
+            %span.red really large 
+            projects
         %section
           %h1
             The
@@ -832,6 +835,46 @@
           %h3
             %a{:href => "https://github.com/bogdan"} https://github.com/bogdan
           
+        %section
+          %h1
+            %p Buktopuha
+        %section
+
+          %h1 Rails v3
+          %pre
+            %code.ruby
+              :preserve
+                Post.has_many :comments, order("created_at desc")
+          %h1 Rails v4
+          %pre
+            %code.ruby
+              :preserve
+                Post.has_many :comments, -> { order("created_at desc") }
+        %section
+          %h2 How many object are made here?
+          %pre
+            %code.ruby
+              :preserve
+                10.times do |i|
+                  :hello.to_s
+                end
+        %section
+          %h3 How many SQL queries is generated here?
+          %pre
+            %code.ruby
+              :preserve
+                Campaign.has_many :localizations
+
+                def localize_by_key(key)
+                  @campaign.localizations.preload(:variants).find do |l|
+                    l.key == key
+                  end.text
+                end
+          %pre
+            %code.haml
+              :preserve
+                = localize_by_key("offer_title")
+                = localize_by_key("offer_description")
     %script{:src => "http://lab.hakim.se/reveal-js/lib/js/head.min.js"}
     %script{:src => "/javascripts/reveal/reveal.js"}
     :javascript
