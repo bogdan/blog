@@ -3,7 +3,7 @@ GEM
   specs:
     haml (4.0.3)
       tilt
-    rack (1.5.2)
+    rack (1.6.8)
     rack-protection (1.5.0)
       rack
     rake (10.4.2)
@@ -23,3 +23,6 @@ DEPENDENCIES
   rake
   shotgun
   sinatra
+
+BUNDLED WITH
+   1.16.0

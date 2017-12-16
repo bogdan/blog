@@ -33,7 +33,7 @@ def site
     include Jekyll::Filters
     options = Jekyll.configuration({})
     site = Jekyll::Site.new(options)
-    site.read_posts('')
+    site.read
     site
   )
 end
@@ -113,7 +113,7 @@ title: Posts tagged "#{tag}"
 
     html << '<ul class="posts">'
     posts.sort_by do |post|
-      post_data = post.to_liquid["date"]
+      post.to_liquid["date"]
     end.reverse_each do |post|
       post_data = post.to_liquid
       html << <<-HTML

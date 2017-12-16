@@ -11,27 +11,27 @@
 require "find"
 require "jekyll-watch"
 
-module Jekyll
-  module Watcher
-    def build_listener_with_symlinks(site, options)
-      src = options["source"]
-      dirs = [src]
-      Find.find(src).each do |f|
-        next if f == "#{src}/_drafts" and not options["show_drafts"]
-        # TODO(willnorris): filter ignored files
-        dirs << f if File.directory?(f) and File.symlink?(f)
-      end
+#module Jekyll
+  #module Watcher
+    #def build_listener_with_symlinks(site, options)
+      #src = options["source"]
+      #dirs = [src]
+      #Find.find(src).each do |f|
+        #next if f == "#{src}/_drafts" and not options["show_drafts"]
+        ## TODO(willnorris): filter ignored files
+        #dirs << f if File.directory?(f) and File.symlink?(f)
+      #end
 
-      require "listen"
-      Listen.to(
-        dirs,
-        :ignore => listen_ignore_paths(options),
-        :force_polling => options["force_polling"],
-        &(listen_handler(site))
-      )
-    end
+      #require "listen"
+      #Listen.to(
+        #dirs,
+        #:ignore => listen_ignore_paths(options),
+        #:force_polling => options["force_polling"],
+        #&(listen_handler(site))
+      #)
+    #end
 
-    alias_method :build_listener_without_symlinks, :build_listener
-    alias_method :build_listener, :build_listener_with_symlinks
-  end
-end
+    #alias_method :build_listener_without_symlinks, :build_listener
+    #alias_method :build_listener, :build_listener_with_symlinks
+  #end
+#end
