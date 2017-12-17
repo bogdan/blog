@@ -2,14 +2,14 @@
 <html lang='en'>
   <head>
     <meta charset='utf-8'>
-    <title>Modular Reporting Architecture</title>
+    <title>Fighting Fat Models</title>
     <meta content='' name='description'>
     <meta content='Bogdan Gusiev' name='author'>
     <meta content='yes' name='apple-mobile-web-app-capable'>
     <meta content='black-translucent' name='apple-mobile-web-app-status-bar-style'>
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' name='viewport'>
     <link href='http://lab.hakim.se/reveal-js/css/reveal.css' rel='stylesheet'>
-    <link href='http://lab.hakim.se/reveal-js/css/theme/night.css' rel='stylesheet'>
+    <link href='https://rawgithub.com/hakimel/reveal.js/master/css/theme/white.css' rel='stylesheet'>
     <!-- For syntax highlighting -->
     <link href='http://lab.hakim.se/reveal-js/lib/css/zenburn.css' rel='stylesheet'>
     <!-- If the query includes 'print-pdf', use the PDF print sheet -->
@@ -17,593 +17,939 @@
       document.write( '<link rel="stylesheet" href="http://lab.hakim.se/reveal-js/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
     </script>
     <style>
+      body .reveal {
+        font-size: 30px !important; }
+      
       .yellow {
         color: yellow; }
       
-      .reveal pre code {
+      .reveal section pre code {
         padding: 20px 5px;
         font-size: 1.3em;
         line-height: 1.3em; }
-      .reveal ul {
+      .reveal section ul {
         min-width: 50%; }
-      .reveal .red {
+      .reveal section .red {
         color: #e02c2d; }
-      .reveal .green {
-        color: #17ff2e; }
-      .reveal .yellow {
+      .reveal section .green {
+        color: #17cc1e; }
+      .reveal section .yellow {
         color: yellow; }
-      .reveal .blue {
+      .reveal section .blue {
         color: #1b91ff; }
-      .reveal .left {
+      .reveal section .left {
         float: left; }
-      .reveal .right {
+      .reveal section .right {
         float: right; }
-      .reveal .clearfix {
+      .reveal section .clearfix {
         overflow: hidden; }
+      .reveal section table.full-border {
+        border-collapse: collapse; }
+        .reveal section table.full-border td {
+          border: 1px solid black !important; }
+      .reveal section img {
+        border: 0px;
+        box-shadow: 0 0 0 0; }
     </style>
   </head>
   <body>
     <div class='reveal'>
       <div class='slides'>
         <section>
-          <h2>Modular Reporting Architecture</h2>
-          <h3>Bogdan Gusiev</h3>
-        </section>
-        <section>
-          <h3>Bogdan G.</h3>
-          <ul>
-            <li class='fragment'>in IT for ~ 8 years</li>
-            <li class='fragment'>5 of them with Ruby and Rails</li>
-            <li class='fragment'>3 of them in Talkable Inc.</li>
-          </ul>
-        </section>
-        <section>
-          <h2>Talkable Inc.</h2>
-          <div class='clearfix'>
-            <div class='left'>
-              <img src='http://take.ms/7KhUZ' style='width: 450px'>
-              <br>
-              <img src='http://take.ms/TZ8UV' style='width: 450px'>
-            </div>
-            <div class='right'>
-              <img src='http://take.ms/s1pvm' style='width: 450px'>
-              <br>
-              <img src='http://take.ms/i2EFe' style='width: 450px'>
-            </div>
-          </div>
-        </section>
-        <section>
-          <h1>Report?</h1>
-          <aside class='notes'>
-            Let's have a quick overview on what is a report
-          </aside>
-        </section>
-        <section>
-          <h3>Why to Report?</h3>
-          <pre><code>ActiveRecord::Base.send(:subclasses).map do |klass|&#x000A;  klass.where(&#x000A;    "updated_at &gt; ?", 1.day.ago&#x000A;  ).count&#x000A;end.sum</code></pre>
-        </section>
-        <section>
-          <h2>At some point you know everything</h2>
-          <aside class='notes'>
-            You know about every single event happening in your application every day.
-          </aside>
-        </section>
-        <section>
-          <h2>At another point you can't do it anymore</h2>
-        </section>
-        <section>
-          <h2 class='red'>Why Modularity and Architecture?</h2>
-          <h2 class='fragment'>How many people want reports?</h2>
-          <aside class='notes'>
-            <ul>
-              <li>not how big numbers are</li>
-              <li>not how often needed</li>
-            </ul>
-          </aside>
-        </section>
-        <section>
-          <h3>How many people</h3>
-          <h3>would it be hard to support?</h3>
-          <div class='fragment'>
-            <h2>Around 5</h2>
-          </div>
-          <aside class='notes'>
-            <p>At some point you can pull all required number as they are needed</p>
-            <p>At some point you can't</p>
-          </aside>
-        </section>
-        <section>
-          <h1>Plan</h1>
-          <ul>
-            <li>Basic Operations</li>
-            <li>Problems as number of metrics growth</li>
-            <li>What is even a metric?</li>
-            <li>What is a filter?</li>
-            <li>Data Model</li>
-            <li>Live examples</li>
-          </ul>
-        </section>
-        <section>
-          <h3 class='red'>People Language</h3>
-          <ul>
-            <li>Please visualise the data.</li>
-            <li>Can I see how we are performing overall in the last time?</li>
-          </ul>
-        </section>
-        <section>
-          <h3>Being More Formal</h3>
-          <ul>
-            <li>How many ...?</li>
-            <li>What is the total amount of ...?</li>
-            <li>... in this scope/date range</li>
-            <li>... for each period/category</li>
-          </ul>
-          <div class='fragment'>
-            <br>
-            <h4>In the SQL</h4>
-            <ul>
-              <li>count(...)</li>
-              <li>sum(...)</li>
-              <li>group by ...</li>
-              <li>where ...</li>
-            </ul>
-          </div>
-        </section>
-        <section>
-          <h3>What to start from</h3>
-          <img src='/slide_A_black.png'>
-        </section>
-        <section>
-          <h3>Stages</h3>
-          <ol>
-            <li>At first you learn: SQL, CSV, Visualisation, S3 file uploading</li>
-            <li>Then you feel like an Reporting Machine</li>
-            <li>And then you say: No thanks...</li>
-          </ol>
-        </section>
-        <section>
-          <h3>Let the machine do the work</h3>
-          <img src='/slide_B_black.png'>
-        </section>
-        <section>
-          <h2>Requirement of unification</h2>
-          <h2>and code reuse</h2>
-        </section>
-        <section>
-          <h3 class='red'>Naming Problem</h3>
-          <h3>Total Sales = ?</h3>
-          1st Developer:
-          <pre class='fragment'><code>Purchase.group(:marketing_campaign).&#x000A;  sum(:subtotal)</code></pre>
-          2nd Developer:
-          <pre class='fragment'><code>Purchase.group("month(created_at)").&#x000A;  successfully_delivered.sum(:subtotal)</code></pre>
-          3rd Developer:
-          <pre class='fragment'><code>Purchase.&#x000A;  group(:marketing_campaign, "month(paid_at)").&#x000A;  successfully_delivered.&#x000A;  sum(:subtotal)&#x000A;</code></pre>
-        </section>
-        <section>
-          <h3>Does it include returned sales or not?</h3>
-          <img src='http://monosnap.com/image/8mWPDzrlTJaQEaY9jMR6b9me8yz4zs.png'>
-        </section>
-        <section>
-          <h3 class='red'>Problem:</h3>
-          <h3>Same metric can be calculated differently</h3>
-          <h3>in different parts of project</h3>
-        </section>
-        <section>
-          <h3 class='red'>Problem:</h3>
-          <h3>No one database knows about</h3>
-          <h2>Daylight Saving Time</h2>
-        </section>
-        <section>
-          <h2 class='yellow'>Conclusion:</h2>
-          <h3>Same Name =&gt; Same Logic</h3>
-          <h3>Different Logic =&gt; Different Name</h3>
-          <h3>No per-person names and reports</h3>
-          <aside class='notes'>
-            <p>Each time person wants to see "Total Sales" there should be only one way of calculating it.</p>
-            <p>If there is a place where sales number needs to be calculated differently,</p>
-            <p>it should be named differently</p>
-          </aside>
-        </section>
-        <section>
-          <h3>"One ring to rule them all!"</h3>
-          <pre><code class='ruby'>{&#x000A;  identifier: 'total_sales',&#x000A;  name: 'Total Sales',&#x000A;  description: 'Amount ($) of successfully delivered sales'&#x000A;  how_to_calculate: -> () { &#x000A;    # coming soon&#x000A;  } &#x000A;}&#x000A;</code></pre>
-        </section>
-        <section>
-          <h2>How to Calculate a metric?</h2>
-          <ul>
-            <li>Be Reusable</li>
-            <li>Support Multiple Filters</li>
-            <li>Support all basic operations</li>
-          </ul>
-        </section>
-        <section>
-          <h3>How to Be organized?</h3>
-          <pre><code class='ruby'>Purchase.where(&#x000A;  created_at: ?,&#x000A;  marketing_campaign: ?,&#x000A;  users: {gender: ?},&#x000A;  status: ?,         &#x000A;  first_time_buyer: ?,&#x000A;  items: { product_category: ? }&#x000A;).sum(:subtotal)</code></pre>
-          <aside class='notes'>We need to organize aggregation and multiple filters for the same metric:</aside>
-        </section>
-        <section>
-          <h3 class='red'>Words snowball</h3>
-          <h4>What is total sales for each marketing campaigns in February?</h4>
-          <pre><code>Purchase.where(&#x000A;  created_at: '2015-02-01'..'2015-03-01'&#x000A;).group(:marketing_campaign).sum(:subtotal)&#x000A;</code></pre>
-          <h4>What is total sales for each week of February in the given marketing campaign?</h4>
-          <pre><code>Purchase.where(&#x000A;  created_at: '2015-02-01'..'2015-03-01', &#x000A;  marketing_campaign: id,&#x000A;).group('week(created_at)').sum(:subtotal)&#x000A;&#x000A;&#x000A;&#x000A;</code></pre>
-        </section>
-        <section>
-          <h4>How many first time buyers does that campaign bring?</h4>
-          <h4>What is purchases ditribution by hour of a day for each country we sell in?</h4>
-          <h4>How much did we sell for each product category this black friday comparing to previous one?</h4>
-          <h4>What is the average order value of first time buyers compared to non-first time buyers?</h4>
-          <aside class='notes'>
-            All these term rotate around in your head like a snowball of mess at some point.
-          </aside>
-        </section>
-        <section>
-          <h2>Is it a code duplication or not?</h2>
-          <pre><code class='ruby'>Purchase.&#x000A;  where(merchant: merchant)&#x000A;  where( paid_at: '2015-02-01'..'2015-03-01').&#x000A;  joins(:payment)&#x000A;  group(:marketing_campaign).&#x000A;  successfully_delivered.&#x000A;  sum(:subtotal)&#x000A;&#x000A;</code></pre>
-          <pre><code class='ruby'>Purchase.&#x000A;  where(merchant: merchant)&#x000A;  where(marketing_campaign: marketing_campaign).&#x000A;  group("month(paid_at)").&#x000A;  joins(:payment)&#x000A;  successfully_delivered.&#x000A;  sum(:subtotal)&#x000A;&#x000A;</code></pre>
-          <h3 class='fragment'>Not yet....</h3>
-        </section>
-        <section>
-          <h3>How to share code between all those requests?</h3>
-        </section>
-        <section>
-          <h2 class='yellow'>Conclusion:</h2>
-          <h2>one number =&gt; one query</h2>
+          <h1>
+            Fighting with fat models
+          </h1>
           <h2>
-            <strike>
-              GROUP BY
-            </strike>
+            Bogdan Gusiev
           </h2>
         </section>
         <section>
-          <pre><code>marketing_campaigns.map do |campaign|&#x000A;  total_sales(&#x000A;    created_at: february_month, &#x000A;    marketing_campaign: campaign,&#x000A;  )&#x000A;end&#x000A;&#x000A;february_month.each_week.map do |week|&#x000A;  total_sales(&#x000A;    created_at: week, &#x000A;    marketing_campaign: selected_campaign,&#x000A;  )&#x000A;end&#x000A;&#x000A;</code></pre>
-        </section>
-        <section>
-          <h3>Filter:</h3>
-          <pre><code class='ruby'>campaigns = Campaign.where(id: [22,81,74]) #selected by user</code></pre>
-          <h3>Overall (in the scope)</h3>
-          <pre><code class='ruby'>total_sales(marketing_campaigns: campaigns)&#x000A;</code></pre>
-          <h3>Detailed (for each)</h3>
-          <pre><code class='ruby'>campaigns.map do |campaign|&#x000A;  total_sales(marketing_campaigns: campaign)&#x000A;end</code></pre>
-          <aside class='notes'>
-            <p>Example:</p>
-            <p>For each of selected campaigns</p>
-            <p>vs</p>
-            <p>in the scope of selected campaigns</p>
-          </aside>
-        </section>
-        <section>
-          <pre><code class='ruby'>result = []&#x000A;marketing_campaigns.each do |campaign|&#x000A;weeks_of_february.each do |week|&#x000A;  result &lt;&lt; [ &#x000A;    campaign,&#x000A;    week, &#x000A;    total_purchases(created_at: week, marketing_campaign: campaign) &#x000A;    total_sales(created_at: week, marketing_campaign: campaign),&#x000A;    unique_buyers(created_at: week, marketing_campaign: campaign)&#x000A;  ]&#x000A;end&#x000A;end&#x000A;</code></pre>
-        </section>
-        <section>
-          <table>
-            <thead>
-              <tr>
-                <th>Week&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-                <th>
-                  Campaign
-                </th>
-                <th>
-                  # Total Sales
-                </th>
-                <th>
-                  $ Total Sales
-                </th>
-                <th>Unique Buyers</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  Feb
-                  1st
-                </td>
-                <td>
-                  <nobr>15Q1 SA</nobr>
-                </td>
-                <td>
-                  26
-                </td>
-                <td>$1,460.49</td>
-                <td>
-                  20
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  Feb
-                  1st
-                </td>
-                <td>
-                  <nobr>25Q2 PP</nobr>
-                </td>
-                <td>
-                  993
-                </td>
-                <td>$10,231.6</td>
-                <td>
-                  794
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  Feb
-                  2nd
-                </td>
-                <td>
-                  <nobr>15Q1 SA</nobr>
-                </td>
-                <td>
-                  655
-                </td>
-                <td>$14,299.70</td>
-                <td>
-                  524
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  Feb
-                  2nd
-                </td>
-                <td>
-                  <nobr>25Q2 PP</nobr>
-                </td>
-                <td>
-                  15
-                </td>
-                <td>$1,103.25</td>
-                <td>
-                  12
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  Feb
-                  3rd
-                </td>
-                <td>
-                  <nobr>15Q1 SA</nobr>
-                </td>
-                <td>
-                  652
-                </td>
-                <td>$7,997.83</td>
-                <td>
-                  521
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  Feb
-                  3rd
-                </td>
-                <td>
-                  <nobr>25Q2 PP</nobr>
-                </td>
-                <td>
-                  599
-                </td>
-                <td>$12,663.7</td>
-                <td>
-                  479
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  Feb
-                  4th
-                </td>
-                <td>
-                  <nobr>15Q1 SA</nobr>
-                </td>
-                <td>
-                  338
-                </td>
-                <td>$7,163.44</td>
-                <td>
-                  270
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  Feb
-                  4th
-                </td>
-                <td>
-                  <nobr>25Q2 PP</nobr>
-                </td>
-                <td>
-                  690
-                </td>
-                <td>$1,488.10</td>
-                <td>
-                  552
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </section>
-        <section>
-          <h2 class='yellow'>Conclusion:</h2>
-          <h2>Tables are your friends</h2>
-          <h2>Numbers =&gt; Table =&gt; Graph</h2>
-          <aside class='notes'>
-            Any data you pull could be put into a table.
-          </aside>
-        </section>
-        <section>
-          <h2>Implementation</h2>
-          <h4>OO Design is recommended</h4>
-          <pre><code class='ruby'>class ApplicationMetrics&#x000A;  def initialize(@filters)&#x000A;  def total_sales&#x000A;    purchases_scope.sum(:subtotal)&#x000A;  end&#x000A;  def total_purchases&#x000A;    purchases_scope.count&#x000A;  end&#x000A;  def unique_buyers&#x000A;    purchases_scope.count("DISTINCT user_id")&#x000A;  end&#x000A;  def purchases_scope&#x000A;    Purchase.successfully_delivered.&#x000A;      where(paid_at: @filters[:period]).&#x000A;      where(marketing_campaign_id: @filters[:marketing_campaign])&#x000A;  end</code></pre>
-        </section>
-        <section>
-          <h3>And the metadata:</h3>
-          <pre><code class='ruby'>def self.metric(name, metadata = {})&#x000A;  @metrics ||= {}&#x000A;  @metrics[name] = metadata&#x000A;  define_method(name) do&#x000A;    yield&#x000A;  end&#x000A;end&#x000A;&#x000A;metric(:total_sales, name: 'Total Sales $', description: '...') do&#x000A;  purchases_scope.sum(:subtotal)&#x000A;end</code></pre>
-        </section>
-        <section>
-          <h3>Advantages</h3>
+          <h2>
+            Bogdan G.
+          </h2>
           <ul>
-            <li>Flexibility</li>
-            <li>Code is simple</li>
-            <li>Consistency</li>
-            <li>Single point of control</li>
-            <li>Code reuse</li>
-            <li>Front-end is decoupled</li>
-          </ul>
-          <aside class='notes'>
-            <ul>
-              <li>Any report aggregation and combination possible</li>
-              <li>SQL is kept simple: code is easier to write</li>
-              <li>All numbers across all your project are consistent</li>
-              <li>Single point of control</li>
-              <li>Better code reuse: You never start new report from scratch</li>
-              <li>Front-end is now decoupled from back-end</li>
-            </ul>
-          </aside>
-        </section>
-        <section>
-          <h2>Consistency?</h2>
-          <table>
-            <tr>
-              <th>Month</th>
-              <th>Total Sales $</th>
-            </tr>
-            <tr>
-              <td>March</td>
-              <td>$1881</td>
-            </tr>
-            <tr>
-              <td>April</td>
-              <td>$1001</td>
-            </tr>
-            <tr>
-              <td>May</td>
-              <td>$2074</td>
-            </tr>
-            <tr>
-              <td>Total</td>
-              <td>?</td>
-            </tr>
-          </table>
-        </section>
-        <section>
-          <h2 class='red'>Consistency!</h2>
-          <h3>Spring = March + April + May</h3>
-          <h3>Week = Su + Mo + Tu + We + Th + Fr + Sa</h3>
-          <br>
-          <div class='fragment'>
-            <h3>DST is your enemy!</h3>
-            <h3>because DB can not do it correctly</h3>
-          </div>
-          <aside class='notes'>
-            Customers can be very fault-finding.
-            If you show them numbers they do not like,
-            even small mistake 0.1% can break their trust.
-            If DST would happen within a week...
-            Users will not trust you unless you gonna be accurate.
-          </aside>
-        </section>
-        <section>
-          <h2 class='yellow'>Conclusion:</h2>
-          <h3>Being Consistent = Gain Trust</h3>
-        </section>
-        <section>
-          <h3 class='red'>Disadvantages</h3>
-          <h2>Performance is going down</h2>
-        </section>
-        <section>
-          <h3>Caching in reporting</h3>
-          <ul>
-            <li>10 marketing campaigns</li>
-            <li>3 years = 1095 days</li>
-            <li>20 product categories</li>
-            <li>10 metrics</li>
-          </ul>
-        </section>
-        <section>
-          <h2>Cache is unmaintainable</h2>
-          <h3>
-            10  * 1095 * 20 * 10 &asymp;
-            <div class='red'>2_000_000 variants</div>
-          </h3>
-          <h4>It is easy to cache a dashboard that</h4>
-          <h4>displays the same information for all users</h4>
-          <h4>But personal reports are not like that.</h4>
-          <aside class='notes'>
-            <p>Exponential growth</p>
-            <p>There are more numbers you can generate than data in your database</p>
-          </aside>
-        </section>
-        <section></section>
-        <section>
-          <h3>Improve performance with</h3>
-          <h2 class='yellow'>Parallel execution</h2>
-          <h3 class='fragment'>Google for: Array parallel map</h3>
-        </section>
-        <section>
-          <h3>
-            Accurate numbers slowly are better
-          </h3>
-          <h3>than random numbers fast</h3>
-          <aside class='notes'>
-            <ul>
-              <li>Accurate numbers</li>
-              <li>Unlike "GROUP BY" this technique is easier to parallelize</li>
-              <li>Do you still not use SSD hard drive or what?</li>
-            </ul>
-          </aside>
-        </section>
-        <section>
-          <h3 class='yellow'>Summing Up</h3>
-        </section>
-        <section>
-          <h2 class='yellow'>Consistent Naming</h2>
-          <h3>Same Name =&gt; Same Logic</h3>
-          <h3>Different Logic =&gt; Different Name</h3>
-        </section>
-        <section>
-          <h3>How to reuse code?</h3>
-          <h3 class='yellow'>One Number =&gt; One Query</h3>
-        </section>
-        <section>
-          <h3 class='yellow'>Unified Definition</h3>
-          <ul>
+            <li>is 9 years in IT</li>
             <li>
-              Name, Description, ...
-            </li>
-            <li>Base query</li>
-            <li>Filters</li>
-            <li>
-              Operation
+              6 years with Ruby and Rails
               <ul>
-                <li>count</li>
-                <li>sum</li>
+                <li>Long Run Rails Contributor</li>
               </ul>
             </li>
           </ul>
         </section>
         <section>
-          <h3 class='yellow'>And remember:</h3>
-          <h3>This is more about DATA</h3>
-          <h3>than anything else</h3>
-        </section>
-        <section>
-          <h2>Thanks for your attention!</h2>
-          <h3>And Remember</h3>
+          <h1>
+            Some of my gems
+          </h1>
           <ul>
-            <li>My blog: gusiev.com</li>
-            <li>My code: github.com/bogdan</li>
-            <li>My company: talkable.com</li>
+            <li>
+              <a href='http://github.com/bogdan'>http://github.com/bogdan</a>
+              <ul>
+                <li>
+                  <a href='https://github.com/bogdan/datagrid'>datagrid</a>
+                </li>
+                <li>
+                  <a href='https://github.com/railsware/js-routes'>js-routes</a>
+                </li>
+                <li>
+                  <a href='https://github.com/bogdan/accepts_values_for'>accepts_values_for</a>
+                </li>
+                <li>
+                  <a href='https://github.com/bogdan/furi'>furi</a>
+                </li>
+              </ul>
+            </li>
           </ul>
         </section>
         <section>
-          <pre><code class='ruby'>  def initialize(@filters)&#x000A;  metric(:total_sales, name: "Total Sales $") do&#x000A;    purchases_scope.sum(:subtotal)&#x000A;  end&#x000A;  metric(:total_purchases, name: "Total Sales #") do&#x000A;    purchases_scope.count&#x000A;  end&#x000A;  metric(:unique_buyers, name: "Unique Buyers") do&#x000A;    purchases_scope.count("DISTINCT user_id")&#x000A;  end&#x000A;  def purchases_scope&#x000A;    Purchase.successfully_delivered.&#x000A;      where(paid_at: @filters[:period]).&#x000A;      where(marketing_campaign_id: @filters[:marketing_campaign])&#x000A;  end</code></pre>
+          <h1>
+            <a href='http://talkable.com'>
+              <img alt='Talkable' src='http://d2jjzw81hqbuqv.cloudfront.net/assets/static/logo-dark-large.png' style=''>
+            </a>
+          </h1>
+          <ul>
+            <li>
+              7 years old startup
+            </li>
+            <li>
+              A lot of code
+            </li>
+            <li>
+              Rails version from 2.0 to 5.1
+            </li>
+          </ul>
+        </section>
+        <section>
+          <h1>
+            Fat Models
+          </h1>
+          <h2>
+            Why the problem appears?
+          </h2>
+          <ul>
+            <li>
+              All business logic code goes to
+              <span class='green'>model by default</span>.
+            </li>
+          </ul>
+        </section>
+        <section>
+          <h1>
+            In the <span class='green'>MVC</span>:
+          </h1>
+          <h2>
+            Why it should not be
+            <br>
+            in <span class='red'>controller or view</span>?
+          </h2>
+          <p>Because they are hard to:</p>
+          <ul>
+            <li>reuse</li>
+            <li>test</li>
+            <li>maintain</li>
+          </ul>
+        </section>
+        <section>
+          <h2>
+            A definition of being fat
+          </h2>
+          <h2>
+            <span class='red'>1000 Lines of code</span>
+          </h2>
+          <p>But it depends on:</p>
+          <ul>
+            <li>Project Size</li>
+            <li>Docs</li>
+          </ul>
+        </section>
+        <section>
+          <h2>Talkable Example</h2>
+          <pre style='width: 100%'><code>$ wc -l app/models/* | sort -n | tail</code></pre>
+          <pre class='left' style='width: 50%'><code class='ruby'>   # 2016-01-21&#x000A;   532 app/models/incentive.rb&#x000A;   540 app/models/person.rb&#x000A;   544 app/models/visitor_offer.rb&#x000A;   550 app/models/reward.rb&#x000A;   571 app/models/web_hook.rb&#x000A;   786 app/models/site.rb&#x000A;   790 app/models/referral.rb&#x000A;   943 app/models/campaign.rb&#x000A;   998 app/models/offer.rb&#x000A; 14924 total</code></pre>
+          <pre class='right' style='width: 50%'><code class='ruby'>   # 2017-12-06&#x000A;   585 app/models/reward.rb&#x000A;   588 app/models/incentive.rb&#x000A;   592 app/models/view_setup.rb&#x000A;   597 app/models/web_hook.rb&#x000A;   602 app/models/visitor_offer.rb&#x000A;   627 app/models/referral.rb&#x000A;   637 app/models/site.rb&#x000A;   756 app/models/offer.rb&#x000A;  1193 app/models/campaign.rb&#x000A; 17831 total</code></pre>
+          <h3 class='fragment'>TODO: move serialization out of <code>campaign.rb</code></h3>
+        </section>
+        <section>
+          <h2>
+            Existing techniques
+          </h2>
+          <ul>
+            <li>
+              Services
+              <ul>
+                <li>Separated utility class</li>
+              </ul>
+            </li>
+            <li>
+              Concerns
+              <ul>
+                <li>Modules that get included to models</li>
+              </ul>
+            </li>
+            <li>
+              Decorators
+              <ul>
+                <li>Classes that wrap existing model to plug new methods</li>
+              </ul>
+            </li>
+          </ul>
+        </section>
+        <section>
+          <h2>
+            What do we expect?
+          </h2>
+          <ul>
+            <li>
+              <p>Standard:</p>
+              <ul>
+                <li>
+                  Reusable
+                  code
+                </li>
+                <li>
+                  Easy to
+                  test
+                </li>
+                <li>Good API</li>
+              </ul>
+            </li>
+            <li class='fragment'>
+              <p>Advanced:</p>
+              <ul>
+                <li>Effective data model</li>
+                <li>
+                  <span class='green'>More</span>
+                  features per second
+                </li>
+                <li>Data Safety</li>
+              </ul>
+            </li>
+          </ul>
+        </section>
+        <section>
+          <h1>
+            Good API
+          </h1>
+          <p>Is a user connected to facebook?</p>
+          <pre><code>user.has_facebook_profile?&#x000A;# OR&#x000A;FacebookService.has_facebook_profile?(user)&#x000A;# OR&#x000A;FacebookWrapper.new(user).has_facebook_profile?</code></pre>
+        </section>
+        <section>
+          <h1>
+            The need of Services
+          </h1>
+          <h2>
+            When amount of utils
+          </h2>
+          <h2>
+            that support Model goes higher
+          </h2>
+          <h2>
+            extract them to service is good idea.
+          </h2>
+        </section>
+        <section>
+          <h2>
+            Move class methods
+            <br>
+            between files is cheap
+          </h2>
+          <pre><code class='ruby'># move&#x000A;User.create_from_facebook&#x000A;# to&#x000A;UserService.create_from_facebook&#x000A;# or&#x000A;FacebookService.create_user</code></pre>
+        </section>
+        <section>
+          <h2>
+            Organise services by
+            <span class='green'>process</span>
+          </h2>
+          <h2>
+            rather than
+            <span class='red'>object</span>
+            they operate on
+          </h2>
+          <p>Otherwise at some moment UserService would not be enough</p>
+        </section>
+        <section>
+          <h2>
+            The problem of services
+          </h2>
+          <p>Service is separated utility class.</p>
+          <pre><code>module CommentService&#x000A;  def self.create(attributes)&#x000A;    comment = Comment.create!(attributes)&#x000A;    deliver_notification(comment)&#x000A;  end&#x000A;end</code></pre>
+          <h4>
+            “Я знаю откуда что берется”
+          </h4>
+        </section>
+        <section>
+          <h1>
+            Services
+            <span class='red'>don’t</span>
+          </h1>
+          <h1>
+            provide
+            <span class='green'>default behavior</span>
+          </h1>
+        </section>
+        <section>
+          <h2>
+            The Need of Default Behavior
+          </h2>
+          <p>Object should encapsulate behavior:</p>
+          <ul>
+            <li>
+              Data Rules
+              <ul>
+                <li>
+                  Set of rules that a model should fit at the programming level
+                  <ul>
+                    <li>Ex: A comment should have an author</li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+            <li>
+              Business Rules
+              <ul>
+                <li>
+                  Set of rules that a model should fit to exist in the real world
+                  <ul>
+                    <li>Ex: A comment should deliver an email notification</li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </section>
+        <section>
+          <h2>
+            What is a model?
+          </h2>
+          <h3>The model is an imitation of real object</h3>
+          <h3>that reflects some it’s behaviors</h3>
+          <h3>that we are focused on.</h3>
+          <h5>
+            Wikipedia
+          </h5>
+        </section>
+        <section>
+          <h1>
+            Model
+          </h1>
+          <h2>
+            is a best place for
+            <span class='green'>default behaviour</span>
+          </h2>
+          <h4>MVC authors meant that</h4>
+        </section>
+        <section>
+          <h1>
+            Implementation
+          </h1>
+          <p>Using built-in Rails features:</p>
+          <ul>
+            <li>ActiveRecord::Callbacks</li>
+          </ul>
+        </section>
+        <section>
+          <h2>
+            Hooks in models
+          </h2>
+          <p>We create default behavior and our data is safe.</p>
+          <p>Example: Comment can not be created without notification.</p>
+          <pre><code>class Comment &lt; AR::Base&#x000A;  after_create :send_notification&#x000A;end</code></pre>
+        </section>
+        <section>
+          <h2>
+            API comparison
+          </h2>
+          <p>
+            A comment should be made like this:
+          </p>
+          <pre><code>Comment.create&#x000A;# or&#x000A;CommentService.create</code></pre>
+          <p>
+            How to deliver the knowledge to
+            <span class='red'>XXX</span>
+            team members?
+          </p>
+        </section>
+        <section>
+          <h2>
+            Successful Projects tend to do
+          </h2>
+          <h1>
+            <span class='green'>one thing</span>
+          </h1>
+          <h2>
+            in many different ways
+          </h2>
+          <h2>
+            rather than <span class='red'>a lot of</span> things
+          </h2>
+        </section>
+        <section>
+          <ul>
+            <li>Comment on a web site</li>
+            <li>Comment in native mobile iOS app</li>
+            <li>Comment in native mobile Android app</li>
+            <li>Comment by replying to an email letter</li>
+            <li>Automatically generate comments</li>
+          </ul>
+        </section>
+        <section>
+          <h1>
+            <span class='red'>Edge cases</span>
+          </h1>
+          <h3>
+            In all cases data created in regular way
+          </h3>
+          <h3>
+            In one edge cases special rules applied
+          </h3>
+        </section>
+        <section>
+          <h2>
+            Service with options
+          </h2>
+          <pre><code>module CommentService&#x000A;  def self.create(&#x000A;    attrs, skip_notification = false)&#x000A;end</code></pre>
+        </section>
+        <section>
+          <h1>
+            Default behavior
+          </h1>
+          <h1>
+            and
+            <span class='red'>edge cases</span>
+          </h1>
+          <ul>
+            <li>
+              Hey model, create my comment.
+              <ul>
+                <li>Ok</li>
+              </ul>
+            </li>
+            <li>
+              Hey model, why did you send the notification?
+              <ul>
+                <li>Because you didn't say you don't need it</li>
+              </ul>
+            </li>
+            <li>
+              Hey model, create model without notification
+              <ul>
+                <li>Ok</li>
+              </ul>
+            </li>
+          </ul>
+        </section>
+        <section>
+          <h1>
+            Support parameter in model
+          </h1>
+          <pre><code>class Comment &lt; AR::Base&#x000A;  attr_accessor :skip_comment_notification&#x000A;  after_create do&#x000A;    unless self.skip_comment_notification&#x000A;      send_notification&#x000A;    end&#x000A;  end&#x000A;end</code></pre>
+          <p>
+            <code>#skip_comment_notification</code>
+            is used only in edge cases.
+          </p>
+        </section>
+        <section>
+          <h2>
+            <span class='green'>Default Behaviour</span>
+            is hard to make
+          </h2>
+          <h2>
+            But it solves
+            <span class='red'>communication problems</span>
+          </h2>
+        </section>
+        <section>
+          <h2>
+            Good Service Example
+          </h2>
+          <pre><code>Customer.has_many :purchases&#x000A;Purchase.has_many :ordered_items&#x000A;OrderItem.belongs_to :product</code></pre>
+          <pre class='fragment'><code class='ruby'>class PhoneOrder&#x000A;  includes ActiveModel::AttributesAssignment&#x000A;  def initialize(attributes)&#x000A;  def save!&#x000A;end</code></pre>
+          <p class='fragment'>
+            PhoneOrder is only different from online one only by
+            <br>
+            how its made not by how it behaves afterwards.
+          </p>
+        </section>
+        <section>
+          <h1>Validation</h1>
+          <h2>Custom</h2>
+          <pre><code class='ruby'>class PhoneOrder&#x000A;  includes ActiveModel::Validation&#x000A;  validate :somthing, :somehow&#x000A;  ...&#x000A;end</code></pre>
+          <h2>Reused</h2>
+          <pre><code class='ruby'>class PhoneOrder&#x000A;  def valid?&#x000A;    @purchase.valid? && @customer.valid? && &#x000A;      @item.all?(&:valid?)&#x000A;  end&#x000A;end</code></pre>
+        </section>
+        <section>
+          <h2>
+            What is the difference?
+          </h2>
+          <pre><code>PhoneOrder.new(...).save!&#x000A;&#x000A;Comment.after_create :send_notification</code></pre>
+          <ul>
+            <li>
+              <p>Business rules:</p>
+              <ul>
+                <li>An Order could be created by phone call</li>
+                <li>A Comment should send an email notification</li>
+              </ul>
+            </li>
+          </ul>
+        </section>
+        <section>
+          <p>
+            <br>
+            <br>
+            <br>
+          </p>
+          <h1>
+            Model stands for
+            <span class='green'>should</span>
+          </h1>
+          <h1>
+            Service stands for
+            <span class='green'>could</span>
+          </h1>
+          <h2 class='fragment'>
+            Please do not confuse
+            <br>
+            <span class='green'>should</span>
+            with
+            <span class='red'>must</span>
+          </h2>
+        </section>
+        <section>
+          <table>
+            <tr>
+              <th>Service</th>
+              <th>Model</th>
+            </tr>
+            <tr>
+              <td>Builder</td>
+              <td>Holder</td>
+            </tr>
+            <tr>
+              <td>Workflow</td>
+              <td>Static</td>
+            </tr>
+            <tr>
+              <td>Opportunity</td>
+              <td>Protection</td>
+            </tr>
+            <tr>
+              <td>Custom</td>
+              <td>Default</td>
+            </tr>
+            <tr>
+              <td>Local</td>
+              <td>Universal</td>
+            </tr>
+          </table>
+        </section>
+        <section>
+          <h2>
+            The model is still
+            <span class='red'>fat</span>.
+          </h2>
+          <h2>
+            What to do?
+          </h2>
+        </section>
+        <section>
+          <h1>
+            Split model into
+            <span class='green'>Concerns</span>
+          </h1>
+          <pre><code>class User &lt; AR::Base&#x000A;  include FacebookProfile&#x000A;end&#x000A;&#x000A;module FacebookProfile&#x000A;  has_one :facebook_profile # simplified&#x000A;  def connected_to_facebook?&#x000A;end</code></pre>
+        </section>
+        <section>
+          <h2>
+            Use Concerns
+          </h2>
+          <pre><code>class Comment &lt; AR::Base&#x000A;  include CommentNotification&#x000A;  include FeedActivityGeneration&#x000A;  include Archivable&#x000A;end</code></pre>
+          <p>
+            Rails default:
+            <code>app/models/concerns/*</code>
+          </p>
+        </section>
+        <section>
+          <h2>
+            You may think of
+          </h2>
+          <h2>
+            Concerns
+            <span class='red'>violate SRP</span>
+          </h2>
+          <h2 class='fragment'>
+            And you are right!
+          </h2>
+        </section>
+        <section>
+          <h2>
+            Single Responsibility Principle
+          </h2>
+          <h1>
+            does not work
+          </h1>
+          <h2 class='fragment'>
+            for real world models
+          </h2>
+        </section>
+        <section>
+          <h2>
+            There is no a single thing
+          </h2>
+          <h2>
+            in the universe that follows the SRP
+          </h2>
+          <div class='clearfix'>
+            <p class='right' style='width: 30%'><img alt='Proton' src='http://science.jrank.org/article_images/ep201102/science/science982.jpg' style='width: 200px'></p>
+            <pre class='left' style='width: 70%'><code>class Proton&#x000A;  include Gravitation&#x000A;  include ElectroMagnetism&#x000A;  include StrongNuclearForce&#x000A;  include WeekNuclearForce&#x000A;end&#x000A;</code></pre>
+          </div>
+        </section>
+        <section>
+          <h2>
+            <div class='green'>Model Concerns</div>
+            are
+            unavoidable
+          </h2>
+          <h3>
+            if you want to follow
+            <div class='green'>MVC ideas</div>
+          </h3>
+        </section>
+        <section>
+          <h2>
+            Concerns are
+            <span class='green'>Vertical slicing</span>
+          </h2>
+          <h4>
+            <span class='red'>Unlike MVC</span>
+            which is horizontal slicing.
+          </h4>
+        </section>
+        <section>
+          <h2>
+            Where are decorators?
+          </h2>
+          <pre><code class='ruby'>user = FacebookWrapper.new(user)&#x000A;# OR&#x000A;class User&#x000A;  include FacebookProfile&#x000A;end&#x000A;</code></pre>
+          <pre><code>#connected_to_facebook?&#x000A;#facebook_image&#x000A;#profile_url</code></pre>
+          <p>
+            Trade an API for less methods in object
+          </p>
+        </section>
+        <section>
+          <h2>
+            Good Decorators Example
+          </h2>
+          <pre><code class='ruby'>class SiteDashboardController&#x000A;  def show&#x000A;    @site = Site.find(params[:id])&#x000A;    @dashboard = SiteDashboard.new(@site)&#x000A;  end&#x000A;end</code></pre>
+        </section>
+        <section>
+          <h1>
+            When decoration is effective?
+          </h1>
+          <ul>
+            <li>Situational API</li>
+            <li>Wrapping around multiple objects</li>
+            <li>Wrapping around collection of objects</li>
+            <li>Under-the-hood class</li>
+          </ul>
+        </section>
+        <section>
+          <h2>
+            Datagrid Gem
+          </h2>
+          <h3>
+            Example of collection wrapper
+          </h3>
+          <p>
+            <a href='https://github.com/bogdan/datagrid'>https://github.com/bogdan/datagrid</a>
+          </p>
+          <pre><code>UsersGrid.new(&#x000A;  last_request: Date.today, &#x000A;  created_at: 1.month.ago..Time.now)&#x000A;&#x000A;class UsersGrid&#x000A;  scope { User }&#x000A;&#x000A;  filter(:created_at, :date, range: true)&#x000A;  filter(:last_request_at, :datetime, range: true)&#x000A;  filter(:ip_address, :string)&#x000A;    &#x000A;  column(:id)&#x000A;  column(:email)&#x000A;  column(:last_request_at)&#x000A;end</code></pre>
+        </section>
+        <section>
+          <h1>
+            Wrapping Around
+            <br>
+            Built-in object
+          </h1>
+          <p>
+            <a href='https://github.com/bogdan/furi'>https://github.com/bogdan/furi</a>
+          </p>
+          <pre><code>u = Furi.parse(&#x000A;  "http://bogdan.github.com/index.html")&#x000A;u.subdomain # => 'bogdan'&#x000A;u.extension # => 'html'&#x000A;u.ssl?      # => false&#x000A;&#x000A;module Furi&#x000A;  def self.parse(string)&#x000A;    Furi::Uri.new(string).parse&#x000A;  end&#x000A;end</code></pre>
+        </section>
+        <section>
+          <h2>
+            Ex.1 User + Facebook
+          </h2>
+          <table>
+            <tr>
+              <td>
+                <code style='width: 70%'>has_one :facebook_profile</code>
+              </td>
+              <td>
+                Easy
+              </td>
+              <td>
+                => Model
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <code style='width: 70%'>register_user_from_facebook</code>
+              </td>
+              <td>
+                Could
+              </td>
+              <td>
+                => Service
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <code style='width: 70%'>connect_facebook_profile</code>
+              </td>
+              <td>
+                Could
+              </td>
+              <td>
+                => Service
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <code style='width: 70%'>connected_to_facebook?</code>
+              </td>
+              <td>
+                Should
+              </td>
+              <td>
+                => Model
+              </td>
+            </tr>
+          </table>
+          <ul>
+            <li>Every user should know if it is connected to facebook or not</li>
+          </ul>
+        </section>
+        <section>
+          <h2>
+            Ex.2 Deliver comment notification
+          </h2>
+          <ul>
+            <li>
+              Comment
+              <code>#send_notification</code>
+              => Model
+              <ul>
+                <li>Default Behaviour</li>
+                <li>Even if exceptions exist</li>
+              </ul>
+            </li>
+          </ul>
+        </section>
+        <section>
+          <h1>
+            Concerns Base
+          </h1>
+          <ul>
+            <li>Attributes</li>
+            <li>
+              Associations
+              <ul>
+                <li>
+                  <code>has_one</code>
+                </li>
+                <li>
+                  <code>has_many</code>
+                </li>
+                <li>
+                  <code>has_and_belongs_to_many</code>
+                </li>
+              </ul>
+            </li>
+          </ul>
+          <p>
+            But rarely
+          </p>
+          <ul>
+            <li>
+              <ul>
+                <li>
+                  <code>belongs_to</code>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </section>
+        <section>
+          <h2>
+            Libraries using Concerns
+          </h2>
+          <ul>
+            <li>ActiveRecord</li>
+            <li>ActiveModel</li>
+            <li>Devise</li>
+            <li>Datagrid</li>
+          </ul>
+          <div class='fragment'>
+            <br>
+            <h5>
+              If it is
+              <span class='green'>possible</span>
+              for such a
+              <span class='red'>complicated library</span>
+              <br>
+            </h5>
+            <h4>
+              then it is
+              <span class='red'>easy</span>
+              for
+              <span class='green'>regular projects</span>
+            </h4>
+          </div>
+        </section>
+        <section>
+          <h1>
+            Summary
+          </h1>
+        </section>
+        <section>
+          <h2>
+            Basic application architecture
+          </h2>
+          <p>
+            <table class='full-border'>
+              <tr>
+                <td colspan='100%'>View</td>
+              </tr>
+              <tr>
+                <td colspan='100%'>Controller</td>
+              </tr>
+              <tr>
+                <td colspan='2' style=''>Services</td>
+                <td colspan='2' style=''>Decorators</td>
+              </tr>
+              <tr>
+                <td colspan='100%' style=''>Model</td>
+              </tr>
+              <tr>
+                <td>Concern</td>
+                <td>Concern</td>
+                <td>Concern</td>
+                <td>Concern</td>
+              </tr>
+            </table>
+          </p>
+        </section>
+        <section>
+          <h1>
+            Inject
+            <span class='green'>Service</span>
+            between Model and Controller
+          </h1>
+          <h2>
+            if you need them
+          </h2>
+        </section>
+        <section>
+          <h1>
+            <span class='green'>Could?</span>
+            =&gt;
+            <span class='red'>Service</span>
+          </h1>
+          <h1>
+            <span class='green'>Should?</span>
+            =&gt;
+            <span class='red'>Model</span>
+          </h1>
+        </section>
+        <section>
+          <h1>
+            <span class='red'>SRP</span>
+            is a misleading principle in the
+            <span class='green'>MVC</span>
+          </h1>
+          <h2>
+            It should not inhibit you from having
+          </h2>
+          <h2>
+            a Better Application Model
+          </h2>
+        </section>
+        <section>
+          <h2>
+            <span class='red'>Fat</span>
+            models =&gt;
+            <span class='green'>Thin</span>
+            Concerns
+          </h2>
+        </section>
+        <section>
+          <h1>
+            Decorators
+          </h1>
+          <h2>
+            are for
+            <span class='green'>situaltional APIs</span>
+            <br>
+            in
+            <span class='red'>really large projects</span>
+          </h2>
+        </section>
+        <section>
+          <h2>
+            <span class='green'>Ruby</span>
+            is all you need
+          </h2>
+          <p>
+            All
+            <span class='red'>promising gems</span>
+            don't do much
+          </p>
+          <p>ActiveModel is the only real helper</p>
+        </section>
+        <section>
+          <h1>
+            The
+            <span class='red'>End</span>
+          </h1>
+          <h2>
+            Thanks for
+            <span class='green'>your time</span>
+          </h2>
+          <h3>
+            <a href='http://gusiev.com'>http://gusiev.com</a>
+          </h3>
+          <h3>
+            <a href='https://github.com/bogdan'>https://github.com/bogdan</a>
+          </h3>
+        </section>
+        <section>
+          <h1>
+            <p>Buktopuha</p>
+          </h1>
+        </section>
+        <section>
+          <h2>How many object are made here and name them?</h2>
+          <pre><code class='ruby'>2.times do |i|&#x000A;  :hello.to_s&#x000A;end</code></pre>
+        </section>
+        <section>
+          <h3>How many SQL queries (including cached) is generated here?</h3>
+          <pre><code class='ruby'>Campaign.has_many :localizations&#x000A;&#x000A;def localize_by_key(key)&#x000A;  @campaign.localizations.preload(:variants).find do |l|&#x000A;    l.key == key&#x000A;  end.text&#x000A;end</code></pre>
+          <pre><code class='haml'>= localize_by_key("offer_title")&#x000A;= localize_by_key("offer_description")</code></pre>
+        </section>
+        <section>
+          <h1>Rails v3</h1>
+          <pre><code class='ruby'>Post.has_many :comments, order("created_at desc")</code></pre>
+          <h1>Rails v4</h1>
+          <pre><code class='ruby'>Post.has_many :comments, -> { order("created_at desc") }</code></pre>
+        </section>
+        <section>
+          <p>The code that uploads toxic assets to FTP every day</p>
+          <h3>Why is the date passet to worker as argument?</h3>
+          <pre><code class='ruby'># Runs daily via crontab&#x000A;task :upload_toxic_asset_to_ftp => :environment do&#x000A;  ToxicUploaderWorker.perform_async(Date.today)&#x000A;end&#x000A;&#x000A;class ToxicUploaderWorker&#x000A;  def perform(date)&#x000A;    file_name = "toxic-assets-#{date}.csv"&#x000A;    upload_to_ftp(file_name, to_csv(Asset.where(created_at: date)))&#x000A;  end&#x000A;end</code></pre>
         </section>
       </div>
     </div>
     <script src='http://lab.hakim.se/reveal-js/lib/js/head.min.js'></script>
-    <script src='/javascripts/reveal/reveal.js'></script>
+    <script src='https://rawgithub.com/hakimel/reveal.js/3.6.0/js/reveal.js'></script>
     <script>
       // https://github.com/hakimel/reveal.js#configuration
       Reveal.initialize({
@@ -621,7 +967,7 @@
       		{ src: 'http://lab.hakim.se/reveal-js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
       		{ src: 'http://lab.hakim.se/reveal-js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
       		{ src: 'http://lab.hakim.se/reveal-js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
-          { src: '/javascripts/reveal/plugin/notes/notes.js', async: true }
+          { src: 'https://rawgithub.com/hakimel/reveal.js/3.6.0/plugin/notes/notes.js', async: true }
       		// { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
       		// { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
       		// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }

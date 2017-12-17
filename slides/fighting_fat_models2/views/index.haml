@@ -133,6 +133,7 @@
             %li Project Size
             %li Docs
         %section
+          %h2 Talkable Example
           %pre{style: "width: 100%"}
             %code
               :preserve
@@ -434,7 +435,6 @@
             %code.ruby
               :preserve
                 class PhoneOrder
-                  includes ActiveModel::Validation
                   includes ActiveModel::AttributesAssignment
                   def initialize(attributes)
                   def save!
@@ -443,6 +443,27 @@
             PhoneOrder is only different from online one only by 
             %br
             how its made not by how it behaves afterwards.
+        %section
+          %h1 Validation
+          %h2 Custom
+          %pre
+            %code.ruby
+              :preserve
+                class PhoneOrder
+                  includes ActiveModel::Validation
+                  validate :somthing, :somehow
+                  ...
+                end
+          %h2 Reused
+          %pre
+            %code.ruby
+              :preserve
+                class PhoneOrder
+                  def valid?
+                    @purchase.valid? && @customer.valid? && 
+                      @item.all?(&:valid?)
+                  end
+                end
         %section
           %h2
             What is the difference?
@@ -599,6 +620,18 @@
                 #profile_url
           %p
             Trade an API for less methods in object
+        %section
+          %h2
+            Good Decorators Example
+          %pre
+            %code.ruby
+              :preserve
+                class SiteDashboardController
+                  def show
+                    @site = Site.find(params[:id])
+                    @dashboard = SiteDashboard.new(@site)
+                  end
+                end
         %section
           %h1
             When decoration is effective?
@@ -858,27 +891,15 @@
           %h1
             %p Buktopuha
         %section
-
-          %h1 Rails v3
+          %h2 How many object are made here and name them?
           %pre
             %code.ruby
               :preserve
-                Post.has_many :comments, order("created_at desc")
-          %h1 Rails v4
-          %pre
-            %code.ruby
-              :preserve
-                Post.has_many :comments, -> { order("created_at desc") }
-        %section
-          %h2 How many object are made here?
-          %pre
-            %code.ruby
-              :preserve
-                10.times do |i|
+                2.times do |i|
                   :hello.to_s
                 end
         %section
-          %h3 How many SQL queries is generated here?
+          %h3 How many SQL queries (including cached) is generated here?
           %pre
             %code.ruby
               :preserve
@@ -894,8 +915,37 @@
               :preserve
                 = localize_by_key("offer_title")
                 = localize_by_key("offer_description")
+        %section
+
+          %h1 Rails v3
+          %pre
+            %code.ruby
+              :preserve
+                Post.has_many :comments, order("created_at desc")
+          %h1 Rails v4
+          %pre
+            %code.ruby
+              :preserve
+                Post.has_many :comments, -> { order("created_at desc") }
+        %section
+          %p The code that uploads toxic assets to FTP every day
+          %h3 Why is the date passet to worker as argument?
+          %pre
+            %code.ruby
+              :preserve
+                # Runs daily via crontab
+                task :upload_toxic_asset_to_ftp => :environment do
+                  ToxicUploaderWorker.perform_async(Date.today)
+                end
+
+                class ToxicUploaderWorker
+                  def perform(date)
+                    file_name = "toxic-assets-\#{date}.csv"
+                    upload_to_ftp(file_name, to_csv(Asset.where(created_at: date)))
+                  end
+                end
     %script{:src => "http://lab.hakim.se/reveal-js/lib/js/head.min.js"}
-    %script{:src => "/javascripts/reveal/reveal.js"}
+    %script{:src => "https://rawgithub.com/hakimel/reveal.js/3.6.0/js/reveal.js"}
     :javascript
       // https://github.com/hakimel/reveal.js#configuration
       Reveal.initialize({
@@ -913,7 +963,7 @@
       		{ src: 'http://lab.hakim.se/reveal-js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
       		{ src: 'http://lab.hakim.se/reveal-js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
       		{ src: 'http://lab.hakim.se/reveal-js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
-          { src: '/javascripts/reveal/plugin/notes/notes.js', async: true }
+          { src: 'https://rawgithub.com/hakimel/reveal.js/3.6.0/plugin/notes/notes.js', async: true }
       		// { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
       		// { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
       		// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
