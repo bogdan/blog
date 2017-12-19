@@ -7,5 +7,4 @@ url: "http://gusiev.com"
 content_delimeter: "<!--more-->"
 gems: [jekyll-paginate]
 exclude:
-  - slides
   - build
