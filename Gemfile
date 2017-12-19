@@ -5,7 +5,6 @@ source 'http://rubygems.org'
 
 #gem "gsl-nmatrix", git: "https://github.com/SciRuby/rb-gsl.git"
 #gem "gli", "1.6.0"
-gem "showoff"
 gem "rake"
 gem "jekyll"
 gem "jekyll-paginate"
