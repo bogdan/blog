@@ -30,12 +30,16 @@
       %p.fragment Fails Driven Process
     %section
       %h2 Code Review Properties
+
+      %h4 Significance
       %ul
         %li Optional
         %li Required
+      %h4 Process
       %ul
         %li Informal
         %li Formal
+      %h4 People
       %ul
         %li Dedicated
         %li Distributed
@@ -59,9 +63,12 @@
         %li Create a Branch
         %li Open a Pull Request
         %li Wait for review
-        %li Discuss
-        %li Fix
+        %li 
+          .green Discuss &amp; Fix
         %li Merge
+    %section
+      %p
+        Code Review is a process of reviewing and approving code changes before they get accepted to the mainstream
     %section
       %h3 Code Review Order
       
@@ -84,7 +91,7 @@
       %h2 Where to look?
 
       %p
-        Things that are most signficant should be reviewed first
+        Things that are most significant should be reviewed first
       %p.fragment
         which are ones that are the most hard to change.
 
@@ -92,16 +99,23 @@
       %h2 Top to Bottom Code Review 
 
       %ol
+        %li Change Goal
         %li Database Schema
         %li Public APIs
         %li Object Oriented Design
         %li Method Signatures
         %li Implementation
         %li Performance
+        %li Security
         %li Test Coverage
         %li Code Style, Typos, Whitespace
     %section
-      %h2 Database Deisgn
+      %h2 Change Goal
+      %ol
+        %li Problem Solved
+        %li High Level Security
+    %section
+      %h2 Database Design
 
       %ol
         %li Tables Relations
@@ -158,12 +172,33 @@
         %li Approach
         %li Algorithm
         %li Performance
+        %li Minimalism
         %li Local Variable Names
 
     %section
-      %h1 Performance
+      %h1 Performance &amp; Security
 
-      %p In the ideal world performance should not change the code structure
+      %p In the ideal world performance and security should not change the code structure
       %p In practice it can
       %p.fragment But we should try hard to fix performance problems only at the implementation level
         
+    %section
+      %h2 Test Coverage
+
+      %ol
+        %li Code Coverage
+        %li Use Cases Coverage
+        %li Tests Implementation
+    %section
+      %h2 Top to bottom Idea
+      
+      %h3 Bad behaviour
+
+      %ul
+        %li Discuss the method name before the method existence as a fact
+        %li Discuss Code Style before implementation approach 
+    %section
+      %h2 Boss control approach
+      
+      %p Ensure top points from the list are always performed
+      %p Choose X things on top of the list to double-check and delegate the rest completely
