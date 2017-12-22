@@ -1,0 +1,169 @@
+%html
+  %head
+  %body
+    %section
+      %h2 Historical code review
+
+      %img
+
+      %h2 Code review tend to be natural
+    %section
+      %h2 Wrong Timing
+      %img
+
+    %section
+
+      %h2 Everything had changed by
+      %h1 GitHub
+
+    %section
+      %h2 Do I need a code review?
+      %h3 IMHO: new projects don't need a code review at all
+
+      %ol
+        %li Spontanuous Code Reviews
+        %li "When I am not sure" code reviews
+        %li Formalizing the process
+        %li Required code review for certain changes
+        %li Required code reviews for everything
+
+      %p.fragment Fails Driven Process
+    %section
+      %h2 Code Review Properties
+      %ul
+        %li Optional
+        %li Required
+      %ul
+        %li Informal
+        %li Formal
+      %ul
+        %li Dedicated
+        %li Distributed
+
+    %section
+      %h2 Position in a process
+
+      %ol
+        %li Planning
+        %li Implementation
+        %li Code Review
+        %li QA
+        %li Release
+
+      %p.fragment QA &lt;-&gt; Code Review Holy war
+      %p.fragment Formally QA after Code Review
+
+    %section
+      %ol
+        %li Make a fork (optional)
+        %li Create a Branch
+        %li Open a Pull Request
+        %li Wait for review
+        %li Discuss
+        %li Fix
+        %li Merge
+    %section
+      %h3 Code Review Order
+      
+      %pre
+        %code.diff
+          :preserve
+            # whitespace demo diff
+
+    %section
+      %h2 Fix common things
+
+      %ul
+        %li Typos
+        %li Whitespace
+        %li Code Style
+      
+      %p.fragment Wrong Direction!
+
+    %section
+      %h2 Where to look?
+
+      %p
+        Things that are most signficant should be reviewed first
+      %p.fragment
+        which are ones that are the most hard to change.
+
+    %section
+      %h2 Top to Bottom Code Review 
+
+      %ol
+        %li Database Schema
+        %li Public APIs
+        %li Object Oriented Design
+        %li Method Signatures
+        %li Implementation
+        %li Performance
+        %li Test Coverage
+        %li Code Style, Typos, Whitespace
+    %section
+      %h2 Database Deisgn
+
+      %ol
+        %li Tables Relations
+        %li Data Storage
+        %li Naming
+    %section
+      %h2 Public APIs
+      %h3 Using HTTP API as example
+      %ol
+        %li Efficiency
+        %li Logical Endpoints
+        %li Request Parameters
+        %li Response Format
+    %section
+      %h2 API inefficiency example
+
+      %pre
+        %code.ruby
+          :preserve
+            Purchase.has_one :referral
+      %pre
+        %code
+          :preserve
+            GET /purchases/:order_number
+              {
+                id: 1,
+                order_number: '1838382',
+                referral_id: 17
+              }
+
+            POST  /referrals/:id/approve
+      %pre.fragment
+        %code
+          :preserve
+            POST /purchases/:order_number/referral/approve
+    %section
+      %h2 Object Oriented Design
+      %ol
+        %li Reflects Real World
+        %li Inheritance
+        %li Constructors
+    %section
+      %h2 Method Signatures
+      
+      %ol
+        %li Placement
+        %li Arguments
+        %li Name
+    %section
+      %h2 Implementation
+
+      %p Each method and class separately
+      %ol
+        %li Approach
+        %li Algorithm
+        %li Performance
+        %li Local Variable Names
+
+    %section
+      %h1 Performance
+
+      %p In the ideal world performance should not change the code structure
+      %p In practice it can
+      %p.fragment But we should try hard to fix performance problems only at the implementation level
+        
