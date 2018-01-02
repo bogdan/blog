@@ -1,0 +1,133 @@
+<!doctype html>
+%html{:lang => "en"}
+  %head
+    %meta{:charset => "utf-8"}/
+    %title Fighting Fat Models
+    %meta{:content => "", :name => "description"}/
+    %meta{:content => "Bogdan Gusiev", :name => "author"}/
+    %meta{:content => "yes", :name => "apple-mobile-web-app-capable"}/
+    %meta{:content => "black-translucent", :name => "apple-mobile-web-app-status-bar-style"}/
+    %meta{:content => "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no", :name => "viewport"}/
+    %link{:href => "http://lab.hakim.se/reveal-js/css/reveal.css", :rel => "stylesheet"}/
+    %link{:href => "https://rawgithub.com/hakimel/reveal.js/master/css/theme/white.css", :rel => "stylesheet"}/
+    / For syntax highlighting
+    %link{:href => "http://lab.hakim.se/reveal-js/lib/css/zenburn.css", :rel => "stylesheet"}/
+    / If the query includes 'print-pdf', use the PDF print sheet
+    :javascript
+      document.write( '<link rel="stylesheet" href="http://lab.hakim.se/reveal-js/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+    :sass
+      body .reveal
+        font-size: 30px !important
+      .yellow
+        color: yellow
+      .reveal
+        section
+          pre
+            code
+              padding: 20px 5px
+              font-size: 1.30em
+              line-height: 1.3em
+          ul
+            min-width: 50%
+          .red
+            color: #e02c2d
+          .green
+            color: #17cc1e
+          .yellow
+            color: yellow
+          .blue
+            color: #1b91ff
+          .left
+            float: left
+          .right
+            float: right
+          .clearfix
+            overflow: hidden
+          table.full-border
+            border-collapse: collapse
+            td
+              border: 1px solid black !important
+          img
+            border: 0px
+            box-shadow: 0 0 0 0
+      
+          
+        
+  %body
+    .reveal
+      .slides
+        %section
+          %h1
+            Code Review Like a Boss
+          %h2
+            Bogdan Gusiev
+        %section
+          %h2
+            Bogdan G.
+          %ul
+            %li is 9 years in IT
+            %li
+              6 years with Ruby and Rails
+              %ul
+                %li Long Run Rails Contributor
+        %section
+          %h1
+            Some of my gems
+          %ul
+            %li
+              %a{:href => "http://github.com/bogdan"} http://github.com/bogdan
+              %ul
+                %li
+                  %a{:href => "https://github.com/bogdan/datagrid"} datagrid
+                %li
+                  %a{:href => "https://github.com/railsware/js-routes"} js-routes
+                %li
+                  %a{:href => "https://github.com/bogdan/accepts_values_for"} accepts_values_for
+                %li
+                  %a{:href => "https://github.com/bogdan/furi"} furi
+        -#%section
+          %h2
+            My Blog
+          %h2
+            %a{:href => "http://gusiev.com"} http://gusiev.com
+        %section
+          %h1
+            %a{:href => "http://talkable.com"}
+              %img{:alt => "Talkable", style: '', :src => "http://d2jjzw81hqbuqv.cloudfront.net/assets/static/logo-dark-large.png"}/
+          %ul
+            %li
+              7 years old startup
+            %li
+              A lot of code
+            %li
+              Rails version from 2.0 to 5.1
+        %section
+          %h2 Code Review Process
+          %h2 Historical approach
+
+          
+    %script{:src => "http://lab.hakim.se/reveal-js/lib/js/head.min.js"}
+    %script{:src => "https://rawgithub.com/hakimel/reveal.js/3.6.0/js/reveal.js"}
+    :javascript
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+      	controls: true,
+      	progress: true,
+      	history: true,
+      	center: true,
+
+      	theme: Reveal.getQueryHash().theme || 'simple', // available themes are in /css/theme
+      	transition: Reveal.getQueryHash().transition || 'fade', // default/cube/page/concave/zoom/linear/fade/none
+
+      	// Optional libraries used to extend on reveal.js
+      	dependencies: [
+      		// { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+      		{ src: 'http://lab.hakim.se/reveal-js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      		{ src: 'http://lab.hakim.se/reveal-js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      		{ src: 'http://lab.hakim.se/reveal-js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+          { src: 'https://rawgithub.com/hakimel/reveal.js/3.6.0/plugin/notes/notes.js', async: true }
+      		// { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+      		// { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
+      		// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+      	]
+      });
