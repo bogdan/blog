@@ -1,0 +1,484 @@
+<!doctype html>
+<html lang='en'>
+  <head>
+    <meta charset='utf-8'>
+    <title>Code Review</title>
+    <meta content='' name='description'>
+    <meta content='Bogdan Gusiev' name='author'>
+    <meta content='yes' name='apple-mobile-web-app-capable'>
+    <meta content='black-translucent' name='apple-mobile-web-app-status-bar-style'>
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' name='viewport'>
+    <link href='http://lab.hakim.se/reveal-js/css/reveal.css' rel='stylesheet'>
+    <link href='https://rawgithub.com/hakimel/reveal.js/master/css/theme/white.css' rel='stylesheet'>
+    <!-- For syntax highlighting -->
+    <link href='http://lab.hakim.se/reveal-js/lib/css/zenburn.css' rel='stylesheet'>
+    <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+    <script>
+      document.write( '<link rel="stylesheet" href="http://lab.hakim.se/reveal-js/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+    </script>
+    <style>
+      body .reveal {
+        font-size: 30px !important; }
+      
+      .yellow {
+        color: yellow; }
+      
+      .reveal section pre code {
+        padding: 20px 5px;
+        font-size: 1.3em;
+        line-height: 1.3em; }
+      .reveal section ul {
+        min-width: 50%; }
+      .reveal section .red {
+        color: #e02c2d; }
+      .reveal section .green {
+        color: #17cc1e; }
+      .reveal section .yellow {
+        color: yellow; }
+      .reveal section .blue {
+        color: #1b91ff; }
+      .reveal section .left {
+        float: left; }
+      .reveal section .right {
+        float: right; }
+      .reveal section .clearfix {
+        overflow: hidden; }
+      .reveal section table.full-border {
+        border-collapse: collapse; }
+        .reveal section table.full-border td {
+          border: 1px solid black !important; }
+      .reveal section img {
+        border: 0px;
+        box-shadow: 0 0 0 0; }
+    </style>
+  </head>
+  <body>
+    <div class='reveal'>
+      <div class='slides'>
+        <section>
+          <h1>
+            Code Review Like a Boss
+          </h1>
+          <h2>
+            Bogdan Gusiev
+          </h2>
+        </section>
+        <section>
+          <h2>Code review tends to be natural</h2>
+          <img src='http://s2.quickmeme.com/img/f0/f05b72bc2a08d7c684443ef10ad2e7ed57d37f57e33af30dbb7dab534399a811.jpg'>
+        </section>
+        <section>
+          <h2>Code Review yourself</h2>
+          <img src='http://www.globalnerdy.com/wordpress/wp-content/uploads/2011/10/its-working.jpg'>
+        </section>
+        <section>
+          <h2>Asking for help</h2>
+          <img src='https://www.visa.com.au/partner-with-us/developer/_jcr_content/par/cardstack_255835962/cardStackColumn3/image.img.jpg/1496038571257.jpg'>
+          img
+        </section>
+        <section>
+          <h3>Spondanuous code review problem:</h3>
+          <h2>Too Late</h2>
+          <img src='http://charissesays.com/wp-content/uploads/2016/02/miss-the-train.jpg'>
+        </section>
+        <section>
+          <h2>Everything had changed by</h2>
+          <h1>GitHub</h1>
+        </section>
+        <section>
+          <h2>Do I need a code review?</h2>
+          <h3>IMHO: new projects</h3>
+          <h3>don't need a code review at all</h3>
+        </section>
+        <section>
+          <h3>Code Review Evolution</h3>
+          <ol>
+            <li>Spontanuous Code Reviews</li>
+            <li>"When I am not sure" code reviews</li>
+            <li>Formal Code Review Process</li>
+            <li>Required code review for certain changes</li>
+            <li>Required code reviews for everything</li>
+          </ol>
+          <p class='fragment'>Fails Driven Process</p>
+        </section>
+        <section>
+          <h2>Code Review Properties</h2>
+          <h4>Necessity</h4>
+          <ul>
+            <li>Optional</li>
+            <li>Required</li>
+          </ul>
+          <h4>Process</h4>
+          <ul>
+            <li>Informal</li>
+            <li>Formal</li>
+          </ul>
+          <h4>People</h4>
+          <ul>
+            <li>Dedicated</li>
+            <li>Distributed</li>
+          </ul>
+        </section>
+        <section>
+          <h2>Position in a process</h2>
+          <ol>
+            <li>Planning</li>
+            <li>Coding</li>
+            <li>Code Review</li>
+            <li>QA</li>
+            <li>Release</li>
+          </ol>
+          <p class='fragment'>QA &lt;-&gt; Code Review</p>
+          <p class='fragment'>Formally QA after Code Review</p>
+        </section>
+        <section>
+          <ol>
+            <li>Make a fork (optional)</li>
+            <li>Create a Branch</li>
+            <li>Open a Pull Request</li>
+            <li>Wait for review</li>
+            <li>
+              <div class='green'>Discuss &amp; Fix</div>
+            </li>
+            <li>Merge</li>
+          </ol>
+        </section>
+        <section>
+          <h2>
+            Code Review is
+          </h2>
+          <h4>
+            a process of
+            <span class='green'>reviewing and approving</span>
+            code changes
+            <span class='red'>before</span>
+            they get accepted to the mainstream
+          </h4>
+        </section>
+        <section>
+          <h3>How to review?</h3>
+          <img src='https://monosnap.com/file/jza1K5VEcJidIyiaz9O80XKHaLUKk5.png'>
+        </section>
+        <section>
+          <h2>Fix common things first?</h2>
+          <ul>
+            <li>Typos</li>
+            <li>Whitespace</li>
+            <li>Code Style</li>
+          </ul>
+          <p class='fragment'>Wrong Direction!</p>
+        </section>
+        <section>
+          <h2>Where to look?</h2>
+          <p>
+            Things that are most significant should be reviewed first
+          </p>
+          <p class='fragment'>
+            which are ones that are the most hard to change.
+          </p>
+        </section>
+        <section>
+          <h2>Top to Bottom Code Review</h2>
+          <ol>
+            <li>
+              Architecture
+              <ol>
+                <li>Problem Solution</li>
+                <li>Public APIs</li>
+                <li>Database Schema</li>
+                <li>Object Oriented Design</li>
+                <li>Public Method Signatures</li>
+              </ol>
+            </li>
+            <li class='fragment'>
+              Implementation
+              <ol>
+                <li>Classes &amp; Methods</li>
+                <li>Views</li>
+                <li>Tests</li>
+                <li>Code Style, Typos, Whitespace</li>
+              </ol>
+            </li>
+          </ol>
+        </section>
+        <section>
+          <h2>Problem Solution</h2>
+          <ol>
+            <li>Problem makes sense</li>
+            <li>Problem Solved</li>
+            <li>High Level Security</li>
+            <li>High Level Performance</li>
+          </ol>
+        </section>
+        <section>
+          <h4>Only show custom properties with at least one value in select</h4>
+          <img src='https://monosnap.com/file/ky94ZMZSBjaJdFscqURtUgHc0dzSYs.png'>
+          <h3>In DB: all of them have at least one value</h3>
+        </section>
+        <section>
+          <h2>High Level Security</h2>
+          <p>Fraud detection by using checkout credit card information</p>
+          <p class='fragment'>Illegal by US law</p>
+        </section>
+        <section>
+          <h2>High Level Performance</h2>
+          <h3>Check if the change</h3>
+          <ul>
+            <li>
+              Touches Performance
+              <span class='red'>sensitive code</span>
+            </li>
+            <li>
+              Will be slow for
+              <span class='red'>particular data</span>
+              <ul>
+                <li>No pagination when there are 1000+ records to display</li>
+              </ul>
+            </li>
+          </ul>
+        </section>
+        <section>
+          <h2>Public APIs</h2>
+          <h3>Using HTTP API as example</h3>
+          <ol>
+            <li>Efficiency</li>
+            <li>Logical Endpoints</li>
+            <li>Request Parameters</li>
+            <li>Response Format</li>
+          </ol>
+          <br>
+          <br>
+          <h4 class='fragment'>Whatever that is documented</h4>
+        </section>
+        <section>
+          <h2>API inefficiency example</h2>
+          <pre><code class='ruby'>Purchase.has_one :referral</code></pre>
+          <pre><code>GET /purchases/:order_number&#x000A;  {&#x000A;    id: 1,&#x000A;    order_number: '1838382',&#x000A;    referral_id: 17&#x000A;  }&#x000A;&#x000A;POST  /referrals/:id/approve</code></pre>
+          <h3>Efficient Way?</h3>
+          <pre class='fragment'><code class='less'>POST /purchases/:order_number/referral/approve</code></pre>
+        </section>
+        <section>
+          <h3>Response Format</h3>
+          <pre><code class='ruby'># Easier&#x000A;render json: @campaign.view_setups.to_json&#x000A;# Extensible&#x000A;render json: {view_setups: @campaign.view_setups.to_json}</code></pre>
+        </section>
+        <section>
+          <h2>Bad API Example</h2>
+          <pre><code class='js'>Talkable.publish('curebit_offer_close', null, true);</code></pre>
+          <pre class='fragment'><code class='js'>Talkable.publish('offer_close', null, true);&#x000A;</code></pre>
+        </section>
+        <section>
+          <h2>Analyze usage first</h2>
+          <h3>but not efficient implementation</h3>
+          <pre><code class='js'>setCustomProperty: function (person, properties) {&#x000A;  ...&#x000A;}</code></pre>
+          <pre class='fragment'><code class='js'>setAdvocateCustomProperty: function(properties) {&#x000A;  utils.setCustomProperty("advocate", properties);&#x000A;},&#x000A;&#x000A;setFriendCustomProperty: function(properties) {&#x000A;  utils.setCustomProperty("friend", properties);&#x000A;},</code></pre>
+        </section>
+        <section>
+          <h2>Database Schema</h2>
+          <ol>
+            <li>Relations between tables</li>
+            <li>Data Columns</li>
+            <li>Naming</li>
+          </ol>
+        </section>
+        <section>
+          <h3>Efficient Relations</h3>
+          <p>
+            <img src='http://support.smartbear.com/support/media/images/support/kb/data/2011/1/31/info-database-schema.jpg' style='height: 300px'>
+          </p>
+          <ol>
+            <li>What are the variants?</li>
+            <li>Was the best one selected?</li>
+          </ol>
+        </section>
+        <section>
+          <h3>Efficient schema</h3>
+          <pre><code class='ruby'>add_column :images, :dimension, :string&#x000A;&#x000A;class Image &lt; AR::Base&#x000A;  def width&#x000A;    dimension.split("x").first&#x000A;  end&#x000A;  def height&#x000A;    dimension.split("x").last&#x000A;  end&#x000A;end</code></pre>
+          <pre class='fragment'><code class='ruby'>add_column :images, :width, :integer&#x000A;add_column :images, :height, :integer</code></pre>
+        </section>
+        <section>
+          <h3>
+            Data should be
+            <span class='green'>easy to read</span>
+          </h3>
+          <h3 class='fragment'>
+            even if it makes it
+            <span class='red'>harder to write</span>
+          </h3>
+        </section>
+        <section>
+          <h2>Object Oriented Design</h2>
+          <ol>
+            <li>Reflects Real World</li>
+            <li>Inheritance</li>
+            <li>Constructors</li>
+          </ol>
+        </section>
+        <section>
+          <h2>Reviewing constructors</h2>
+          <pre><code class='ruby'>class Field&#x000A;  def initialize&#x000A;    @cells = Array.new(10) do&#x000A;      Array.new(10) { Cell.new(self) }&#x000A;    end&#x000A;  end&#x000A;end&#x000A;class Cell&#x000A;  def initialize(field)&#x000A;    @field = field&#x000A;  end&#x000A;end</code></pre>
+          <p class='fragment'>Constructor defines an object context</p>
+        </section>
+        <section>
+          <h2>Public Method Signatures</h2>
+          <ol>
+            <li>Placement</li>
+            <li>Arguments</li>
+            <li>Name</li>
+          </ol>
+        </section>
+        <section>
+          <h2>Method Placement</h2>
+          <pre><code class='ruby'>class User&#x000A;  def approve!(referral)&#x000A;end&#x000A;# OR&#x000A;class Referral&#x000A;  def approve!(user)&#x000A;end</code></pre>
+        </section>
+        <section>
+          <h2>Method Arguments</h2>
+          <pre><code class='js'>this.extractUserData(this.data)&#x000A;</code></pre>
+        </section>
+        <section>
+          <h1>Implementation</h1>
+        </section>
+        <section>
+          <h2>Classes &amp; Method Bodies</h2>
+          <p>Each method or class separately</p>
+          <p>Check one by one:</p>
+          <ol>
+            <li>Approach &amp; Algorithm</li>
+            <li>Performance</li>
+            <li>Security</li>
+            <li>Minimalism</li>
+            <li>Local Variable Names</li>
+          </ol>
+        </section>
+        <section>
+          <h2>Performance &amp; Vulnerabilities</h2>
+          <p>
+            In the ideal world performance and vulnerabilities
+            <br>
+            should not change the code structure.
+          </p>
+          <p class='fragment'>
+            In practice it can but we should try hard
+            <br>
+            to fix performance problems only at the implementation level
+          </p>
+        </section>
+        <section>
+          <h3>Good Performance Patch</h3>
+          <pre><code class='diff'> def core_options&#x000A;-  { header: name, description: description, group: group }&#x000A;+  @core_options ||= { header: name, description: description, group: group }&#x000A; end</code></pre>
+          <pre><code class='diff'>- @campaign.locale_entries.each do&#x000A;+ @campaign.locale_entries.preload(:variants).each do&#x000A;&#x000A;</code></pre>
+        </section>
+        <section>
+          <h3>Good Vulnerability Patch</h3>
+          <pre><code class='diff'>-{{ advocate_info.first_name }}&#x000A;+{{ advocate_info.first_name | escape }}</code></pre>
+        </section>
+        <section>
+          <h1>Security</h1>
+          <ul>
+            <li>
+              Approach Security (Step 1)
+              <ul>
+                <li>Is it secure to have this feature?</li>
+                <li>Is it secure to implement the feature this way?</li>
+              </ul>
+            </li>
+            <li class='fragment'>
+              Vulnerabilities
+              <ul>
+                <li>XSS</li>
+                <li>Allowed Parameters</li>
+                <li>Backend Authorisation check</li>
+                <li>Authorisation for UI elements</li>
+              </ul>
+            </li>
+          </ul>
+        </section>
+        <section>
+          <h2>Tests</h2>
+          <ol>
+            <li>Use Cases Coverage</li>
+            <li>Formal Code Coverage</li>
+            <li>Tests Implementation</li>
+          </ol>
+        </section>
+        <section>
+          <h2>Top to bottom Idea</h2>
+          <h3>It is bad to:</h3>
+          <ul>
+            <li>Discuss the method name before the method existence as a fact</li>
+            <li>Discuss Code Style before implementation itself</li>
+          </ul>
+        </section>
+        <section>
+          <h2>Boss control approach</h2>
+          <p>Ensure top points from the list are always performed</p>
+          <p>Choose X things on top of the list to double-check and delegate the rest completely</p>
+        </section>
+        <section>
+          <h2>Code Review Culture</h2>
+          <ul>
+            <li>Be Polite</li>
+            <li>Admit good things</li>
+            <li>
+              First things first
+              <ul class='fragment'>
+                <li>Reduce number of cycles</li>
+                <li>Save Author's time</li>
+                <li>Save Your time</li>
+              </ul>
+            </li>
+          </ul>
+        </section>
+        <section>
+          <h2>Top to Bottom Code Review</h2>
+          <ol>
+            <li>
+              Architecture
+              <ol>
+                <li>Problem Solution</li>
+                <li>Public APIs</li>
+                <li>Database Schema</li>
+                <li>Object Oriented Design</li>
+                <li>Public Method Signatures</li>
+              </ol>
+            </li>
+            <li class='fragment'>
+              Implementation
+              <ol>
+                <li>Classes &amp; Methods</li>
+                <li>Views</li>
+                <li>Test Coverage</li>
+                <li>Code Style, Typos, Whitespace</li>
+              </ol>
+            </li>
+          </ol>
+        </section>
+      </div>
+    </div>
+    <script src='http://lab.hakim.se/reveal-js/lib/js/head.min.js'></script>
+    <script src='https://rawgithub.com/hakimel/reveal.js/3.6.0/js/reveal.js'></script>
+    <script>
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+      	controls: true,
+      	progress: true,
+      	history: true,
+      	center: true,
+      
+      	theme: Reveal.getQueryHash().theme || 'simple', // available themes are in /css/theme
+      	transition: Reveal.getQueryHash().transition || 'fade', // default/cube/page/concave/zoom/linear/fade/none
+      
+      	// Optional libraries used to extend on reveal.js
+      	dependencies: [
+      		// { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+      		{ src: 'http://lab.hakim.se/reveal-js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      		{ src: 'http://lab.hakim.se/reveal-js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      		{ src: 'http://lab.hakim.se/reveal-js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+          { src: 'https://rawgithub.com/hakimel/reveal.js/3.6.0/plugin/notes/notes.js', async: true }
+      		// { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+      		// { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
+      		// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+      	]
+      });
+    </script>
+  </body>
+</html>
