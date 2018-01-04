@@ -133,7 +133,7 @@
           %ol
             %li Spontanuous Code Reviews
             %li "When I am not sure" code reviews
-            %li Formalizing the process
+            %li Formal Code Review Process
             %li Required code review for certain changes
             %li Required code reviews for everything
 
@@ -177,8 +177,14 @@
               .green Discuss &amp; Fix
             %li Merge
         %section
-          %p
-            Code Review is a process of reviewing and approving code changes before they get accepted to the mainstream
+          %h2
+            Code Review is 
+          %h4 
+            a process of 
+            %span.green reviewing and approving 
+            code changes 
+            %span.red before 
+            they get accepted to the mainstream
         %section
           %h3 How to review?
           
@@ -221,13 +227,13 @@
                 %li Public APIs
                 %li Database Schema
                 %li Object Oriented Design
-                %li Method Signatures
+                %li Public Method Signatures
             %li.fragment 
               Implementation
               %ol
                 %li Classes &amp; Methods 
                 %li Views
-                %li Test Coverage
+                %li Tests
                 %li Code Style, Typos, Whitespace
         %section
           %h2 Problem Solution
@@ -252,6 +258,18 @@
           %p.fragment Illegal by US law
 
         %section
+          %h2 High Level Performance
+          %h3 Check if the change
+          %ul
+            %li 
+              Touches Performance 
+              %span.red sensitive code
+            %li 
+              Will be slow for 
+              %span.red particular data
+              %ul
+                %li No pagination when there are 1000+ records to display
+        %section
           %h2 Public APIs
           %h3 Using HTTP API as example
           %ol
@@ -259,6 +277,9 @@
             %li Logical Endpoints
             %li Request Parameters
             %li Response Format
+          %br
+          %br
+          %h4.fragment Whatever that is documented
         %section
           %h2 API inefficiency example
 
@@ -277,21 +298,19 @@
                   }
 
                 POST  /referrals/:id/approve
-          %h3 Efficient Way
+          %h3 Efficient Way?
           %pre.fragment
             %code.less
               :preserve
                 POST /purchases/:order_number/referral/approve
         %section
-          %h3 Bad Response Format
+          %h3 Response Format
           %pre
             %code.ruby
               :preserve
+                # Easier
                 render json: @campaign.view_setups.to_json
-          %h3 Extensible Way
-          %pre
-            %code.ruby
-              :preserve
+                # Extensible
                 render json: {view_setups: @campaign.view_setups.to_json}
         %section
           %h2 Bad API Example
@@ -366,8 +385,12 @@
                 add_column :images, :width, :integer
                 add_column :images, :height, :integer
         %section
-          %h3 Data should be easy to read 
-          %h3.fragment even if it makes it harder to write
+          %h3 
+            Data should be 
+            %span.green easy to read 
+          %h3.fragment 
+            even if it makes it 
+            %span.red harder to write
         %section
           %h2 Object Oriented Design
           %ol
@@ -394,7 +417,7 @@
                 end
           %p.fragment Constructor defines an object context
         %section
-          %h2 Method Signatures
+          %h2 Public Method Signatures
           %ol
             %li Placement
             %li Arguments
@@ -420,6 +443,8 @@
                 this.extractUserData(this.data)
                 
         %section
+          %h1 Implementation
+        %section
           %h2 Classes &amp; Method Bodies
 
           %p Each method or class separately
@@ -434,9 +459,15 @@
         %section
           %h2 Performance &amp; Vulnerabilities
 
-          %p In the ideal world performance and vulnerabilities should not change the code structure
+          %p 
+            In the ideal world performance and vulnerabilities 
+            %br
+            should not change the code structure.
           
-          %p.fragment In practice it can but we should try hard to fix performance problems only at the implementation level
+          %p.fragment 
+            In practice it can but we should try hard 
+            %br
+            to fix performance problems only at the implementation level
 
         %section
           %h3 Good Performance Patch
@@ -447,6 +478,12 @@
                 -  { header: name, description: description, group: group }
                 +  @core_options ||= { header: name, description: description, group: group }
                  end
+          %pre
+            %code.diff
+              :preserve
+                - @campaign.locale_entries.each do
+                + @campaign.locale_entries.preload(:variants).each do
+
             
         %section
           %h3 Good Vulnerability Patch
@@ -472,20 +509,20 @@
                 %li Backend Authorisation check
                 %li Authorisation for UI elements
         %section
-          %h2 Test Coverage
+          %h2 Tests
 
           %ol
-            %li Code Coverage
             %li Use Cases Coverage
+            %li Formal Code Coverage
             %li Tests Implementation
         %section
           %h2 Top to bottom Idea
           
-          %h3 Bad behaviour
+          %h3 It is bad to:
 
           %ul
             %li Discuss the method name before the method existence as a fact
-            %li Discuss Code Style before implementation approach 
+            %li Discuss Code Style before implementation itself 
         %section
           %h2 Boss control approach
           
@@ -498,8 +535,12 @@
           %ul
             %li Be Polite
             %li Admit good things
-            %li Save Author's time
-            %li First things first
+            %li 
+              First things first
+              %ul.fragment
+                %li Reduce number of cycles
+                %li Save Author's time
+                %li Save Your time
         %section
           %h2 Top to Bottom Code Review 
 
@@ -511,7 +552,7 @@
                 %li Public APIs
                 %li Database Schema
                 %li Object Oriented Design
-                %li Method Signatures
+                %li Public Method Signatures
             %li.fragment 
               Implementation
               %ol
