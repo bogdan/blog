@@ -58,7 +58,7 @@
       .slides
         %section
           %h1
-            Code Review Like a Boss
+            Code Review Process
           %h2
             Bogdan Gusiev
         -#%section
@@ -399,6 +399,7 @@
             %li Constructors
         %section
           %h2 Reviewing constructors
+          %h3 Circular Dependency
 
           %pre
             %code.ruby
@@ -416,6 +417,25 @@
                   end
                 end
           %p.fragment Constructor defines an object context
+        %section
+          %h2 Reviewing Constructors
+          %h3 Undefined Context
+
+          %pre
+            %code.ruby
+              :preserve
+                class ApplicationController
+                  before_action do
+                    RequestAnalyzer.new(request).analyze
+                  end
+                end
+          %pre.fragment
+            %code.ruby
+              :preserve
+                class RequestAnalyzer
+                  def initialize(user_agent, url, content_type)
+                  end
+                end
         %section
           %h2 Public Method Signatures
           %ol
