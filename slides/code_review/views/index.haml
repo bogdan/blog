@@ -251,7 +251,8 @@
             %li High Level Performance
         %section
 
-          %h4 Only show custom properties with at least one value in select
+          %h4 Only show product categories with at least one product 
+          %h4 in the select box
 
           %pre
             %code.diff
@@ -276,11 +277,11 @@
           %h3.fragment This is not very secure
 
         %section
-          %h2 High Level Performance
-          %h3 Check if the change
-          %ul
+          %h2 High Level Performance:
+          %h3 Is there a way to even make this feature fast?
+          %ul.fragment
             %li 
-              Touches Performance 
+              Touches performance 
               %span.red sensitive code
             %li 
               Will be slow for 
@@ -291,7 +292,7 @@
           %h2 Public APIs
           %h3 Using HTTP API as example
           %ol
-            %li Efficiency
+            %li.red Efficiency
             %li Logical Endpoints
             %li Request Parameters
             %li Response Format
@@ -300,23 +301,24 @@
           %h4.fragment Whatever that is documented
         %section
           %h2 API inefficiency example
-
           %pre
             %code.ruby
               :preserve
                 Purchase.has_one :referral
-          %pre
-            %code
-              :preserve
-                GET /purchases/:order_number
-                  {
-                    id: 1,
-                    order_number: '1838382',
-                    referral_id: 17
-                  }
+          %p How do I approve the referral when I have a Purchase#order_number?
+          .fragment
+            %pre
+              %code
+                :preserve
+                  GET /purchases/:order_number
+                    {
+                      id: 1,
+                      order_number: '1838382',
+                      referral_id: 17
+                    }
 
-                POST  /referrals/:id/approve
-          %h3 Efficient Way?
+                  POST  /referrals/:id/approve
+            %h3 Efficient Way?
           %pre.fragment
             %code.less
               :preserve
@@ -375,12 +377,12 @@
         %section
           %h3 Efficient Relations
 
-          %p
-            %img{src: "http://support.smartbear.com/support/media/images/support/kb/data/2011/1/31/info-database-schema.jpg", style: 'height: 300px'}
-
           %ol
             %li What are the variants?
             %li Was the best one selected?
+          %p
+            %img{src: "http://support.smartbear.com/support/media/images/support/kb/data/2011/1/31/info-database-schema.jpg", style: 'height: 300px'}
+
                
         %section
 
@@ -411,12 +413,27 @@
           %h3.fragment 
             even if it makes it 
             %span.red harder to write
+          %h3.fragment
+            Database schema change 
+            %br 
+            can be one of the hardest ones
         %section
           %h2 Object Oriented Design
           %ol
-            %li Reflects Real World
-            %li Inheritance
-            %li Constructors
+            %li 
+              Reflects Real World
+              %ul
+                %li Classes correspond to the real interactions that happen
+            %li 
+              Inheritance
+              %ul
+                %li Classes are inherited correctly
+
+            %li.red Constructors
+        %section
+          %h2 Reflects Real World
+
+          %h3 Inheritance done right
         %section
           %h2 Reviewing constructors
           %h3 Circular Dependency
@@ -437,7 +454,7 @@
                   end
                 end
         %section
-          %h2 Object constructors are important:
+          %h2 Class constructor answers to:
 
           %ul
             %li Which things are required to use an object?
@@ -466,7 +483,7 @@
           %pre.fragment
             %code.ruby
               :preserve
-                CrawlerRequestAnalyzer.new(
+                ConcreteRequestAnalyzer.new(
                   request.user_agent, request.url, request.content_type
                 ).analyze
         %section
@@ -494,6 +511,10 @@
             %code.js
               :preserve
                 this.extractUserData(this.data)
+          %pre
+            %code.js
+              :preserve
+                renderFeedbackForm(user, user.role)
                 
         %section
           %h1 Implementation
@@ -544,18 +565,18 @@
           %pre
             %code.diff
               :preserve
-                -{{ advocate_info.first_name }}
-                +{{ advocate_info.first_name | escape }}
+                -&lt;%= advocate_info.first_name %&gt;
+                +&lt;%= escape(advocate_info.first_name) %&gt;
         %section
           %h1 Security
           %ul
             %li 
-              Approach Security (Step 1)
+              General Approach Security
               %ul
                 %li Is it secure to have this feature?
                 %li Is it secure to implement the feature this way?
             %li.fragment 
-              Vulnerabilities 
+              Implementation Vulnerabilities 
               %ul
                 %li XSS
                 %li Allowed Parameters
@@ -565,7 +586,7 @@
           %h2 Tests
 
           %ol
-            %li Use Cases Coverage
+            %li.red Use Cases Coverage
             %li Formal Code Coverage
             %li Tests Implementation
         %section
@@ -576,12 +597,6 @@
           %ul
             %li Discuss the method name before the method existence as a fact
             %li Discuss Code Style before implementation itself 
-        %section
-          %h2 Boss control approach
-          
-          %p Ensure top points from the list are always performed
-          %p Choose X things on top of the list to double-check and delegate the rest completely
-          
         %section
           %h2 Code Review Culture
           
@@ -594,6 +609,12 @@
                 %li Reduce number of cycles
                 %li Save Author's time
                 %li Save Your time
+        %section
+          %h2 Boss control approach
+          
+          %p Ensure top points from the list are always performed
+          %p Choose X things on top of the list to double-check and delegate the rest completely
+          
         %section
           %h2 Top to Bottom Code Review 
 
