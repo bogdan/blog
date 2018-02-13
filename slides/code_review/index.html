@@ -14,7 +14,11 @@
     <link href='http://lab.hakim.se/reveal-js/lib/css/zenburn.css' rel='stylesheet'>
     <!-- If the query includes 'print-pdf', use the PDF print sheet -->
     <script>
-      document.write( '<link rel="stylesheet" href="http://lab.hakim.se/reveal-js/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = "https://revealjs.com/css/print/" + (window.location.search.match( /print-pdf/gi ) ? 'pdf.css' : 'paper.css');
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
     </script>
     <style>
       body .reveal {
@@ -74,12 +78,11 @@
         <section>
           <h2>Asking for help</h2>
           <img src='https://www.visa.com.au/partner-with-us/developer/_jcr_content/par/cardstack_255835962/cardStackColumn3/image.img.jpg/1496038571257.jpg'>
-          img
         </section>
         <section>
           <h3>Spondanuous code review problem:</h3>
           <h2>Too Late</h2>
-          <img src='http://charissesays.com/wp-content/uploads/2016/02/miss-the-train.jpg'>
+          <img src='https://i.ytimg.com/vi/M6OcklRigfs/hqdefault.jpg'>
         </section>
         <section>
           <h2>Everything had changed by</h2>
@@ -88,7 +91,7 @@
         <section>
           <h2>Do I need a code review?</h2>
           <h3>IMHO: new projects</h3>
-          <h3>don't need a code review at all</h3>
+          <h3>don't need a formal code review at all</h3>
         </section>
         <section>
           <h3>Code Review Evolution</h3>
@@ -151,6 +154,7 @@
             a process of
             <span class='green'>reviewing and approving</span>
             code changes
+            <br>
             <span class='red'>before</span>
             they get accepted to the mainstream
           </h4>
@@ -171,10 +175,13 @@
         <section>
           <h2>Where to look?</h2>
           <p>
-            Things that are most significant should be reviewed first
+            Things that are
+            <span class='green'>most significant</span>
+            should be reviewed first
           </p>
           <p class='fragment'>
-            which are ones that are the most hard to change.
+            which are ones that are the most
+            <span class='red'>hard to change.</span>
           </p>
         </section>
         <section>
@@ -212,13 +219,14 @@
         </section>
         <section>
           <h4>Only show custom properties with at least one value in select</h4>
-          <img src='https://monosnap.com/file/ky94ZMZSBjaJdFscqURtUgHc0dzSYs.png'>
-          <h3>In DB: all of them have at least one value</h3>
+          <pre><code class='diff'>def selectable_product_categories&#x000A;+  ProductCategory.with_at_least_one_product&#x000A;-  ProductCategory.all&#x000A;end&#x000A;</code></pre>
+          <pre class='fragment'><code class='ruby'>ProductCategory.&#x000A;  where("not exists(select * from products where ...)").&#x000A;  count # => 0&#x000A;</code></pre>
         </section>
         <section>
           <h2>High Level Security</h2>
-          <p>Fraud detection by using checkout credit card information</p>
-          <p class='fragment'>Illegal by US law</p>
+          <h3>Ex. Feature:</h3>
+          <h4>Login user automatically when it clicks on the link in the email</h4>
+          <h3 class='fragment'>This is not very secure</h3>
         </section>
         <section>
           <h2>High Level Performance</h2>
@@ -263,14 +271,14 @@
         </section>
         <section>
           <h2>Bad API Example</h2>
-          <pre><code class='js'>Talkable.publish('curebit_offer_close', null, true);</code></pre>
+          <pre><code class='js'>Talkable.publish('talkable_offer_close', null, true);</code></pre>
           <pre class='fragment'><code class='js'>Talkable.publish('offer_close', null, true);&#x000A;</code></pre>
         </section>
         <section>
           <h2>Analyze usage first</h2>
-          <h3>but not efficient implementation</h3>
-          <pre><code class='js'>setCustomProperty: function (person, properties) {&#x000A;  ...&#x000A;}</code></pre>
-          <pre class='fragment'><code class='js'>setAdvocateCustomProperty: function(properties) {&#x000A;  utils.setCustomProperty("advocate", properties);&#x000A;},&#x000A;&#x000A;setFriendCustomProperty: function(properties) {&#x000A;  utils.setCustomProperty("friend", properties);&#x000A;},</code></pre>
+          <h3>but not implementation</h3>
+          <pre><code class='js'>setCustomProperty: function (person, properties) {&#x000A;  ...&#x000A;}&#x000A;setCustomProperty('advocate', {key: value})&#x000A;setCustomProperty('friend',   {key: value})</code></pre>
+          <pre class='fragment'><code class='js'>setAdvocateCustomProperty: function(properties) {&#x000A;  private_stuff.setCustomProperty("advocate", properties);&#x000A;},&#x000A;&#x000A;setFriendCustomProperty: function(properties) {&#x000A;  private_stuff.setCustomProperty("friend", properties);&#x000A;},</code></pre>
         </section>
         <section>
           <h2>Database Schema</h2>
@@ -315,8 +323,33 @@
         </section>
         <section>
           <h2>Reviewing constructors</h2>
+          <h3>Circular Dependency</h3>
           <pre><code class='ruby'>class Field&#x000A;  def initialize&#x000A;    @cells = Array.new(10) do&#x000A;      Array.new(10) { Cell.new(self) }&#x000A;    end&#x000A;  end&#x000A;end&#x000A;class Cell&#x000A;  def initialize(field)&#x000A;    @field = field&#x000A;  end&#x000A;end</code></pre>
-          <p class='fragment'>Constructor defines an object context</p>
+        </section>
+        <section>
+          <h2>Object constructors are important:</h2>
+          <ul>
+            <li>Which things are required to use an object?</li>
+            <li>
+              What are the object responsibilities?
+              <ul>
+                <li>Theoretical limit</li>
+              </ul>
+            </li>
+            <li>Which methods can be implemented in the object?</li>
+            <li>
+              Which things would need to be passed to methods as arguments?
+              <ul>
+                <li>Constructor defines object API</li>
+              </ul>
+            </li>
+          </ul>
+        </section>
+        <section>
+          <h2>Reviewing Constructors</h2>
+          <h3>Undefined Context</h3>
+          <pre><code class='ruby'>class ApplicationController&#x000A;  before_action do&#x000A;    WhateverRequestAnalyzer.new(request).analyze&#x000A;  end&#x000A;end</code></pre>
+          <pre class='fragment'><code class='ruby'>CrawlerRequestAnalyzer.new(&#x000A;  request.user_agent, request.url, request.content_type&#x000A;).analyze</code></pre>
         </section>
         <section>
           <h2>Public Method Signatures</h2>
