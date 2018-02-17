@@ -54,6 +54,16 @@
       .reveal section img {
         border: 0px;
         box-shadow: 0 0 0 0; }
+      .reveal section code.line-numbers {
+        counter-reset: line_numbers; }
+      .reveal section code span.line-number {
+        counter-increment: line_numbers;
+        margin-right: 1em; }
+        .reveal section code span.line-number:before {
+          content: counter(line_numbers,decimal-leading-zero);
+          color: gray; }
+      .reveal section code span.highlight-line:before {
+        color: yellow; }
     </style>
   </head>
   <body>
@@ -136,8 +146,8 @@
         </section>
         <section>
           <ol>
-            <li>Make a fork (optional)</li>
-            <li>Create a Branch</li>
+            <li>Make a branch or fork</li>
+            <li>Make a change</li>
             <li>Open a Pull Request</li>
             <li>Wait for review</li>
             <li>
@@ -218,8 +228,9 @@
           </ol>
         </section>
         <section>
-          <h4>Only show custom properties with at least one value in select</h4>
-          <pre><code class='diff'>def selectable_product_categories&#x000A;+  ProductCategory.with_at_least_one_product&#x000A;-  ProductCategory.all&#x000A;end&#x000A;</code></pre>
+          <h4>Only show product categories with at least one product</h4>
+          <h4>in the select box</h4>
+          <pre><code class='diff'>def selectable_product_categories&#x000A;-  ProductCategory.with_at_least_one_product&#x000A;+  ProductCategory.all&#x000A;end&#x000A;</code></pre>
           <pre class='fragment'><code class='ruby'>ProductCategory.&#x000A;  where("not exists(select * from products where ...)").&#x000A;  count # => 0&#x000A;</code></pre>
         </section>
         <section>
@@ -229,11 +240,11 @@
           <h3 class='fragment'>This is not very secure</h3>
         </section>
         <section>
-          <h2>High Level Performance</h2>
-          <h3>Check if the change</h3>
-          <ul>
+          <h2>High Level Performance:</h2>
+          <h3>Is there a way to even make this feature fast?</h3>
+          <ul class='fragment'>
             <li>
-              Touches Performance
+              Touches performance
               <span class='red'>sensitive code</span>
             </li>
             <li>
@@ -249,7 +260,7 @@
           <h2>Public APIs</h2>
           <h3>Using HTTP API as example</h3>
           <ol>
-            <li>Efficiency</li>
+            <li class='red'>Efficiency</li>
             <li>Logical Endpoints</li>
             <li>Request Parameters</li>
             <li>Response Format</li>
@@ -261,8 +272,11 @@
         <section>
           <h2>API inefficiency example</h2>
           <pre><code class='ruby'>Purchase.has_one :referral</code></pre>
-          <pre><code>GET /purchases/:order_number&#x000A;  {&#x000A;    id: 1,&#x000A;    order_number: '1838382',&#x000A;    referral_id: 17&#x000A;  }&#x000A;&#x000A;POST  /referrals/:id/approve</code></pre>
-          <h3>Efficient Way?</h3>
+          <p>How do I approve the referral when I have a Purchase#order_number?</p>
+          <div class='fragment'>
+            <pre><code>GET /purchases/:order_number&#x000A;  {&#x000A;    id: 1,&#x000A;    order_number: '1838382',&#x000A;    referral_id: 17&#x000A;  }&#x000A;&#x000A;POST  /referrals/:id/approve</code></pre>
+            <h3>Efficient Way?</h3>
+          </div>
           <pre class='fragment'><code class='less'>POST /purchases/:order_number/referral/approve</code></pre>
         </section>
         <section>
@@ -277,8 +291,8 @@
         <section>
           <h2>Analyze usage first</h2>
           <h3>but not implementation</h3>
-          <pre><code class='js'>setCustomProperty: function (person, properties) {&#x000A;  ...&#x000A;}&#x000A;setCustomProperty('advocate', {key: value})&#x000A;setCustomProperty('friend',   {key: value})</code></pre>
-          <pre class='fragment'><code class='js'>setAdvocateCustomProperty: function(properties) {&#x000A;  private_stuff.setCustomProperty("advocate", properties);&#x000A;},&#x000A;&#x000A;setFriendCustomProperty: function(properties) {&#x000A;  private_stuff.setCustomProperty("friend", properties);&#x000A;},</code></pre>
+          <pre><code class='js'>setProperties: function (person, properties) {&#x000A;  ...&#x000A;}&#x000A;setProperties('advocate', {key: value})&#x000A;setProperties('friend',   {key: value})</code></pre>
+          <pre class='fragment'><code class='js'>setAdvocateProperties: function(properties) {&#x000A;  privateStuff.setProperties("advocate", properties);&#x000A;},&#x000A;&#x000A;setFriendProperties: function(properties) {&#x000A;  privateStuff.setProperties("friend", properties);&#x000A;},</code></pre>
         </section>
         <section>
           <h2>Database Schema</h2>
@@ -290,13 +304,13 @@
         </section>
         <section>
           <h3>Efficient Relations</h3>
-          <p>
-            <img src='http://support.smartbear.com/support/media/images/support/kb/data/2011/1/31/info-database-schema.jpg' style='height: 300px'>
-          </p>
           <ol>
             <li>What are the variants?</li>
             <li>Was the best one selected?</li>
           </ol>
+          <p>
+            <img src='http://support.smartbear.com/support/media/images/support/kb/data/2011/1/31/info-database-schema.jpg' style='height: 300px'>
+          </p>
         </section>
         <section>
           <h3>Efficient schema</h3>
@@ -312,14 +326,34 @@
             even if it makes it
             <span class='red'>harder to write</span>
           </h3>
+          <h3 class='fragment'>
+            Database schema change
+            <br>
+            can be one of the hardest ones
+          </h3>
         </section>
         <section>
           <h2>Object Oriented Design</h2>
           <ol>
-            <li>Reflects Real World</li>
-            <li>Inheritance</li>
-            <li>Constructors</li>
+            <li>
+              Reflects Real World
+              <ul>
+                <li>Classes correspond to the real interactions that happen</li>
+              </ul>
+            </li>
+            <li>
+              Inheritance
+              <ul>
+                <li>Classes are inherited correctly</li>
+              </ul>
+            </li>
+            <li class='red'>Constructors</li>
           </ol>
+        </section>
+        <section>
+          <h1>Inheritance</h1>
+          <h3>From Random Java Handbook:</h3>
+          <pre><code class='java'>public class Animal {&#x000A;}&#x000A;&#x000A;public class Mammal extends Animal {&#x000A;}&#x000A;&#x000A;public class Reptile extends Animal {&#x000A;}&#x000A;&#x000A;public class Dog extends Mammal {&#x000A;}</code></pre>
         </section>
         <section>
           <h2>Reviewing constructors</h2>
@@ -327,7 +361,7 @@
           <pre><code class='ruby'>class Field&#x000A;  def initialize&#x000A;    @cells = Array.new(10) do&#x000A;      Array.new(10) { Cell.new(self) }&#x000A;    end&#x000A;  end&#x000A;end&#x000A;class Cell&#x000A;  def initialize(field)&#x000A;    @field = field&#x000A;  end&#x000A;end</code></pre>
         </section>
         <section>
-          <h2>Object constructors are important:</h2>
+          <h2>Class constructor answers to:</h2>
           <ul>
             <li>Which things are required to use an object?</li>
             <li>
@@ -339,22 +373,28 @@
             <li>Which methods can be implemented in the object?</li>
             <li>
               Which things would need to be passed to methods as arguments?
-              <ul>
-                <li>Constructor defines object API</li>
-              </ul>
             </li>
           </ul>
+          <br>
+          <br>
+          <h4 class='fragment'>
+            Name gives a clue what object
+            <span class='red'>should do</span>
+            <br>
+            Constructor gives a clue what object
+            <span class='green'>can do</span>
+          </h4>
         </section>
         <section>
           <h2>Reviewing Constructors</h2>
           <h3>Undefined Context</h3>
           <pre><code class='ruby'>class ApplicationController&#x000A;  before_action do&#x000A;    WhateverRequestAnalyzer.new(request).analyze&#x000A;  end&#x000A;end</code></pre>
-          <pre class='fragment'><code class='ruby'>CrawlerRequestAnalyzer.new(&#x000A;  request.user_agent, request.url, request.content_type&#x000A;).analyze</code></pre>
+          <pre class='fragment'><code class='ruby'>ConcreteRequestAnalyzer.new(&#x000A;  request.user_agent, request.url, request.content_type&#x000A;).analyze</code></pre>
         </section>
         <section>
           <h2>Public Method Signatures</h2>
           <ol>
-            <li>Placement</li>
+            <li class='red'>Placement</li>
             <li>Arguments</li>
             <li>Name</li>
           </ol>
@@ -365,7 +405,8 @@
         </section>
         <section>
           <h2>Method Arguments</h2>
-          <pre><code class='js'>this.extractUserData(this.data)&#x000A;</code></pre>
+          <pre><code class='js'>this.extractUserData(this.data)</code></pre>
+          <pre><code class='js'>renderFeedbackForm(user, user.role)&#x000A;</code></pre>
         </section>
         <section>
           <h1>Implementation</h1>
@@ -375,12 +416,23 @@
           <p>Each method or class separately</p>
           <p>Check one by one:</p>
           <ol>
-            <li>Approach &amp; Algorithm</li>
+            <li>Approach</li>
             <li>Performance</li>
             <li>Security</li>
             <li>Minimalism</li>
             <li>Local Variable Names</li>
           </ol>
+        </section>
+        <section>
+          <h1>Approach</h1>
+          <ol>
+            <li>Cycles statements</li>
+            <li>Conditional statements</li>
+            <li>Everything else</li>
+          </ol>
+        </section>
+        <section>
+          <pre><code class='ruby line-numbers' data-highlight-lines='2,3,6,7,9'>existing_properties = by_site(site).preload(:key).&#x000A;  by_person_or_visitor(person&.id, visitor&.id).group_by(&:key)&#x000A;new_properties = properties.transform_keys do |key|&#x000A;  site.custom_property_key_for!(key)&#x000A;end&#x000A;(existing_properties.keys + new_properties.keys).uniq.each do |key|&#x000A;  target_property = existing_properties[key]&.find do |property|&#x000A;    property.with_person_or_visitor?(person, visitor)&#x000A;  end || CustomProperty.new(key: key, value: existing_properties[key]&.first&.value)&#x000A;  target_property.person = person if person&#x000A;  target_property.visitor = visitor if visitor&#x000A;  target_property.value = new_properties.fetch(key) || ''&#x000A;  target_property.save! if target_property.changed?&#x000A;end</code></pre>
         </section>
         <section>
           <h2>Performance &amp; Vulnerabilities</h2>
@@ -402,20 +454,20 @@
         </section>
         <section>
           <h3>Good Vulnerability Patch</h3>
-          <pre><code class='diff'>-{{ advocate_info.first_name }}&#x000A;+{{ advocate_info.first_name | escape }}</code></pre>
+          <pre><code class='diff'>-&lt;%= advocate_info.first_name %&gt;&#x000A;+&lt;%= escape(advocate_info.first_name) %&gt;</code></pre>
         </section>
         <section>
           <h1>Security</h1>
           <ul>
             <li>
-              Approach Security (Step 1)
+              General Security
               <ul>
                 <li>Is it secure to have this feature?</li>
                 <li>Is it secure to implement the feature this way?</li>
               </ul>
             </li>
             <li class='fragment'>
-              Vulnerabilities
+              Implementation Vulnerabilities
               <ul>
                 <li>XSS</li>
                 <li>Allowed Parameters</li>
@@ -426,9 +478,29 @@
           </ul>
         </section>
         <section>
+          <h1>Performance</h1>
+          <ul>
+            <li>
+              General Performance
+              <ul>
+                <li>Can it be done fast?</li>
+                <li>Will it work fast for all possible use cases?</li>
+              </ul>
+            </li>
+            <li class='fragment'>
+              Implementation Performance
+              <ul>
+                <li>Fast DB queries</li>
+                <li>Caching</li>
+                <li>Microoptimization</li>
+              </ul>
+            </li>
+          </ul>
+        </section>
+        <section>
           <h2>Tests</h2>
           <ol>
-            <li>Use Cases Coverage</li>
+            <li class='red'>Use Cases Coverage</li>
             <li>Formal Code Coverage</li>
             <li>Tests Implementation</li>
           </ol>
@@ -442,11 +514,6 @@
           </ul>
         </section>
         <section>
-          <h2>Boss control approach</h2>
-          <p>Ensure top points from the list are always performed</p>
-          <p>Choose X things on top of the list to double-check and delegate the rest completely</p>
-        </section>
-        <section>
           <h2>Code Review Culture</h2>
           <ul>
             <li>Be Polite</li>
@@ -454,12 +521,17 @@
             <li>
               First things first
               <ul class='fragment'>
-                <li>Reduce number of cycles</li>
+                <li>Reduce number of review cycles</li>
                 <li>Save Author's time</li>
                 <li>Save Your time</li>
               </ul>
             </li>
           </ul>
+        </section>
+        <section>
+          <h2>Boss control approach</h2>
+          <p>Ensure top points from the list are always performed</p>
+          <p>Choose X things on top of the list to double-check and delegate the rest completely</p>
         </section>
         <section>
           <h2>Top to Bottom Code Review</h2>
@@ -485,6 +557,37 @@
             </li>
           </ol>
         </section>
+        <section>
+          <h1>
+            <p>Buktopuha</p>
+          </h1>
+        </section>
+        <section>
+          <p>The code that uploads toxic assets to FTP every day</p>
+          <h3>Why is the date passed to worker as argument?</h3>
+          <pre><code class='ruby'># Runs daily via crontab&#x000A;task :upload_toxic_asset_to_ftp => :environment do&#x000A;  ToxicUploaderWorker.perform_async(Date.today)&#x000A;end&#x000A;&#x000A;class ToxicUploaderWorker&#x000A;  def perform(date)&#x000A;    file_name = "toxic-assets-#{date}.csv"&#x000A;    upload_to_ftp(file_name, to_csv(Asset.where(created_at: date)))&#x000A;  end&#x000A;end&#x000A;</code></pre>
+        </section>
+        <section>
+          <h3>What does it return no results? How to fix that?</h3>
+          <pre><code class='ruby'>User.where(created_at: Date.today).count # => 0</code></pre>
+        </section>
+        <section>
+          <h3>The code fragment generates 4 SQL queries:</h3>
+          <h3>Why does it happen and how to fix that?</h3>
+          <pre><code class='ruby'>Campaign.has_many :localizations&#x000A;Localiztion.has_many :variants&#x000A;&#x000A;def localize_by_key(key)&#x000A;  @campaign.localizations.preload(:variants).find do |l|&#x000A;    l.key == key&#x000A;  end.text&#x000A;end</code></pre>
+          <pre><code class='haml'>= localize_by_key("offer_title")&#x000A;= localize_by_key("offer_description")</code></pre>
+          <pre class='fragment'><code class='sql'>(SQL) SELECT * from localizations where campaign_id = ?&#x000A;(SQL) SELECT * from variants where localization_id in ?&#x000A;(Cached) SELECT * from localizations where campaign_id = ?&#x000A;(Cached) SELECT * from variants where localization_id in ?</code></pre>
+        </section>
+        <section>
+          <h1>The Fix:</h1>
+          <pre><code class='ruby'>ActiveRecord::Associations::Preloader.new.preload(&#x000A;  campaign.localizations, :variants&#x000A;)</code></pre>
+        </section>
+        <section>
+          <h1>Rails v3</h1>
+          <pre><code class='ruby'>Post.has_many :comments, where(published: true)</code></pre>
+          <h1>Rails v4</h1>
+          <pre><code class='ruby'>Post.has_many :comments, -> { where(published: true) }</code></pre>
+        </section>
       </div>
     </div>
     <script src='http://lab.hakim.se/reveal-js/lib/js/head.min.js'></script>
@@ -506,6 +609,8 @@
       		{ src: 'http://lab.hakim.se/reveal-js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
       		{ src: 'http://lab.hakim.se/reveal-js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
       		{ src: 'http://lab.hakim.se/reveal-js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+          {src: 'https://mikemiles86.github.io/reveal-line-numbers/plugin/line-numbers/line-numbers.js'},
+          
           { src: 'https://rawgithub.com/hakimel/reveal.js/3.6.0/plugin/notes/notes.js', async: true }
       		// { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
       		// { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
