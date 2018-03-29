@@ -135,6 +135,15 @@
           .fragment
             %h2 Real Solution: 
             %h3 Create several databases and split some of the clients data between those databases
+        %section
+          %h1 Databases
+
+          %ol
+            %li Primary
+            %li Shard 1
+            %li Shard 2
+            %li Shard 3
+            %li Shard ...
 
         %section
           %h2 Each account with have a shard
@@ -184,7 +193,7 @@
           %h3 Is the following data sharded?
           %ol
             %li 
-              Fraud Policy
+              Fraud Policies
               %span.fragment.red - No
             %li
               Purchases
@@ -370,13 +379,9 @@
           %ul
             %li Each shard would need to be migrated
             %li Ghost processes would need to be launched in parallel
+
         %section
           %h2 Low Level API
-          %ul
-            %li 
-              Mainstream - MyClass.connection
-            %li 
-              Advanced - ActiveRecord::Base.connection
           %pre
             %code.ruby
               :preserve
@@ -390,6 +395,39 @@
                   on_all_databases
                   shards_sum
                   current_shard
+        %section
+          %h2 Connection Madness: Direct use
+
+          %p returns a connection to the shard or to primary 
+          %pre
+            %code.ruby
+              :preserve
+                Model.connection
+
+        %section
+          %h2 Connection Madness: Transaction
+
+          %p Open transaction on the primary or shard DB
+          %pre
+            %code.ruby
+              :preserve
+                Model.transaction do
+                  ...
+                end
+
+        %section
+          %h2 Connection Madness: Query Cache
+          %pre
+            %code.ruby
+              :preserve
+                ActiveRecord::Base.connection.query_cache_enabled
+          %h2 Disable the cache for all 4 databases
+          %pre
+            %code.ruby
+              :preserve
+                DatabaseUtils.uncached do
+                  ...
+                end
         %section
           %h2 Upgrading Dev Env
 
@@ -406,8 +444,9 @@
               :preserve
                 cp config/deploy/templates/database.yml config
                 edit config/database.yml
-                rake db:migrate
+                rake db:create db:migrate
                 rails runner support/2018/20180202160337_db_extraction.rb
+                rake db:drop db:create db:migrate RAILS_ENV=test
     %script{:src => "http://lab.hakim.se/reveal-js/lib/js/head.min.js"}
     %script{:src => "https://rawgithub.com/hakimel/reveal.js/3.6.0/js/reveal.js"}
     :javascript
