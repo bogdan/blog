@@ -81,513 +81,250 @@
           </h3>
         </section>
         <section>
-          <h2>Code review tends to be natural</h2>
-          <img src='http://s2.quickmeme.com/img/f0/f05b72bc2a08d7c684443ef10ad2e7ed57d37f57e33af30dbb7dab534399a811.jpg'>
-        </section>
-        <section>
-          <h2>Code Review yourself</h2>
-          <img src='http://www.globalnerdy.com/wordpress/wp-content/uploads/2011/10/its-working.jpg'>
-        </section>
-        <section>
-          <h2>Asking for help</h2>
-          <img src='https://www.visa.com.au/partner-with-us/developer/_jcr_content/par/cardstack_255835962/cardStackColumn3/image.img.jpg/1496038571257.jpg'>
-        </section>
-        <section>
-          <h3>Spondanuous code review problem:</h3>
-          <h2>Too Late</h2>
-          <img src='https://i.ytimg.com/vi/M6OcklRigfs/hqdefault.jpg'>
-        </section>
-        <section>
-          <h2>Everything had changed by</h2>
-          <h1>GitHub</h1>
-        </section>
-        <section>
-          <h2>Do I need a code review?</h2>
-          <h3>IMHO: new projects</h3>
-          <h3>don't need a formal code review at all</h3>
-        </section>
-        <section>
-          <h3>Code Review Evolution</h3>
-          <ol>
-            <li>Spontanuous Code Reviews</li>
-            <li>"When I am not sure" code reviews</li>
-            <li>Formal Code Review Process</li>
-            <li>Required code review for certain changes</li>
-            <li>Required code reviews for everything</li>
-          </ol>
-          <p class='fragment'>Fails Driven Process</p>
-        </section>
-        <section>
-          <h2>Code Review Properties</h2>
-          <h4>Necessity</h4>
-          <ul>
-            <li>Optional</li>
-            <li>Required</li>
-          </ul>
-          <h4>Process</h4>
-          <ul>
-            <li>Informal</li>
-            <li>Formal</li>
-          </ul>
-          <h4>People</h4>
-          <ul>
-            <li>Dedicated</li>
-            <li>Distributed</li>
-          </ul>
-        </section>
-        <section>
-          <h2>Position in a process</h2>
-          <ol>
-            <li>Planning</li>
-            <li>Coding</li>
-            <li>Code Review</li>
-            <li>QA</li>
-            <li>Release</li>
-          </ol>
-          <p class='fragment'>QA &lt;-&gt; Code Review</p>
-          <p class='fragment'>Formally QA after Code Review</p>
-        </section>
-        <section>
-          <ol>
-            <li>Make a branch or fork</li>
-            <li>Make a change</li>
-            <li>Open a Pull Request</li>
-            <li>Wait for review</li>
-            <li>
-              <div class='green'>Discuss &amp; Fix</div>
-            </li>
-            <li>Merge</li>
-          </ol>
-        </section>
-        <section>
+          <h2>Problem:</h2>
           <h2>
-            Code Review is
+            Database size is 2TB
           </h2>
-          <h4>
-            a process of
-            <span class='green'>reviewing and approving</span>
-            code changes
-            <br>
-            <span class='red'>before</span>
-            they get accepted to the mainstream
-          </h4>
-        </section>
-        <section>
-          <h3>How to review?</h3>
-          <img src='https://monosnap.com/file/jza1K5VEcJidIyiaz9O80XKHaLUKk5.png'>
-        </section>
-        <section>
-          <h2>Fix common things first?</h2>
           <ul>
-            <li>Typos</li>
-            <li>Whitespace</li>
-            <li>Code Style</li>
-          </ul>
-          <p class='fragment'>Wrong Direction!</p>
-        </section>
-        <section>
-          <h2>Where to look?</h2>
-          <p>
-            Things that are
-            <span class='green'>most significant</span>
-            should be reviewed first
-          </p>
-          <p class='fragment'>
-            which are ones that are the most
-            <span class='red'>hard to change.</span>
-          </p>
-        </section>
-        <section>
-          <h2>Top to Bottom Code Review</h2>
-          <ol>
-            <li>
-              Architecture
-              <ol>
-                <li>Problem Solution</li>
-                <li>Public APIs</li>
-                <li>Database Schema</li>
-                <li>Object Oriented Design</li>
-                <li>Public Method Signatures</li>
-              </ol>
-            </li>
-            <li class='fragment'>
-              Implementation
-              <ol>
-                <li>Classes &amp; Methods</li>
-                <li>Views</li>
-                <li>Tests</li>
-                <li>Code Style, Typos, Whitespace</li>
-              </ol>
-            </li>
-          </ol>
-        </section>
-        <section>
-          <h2>Problem Solution</h2>
-          <ol>
-            <li>Problem makes sense</li>
-            <li>Problem Solved</li>
-            <li>High Level Security</li>
-            <li>High Level Performance</li>
-          </ol>
-        </section>
-        <section>
-          <h4>Only show product categories with at least one product</h4>
-          <h4>in the select box</h4>
-          <pre><code class='diff'>def selectable_product_categories&#x000A;-  ProductCategory.with_at_least_one_product&#x000A;+  ProductCategory.all&#x000A;end&#x000A;</code></pre>
-          <pre class='fragment'><code class='ruby'>ProductCategory.&#x000A;  where("not exists(select * from products where ...)").&#x000A;  count # => 0&#x000A;</code></pre>
-        </section>
-        <section>
-          <h2>High Level Security</h2>
-          <h3>Ex. Feature:</h3>
-          <h4>Login user automatically when it clicks on the link in the email</h4>
-          <h3 class='fragment'>This is not very secure</h3>
-        </section>
-        <section>
-          <h2>High Level Performance:</h2>
-          <h3>Is there a way to even make this feature fast?</h3>
-          <ul class='fragment'>
-            <li>
-              Touches performance
-              <span class='red'>sensitive code</span>
-            </li>
-            <li>
-              Will be slow for
-              <span class='red'>particular data</span>
-              <ul>
-                <li>No pagination when there are 1000+ records to display</li>
-              </ul>
-            </li>
+            <li>Hard to change schema</li>
+            <li>Hard to copy into test envs</li>
+            <li>Hard to scale</li>
           </ul>
         </section>
         <section>
-          <h2>Public APIs</h2>
-          <h3>Using HTTP API as example</h3>
-          <ol>
-            <li class='red'>Efficiency</li>
-            <li>Logical Endpoints</li>
-            <li>Request Parameters</li>
-            <li>Response Format</li>
-          </ol>
-          <br>
-          <br>
-          <h4 class='fragment'>Whatever that is documented</h4>
-        </section>
-        <section>
-          <h2>API inefficiency example</h2>
-          <pre><code class='ruby'>Purchase.has_one :referral</code></pre>
-          <p>How do I approve the referral when I have a Purchase#order_number?</p>
+          <h2>Perfect solution:</h2>
+          <h3>Store each client in its own database</h3>
           <div class='fragment'>
-            <pre><code>GET /purchases/:order_number&#x000A;  {&#x000A;    id: 1,&#x000A;    order_number: '1838382',&#x000A;    referral_id: 17&#x000A;  }&#x000A;&#x000A;POST  /referrals/:id/approve</code></pre>
-            <h3>Efficient Way?</h3>
+            <h2>Real Solution:</h2>
+            <h3>Create several databases and split some of the clients data between those databases</h3>
           </div>
-          <pre class='fragment'><code class='less'>POST /purchases/:order_number/referral/approve</code></pre>
         </section>
         <section>
-          <h3>Response Format</h3>
-          <pre><code class='ruby'># Easier&#x000A;render json: @campaign.view_setups.to_json&#x000A;# Extensible&#x000A;render json: {view_setups: @campaign.view_setups.to_json}</code></pre>
-        </section>
-        <section>
-          <h2>Bad API Example</h2>
-          <pre><code class='js'>Talkable.publish('talkable_offer_close', null, true);</code></pre>
-          <pre class='fragment'><code class='js'>Talkable.publish('offer_close', null, true);&#x000A;</code></pre>
-        </section>
-        <section>
-          <h2>Analyze usage first</h2>
-          <h3>but not implementation</h3>
-          <pre><code class='js'>setProperties: function (person, properties) {&#x000A;  ...&#x000A;}&#x000A;setProperties('advocate', {key: value})&#x000A;setProperties('friend',   {key: value})</code></pre>
-          <pre class='fragment'><code class='js'>setAdvocateProperties: function(properties) {&#x000A;  privateStuff.setProperties("advocate", properties);&#x000A;},&#x000A;&#x000A;setFriendProperties: function(properties) {&#x000A;  privateStuff.setProperties("friend", properties);&#x000A;},</code></pre>
-        </section>
-        <section>
-          <h2>Database Schema</h2>
+          <h1>Databases</h1>
           <ol>
-            <li>Relations between tables</li>
-            <li>Data Columns</li>
-            <li>Naming</li>
+            <li>Primary</li>
+            <li>Shard 1</li>
+            <li>Shard 2</li>
+            <li>Shard 3</li>
+            <li>Shard ...</li>
           </ol>
         </section>
         <section>
-          <h3>Efficient Relations</h3>
-          <ol>
-            <li>What are the variants?</li>
-            <li>Was the best one selected?</li>
-          </ol>
+          <h2>Each account with have a shard</h2>
+          <img src='https://monosnap.com/file/1RCKV031ZGykFHyN2BfUZaJmiKjVI8.png'>
+        </section>
+        <section>
+          <h2>Shared Data vs Sharded Data</h2>
+          <h3>Sharded Tables</h3>
+          <div class='clearfix'>
+            <div class='left' style='width: 45%'>
+              <ul>
+                <li>activities</li>
+                <li>checkout_coupons</li>
+                <li>coupons</li>
+                <li>custom_attributes</li>
+                <li>custom_properties</li>
+                <li>customer_emails</li>
+                <li>items</li>
+                <li>incentive_outcomes</li>
+                <li>offers</li>
+                <li>offer_shares</li>
+              </ul>
+            </div>
+            <div class='right' style='width: 45%'>
+              <ul>
+                <li>origins</li>
+                <li>people</li>
+                <li>previous_customers</li>
+                <li>products</li>
+                <li>referrals</li>
+                <li>share_emails</li>
+                <li>split_test_impressions</li>
+                <li>visitors</li>
+                <li>visitor_offers</li>
+                <li>visitor_user_agents</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+        <section>
+          <h3>Conceptual Split</h3>
           <p>
-            <img src='http://support.smartbear.com/support/media/images/support/kb/data/2011/1/31/info-database-schema.jpg' style='height: 300px'>
+            We shard only the referrals data starting from People and Visitors
+            up to Referrals and Rewards
           </p>
-        </section>
-        <section>
-          <h3>Efficient schema</h3>
-          <pre><code class='ruby'>add_column :images, :dimension, :string&#x000A;&#x000A;class Image &lt; AR::Base&#x000A;  def width&#x000A;    dimension.split("x").first&#x000A;  end&#x000A;  def height&#x000A;    dimension.split("x").last&#x000A;  end&#x000A;end</code></pre>
-          <pre class='fragment'><code class='ruby'>add_column :images, :width, :integer&#x000A;add_column :images, :height, :integer</code></pre>
-        </section>
-        <section>
-          <h3>
-            Data should be
-            <span class='green'>easy to read</span>
-          </h3>
-          <h3 class='fragment'>
-            even if it makes it
-            <span class='red'>harder to write</span>
-          </h3>
-          <h3 class='fragment'>
-            Database schema change
-            <br>
-            can be one of the hardest ones
-          </h3>
-        </section>
-        <section>
-          <h2>Object Oriented Design</h2>
-          <ol>
-            <li>
-              Reflects Real World
-              <ul>
-                <li>Classes correspond to the real interactions that happen</li>
-              </ul>
-            </li>
-            <li>
-              Inheritance
-              <ul>
-                <li>Classes are inherited correctly</li>
-              </ul>
-            </li>
-            <li class='red'>Constructors</li>
-          </ol>
-        </section>
-        <section>
-          <h1>Inheritance</h1>
-          <h3>From Random Java Handbook:</h3>
-          <pre><code class='java'>public class Animal {&#x000A;}&#x000A;&#x000A;public class Mammal extends Animal {&#x000A;}&#x000A;&#x000A;public class Reptile extends Animal {&#x000A;}&#x000A;&#x000A;public class Dog extends Mammal {&#x000A;}</code></pre>
-        </section>
-        <section>
-          <h2>Reviewing constructors</h2>
-          <h3>Circular Dependency</h3>
-          <pre><code class='ruby'>class Field&#x000A;  def initialize&#x000A;    @cells = Array.new(10) do&#x000A;      Array.new(10) { Cell.new(self) }&#x000A;    end&#x000A;  end&#x000A;end&#x000A;class Cell&#x000A;  def initialize(field)&#x000A;    @field = field&#x000A;  end&#x000A;end</code></pre>
-        </section>
-        <section>
-          <h2>Class constructor answers to:</h2>
-          <ul>
-            <li>Which things are required to use an object?</li>
-            <li>
-              What are the object responsibilities?
-              <ul>
-                <li>Theoretical limit</li>
-              </ul>
-            </li>
-            <li>Which methods can be implemented in the object?</li>
-            <li>
-              Which things would need to be passed to methods as arguments?
-            </li>
-          </ul>
-          <br>
-          <br>
-          <h4 class='fragment'>
-            Name gives a clue what object
-            <span class='red'>should do</span>
-            <br>
-            Constructor gives a clue what object
-            <span class='green'>can do</span>
-          </h4>
-        </section>
-        <section>
-          <h2>Reviewing Constructors</h2>
-          <h3>Undefined Context</h3>
-          <pre><code class='ruby'>class ApplicationController&#x000A;  before_action do&#x000A;    WhateverRequestAnalyzer.new(request).analyze&#x000A;  end&#x000A;end</code></pre>
-          <pre class='fragment'><code class='ruby'>ConcreteRequestAnalyzer.new(&#x000A;  request.user_agent, request.url, request.content_type&#x000A;).analyze</code></pre>
-        </section>
-        <section>
-          <h2>Public Method Signatures</h2>
-          <ol>
-            <li class='red'>Placement</li>
-            <li>Arguments</li>
-            <li>Name</li>
-          </ol>
-        </section>
-        <section>
-          <h2>Method Placement</h2>
-          <pre><code class='ruby'>class User&#x000A;  def approve!(referral)&#x000A;end&#x000A;# OR&#x000A;class Referral&#x000A;  def approve!(user)&#x000A;end</code></pre>
-        </section>
-        <section>
-          <h2>Method Arguments</h2>
-          <pre><code class='js'>this.extractUserData(this.data)</code></pre>
-          <pre><code class='js'>renderFeedbackForm(user, user.role)&#x000A;</code></pre>
-        </section>
-        <section>
-          <h1>Implementation</h1>
-        </section>
-        <section>
-          <h2>Classes &amp; Method Bodies</h2>
-          <p>Each method or class separately</p>
-          <p>Check one by one:</p>
-          <ol>
-            <li>Approach</li>
-            <li>Performance</li>
-            <li>Security</li>
-            <li>Minimalism</li>
-            <li>Local Variable Names</li>
-          </ol>
-        </section>
-        <section>
-          <h1>Approach</h1>
-          <ol>
-            <li>Cycles statements</li>
-            <li>Conditional statements</li>
-            <li>Everything else</li>
-          </ol>
-        </section>
-        <section>
-          <pre><code class='ruby line-numbers' data-highlight-lines='2,3,6,7,9'>existing_properties = by_site(site).preload(:key).&#x000A;  by_person_or_visitor(person&.id, visitor&.id).group_by(&:key)&#x000A;new_properties = properties.transform_keys do |key|&#x000A;  site.custom_property_key_for!(key)&#x000A;end&#x000A;(existing_properties.keys + new_properties.keys).uniq.each do |key|&#x000A;  target_property = existing_properties[key]&.find do |property|&#x000A;    property.with_person_or_visitor?(person, visitor)&#x000A;  end || CustomProperty.new(key: key, value: existing_properties[key]&.first&.value)&#x000A;  target_property.person = person if person&#x000A;  target_property.visitor = visitor if visitor&#x000A;  target_property.value = new_properties.fetch(key) || ''&#x000A;  target_property.save! if target_property.changed?&#x000A;end</code></pre>
-        </section>
-        <section>
-          <h2>Performance &amp; Vulnerabilities</h2>
           <p>
-            In the ideal world performance and vulnerabilities
-            <br>
-            should not change the code structure.
-          </p>
-          <p class='fragment'>
-            In practice it can but we should try hard
-            <br>
-            to fix performance problems only at the implementation level
+            Campaign Configurations, Site configurations, View and Fraud settings are not sharded
           </p>
         </section>
         <section>
-          <h3>Good Performance Patch</h3>
-          <pre><code class='diff'> def core_options&#x000A;-  { header: name, description: description, group: group }&#x000A;+  @core_options ||= { header: name, description: description, group: group }&#x000A; end</code></pre>
-          <pre><code class='diff'>- @campaign.locale_entries.each do&#x000A;+ @campaign.locale_entries.preload(:variants).each do&#x000A;&#x000A;</code></pre>
-        </section>
-        <section>
-          <h3>Good Vulnerability Patch</h3>
-          <pre><code class='diff'>-&lt;%= advocate_info.first_name %&gt;&#x000A;+&lt;%= escape(advocate_info.first_name) %&gt;</code></pre>
-        </section>
-        <section>
-          <h1>Security</h1>
-          <ul>
-            <li>
-              General Security
-              <ul>
-                <li>Is it secure to have this feature?</li>
-                <li>Is it secure to implement the feature this way?</li>
-              </ul>
-            </li>
-            <li class='fragment'>
-              Implementation Vulnerabilities
-              <ul>
-                <li>XSS</li>
-                <li>Allowed Parameters</li>
-                <li>Backend Authorisation check</li>
-                <li>Authorisation for UI elements</li>
-              </ul>
-            </li>
-          </ul>
-        </section>
-        <section>
-          <h1>Performance</h1>
-          <ul>
-            <li>
-              General Performance
-              <ul>
-                <li>Can it be done fast?</li>
-                <li>Will it work fast for all possible use cases?</li>
-              </ul>
-            </li>
-            <li class='fragment'>
-              Implementation Performance
-              <ul>
-                <li>Fast DB queries</li>
-                <li>Caching</li>
-                <li>Microoptimization</li>
-              </ul>
-            </li>
-          </ul>
-        </section>
-        <section>
-          <h2>Tests</h2>
-          <ol>
-            <li class='red'>Use Cases Coverage</li>
-            <li>Formal Code Coverage</li>
-            <li>Tests Implementation</li>
-          </ol>
-        </section>
-        <section>
-          <h2>Top to bottom Idea</h2>
-          <h3>It is bad to:</h3>
-          <ul>
-            <li>Discuss the method name before the method existence as a fact</li>
-            <li>Discuss Code Style before implementation itself</li>
-          </ul>
-        </section>
-        <section>
-          <h2>Code Review Culture</h2>
-          <ul>
-            <li>Be Polite</li>
-            <li>Admit good things</li>
-            <li>
-              First things first
-              <ul class='fragment'>
-                <li>Reduce number of review cycles</li>
-                <li>Save Author's time</li>
-                <li>Save Your time</li>
-              </ul>
-            </li>
-          </ul>
-        </section>
-        <section>
-          <h2>Boss control approach</h2>
-          <p>Ensure top points from the list are always performed</p>
-          <p>Choose X things on top of the list to double-check and delegate the rest completely</p>
-        </section>
-        <section>
-          <h2>Top to Bottom Code Review</h2>
+          <h3>Is the following data sharded?</h3>
           <ol>
             <li>
-              Architecture
-              <ol>
-                <li>Problem Solution</li>
-                <li>Public APIs</li>
-                <li>Database Schema</li>
-                <li>Object Oriented Design</li>
-                <li>Public Method Signatures</li>
-              </ol>
+              Fraud Policies
+              <span class='fragment red'>- No</span>
             </li>
-            <li class='fragment'>
-              Implementation
-              <ol>
-                <li>Classes &amp; Methods</li>
-                <li>Views</li>
-                <li>Test Coverage</li>
-                <li>Code Style, Typos, Whitespace</li>
-              </ol>
+            <li>
+              Purchases
+              <span class='fragment green'>- Yes</span>
+            </li>
+            <li>
+              Offer Shares
+              <span class='fragment green'>- Yes</span>
+            </li>
+            <li>
+              Sharing Channels
+              <span class='fragment red'>- No</span>
+            </li>
+            <li>
+              Traffic Sources
+              <span class='fragment red'>- No</span>
+            </li>
+            <li>
+              Coupons
+              <span class='fragment green'>- Yes</span>
+            </li>
+            <li>
+              Short Urls
+              <span class='fragment red'>- No</span>
             </li>
           </ol>
         </section>
         <section>
-          <h1> Buktopuha </h1>
+          <h3>Impact to the system</h3>
+          <ul>
+            <li>Cross site reports need to care about sharding</li>
+            <li>Joines between sharded and not sharded data are impossible</li>
+            <li>Support scripts wouneed to care about sharding</li>
+          </ul>
         </section>
         <section>
-          <p>The code that uploads toxic assets to FTP every day</p>
-          <h3>Why is the date passed to worker as argument?</h3>
-          <pre><code class='ruby'># Runs daily via crontab&#x000A;task :upload_toxic_asset_to_ftp => :environment do&#x000A;  ToxicUploaderWorker.perform_async(Date.today)&#x000A;end&#x000A;&#x000A;class ToxicUploaderWorker&#x000A;  def perform(date)&#x000A;    file_name = "toxic-assets-#{date}.csv"&#x000A;    upload_to_ftp(file_name, to_csv(Asset.where(created_at: date)))&#x000A;  end&#x000A;end&#x000A;</code></pre>
+          <h3>Sharding Related Bugs</h3>
+          <ul>
+            <li>Sudden zeros and empty tables in reports can appear</li>
+            <li>500 on cross site reports</li>
+            <li>Bug only affects clients on specific shard</li>
+          </ul>
         </section>
         <section>
-          <h3>What does it return no results? How to fix that?</h3>
-          <pre><code class='ruby'>User.where(created_at: Date.today).count # => 0</code></pre>
+          <h2>Developers Section</h2>
+          <ul>
+            <li>Avoiding joins</li>
+            <li>Master and Slave</li>
+            <li>Console and Support Scripts</li>
+            <li>Migrations</li>
+            <li>Low level utilities</li>
+            <li>What to be aware of</li>
+          </ul>
         </section>
         <section>
-          <h3>The code fragment generates 4 SQL queries:</h3>
-          <h3>Why does it happen and how to fix that?</h3>
-          <pre><code class='ruby'>Campaign.has_many :localizations&#x000A;Localiztion.has_many :variants&#x000A;&#x000A;def localize_by_key(key)&#x000A;  @campaign.localizations.preload(:variants).find do |l|&#x000A;    l.key == key&#x000A;  end.text&#x000A;end</code></pre>
-          <pre><code class='haml'>= localize_by_key("offer_title")&#x000A;= localize_by_key("offer_description")</code></pre>
-          <pre class='fragment'><code class='sql'>(SQL) SELECT * from localizations where campaign_id = ?&#x000A;(SQL) SELECT * from variants where localization_id in ?&#x000A;(Cached) SELECT * from localizations where campaign_id = ?&#x000A;(Cached) SELECT * from variants where localization_id in ?</code></pre>
+          <h3>Sharded Models inherit <code>ShardedRecord</code></h3>
+          <h3>Not-Sharded Models inherit <code>ApplicationRecord</code></h3>
+          <div class='fragment'>
+            <p>
+              Models are sharded by default that is why
+              models from gems should be manually marked as not sharded
+              <pre><code class='ruby'>FriendlyId::Slug.not_sharded</code></pre>
+            </p>
+          </div>
         </section>
         <section>
-          <h1>The Fix:</h1>
-          <pre><code class='ruby'>ActiveRecord::Associations::Preloader.new.preload(&#x000A;  campaign.localizations, :variants&#x000A;)</code></pre>
+          <h2>Avoid Joins</h2>
+          <p>Old</p>
+          <pre><code class='ruby'>Referral.joins(visitor_offer: :sharing_channel).&#x000A;  days(30).ideal.group(:identifier).count&#x000A;# => ShardingJoinFinder::Error: "sharing_channels" can not &#x000A;#    be joined into VisitorOffer because of DB sharding</code></pre>
+          <div class='fragment'>
+            <p>New</p>
+            <pre><code class='ruby'>data = Referral.ideal.joins(:visitor_offer).&#x000A;  group(:sharing_channel_id).days(7).count&#x000A;ApplicationRecord.replace_ids(&#x000A;  data,&#x000A;  SharingChannel.all,&#x000A;  :identifier,&#x000A;  filter: true,&#x000A;  &:sum&#x000A;)</code></pre>
+          </div>
         </section>
         <section>
-          <h1>Rails v3</h1>
-          <pre><code class='ruby'>Post.has_many :comments, where(published: true)</code></pre>
-          <h1>Rails v4</h1>
-          <pre><code class='ruby'>Post.has_many :comments, -> { where(published: true) }</code></pre>
+          <h2>Avoid Joins</h2>
+          <p><code>ActiveRecord::Relation</code> methods</p>
+          <ul>
+            <li>
+              <strike>includes</strike>
+            </li>
+            <li>
+              <strike>eager_load</strike>
+            </li>
+          </ul>
+          <ul>
+            <li>joins</li>
+            <li>preload</li>
+          </ul>
+        </section>
+        <section>
+          <h2>Support Scripts</h2>
+          <pre><code class='ruby'>site.with_shard { site.people.count }&#x000A;with_context &lt;=&gt; with_shard + with_tz&#x000A;site.with_context { site.people.last.created_at }&#x000A;Site.focused.each_with_context do |site|&#x000A;  site.referrals.ideal.count&#x000A;end</code></pre>
+        </section>
+        <section>
+          <h2>Cross Shard Reports</h2>
+          <pre><code class='ruby'>DatabaseUtils.shards_sum { Referral.days(7).count }</code></pre>
+          <pre><code class='ruby'>DatabaseUtils.shards_sum do &#x000A;  Referral.group(:track_method).days(7).count&#x000A;end</code></pre>
+        </section>
+        <section>
+          <pre><code class='ruby'>DatabaseUtils.shards_sum do&#x000A;  data = Referral.ideal.joins(:visitor_offer).&#x000A;    group(:sharing_channel_id).days(7).count&#x000A;  ApplicationRecord.replace_ids(&#x000A;    data,&#x000A;    SharingChannel.all,&#x000A;    :identifier,&#x000A;    filter: true,&#x000A;    &:sum&#x000A;  )&#x000A;end&#x000A;</code></pre>
+        </section>
+        <section>
+          <h2>Console</h2>
+          <pre><code class='ruby'>>> site = Site.find(...)&#x000A;>> site.offers.count&#x000A;=> RuntimeError: Offer can not be queried: shard is not selected</code></pre>
+          <pre class='fragment'><code>>> shard # => nil&#x000A;>> shard(1) # => 1&#x000A;>> shard # => 1&#x000A;>> shard(site) # => 2</code></pre>
+        </section>
+        <section>
+          <h2>Console</h2>
+          <p>
+            Beware of selected shard when performing several operations in the same console for different sites
+          </p>
+          <pre><code class='ruby'>>> site = Site.find('shuterfly')&#x000A;>> shard(site)&#x000A;>> site.referrals.ideal.where(track_method: 'coupon').count</code></pre>
+          <div class='fragment'>
+            <pre><code class='ruby'># 3 Hours later same console&#x000A;site = Site.find('aeo')&#x000A;site.offers.where(campaign_id: [...]).count # => 0&#x000A;</code></pre>
+          </div>
+        </section>
+        <section>
+          <h2>Migrations</h2>
+          <pre><code class='ruby'>class AddWhateverToReferrals &lt; ActiveRecord::Migration[5.1]&#x000A;  shard :all&#x000A;  def change&#x000A;    add_column :referrals, :whatever, :string&#x000A;  end&#x000A;end&#x000A;&#x000A;class AddWhateverToSites &lt; ActiveRecord::Migration[5.1]&#x000A;  shard :none&#x000A;  def change&#x000A;    add_column :sites, :whatever, :string&#x000A;  end&#x000A;end</code></pre>
+        </section>
+        <section>
+          <h2>Sharded Migrations + Ghost</h2>
+          <ul>
+            <li>Each shard would need to be migrated</li>
+            <li>Ghost processes would need to be launched in parallel</li>
+          </ul>
+        </section>
+        <section>
+          <h2>Low Level API</h2>
+          <pre><code class='ruby'>DatabaseUtils.&#x000A;  config_for(slave: true, shard: 1)&#x000A;  connection(slave: true, shard: 1)&#x000A;  sharded_tables&#x000A;  use_shard(nil|1)&#x000A;  use_slave&#x000A;  on_all_shards&#x000A;  on_all_databases&#x000A;  shards_sum&#x000A;  current_shard</code></pre>
+        </section>
+        <section>
+          <h2>Connection Madness: Direct use</h2>
+          <p>returns a connection to the shard or to primary</p>
+          <pre><code class='ruby'>Model.connection&#x000A;</code></pre>
+        </section>
+        <section>
+          <h2>Connection Madness: Transaction</h2>
+          <p>Open transaction on the primary or shard DB</p>
+          <pre><code class='ruby'>Model.transaction do&#x000A;  ...&#x000A;end&#x000A;</code></pre>
+        </section>
+        <section>
+          <h2>Connection Madness: Query Cache</h2>
+          <pre><code class='ruby'>ActiveRecord::Base.connection.query_cache_enabled</code></pre>
+          <h2>Disable the cache for all 4 databases</h2>
+          <pre><code class='ruby'>DatabaseUtils.uncached do&#x000A;  ...&#x000A;end</code></pre>
+        </section>
+        <section>
+          <h2>Upgrading Dev Env</h2>
+          <ol>
+            <li>
+              Upgrade database.yml
+              <ul>
+                <li>MySQL server connection URL</li>
+                <li>Ensure Primary DB name is right</li>
+              </ul>
+            </li>
+            <li>Split extract shard 1 from primary DB</li>
+            <li>Shard 2 will be used for new sites.</li>
+          </ol>
+          <pre><code class='sh'>cp config/deploy/templates/database.yml config&#x000A;edit config/database.yml&#x000A;rake db:create db:migrate&#x000A;rails runner support/2018/20180202160337_db_extraction.rb&#x000A;rake db:drop db:create db:migrate RAILS_ENV=test</code></pre>
         </section>
       </div>
     </div>
