@@ -74,8 +74,11 @@
       .slides
         %section
           %h1
-            Rails App Performance
-          %h1 at the limit
+            Rails App 
+            %span.green Performance
+          %h1 
+            at the 
+            %span.red limit
           %h2
             November 2018
           %h3
@@ -84,11 +87,14 @@
           %h2
             Bogdan G.
           %ul
-            %li is 9 years in IT
+            %li is 10 years in IT
             %li
-              6 years with Ruby and Rails
+              8 years with Ruby and Rails
               %ul
                 %li Long Run Rails Contributor
+            %li 
+              Active Speaker
+
         %section
           %h1
             Some of my gems
@@ -136,6 +142,7 @@
 
         %section
           %h1 Is Rails slow?
+          %h3 A minute of severe reality
         %section
           %h3 How slow is Action Controller &amp; Action Dispatch?
 
@@ -333,11 +340,11 @@
           %pre.left{style: 'width: 45%'}
             %code.ruby
               :preserve
-                id                  :integer          
-                referred_origin_id  :integer          
-                visitor_offer_id    :integer          
-                status              :string(20)       
-                webhook_status      :string(10)       
+                id                  :integer   
+                referred_origin_id  :integer   
+                visitor_offer_id    :integer   
+                status              :string(20)
+                webhook_status      :string(10)
                 track_method        :string(20)
                 processed_by        :integer
                 created_at          :datetime
@@ -348,13 +355,13 @@
             %code.ruby
               :preserve
                 offer_id            :integer
-                site_id             :integer          
-                campaign_id         :integer          
-                advocate_visitor_id :integer          
+                site_id             :integer
+                campaign_id         :integer
+                advocate_visitor_id :integer
                 friend_timing       :decimal
                 referred_subtotal   :decimal
-                qa_generated        :boolean          
-                ad_rewarded         :boolean          
+                qa_generated        :boolean
+                ad_rewarded         :boolean
           -#%pre
             %code
               :preserve
@@ -449,7 +456,9 @@
           %ul
             %li HTTP access.log
             %li Rails production.log
+            %li Kibana
             %li New Relic
+            %li.fragment Your variant?
 
         %section
           %h1 Specific optimization plan
