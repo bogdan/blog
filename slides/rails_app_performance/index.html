@@ -1,698 +1,746 @@
 <!doctype html>
 <html lang='en'>
-  <head>
-    <meta charset='utf-8'>
-    <title>Rails App Performance</title>
-    <meta content='' name='description'>
-    <meta content='Bogdan Gusiev' name='author'>
-    <meta content='yes' name='apple-mobile-web-app-capable'>
-    <meta content='black-translucent' name='apple-mobile-web-app-status-bar-style'>
-    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' name='viewport'>
-    <link href='http://lab.hakim.se/reveal-js/css/reveal.css' rel='stylesheet'>
-    <link href='https://rawgithub.com/hakimel/reveal.js/master/css/theme/white.css' rel='stylesheet'>
-    <!-- For syntax highlighting -->
-    <link href='http://lab.hakim.se/reveal-js/lib/css/zenburn.css' rel='stylesheet'>
-    <!-- If the query includes 'print-pdf', use the PDF print sheet -->
-    <script>
-      var link = document.createElement( 'link' );
-      link.rel = 'stylesheet';
-      link.type = 'text/css';
-      link.href = "https://revealjs.com/css/print/" + (window.location.search.match( /print-pdf/gi ) ? 'pdf.css' : 'paper.css');
-      document.getElementsByTagName( 'head' )[0].appendChild( link );
-    </script>
-    <style>
-      body .reveal {
-        font-size: 30px !important; }
+<head>
+<meta charset='utf-8'>
+<title>Rails App Performance</title>
+<meta content='' name='description'>
+<meta content='Bogdan Gusiev' name='author'>
+<meta content='yes' name='apple-mobile-web-app-capable'>
+<meta content='black-translucent' name='apple-mobile-web-app-status-bar-style'>
+<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' name='viewport'>
+<link href='http://lab.hakim.se/reveal-js/css/reveal.css' rel='stylesheet'>
+<link href='https://rawgithub.com/hakimel/reveal.js/master/css/theme/white.css' rel='stylesheet'>
+<!-- For syntax highlighting -->
+<link href='http://lab.hakim.se/reveal-js/lib/css/zenburn.css' rel='stylesheet'>
+<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+<script>
+  var link = document.createElement( 'link' );
+  link.rel = 'stylesheet';
+  link.type = 'text/css';
+  link.href = "https://revealjs.com/css/print/" + (window.location.search.match( /print-pdf/gi ) ? 'pdf.css' : 'paper.css');
+  document.getElementsByTagName( 'head' )[0].appendChild( link );
+</script>
+<style>
+  body .reveal {
+    font-size: 30px !important; }
+  
+  .yellow {
+    color: yellow; }
+  
+  .reveal section pre code {
+    padding: 20px 5px;
+    font-size: 1.3em;
+    line-height: 1.3em; }
+  .reveal section ul {
+    min-width: 50%; }
+  .reveal section .red {
+    color: #e02c2d; }
+  .reveal section .green {
+    color: #17cc1e; }
+  .reveal section .yellow {
+    color: yellow; }
+  .reveal section .blue {
+    color: #1b91ff; }
+  .reveal section .left {
+    float: left; }
+  .reveal section .right {
+    float: right; }
+  .reveal section .clearfix {
+    overflow: hidden; }
+  .reveal section table.full-border {
+    border-collapse: collapse; }
+    .reveal section table.full-border td {
+      border: 1px solid black !important; }
+  .reveal section img {
+    border: 0px;
+    box-shadow: 0 0 0 0; }
+  .reveal section code.line-numbers {
+    counter-reset: line_numbers; }
+  .reveal section code span.line-number {
+    counter-increment: line_numbers;
+    margin-right: 1em; }
+    .reveal section code span.line-number:before {
+      content: counter(line_numbers,decimal-leading-zero);
+      color: gray; }
+  .reveal section code span.highlight-line:before {
+    color: yellow; }
+</style>
+</head>
+<body>
+<div class='reveal'>
+<div class='slides'>
+<section>
+<h1>
+Rails App
+<span class='green'>Performance</span>
+</h1>
+<h1>
+at the
+<span class='red'>limit</span>
+</h1>
+<h2>
+November 2018
+</h2>
+<h3>
+Bogdan Gusiev
+</h3>
+</section>
+<section>
+<h2>
+Bogdan G.
+</h2>
+<ul>
+<li>is 10 years in IT</li>
+<li>
+8 years with Ruby and Rails
+<ul>
+<li>Long Run Rails Contributor</li>
+</ul>
+</li>
+<li>
+Active Speaker
+</li>
+</ul>
+</section>
+<section>
+<h1>
+Some of my gems
+</h1>
+<ul>
+<li>
+<a href='http://github.com/bogdan'>http://github.com/bogdan</a>
+<ul>
+<li>
+<a href='https://github.com/bogdan/datagrid'>datagrid</a>
+</li>
+<li>
+<a href='https://github.com/railsware/js-routes'>js-routes</a>
+</li>
+<li>
+<a href='https://github.com/bogdan/accepts_values_for'>accepts_values_for</a>
+</li>
+<li>
+<a href='https://github.com/bogdan/furi'>furi</a>
+</li>
+</ul>
+</li>
+</ul>
+</section>
+<section>
+<h2>The Scope of this presentation</h2>
+<ul>
+<li>App server optimization</li>
+<li>Only technologies compatible with rails</li>
+<li>Relay on rails tools if we can</li>
+</ul>
+</section>
+<section>
+<h2>The plan</h2>
+<ol>
+<li>General optimization</li>
+<li>When to optimize specifically?</li>
+<li>Identify slow parts</li>
+<li>Targeted Optimization Methods</li>
+</ol>
+</section>
+<section>
+<h1>
+<a href='http://talkable.com'>
+<img alt='Talkable' src='http://d2jjzw81hqbuqv.cloudfront.net/assets/static/logo-dark-large.png' style=''>
+</a>
+</h1>
+<ul>
+<li>
+8 years old startup
+</li>
+<li>
+A lot of code
+</li>
+<li>
+Rails version from 2.0 to 5.1
+</li>
+<li>
+35_000 RPM
+</li>
+<li>
+2TB sharded database
+</li>
+</ul>
+</section>
+<section>
+<h1>Is Rails slow?</h1>
+<h3>A minute of severe reality</h3>
+</section>
+<section>
+<h3>How slow is Action Controller &amp; Action Dispatch?</h3>
+<p>Everyone's favorite hello-world benchmark</p>
+<div class='fragment'>
+<pre><code class='ruby'>Framework     Reqs/sec  % from best&#x000A;-----------------------------------&#x000A;rack          15839.64      100.00%&#x000A;sinatra        3977.30       25.11%&#x000A;grape          2937.03       18.54%&#x000A;rails-api      1211.33        7.65%&#x000A;</code></pre>
+<p>
+Source:
+<a href='https://github.com/luislavena/bench-micro'>bench-micro</a>
+</p>
+</div>
+</section>
+<section>
+<h1>How slow is ActiveRecord?</h1>
+<div class='fragment'>
+<pre><code class='ruby'>sql = "select * from users where id = 1"&#x000A;# No ActiveRecord&#x000A;Mysql2::Client~query(sql)&#x000A;# Connection Query&#x000A;AR::Base.connection.execute(sql)&#x000A;# ActiveRecord::Base&#x000A;User.find(1)</code></pre>
+<a href='https://gist.github.com/31fbdf0cfe12bf55e07e275650d45c4f'>Benchmark Gist</a>
+</div>
+</section>
+<section>
+<h3>
+Dev Environment:
+<br>
+Query from the same machine as the DB
+</h3>
+<pre><code class='plain'>   No ActiveRecord:     7034.8 i/s&#x000A;  Connection query:     6825.3 i/s - same-ish&#x000A;ActiveRecord::Base:     1244.8 i/s - 5.65x  slower</code></pre>
+<div class='fragment'>
+<h3>
+AWS RDS EC2 instance:
+<br>
+Query from a different machine than the DB
+</h3>
+<pre><code class='plain'>   No ActiveRecord:     3204.2 i/s&#x000A;  Connection query:     2762.6 i/s - 1.16x  slower&#x000A;ActiveRecord::Base:      781.3 i/s - 4.10x  slower</code></pre>
+</div>
+</section>
+<section>
+<h1>No ActiveRecord impact</h1>
+<ul>
+<li>Up to 4 times faster</li>
+<li>Ugliest API</li>
+<li>No code reuse tools</li>
+</ul>
+<p>The dev process will be slowed down from 4 times</p>
+</section>
+<section>
+<h1>How slow is ActionView?</h1>
+<div class='fragment'>
+<p>
+It is really hard to evaluate.
+<br>
+Hello-world benchmark will not show anything
+</p>
+</div>
+<div class='fragment'>
+<p>Main things that impact performance:</p>
+<ul>
+<li>Advanced layout structure</li>
+<li>Render partials</li>
+<li>Helper method calls</li>
+<li>Using ActiveRecord inside views</li>
+</ul>
+</div>
+</section>
+<section>
+<h1>Good news about ActionView</h1>
+<ul>
+<li>Easy to replace with different technology</li>
+<li>Client side rendering is available</li>
+</ul>
+</section>
+<section>
+<h2>
+Optimization
+<nobr>
+anti-pattern
+</nobr>
+</h2>
+<ul>
+<li>Our App is slow, can we make it fast?</li>
+<li>Sure!</li>
+</ul>
+<table class='fragment' style='vertical-align: top'>
+<tr>
+<td>
+<img height='200px' src='https://media.giphy.com/media/9rjRGuk1qzqe4cgTzp/giphy.gif' width='300px'>
+</td>
+<td>
+<img height='200px' src='https://media.giphy.com/media/l0HlHJGHe3yAMhdQY/giphy.gif' width='300px'>
+</td>
+</tr>
+<tr>
+<td>
+<img height='200px' src='https://media.giphy.com/media/26vUw5sYGcqmMDoBy/giphy.gif' width='300px'>
+</td>
+<td>
+<img height='200px' src='https://media.giphy.com/media/sJPqw54VQJfY4/giphy.gif' width='300px'>
+</td>
+</tr>
+</table>
+</section>
+<section>
+<h2>What are you going to improve with?</h2>
+<ul>
+<li>App Server Container</li>
+<li>Changing RDBMS</li>
+<li>Ruby interpreter</li>
+</ul>
+</section>
+<section>
+<h1>General optimization</h1>
+<div class='left'>
+<img src='https://media.giphy.com/media/3ba6CvOF2mSe0pvOuE/giphy.gif' width='300'>
+</div>
+<div class='fragment rigth' width='300'>
+<img src='https://media.giphy.com/media/8vqFcSiyzC5qxwwzPn/giphy.gif' width='300'>
+</div>
+<p class='fragment'>
+Worms are not made to move fast
+</p>
+</section>
+<section>
+<h2>
+<span class='green'>Effective Database Structure</span>
+<br>
+is the only one general optimization technique we found useful
+<span class='red'>in 8 years</span>
+</h2>
+</section>
+<section>
+<h2>Great Database Schema</h2>
+<ul>
+<li>Allows all controllers to do their work efficiently</li>
+<li>Reduces the operations using ruby to minimum</li>
+<li>Reduces SQL complexity</li>
+</ul>
+</section>
+<section>
+<h1>Golden Rules</h1>
+<ul>
+<li>Optimize data storage for reading not for writing</li>
+<li>Business Rules define the database schema</li>
+<li>There is usually only one way that "feels" right</li>
+<li>Design efficiently for today</li>
+</ul>
+</section>
+<section>
+<h1>Cache columns</h1>
+<h2>Foreign key cache example</h2>
+<pre class='fragment'><code class='ruby'>Poll.has_many :options&#x000A;Option.belongs_to :poll&#x000A;Option.has_many :votes&#x000A;Vote.belongs_to :option, counter_cache: true&#x000A;Vote.belongs_to :user</code></pre>
+<pre class='fragment'><code class='ruby'>Poll.has_many :votes&#x000A;Vote.belongs_to :poll, counter_cache: true &#x000A;Vote.validates_uniqueness_of :poll_id, scope: [:user_id]</code></pre>
+</section>
+<section>
+<h1>Join Avoidance</h1>
+<pre><code class='ruby'>Site.has_many :campaigns&#x000A;Campaign.has_many :offers&#x000A;Offer.has_many :offer_shares&#x000A;OfferShare.has_many :visitor_offers&#x000A;VisitorOffer.has_many :referrals</code></pre>
+<pre class='fragment'><code class='ruby'>Referral.scope :by_site, -> (id) {&#x000A;  joins(visitor_offer: {offer_share: {offer: :campaign}}).&#x000A;  where(campaigns: {site_id: id})&#x000A;}</code></pre>
+<pre class='fragment'><code class='ruby'>add_column :referrals, :site_id&#x000A;Referral.before_validation do&#x000A;  self.site_id = visitor_offer.offer_share.offer.campaign.site_id&#x000A;end</code></pre>
+</section>
+<section>
+<h2>Real example of</h2>
+<h1>cache columns</h1>
+<pre class='left' style='width: 45%'><code class='ruby'>id                  :integer   &#x000A;referred_origin_id  :integer   &#x000A;visitor_offer_id    :integer   &#x000A;status              :string(20)&#x000A;webhook_status      :string(10)&#x000A;track_method        :string(20)&#x000A;processed_by        :integer&#x000A;created_at          :datetime&#x000A;updated_at          :datetime&#x000A;processed_at        :datetime&#x000A;</code></pre>
+<pre class='right' style='width: 45%; height: 100%'><code class='ruby'>offer_id            :integer&#x000A;site_id             :integer&#x000A;campaign_id         :integer&#x000A;advocate_visitor_id :integer&#x000A;friend_timing       :decimal&#x000A;referred_subtotal   :decimal&#x000A;qa_generated        :boolean&#x000A;ad_rewarded         :boolean</code></pre>
+</section>
+<section>
+<h1>
+Cache Columns
+<br>
+<span class='green'>best practices</span>
+</h1>
+<ul>
+<li>Mostly for read-only data</li>
+<li>Remember what is the source and what is cache</li>
+<li>Watch the disk space</li>
+<li>It is worth it!</li>
+</ul>
+</section>
+<section>
+<h1>Specific Optimization</h1>
+<ul>
+<li>Applied only to problematic pieces</li>
+<li>Makes sense for the used functionality</li>
+<li>Makes sense only when the functionality is stable</li>
+<li>Can be faster than switch to faster technology in general</li>
+</ul>
+</section>
+<section>
+<h2>How business views the optimization?</h2>
+<p>You: Lets Optimize!</p>
+<div class='fragment' style='margin: 0 auto;width: 50%'>
+<p>Business:</p>
+<img class='left' src='https://media.giphy.com/media/nR4L10XlJcSeQ/giphy.gif' style='width: 48%; height: 200px'>
+<img class='right' src='https://media.giphy.com/media/ZwOmKAAVX6f3zrcBi0/giphy.gif' style='width: 48%; height: 200px'>
+</div>
+<div class='fragment'>
+<p>Business says yes when:</p>
+<ul>
+<li>Functionality is stable</li>
+<li>Feature is being used</li>
+<li>Company is making money with it</li>
+</ul>
+</div>
+</section>
+<section>
+<h1>
+How to identify
+<br>the optimization areas</br>
+</h1>
+</section>
+<section>
+<h1>Throughput by action</h1>
+<iframe width="600" height="371" seamless frameborder="0" scrolling="no" src="https://docs.google.com/spreadsheets/d/e/2PACX-1vRb1tFj24UesZzAo9Vz00bqCF3CQqg5i0nm3PRjtYMJfoM9Aa4YlHlHbO_-cpULI3eIOsbnOBbwnesu/pubchart?oid=1782821828&amp;format=image"></iframe>
+</section>
+<section>
+<h1>Resources consumed</h1>
+<iframe width="600" height="371" seamless frameborder="0" scrolling="no" src="https://docs.google.com/spreadsheets/d/e/2PACX-1vRb1tFj24UesZzAo9Vz00bqCF3CQqg5i0nm3PRjtYMJfoM9Aa4YlHlHbO_-cpULI3eIOsbnOBbwnesu/pubchart?oid=337667264&amp;format=interactive"></iframe>
+</section>
+<section>
+<h1>Optimization measurement</h1>
+<ul>
+<li>Average response time</li>
+<li>Consumed resources</li>
+</ul>
+<div class='fragment'>
+<pre><code>select controller, action, http_method, &#x000A;  sum(duration), average(duration), count(*)&#x000A;from app_server_requests</code></pre>
+<p>
+(pseudocode)
+</p>
+</div>
+</section>
+<section>
+<h2>Tools</h2>
+<ul>
+<li>HTTP access.log</li>
+<li>Rails production.log</li>
+<li>Kibana</li>
+<li>New Relic</li>
+<li class='fragment'>Your variant?</li>
+</ul>
+</section>
+<section>
+<h1>Specific optimization plan</h1>
+<ol>
+<li>Define Optimization Metric</li>
+<li>Measure the metric</li>
+<li>Zoom in to see optimizable parts</li>
+<li>Choose optimized fragment and strategy</li>
+</ol>
+</section>
+<section>
+<h1>Optimization Methods</h1>
+</section>
+<section>
+<h2>Avoiding ActiveRecord</h2>
+<ul>
+<li>Looks awesome on the first glance</li>
+<li>Less valuable with effective DB schema</li>
+<li>More work with more DB queries</li>
+<li>Unreusable code</li>
+<li>Caching can be superior</li>
+</ul>
+</section>
+<section>
+<h3>Avoiding ActiveRecord examples</h3>
+<pre><code class='ruby'>class Campaign&#x000A;  has_many :tags&#x000A;  def tag_names&#x000A;    tags.pluck(:name)&#x000A;  end&#x000A;end</code></pre>
+<pre class='fragment'><code class='ruby'>def offers_created_at_range&#x000A;  scope = offers.reorder(created_at: :asc).limit(1)&#x000A;  scope.pluck(:created_at).first..&#x000A;    scope.reverse_order.pluck(:created_at).first&#x000A;end</code></pre>
+</section>
+<section>
+<h2>
+Bogdan
+❤️
+ActiveRecord
+</h2>
+<h3>Why don't all people love ActiveRecord?</h3>
+<ul>
+<li class='fragment'>They don't optimize their schema</li>
+<li class='fragment'>They don't realize it does the hardest work</li>
+<li class='fragment'>They don't appreaciate the feature-set/performance trade off</li>
+</ul>
+<h3 class='fragment'>
+All my examples are considered
+<br>
+micro optimization
+</h3>
+</section>
+<section>
+<h1>Conditional Get</h1>
+<table>
+<tr class='fragment'>
+<td>Client</td>
+<td>GET /products/1827.json</td>
+</tr>
+<tr class='fragment'>
+<td>Server</td>
+<td>
+Response /products/1827.json
+<br>
+Etag: "2018-10-29 16:36"
+</td>
+</tr>
+<tr class='fragment'>
+<td>Client</td>
+<td>
+GET /products/1827.json
+<br>
+If-None-Match: "2018-10-29 16:36"
+</td>
+</tr>
+<tr class='fragment'>
+<td>Server</td>
+<td>
+STATUS 304 Not Modified
+<br>
+<div class='fragment'>
+<strong>OR</strong>
+<br>
+Response /products/1827.json
+<br>
+Etag: "2018-10-29 16:37"
+</div>
+</td>
+</tr>
+</table>
+</section>
+<section>
+<h1>Conditional Get tools</h1>
+<pre><code class='ruby'>class Api::ProductsController &lt; ApplicationController&#x000A;  def show&#x000A;    @product = Product.find(params[:id])&#x000A;    if stale?(last_modified: @product.updated_at, &#x000A;              etag: @product.cache_key)&#x000A;      render json: { product: @product }&#x000A;    end&#x000A;  end&#x000A;end</code></pre>
+<a href='https://guides.rubyonrails.org/caching_with_rails.html#conditional-get-support'>
+Rails Conditional GET Guide
+</a>
+</section>
+<section>
+<h1>
+Conditional GET
+<br>
+is great when
+</h1>
+<ul>
+<li>A single page is viewed multiple times by the same browser</li>
+<li>Lightweight actions</li>
+<li>Actions returning JSON</li>
+</ul>
+</section>
+<section>
+<h1>Rewriting with rack</h1>
+<ol>
+<li>The action is already under 500ms</li>
+<li>Heavily loaded action</li>
+<li>It is painful</li>
+<li>Looks better than rewriting on Sinatra</li>
+</ol>
+</section>
+<section>
+<h2>Conditional Get held in Rack</h2>
+<pre><code class='ruby'>class OffersController &lt; ApplicationController&#x000A;  def show&#x000A;    @offer = Offer.find(params[:id])&#x000A;    digest = SecureRandom.uuid&#x000A;    data = { offer_id: offer.id, cached_at: Time.zone.now, }&#x000A;    Rails.cache.write(digest, data, &#x000A;                      expires_in: CACHE_PERIOD.from_now)&#x000A;    response.headers['Cache-Control'] = &#x000A;      'max-age=0, private, must-revalidate'&#x000A;    response.headers['ETag'] = %(W/"#{digest}")&#x000A;  end&#x000A;end&#x000A;</code></pre>
+</section>
+<section>
+<h2>Rack Middleware</h2>
+<pre><code class='ruby'>def call(env)&#x000A;  if fresh?(env['HTTP_IF_NONE_MATCH'])&#x000A;    return [304, {}, ['Not Modified']]&#x000A;  end&#x000A;  @app.call(env)&#x000A;end&#x000A;&#x000A;def fresh?(etag_header)&#x000A;  return unless data = Rails.cache.read(digest)&#x000A;  site_id, timestamp = &#x000A;    Offer.where(id: data[:offer_id]).pluck(:site_id, :updated_at)&#x000A;  SettingsChange.where(site_id: site_id, created_at: lookup_period).empty? &&&#x000A;    !((data[:cached_at]..Time.zone.now).include?(timestamp))&#x000A;end&#x000A;</code></pre>
+</section>
+<section>
+<h2>Introduce caching</h2>
+<ol>
+<li>Find suitable code fragment</li>
+<li>Measure Cache Hit</li>
+<li>Use expiration by key</li>
+<li>Always expire by timeout</li>
+<li>Expire on deploy</li>
+</ol>
+</section>
+<section>
+<h1>Cache Hit</h1>
+<ul>
+<li>How many cache entries will be made?</li>
+<li>What is the average size of cache entry?</li>
+<li>How many times each entry will be used?</li>
+<li>What % of requests will use cache?</li>
+<li>How much memory would it take?</li>
+</ul>
+</section>
+<section>
+<h2>Cache hit example</h2>
+<pre><code class='ruby'>class Campaign&#x000A;  has_many :offers&#x000A;  def cached_offers_count&#x000A;    @offers_count ||= if active?&#x000A;      offers.count&#x000A;    else&#x000A;      # Caching only inactive campaigns&#x000A;      # because they can not get additional offers&#x000A;      Rails.cache.fetch(&#x000A;              ["campaign_offers_count", id], expires_in: 1.month) do&#x000A;        offers.count&#x000A;      end&#x000A;    end&#x000A;  end&#x000A;end</code></pre>
+</section>
+<section>
+<h1>Expiration by key</h1>
+<p>Manual expiration example</p>
+<pre><code class='ruby'>def show&#x000A;  response = Rails.cache.fetch(["products", @product.id]) do&#x000A;    @product.to_json&#x000A;  end&#x000A;  render json: response&#x000A;end &#x000A;def update&#x000A;  @product.update!(params[:product])&#x000A;  Rails.cache.delete(["products", @product.id])&#x000A;end</code></pre>
+</section>
+<section>
+<h2>Expiration by Key example</h2>
+<pre><code class='ruby'>class ViewStylesheet&#x000A;def css&#x000A;  # Combining many cache keys here &#x000A;  # to expire whenever any object is updated&#x000A;  cache_key = ['view_setup_css', campaign, self, account]&#x000A;  Rails.cache.fetch(cache_key, &#x000A;        force: template_changed?, expires_in: 3.days) do&#x000A;    Sass.compile(template)&#x000A;  end&#x000A;end&#x000A;end</code></pre>
+<a href='https://signalvnoise.com/posts/3113-how-key-based-cache-expiration-works'>
+Key-based Expiration from DHH
+</a>
+</section>
+<section>
+<h2>Expiration best practices</h2>
+<pre><code class='ruby'>config.cache_store = :redis_store, &#x000A;    namespace: Deploy.identifier, expires_in: 1.day&#x000A;</code></pre>
+</section>
+<section>
+<h2>Rails magic on working with cache</h2>
+<pre><code class='haml'>- cache @projects do&#x000A;  - @projects.each do |project| %>&#x000A;    = render partial: 'projects/project', project</code></pre>
+<pre class='fragment'><code class='haml'>%a{href: project_path(product)}= project.name&#x000A;.star{class: current_user.bookmarked?(project) ? 'enabled' : ''}</code></pre>
+<ul>
+<li>Variables usage inside ActionView is implicit</li>
+<li>Magic is always slow</li>
+</ul>
+</section>
+<section>
+<h2>Optimizable requests</h2>
+<ul>
+<li>Lightweight</li>
+<li>GET method</li>
+<li>
+Used data is explicit
+<ul>
+<li>Return JSON but not HTML</li>
+<li>Do not use ActionView</li>
+</ul>
+</li>
+</ul>
+</section>
+<section>
+<h3>What optimizable page should look like?</h3>
+<img src='https://api.monosnap.com/rpc/file/download?id=RcjcGq17e8inIi1mWhM29CpYPoSA4E'>
+</section>
+<section>
+<h2>
+Optimization
+❤️
+Client Side Rendering
+</h2>
+<ul>
+<li>Saves server resources</li>
+<li>Parallel load</li>
+<li>Makes used data explicit</li>
+</ul>
+</section>
+<section>
+<h2>
+Optimization by
+<br>
+code structure change
+</h2>
+<ul>
+<li>
+Trivial
+<ul class='fragment'>
+<li>Always considered first</li>
+</ul>
+</li>
+<li>
+Significant
+<ul class='fragment'>
+<li>If it gives a huge performance boost</li>
+</ul>
+</li>
+<li>
+Radical
+<ul class='fragment'>
+<li>If you re-think the business process</li>
+</ul>
+</li>
+</ul>
+</section>
+<section>
+<h2>Trivial code structure change</h2>
+<pre><code class='diff'> def render_main_template&#x000A;-  view_setup.render_liquid(:main_template, translator, options)  &#x000A;+  template = rendering_cache do&#x000A;+    view_setup.render_liquid(:main_template, translator, options)&#x000A;+  end&#x000A; end&#x000A;&#x000A; def rendering_cache&#x000A;   # 100 lines of code&#x000A; end</code></pre>
+</section>
+<section>
+<h2>Results of good optimization</h2>
+<table>
+<tr>
+<td>Throughput</td>
+<td>
+35_000 RPM
+</td>
+</tr>
+<tr>
+<td>Infrastructure Cost</td>
+<td>$16_000/Month</td>
+</tr>
+</table>
+</section>
+<section>
+<h1>AWS setup</h1>
+<table>
+<tr>
+<td>Instance Type</td>
+<td>c4.2xlarge</td>
+</tr>
+<tr>
+<td>vCPU</td>
+<td>8</td>
+</tr>
+<tr>
+<td>ECU</td>
+<td>31</td>
+</tr>
+<tr>
+<td>Memory</td>
+<td>15 GiB</td>
+</tr>
+<tr class='fragment'>
+<td>Requests</td>
+<td>120/second</td>
+</tr>
+<tr class='fragment'>
+<td>Per CPU</td>
+<td>15/second</td>
+</tr>
+</table>
+</section>
+<section>
+<h1>The Strategy</h1>
+<ol>
+<li class='fragment'>
+Generic Optimization
+<ul>
+<li>Have the schema always optimized</li>
+<li>Add cache columns</li>
+</ul>
+</li>
+<li class='fragment'>
+Ensure specific optimization is needed
+<ul>
+<li>Functionality is stable</li>
+<li>The performance is measured</li>
+</ul>
+</li>
+<li class='fragment'>
+Apply specific optimization
+<ul>
+<li>Use Conditional Get</li>
+<li>Rewrite with Rack</li>
+<li>Introduce caching</li>
+<li>Use direct SQL</li>
+<li>ETC</li>
+</ul>
+</li>
+</ol>
+</section>
+</div>
+</div>
+<script src='http://lab.hakim.se/reveal-js/lib/js/head.min.js'></script>
+<script src='https://rawgithub.com/hakimel/reveal.js/3.6.0/js/reveal.js'></script>
+<script>
+  // https://github.com/hakimel/reveal.js#configuration
+  Reveal.initialize({
+  	controls: true,
+  	progress: true,
+  	history: true,
+  	center: true,
+  
+  	theme: Reveal.getQueryHash().theme || 'simple', // available themes are in /css/theme
+  	transition: Reveal.getQueryHash().transition || 'fade', // default/cube/page/concave/zoom/linear/fade/none
+  
+  	// Optional libraries used to extend on reveal.js
+  	dependencies: [
+  		// { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+  		{ src: 'http://lab.hakim.se/reveal-js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+  		{ src: 'http://lab.hakim.se/reveal-js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+  		{ src: 'http://lab.hakim.se/reveal-js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+      {src: 'https://mikemiles86.github.io/reveal-line-numbers/plugin/line-numbers/line-numbers.js'},
       
-      .yellow {
-        color: yellow; }
-      
-      .reveal section pre code {
-        padding: 20px 5px;
-        font-size: 1.3em;
-        line-height: 1.3em; }
-      .reveal section ul {
-        min-width: 50%; }
-      .reveal section .red {
-        color: #e02c2d; }
-      .reveal section .green {
-        color: #17cc1e; }
-      .reveal section .yellow {
-        color: yellow; }
-      .reveal section .blue {
-        color: #1b91ff; }
-      .reveal section .left {
-        float: left; }
-      .reveal section .right {
-        float: right; }
-      .reveal section .clearfix {
-        overflow: hidden; }
-      .reveal section table.full-border {
-        border-collapse: collapse; }
-        .reveal section table.full-border td {
-          border: 1px solid black !important; }
-      .reveal section img {
-        border: 0px;
-        box-shadow: 0 0 0 0; }
-      .reveal section code.line-numbers {
-        counter-reset: line_numbers; }
-      .reveal section code span.line-number {
-        counter-increment: line_numbers;
-        margin-right: 1em; }
-        .reveal section code span.line-number:before {
-          content: counter(line_numbers,decimal-leading-zero);
-          color: gray; }
-      .reveal section code span.highlight-line:before {
-        color: yellow; }
-    </style>
-  </head>
-  <body>
-    <div class='reveal'>
-      <div class='slides'>
-        <section>
-          <h1>
-            Rails App
-            <span class='green'>Performance</span>
-          </h1>
-          <h1>
-            at the
-            <span class='red'>limit</span>
-          </h1>
-          <h2>
-            November 2018
-          </h2>
-          <h3>
-            Bogdan Gusiev
-          </h3>
-        </section>
-        <section>
-          <h2>
-            Bogdan G.
-          </h2>
-          <ul>
-            <li>is 10 years in IT</li>
-            <li>
-              8 years with Ruby and Rails
-              <ul>
-                <li>Long Run Rails Contributor</li>
-              </ul>
-            </li>
-            <li>
-              Active Speaker
-            </li>
-          </ul>
-        </section>
-        <section>
-          <h1>
-            Some of my gems
-          </h1>
-          <ul>
-            <li>
-              <a href='http://github.com/bogdan'>http://github.com/bogdan</a>
-              <ul>
-                <li>
-                  <a href='https://github.com/bogdan/datagrid'>datagrid</a>
-                </li>
-                <li>
-                  <a href='https://github.com/railsware/js-routes'>js-routes</a>
-                </li>
-                <li>
-                  <a href='https://github.com/bogdan/accepts_values_for'>accepts_values_for</a>
-                </li>
-                <li>
-                  <a href='https://github.com/bogdan/furi'>furi</a>
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </section>
-        <section>
-          <h2>The Scope of this presentation</h2>
-          <ul>
-            <li>App server optimization</li>
-            <li>Only technologies compatible with rails</li>
-            <li>Relay on rails tools if we can</li>
-          </ul>
-        </section>
-        <section>
-          <h2>The plan</h2>
-          <ol>
-            <li>General optimization</li>
-            <li>When to optimize specifically?</li>
-            <li>Identify slow parts</li>
-            <li>Targeted Optimization Methods</li>
-          </ol>
-        </section>
-        <section>
-          <h1>
-            <a href='http://talkable.com'>
-              <img alt='Talkable' src='http://d2jjzw81hqbuqv.cloudfront.net/assets/static/logo-dark-large.png' style=''>
-            </a>
-          </h1>
-          <ul>
-            <li>
-              8 years old startup
-            </li>
-            <li>
-              A lot of code
-            </li>
-            <li>
-              Rails version from 2.0 to 5.1
-            </li>
-            <li>
-              35_000 RPM
-            </li>
-            <li>
-              2TB sharded database
-            </li>
-          </ul>
-        </section>
-        <section>
-          <h1>Is Rails slow?</h1>
-          <h3>A minute of severe reality</h3>
-        </section>
-        <section>
-          <h3>How slow is Action Controller &amp; Action Dispatch?</h3>
-          <p>Everyone's favorite hello-world benchmark</p>
-          <div class='fragment'>
-            <pre><code class='ruby'>Framework     Reqs/sec  % from best&#x000A;-----------------------------------&#x000A;rack          15839.64      100.00%&#x000A;sinatra        3977.30       25.11%&#x000A;grape          2937.03       18.54%&#x000A;rails-api      1211.33        7.65%&#x000A;</code></pre>
-            <p>
-              Source:
-              <a href='https://github.com/luislavena/bench-micro'>bench-micro</a>
-            </p>
-          </div>
-        </section>
-        <section>
-          <h1>How slow is ActiveRecord?</h1>
-          <div class='fragment'>
-            <pre><code class='ruby'>sql = "select * from users where id = 1"&#x000A;# No ActiveRecord&#x000A;Mysql2::Client~query(sql)&#x000A;# Connection Query&#x000A;AR::Base.connection.execute(sql)&#x000A;# ActiveRecord::Base&#x000A;User.find(1)</code></pre>
-            <a href='https://gist.github.com/31fbdf0cfe12bf55e07e275650d45c4f'>Benchmark Gist</a>
-          </div>
-        </section>
-        <section>
-          <h3>
-            Dev Environment:
-            <br>
-            Query from the same machine as the DB
-          </h3>
-          <pre><code class='plain'>   No ActiveRecord:     7034.8 i/s&#x000A;  Connection query:     6825.3 i/s - same-ish&#x000A;ActiveRecord::Base:     1244.8 i/s - 5.65x  slower</code></pre>
-          <div class='fragment'>
-            <h3>
-              AWS RDS EC2 instance:
-              <br>
-              Query from a different machine than the DB
-            </h3>
-            <pre><code class='plain'>   No ActiveRecord:     3204.2 i/s&#x000A;  Connection query:     2762.6 i/s - 1.16x  slower&#x000A;ActiveRecord::Base:      781.3 i/s - 4.10x  slower</code></pre>
-          </div>
-        </section>
-        <section>
-          <h1>No ActiveRecord impact</h1>
-          <ul>
-            <li>Up to 4 times faster</li>
-            <li>Ugliest API</li>
-            <li>No code reuse tools</li>
-          </ul>
-          <p>The dev process will be slowed down from 4 times</p>
-        </section>
-        <section>
-          <h1>How slow is ActionView?</h1>
-          <div class='fragment'>
-            <p>
-              It is really hard to evaluate.
-              <br>
-              Hello-world benchmark will not show anything
-            </p>
-          </div>
-          <div class='fragment'>
-            <p>Main things that impact performance:</p>
-            <ul>
-              <li>Advanced layout structure</li>
-              <li>Render partials</li>
-              <li>Helper method calls</li>
-              <li>Using ActiveRecord inside views</li>
-            </ul>
-          </div>
-        </section>
-        <section>
-          <h1>Good news about ActionView</h1>
-          <ul>
-            <li>Easy to replace with different technology</li>
-            <li>Client side rendering is available</li>
-          </ul>
-        </section>
-        <section>
-          <h2>
-            Optimization
-            <nobr>
-              anti-pattern
-            </nobr>
-          </h2>
-          <ul>
-            <li>Our App is slow, can we make it fast?</li>
-            <li>Sure!</li>
-          </ul>
-          <table class='fragment' style='vertical-align: top'>
-            <tr>
-              <td>
-                <img height='200px' src='https://media.giphy.com/media/9rjRGuk1qzqe4cgTzp/giphy.gif' width='300px'>
-              </td>
-              <td>
-                <img height='200px' src='https://media.giphy.com/media/l0HlHJGHe3yAMhdQY/giphy.gif' width='300px'>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <img height='200px' src='https://media.giphy.com/media/26vUw5sYGcqmMDoBy/giphy.gif' width='300px'>
-              </td>
-              <td>
-                <img height='200px' src='https://media.giphy.com/media/sJPqw54VQJfY4/giphy.gif' width='300px'>
-              </td>
-            </tr>
-          </table>
-        </section>
-        <section>
-          <h2>What are you going to improve with?</h2>
-          <ul>
-            <li>App Server Container</li>
-            <li>Changing RDBMS</li>
-            <li>Ruby interpreter</li>
-          </ul>
-        </section>
-        <section>
-          <h1>General optimization</h1>
-          <div class='left'>
-            <img src='https://media.giphy.com/media/3ba6CvOF2mSe0pvOuE/giphy.gif' width='300'>
-          </div>
-          <div class='fragment rigth' width='300'>
-            <img src='https://media.giphy.com/media/8vqFcSiyzC5qxwwzPn/giphy.gif' width='300'>
-          </div>
-          <p class='fragment'>
-            Worms are not made to move fast
-          </p>
-        </section>
-        <section>
-          <h2>
-            <span class='green'>Effective Database Structure</span>
-            <br>
-            is the only one general optimization technique we found useful
-            <span class='red'>in 8 years</span>
-          </h2>
-        </section>
-        <section>
-          <h2>Great Database Schema</h2>
-          <ul>
-            <li>Allows all controllers to do their work efficiently</li>
-            <li>Reduces the operations using ruby to minimum</li>
-            <li>Reduces SQL complexity</li>
-          </ul>
-        </section>
-        <section>
-          <h1>Golden Rules</h1>
-          <ul>
-            <li>Optimize data storage for reading not for writing</li>
-            <li>Business Rules define the database schema</li>
-            <li>There is usually only one way that "feels" right</li>
-            <li>Design efficiently for today</li>
-          </ul>
-        </section>
-        <section>
-          <h1>Cache columns</h1>
-          <h2>Foreign key cache example</h2>
-          <pre class='fragment'><code class='ruby'>Poll.has_many :options&#x000A;Option.belongs_to :poll&#x000A;Option.has_many :votes&#x000A;Vote.belongs_to :option, counter_cache: true&#x000A;Vote.belongs_to :user</code></pre>
-          <pre class='fragment'><code class='ruby'>Poll.has_many :votes&#x000A;Vote.belongs_to :poll, counter_cache: true &#x000A;Vote.validates_uniqueness_of :poll_id, scope: [:user_id]</code></pre>
-        </section>
-        <section>
-          <h1>Join Avoidance</h1>
-          <pre><code class='ruby'>Site.has_many :campaigns&#x000A;Campaign.has_many :offers&#x000A;Offer.has_many :offer_shares&#x000A;OfferShare.has_many :visitor_offers&#x000A;VisitorOffer.has_many :referrals</code></pre>
-          <pre class='fragment'><code class='ruby'>Referral.scope :by_site, -> (id) {&#x000A;  joins(visitor_offer: {offer_share: {offer: :campaign}}).&#x000A;  where(campaigns: {site_id: id})&#x000A;}</code></pre>
-          <pre class='fragment'><code class='ruby'>add_column :referrals, :site_id&#x000A;Referral.before_validation do&#x000A;  self.site_id = visitor_offer.offer_share.offer.campaign.site_id&#x000A;end</code></pre>
-        </section>
-        <section>
-          <h2>Real example of</h2>
-          <h1>cache columns</h1>
-          <pre class='left' style='width: 45%'><code class='ruby'>id                  :integer   &#x000A;referred_origin_id  :integer   &#x000A;visitor_offer_id    :integer   &#x000A;status              :string(20)&#x000A;webhook_status      :string(10)&#x000A;track_method        :string(20)&#x000A;processed_by        :integer&#x000A;created_at          :datetime&#x000A;updated_at          :datetime&#x000A;processed_at        :datetime&#x000A;</code></pre>
-          <pre class='right' style='width: 45%; height: 100%'><code class='ruby'>offer_id            :integer&#x000A;site_id             :integer&#x000A;campaign_id         :integer&#x000A;advocate_visitor_id :integer&#x000A;friend_timing       :decimal&#x000A;referred_subtotal   :decimal&#x000A;qa_generated        :boolean&#x000A;ad_rewarded         :boolean</code></pre>
-        </section>
-        <section>
-          <h1>
-            Cache Columns
-            <br>
-            <span class='green'>best practices</span>
-          </h1>
-          <ul>
-            <li>Mostly for read-only data</li>
-            <li>Remember what is the source and what is cache</li>
-            <li>Watch the disk space</li>
-            <li>It is worth it!</li>
-          </ul>
-        </section>
-        <section>
-          <h1>Specific Optimization</h1>
-          <ul>
-            <li>Applied only to problematic pieces</li>
-            <li>Makes sense for the used functionality</li>
-            <li>Makes sense only when the functionality is stable</li>
-            <li>Can be faster than switch to faster technology in general</li>
-          </ul>
-        </section>
-        <section>
-          <h2>How business views the optimization?</h2>
-          <p>You: Lets Optimize!</p>
-          <div class='fragment' style='margin: 0 auto;width: 50%'>
-            <p>Business:</p>
-            <img class='left' src='https://media.giphy.com/media/nR4L10XlJcSeQ/giphy.gif' style='width: 48%; height: 200px'>
-            <img class='right' src='https://media.giphy.com/media/ZwOmKAAVX6f3zrcBi0/giphy.gif' style='width: 48%; height: 200px'>
-          </div>
-          <div class='fragment'>
-            <p>Business says yes when:</p>
-            <ul>
-              <li>Functionality is stable</li>
-              <li>Feature is being used</li>
-              <li>Company is making money with it</li>
-            </ul>
-          </div>
-        </section>
-        <section>
-          <h1>
-            How to identify
-            <br>the optimization areas</br>
-          </h1>
-        </section>
-        <section>
-          <h1>Throughput by action</h1>
-          <iframe width="600" height="371" seamless frameborder="0" scrolling="no" src="https://docs.google.com/spreadsheets/d/e/2PACX-1vRb1tFj24UesZzAo9Vz00bqCF3CQqg5i0nm3PRjtYMJfoM9Aa4YlHlHbO_-cpULI3eIOsbnOBbwnesu/pubchart?oid=1782821828&amp;format=image"></iframe>
-        </section>
-        <section>
-          <h1>Resources consumed</h1>
-          <iframe width="600" height="371" seamless frameborder="0" scrolling="no" src="https://docs.google.com/spreadsheets/d/e/2PACX-1vRb1tFj24UesZzAo9Vz00bqCF3CQqg5i0nm3PRjtYMJfoM9Aa4YlHlHbO_-cpULI3eIOsbnOBbwnesu/pubchart?oid=337667264&amp;format=interactive"></iframe>
-        </section>
-        <section>
-          <h1>Optimization measurement</h1>
-          <ul>
-            <li>Average response time</li>
-            <li>Consumed resources</li>
-          </ul>
-          <div class='fragment'>
-            <pre><code>select controller, action, http_method, &#x000A;  sum(duration), average(duration), count(*)&#x000A;from app_server_requests</code></pre>
-            <p>
-              (pseudocode)
-            </p>
-          </div>
-        </section>
-        <section>
-          <h2>Tools</h2>
-          <ul>
-            <li>HTTP access.log</li>
-            <li>Rails production.log</li>
-            <li>Kibana</li>
-            <li>New Relic</li>
-            <li class='fragment'>Your variant?</li>
-          </ul>
-        </section>
-        <section>
-          <h1>Specific optimization plan</h1>
-          <ol>
-            <li>Define Optimization Metric</li>
-            <li>Measure the metric</li>
-            <li>Zoom in to see optimizable parts</li>
-            <li>Choose optimized fragment and strategy</li>
-          </ol>
-        </section>
-        <section>
-          <h1>Optimization Methods</h1>
-        </section>
-        <section>
-          <h2>Avoiding ActiveRecord</h2>
-          <ul>
-            <li>Looks awesome on the first glance</li>
-            <li>Less valuable with effective DB schema</li>
-            <li>More work with more DB queries</li>
-            <li>Unreusable code</li>
-            <li>Caching can be superior</li>
-          </ul>
-          <h3 class='fragment'>
-            All my examples are considered
-            <br>
-            micro optimization
-          </h3>
-        </section>
-        <section>
-          <h3>Avoiding ActiveRecord examples</h3>
-          <pre><code class='ruby'>class Campaign&#x000A;  has_many :tags&#x000A;  def tag_names&#x000A;    tags.pluck(:name)&#x000A;  end&#x000A;end</code></pre>
-          <pre class='fragment'><code class='ruby'>def offers_created_at_range&#x000A;  scope = offers.reorder(created_at: :asc).limit(1)&#x000A;  scope.pluck(:created_at).first..&#x000A;    scope.reverse_order.pluck(:created_at).first&#x000A;end</code></pre>
-        </section>
-        <section>
-          <h1>Conditional Get</h1>
-          <table>
-            <tr class='fragment'>
-              <td>Client</td>
-              <td>GET /products/1827.json</td>
-            </tr>
-            <tr class='fragment'>
-              <td>Server</td>
-              <td>
-                Response /products/1827.json
-                <br>
-                Etag: "2018-10-29 16:36"
-              </td>
-            </tr>
-            <tr class='fragment'>
-              <td>Client</td>
-              <td>
-                GET /products/1827.json
-                <br>
-                If-None-Match: "2018-10-29 16:36"
-              </td>
-            </tr>
-            <tr class='fragment'>
-              <td>Server</td>
-              <td>
-                STATUS 304 Not Modified
-                <br>
-                <div class='fragment'>
-                  <strong>OR</strong>
-                  <br>
-                  Response /products/1827.json
-                  <br>
-                  Etag: "2018-10-29 16:37"
-                </div>
-              </td>
-            </tr>
-          </table>
-        </section>
-        <section>
-          <h1>Conditional Get tools</h1>
-          <pre><code class='ruby'>class Api::ProductsController &lt; ApplicationController&#x000A;  def show&#x000A;    @product = Product.find(params[:id])&#x000A;    if stale?(last_modified: @product.updated_at, &#x000A;              etag: @product.cache_key)&#x000A;      render json: { product: @product }&#x000A;    end&#x000A;  end&#x000A;end</code></pre>
-          <a href='https://guides.rubyonrails.org/caching_with_rails.html#conditional-get-support'>
-            Rails Conditional GET Guide
-          </a>
-        </section>
-        <section>
-          <h1>
-            Conditional GET
-            <br>
-            is great when
-          </h1>
-          <ul>
-            <li>A single page is viewed multiple times by the same browser</li>
-            <li>Lightweight actions</li>
-            <li>Actions returning JSON</li>
-          </ul>
-        </section>
-        <section>
-          <h1>Rewriting with rack</h1>
-          <ol>
-            <li>The action is already under 500ms</li>
-            <li>Heavily loaded action</li>
-            <li>It is painful</li>
-            <li>Looks better than rewriting on Sinatra</li>
-          </ol>
-        </section>
-        <section>
-          <h2>Conditional Get held in Rack</h2>
-          <pre><code class='ruby'>class OffersController &lt; ApplicationController&#x000A;  def show&#x000A;    @offer = Offer.find(params[:id])&#x000A;    digest = SecureRandom.uuid&#x000A;    data = { offer_id: offer.id, cached_at: Time.zone.now, }&#x000A;    Rails.cache.write(digest, data, &#x000A;                      expires_in: CACHE_PERIOD.from_now)&#x000A;    response.headers['Cache-Control'] = &#x000A;      'max-age=0, private, must-revalidate'&#x000A;    response.headers['ETag'] = %(W/"#{digest}")&#x000A;  end&#x000A;end&#x000A;</code></pre>
-        </section>
-        <section>
-          <h2>Rack Middleware</h2>
-          <pre><code class='ruby'>def call(env)&#x000A;  if fresh?(env['HTTP_IF_NONE_MATCH'])&#x000A;    return [304, {}, ['Not Modified']]&#x000A;  end&#x000A;  @app.call(env)&#x000A;end&#x000A;&#x000A;def fresh?(etag_header)&#x000A;  return unless data = Rails.cache.read(digest)&#x000A;  site_id, timestamp = &#x000A;    Offer.where(id: data[:offer_id]).pluck(:site_id, :updated_at)&#x000A;  SettingsChange.where(site_id: site_id, created_at: lookup_period).empty? &&&#x000A;    !((data[:cached_at]..Time.zone.now).include?(timestamp))&#x000A;end&#x000A;</code></pre>
-        </section>
-        <section>
-          <h2>Introduce caching</h2>
-          <ol>
-            <li>Find suitable code fragment</li>
-            <li>Measure Cache Hit</li>
-            <li>Use expiration by key</li>
-            <li>Always expire by timeout</li>
-            <li>Expire on deploy</li>
-          </ol>
-        </section>
-        <section>
-          <h1>Cache Hit</h1>
-          <ul>
-            <li>How many cache entries will be made?</li>
-            <li>What is the average size of cache entry?</li>
-            <li>How many times each entry will be used?</li>
-            <li>What % of requests will use cache?</li>
-            <li>How much memory would it take?</li>
-          </ul>
-        </section>
-        <section>
-          <h1>Expiration by key</h1>
-          <p>Manual expiration example</p>
-          <pre><code class='ruby'>class ProductsController&#x000A;  def load_product&#x000A;    @product = Product.find(params[:id])&#x000A;  end&#x000A;  def show&#x000A;    response = Rails.cache.fetch(["products", @product.id]) do&#x000A;      @product.to_json&#x000A;    end&#x000A;    render json: response&#x000A;  end &#x000A;  def update&#x000A;    @product.update!(params[:product])&#x000A;    Rails.cache.delete(["products", @product.id])&#x000A;  end&#x000A;end</code></pre>
-        </section>
-        <section>
-          <h2>Expiration by Key example</h2>
-          <pre><code class='ruby'>class ViewStylesheet&#x000A;def css&#x000A;  # Combining many cache keys here &#x000A;  # to expire whenever any object is updated&#x000A;  cache_key = ['view_setup_css', campaign, self, account]&#x000A;  Rails.cache.fetch(cache_key, &#x000A;        force: template_changed?, expires_in: 3.days) do&#x000A;    Sass.compile(template)&#x000A;  end&#x000A;end&#x000A;end</code></pre>
-          <a href='https://signalvnoise.com/posts/3113-how-key-based-cache-expiration-works'>
-            Key-based Expiration from DHH
-          </a>
-        </section>
-        <section>
-          <h2>Expiration best practices</h2>
-          <pre><code class='ruby'>config.cache_store = :redis_store, &#x000A;    namespace: Deploy.identifier, expires_in: 1.day&#x000A;</code></pre>
-        </section>
-        <section>
-          <h2>Rails magic on working with cache</h2>
-          <pre><code class='haml'>- cache @projects do&#x000A;  - @projects.each do |project| %>&#x000A;    = render partial: 'projects/project', project</code></pre>
-          <pre class='fragment'><code class='haml'>%a{href: project_path(product)}= project.name&#x000A;.star{class: current_user.bookmarked?(project) ? 'enabled' : ''}</code></pre>
-          <ul>
-            <li>Variables usage inside ActionView is implicit</li>
-            <li>Magic is always slow</li>
-          </ul>
-        </section>
-        <section>
-          <h2>Optimizable requests</h2>
-          <ul>
-            <li>Lightweight</li>
-            <li>GET method</li>
-            <li>
-              Used data is explicit
-              <ul>
-                <li>Return JSON but not HTML</li>
-                <li>Do not use ActionView</li>
-              </ul>
-            </li>
-            <li></li>
-          </ul>
-        </section>
-        <section>
-          <h3>What optimizable page should look like?</h3>
-          <img src='https://api.monosnap.com/rpc/file/download?id=RcjcGq17e8inIi1mWhM29CpYPoSA4E'>
-        </section>
-        <section>
-          <h2>Optimization by code structure change</h2>
-          <ul>
-            <li>Trivial</li>
-            <li>Significant</li>
-            <li>Radical</li>
-          </ul>
-        </section>
-        <section>
-          <h2>Trivial code structure change</h2>
-          <pre><code class='diff'> def render_main_template&#x000A;-  view_setup.render_liquid(:main_template, translator, options)  &#x000A;+  template = rendering_cache do&#x000A;+    view_setup.render_liquid(:main_template, translator, options)&#x000A;+  end&#x000A; end&#x000A;&#x000A; def rendering_cache&#x000A;   # 100 lines of code&#x000A; end</code></pre>
-        </section>
-        <section>
-          <h2>Results of good optimization</h2>
-          <table>
-            <tr>
-              <td>Throughput</td>
-              <td>
-                35_000 RPM
-              </td>
-            </tr>
-            <tr>
-              <td>Infrastructure Cost</td>
-              <td>$16_000/Month</td>
-            </tr>
-          </table>
-        </section>
-        <section>
-          <h1>AWS setup</h1>
-          <table>
-            <tr>
-              <td>Instance Type</td>
-              <td>c4.2xlarge</td>
-            </tr>
-            <tr>
-              <td>vCPU</td>
-              <td>8</td>
-            </tr>
-            <tr>
-              <td>ECU</td>
-              <td>31</td>
-            </tr>
-            <tr>
-              <td>Memory</td>
-              <td>15 GiB</td>
-            </tr>
-            <tr class='fragment'>
-              <td>Requests</td>
-              <td>120/second</td>
-            </tr>
-            <tr class='fragment'>
-              <td>Per CPU</td>
-              <td>15/second</td>
-            </tr>
-          </table>
-        </section>
-        <section>
-          <h1>The Strategy</h1>
-          <ol>
-            <li>
-              Generic Optimization
-              <ul>
-                <li>Have the schema always optimized</li>
-                <li>Add cache columns</li>
-              </ul>
-            </li>
-            <li>
-              Ensure specific optimization is needed
-              <ul>
-                <li>Functionality is stable</li>
-                <li>The performance is measured</li>
-              </ul>
-            </li>
-            <li>
-              Apply specific optimization
-              <ul>
-                <li>Use Conditional Get</li>
-                <li>Rewrite with Rack</li>
-                <li>Introduce caching</li>
-                <li>Use direct SQL</li>
-              </ul>
-            </li>
-          </ol>
-        </section>
-      </div>
-    </div>
-    <script src='http://lab.hakim.se/reveal-js/lib/js/head.min.js'></script>
-    <script src='https://rawgithub.com/hakimel/reveal.js/3.6.0/js/reveal.js'></script>
-    <script>
-      // https://github.com/hakimel/reveal.js#configuration
-      Reveal.initialize({
-      	controls: true,
-      	progress: true,
-      	history: true,
-      	center: true,
-      
-      	theme: Reveal.getQueryHash().theme || 'simple', // available themes are in /css/theme
-      	transition: Reveal.getQueryHash().transition || 'fade', // default/cube/page/concave/zoom/linear/fade/none
-      
-      	// Optional libraries used to extend on reveal.js
-      	dependencies: [
-      		// { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
-      		{ src: 'http://lab.hakim.se/reveal-js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-      		{ src: 'http://lab.hakim.se/reveal-js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-      		{ src: 'http://lab.hakim.se/reveal-js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
-          {src: 'https://mikemiles86.github.io/reveal-line-numbers/plugin/line-numbers/line-numbers.js'},
-          
-          { src: 'https://rawgithub.com/hakimel/reveal.js/3.6.0/plugin/notes/notes.js', async: true }
-      		// { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
-      		// { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
-      		// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
-      	]
-      });
-    </script>
-  </body>
+      { src: 'https://rawgithub.com/hakimel/reveal.js/3.6.0/plugin/notes/notes.js', async: true }
+  		// { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+  		// { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
+  		// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+  	]
+  });
+</script>
+</body>
 </html>

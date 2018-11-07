@@ -478,10 +478,7 @@
             %li More work with more DB queries
             %li Unreusable code
             %li Caching can be superior
-          %h3.fragment
-            All my examples are considered 
-            %br
-            micro optimization
+
         %section
           %h3 Avoiding ActiveRecord examples
           %pre
@@ -501,6 +498,23 @@
                   scope.pluck(:created_at).first..
                     scope.reverse_order.pluck(:created_at).first
                 end
+        %section
+
+          %h2 
+            Bogdan 
+            ❤️     
+            ActiveRecord
+
+          %h3 Why don't all people love ActiveRecord?
+          %ul
+            %li.fragment They don't optimize their schema
+            %li.fragment They don't realize it does the hardest work
+            %li.fragment They don't appreaciate the feature-set/performance trade off
+          
+          %h3.fragment
+            All my examples are considered 
+            %br
+            micro optimization  
         %section
           %h1 Conditional Get
           
@@ -625,6 +639,26 @@
             %li How much memory would it take?
       
         %section
+          %h2 Cache hit example
+          %pre
+            %code.ruby
+              :preserve
+                class Campaign
+                  has_many :offers
+                  def cached_offers_count
+                    @offers_count ||= if active?
+                      offers.count
+                    else
+                      # Caching only inactive campaigns
+                      # because they can not get additional offers
+                      Rails.cache.fetch(
+                              ["campaign_offers_count", id], expires_in: 1.month) do
+                        offers.count
+                      end
+                    end
+                  end
+                end
+        %section
           %h1 Expiration by key
 
           %p Manual expiration example
@@ -632,20 +666,15 @@
           %pre
             %code.ruby
               :preserve
-                class ProductsController
-                  def load_product
-                    @product = Product.find(params[:id])
+                def show
+                  response = Rails.cache.fetch(["products", @product.id]) do
+                    @product.to_json
                   end
-                  def show
-                    response = Rails.cache.fetch(["products", @product.id]) do
-                      @product.to_json
-                    end
-                    render json: response
-                  end 
-                  def update
-                    @product.update!(params[:product])
-                    Rails.cache.delete(["products", @product.id])
-                  end
+                  render json: response
+                end 
+                def update
+                  @product.update!(params[:product])
+                  Rails.cache.delete(["products", @product.id])
                 end
         %section
           %h2 Expiration by Key example
@@ -703,18 +732,39 @@
               %ul
                 %li Return JSON but not HTML
                 %li Do not use ActionView
-
-            %li 
         %section
           %h3 What optimizable page should look like?
           %img{src: "https://api.monosnap.com/rpc/file/download?id=RcjcGq17e8inIi1mWhM29CpYPoSA4E"}
         %section
-          %h2 Optimization by code structure change
+          %h2 
+            Optimization 
+            ❤️     
+            Client Side Rendering
+          %ul
+            %li Saves server resources
+            %li Parallel load
+            %li Makes used data explicit
+        %section
+          %h2 
+            Optimization by 
+            %br
+            code structure change
           
           %ul
-            %li Trivial
-            %li Significant
-            %li Radical
+            %li 
+              Trivial
+              %ul.fragment
+                %li Always considered first
+            
+            %li 
+              Significant
+              %ul.fragment
+                %li If it gives a huge performance boost
+              
+            %li 
+              Radical
+              %ul.fragment
+                %li If you re-think the business process
 
         %section
           %h2 Trivial code structure change
@@ -770,23 +820,24 @@
           %h1 The Strategy
 
           %ol
-            %li 
+            %li.fragment 
               Generic Optimization
               %ul
                 %li Have the schema always optimized
                 %li Add cache columns
-            %li 
+            %li.fragment
               Ensure specific optimization is needed
               %ul
                 %li Functionality is stable
                 %li The performance is measured
-            %li 
+            %li.fragment 
               Apply specific optimization
               %ul
                 %li Use Conditional Get
                 %li Rewrite with Rack
                 %li Introduce caching
                 %li Use direct SQL
+                %li ETC
 
 
     %script{:src => "http://lab.hakim.se/reveal-js/lib/js/head.min.js"}
