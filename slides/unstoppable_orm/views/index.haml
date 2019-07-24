@@ -1,0 +1,464 @@
+<!doctype html>
+%html{:lang => "en"}
+  %head
+    %meta{:charset => "utf-8"}/
+    %title Unstoppable Website
+    %meta{:content => "", :name => "description"}/
+    %meta{:content => "Bogdan Gusiev", :name => "author"}/
+    %meta{:content => "yes", :name => "apple-mobile-web-app-capable"}/
+    %meta{:content => "black-translucent", :name => "apple-mobile-web-app-status-bar-style"}/
+    %meta{:content => "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no", :name => "viewport"}/
+    %link{:href => "http://lab.hakim.se/reveal-js/css/reveal.css", :rel => "stylesheet"}/
+    %link{:href => "https://rawgithub.com/hakimel/reveal.js/master/css/theme/white.css", :rel => "stylesheet"}/
+    / For syntax highlighting
+    %link{:href => "http://lab.hakim.se/reveal-js/lib/css/zenburn.css", :rel => "stylesheet"}/
+    / If the query includes 'print-pdf', use the PDF print sheet
+    :javascript
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = "https://revealjs.com/css/print/" + (window.location.search.match( /print-pdf/gi ) ? 'pdf.css' : 'paper.css');
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    :sass
+      body .reveal
+        font-size: 30px !important
+      .yellow
+        color: yellow
+      .reveal
+        section
+          pre
+            code
+              padding: 20px 5px
+              font-size: 1.30em
+              line-height: 1.3em
+          ul
+            min-width: 50%
+          .red
+            color: #e02c2d
+          .green
+            color: #17cc1e
+          .yellow
+            color: yellow
+          .blue
+            color: #1b91ff
+          .left
+            float: left
+          .right
+            float: right
+          .clearfix
+            overflow: hidden
+          table.full-border
+            border-collapse: collapse
+            td
+              border: 1px solid black !important
+          img
+            border: 0px
+            box-shadow: 0 0 0 0
+      
+          code
+            &.line-numbers
+              counter-reset: line_numbers
+            span
+              &.line-number
+                counter-increment: line_numbers
+                margin-right: 1em
+                &:before
+                  content: counter(line_numbers, decimal-leading-zero)
+                  color: gray
+              &.highlight-line:before
+                color: yellow
+          
+        
+  %body
+    .reveal
+      .slides
+        %section
+          %h1
+            Unstoppable Website
+          %h2
+            May 2019
+        %section
+          %h2 Web is 30 years old
+
+          %ul
+            %li Crazy amount of legacy
+            %li Crazy amount of best practices
+
+        %section
+
+          %h2 Example
+          %pre
+            %code.text
+              :preserve
+                https://github.com/bogdan/datagrid/search?
+                  utf8=%E2%9C%93&q=hello+user%3Agithub+repo%3Ahello&type=Repositories&ref=advsearch&l=&l=
+          %pre
+            %code.ruby
+              :preserve
+                {
+                  "utf8":"✓",
+                  "q":"hello user:github repo:hello",
+                  "type":"Repositories",
+                  "ref":"advsearch",
+                  "l":""
+                }
+        %section
+          %h2 Reverse Generate
+
+          %pre
+            %code.js
+              :preserve
+                url("/:user/:repo/search", {...})
+          %ul
+            %li.fragment 
+              What if I want to pass an array or a nested object
+              %ul
+                %li Lodash path convention
+            %li.fragment Different escaping mechanism for path params and query params
+
+        %section
+          %h3 Express JS doesn't include a lot
+          %h3 from 30 years of experience
+
+          %ul
+            %li Secure headers by default
+            %li URL formatting
+            %li CSRF token protection
+            %li JS injection prevention tools
+            %li ....
+
+        %section
+
+          %h3 Express is super fit 
+          %h3 for microservice behind a firewall
+          %h2 What about full featured website?
+          .fragment
+            %h4 If we are going to implement everything ourselves
+            %h4  When will we think of how to revolve domains?
+        %section
+          %h3 Writing  data
+
+          %ul
+            %li Migrations
+            %li Typecast
+            %li Validate
+            %li Write to DB
+
+          %h3 Reading Data
+          %ul
+            %li Query
+            %li Typecast
+            %li Serialize for UI
+            %li Generate HTML
+
+        %section
+          %h3 Migrations
+          
+          %h3 Migrations are must for all databases
+          %h3 It is just less often in no schema databases
+        %section
+          %h3 Typical migration
+
+          %pre
+            %code.js
+              :preserve
+                const myMigration = {
+                  up: () => {
+                    applyChangeSql()
+                  },
+                  down: () => {
+                    revertChangeSql()
+                  }
+                }
+        %section
+          %h3 Migrations Order
+          %pre
+            %code.txt
+              :preserve
+                $ ls migrations
+                001_migrate_orders_from_firebase
+                002_create_offers_table
+                003_delete_duplicate_emails
+                004_put_email_uniqueness_constraint
+        %section
+          %h3 Migrator
+          %ul
+            %li CLI to migrate and revert
+            %li Ensures the right migrations order
+            %li Ensures all migrations are applied in each ENV
+        %section
+          %h1 Writing Data
+
+        %section
+          %h2 Typecasting is hard
+          %pre
+            %code.js
+              :preserve
+                 const id = writeUserToDb({name, email, createdAt})
+                 const user = findUserById(id)
+                 createdAt == user2.createdAt
+          
+          %ul.fragment
+            %li Time zones
+            %li Seconds fraction precision
+        %section
+          %h3 Validation
+
+
+          %img{src: "https://d1ro8r1rbfn3jf.cloudfront.net/ms_8992/FGWAz0ilKBSSPFlze1NXG59ScfWD9T/Join%2BGitHub%2B%25C2%25B7%2BGitHub%2B2019-05-30%2B16-00-24.jpg?Expires=1559223000&Signature=jsbNXARG87-lThUZtgU46ozs3Qg3579nbOxHDLA40KjgwFzQTuv4zx2lbmd4ZE4EptwecTvR-s9aRsF8e2ShDWkEeTUWxXQuHib6LalFSkRJ7grZaR4t1mCR~V0JvEoGJowjMtk9nPpLqF53skIn5vV6w5g28VfKiq3Fhg5EeziM~Oh~Zv8PcTbiTTn2KZ4BNnrcMVJ5Flfke-rM8OYcOviyK75Bqb8Lye9Vr3q9YGEIKCPh9m1DUZfGY7fIGEqtgiFmBw7~fM5FNcv9YYClGMGG~HZmnpxwigHmPj7x4fnUxTr2Jf13-TLNZVeOtkO5wksdof0i7aySCQOmt7RVVw__&Key-Pair-Id=APKAJBCGYQYURKHBGCOA"}
+
+        %section
+          %h2 Adequate validation result
+
+          %pre
+            %code.json
+              :preserve
+                {
+                  email: [
+                    'Email can not be blank'
+                  ],
+                  password: [
+                    'Password needs to have at least 12 symbols',
+                    'Passowrd needs to have special characters',
+                  ],
+                }
+          
+                
+        %section
+          %h2 Adequate validation code
+
+          %pre
+            %code.js
+              :preserve
+                validateFormat('email', {format: /regex/, message: ''})
+                validateLength('password', 
+                  {min: 10, message: 'Password is too short'})
+                validateLength('password', 
+                  {max: 50, message: 'Password is too long'})
+          %h3.fragment
+            And don't forget to leave the oppotunity for internationalisation
+        %section
+          %h1 Reading Data  
+
+        %section
+          %h2 SQL generation
+          %h3 How I've done it 10 years ago
+          %pre
+            %code.xml
+              :preserve
+                &lt;update id="updateAuthorIfNecessary"&gt;
+                update authors
+                &lt;if test="username != null"&gt;username=${username},&lt;/if&gt;
+                &lt;if test="password != null"&gt;password=${password},&lt;/if&gt;
+                &lt;if test="email != null"&gt;email=${email},&lt;/if&gt;
+                &lt;if test="bio != null"&gt;bio=${bio}&lt;/if&gt;
+                where id=${id}
+                &lt;/update&gt;
+        %section
+          %h3 SQL Fragments
+          %pre
+            %code.xml
+              :preserve
+                &lt;select id="selectOrders">
+                  select orders.* from orders
+                  &lt;if test="categoryId != null">
+                    left join orderItems oi on oi.orderId = orders.id
+                  &lt;/if>
+                  ...other joins...
+
+                  where 
+                  &lt;if test="categoryId != null">
+                    oi.categoryId = :categoryId and
+                  &lt;/if&gt;
+                  1=1
+                &lt;/select>
+                
+        %section
+          %h3 Smarter solutions
+          %pre
+            %code.js
+              :preserve
+                const sqlFragmentForCategoryId = (id) => 
+                {
+                  where: 'products.categoryId = :id'
+                  joins: 'left join products p 
+                    on products.id = orderItems.productId'
+                }
+                generateSelectSql(
+                  "orders",
+                  sqlFragmentForCategoryId(1), 
+                  sqlFragmentForCompletedState('COMPLETED')
+                )
+        %section
+          %h3 Adequate SQL generation
+          %pre
+            %code.js
+              :preserve
+                Order.whereCategoryId(1)
+                  .whereState('COMPLETED')
+                  .order("orders.createdAt DESC")
+                  .limit(10)
+        %section
+          %h3 Eager Loading problem
+
+          %img{src: "https://d1ro8r1rbfn3jf.cloudfront.net/ms_8992/cQCs6bLmDAQoNxS4oKyPQkv4ud6I1e/GitHub%2B2019-05-30%2B16-46-43.jpg?Expires=1559224800&Signature=KBtSGfpfWhZ1pfpUDCkd5-sqFloIT9dt-T1b4UFqDwyOm3xCPdCTKV~Ba52e0NXeg9VFi2dVms7g3EP90cKa3GyS54SLqak02En8T2j4g8DlJACX3~0GLgHq4jannp~JSRXHPn5ZHwuPCQW3oGPgd1UmhMR1IlEXG1NSh8fwDKBdbd3CXroK-YevHg6pvpR3khcyP4qDtGRPjPg9Fc8ayCUhpI7lIMhR5MHQr9v1MlSIvh38sn~9BBL7hTVVzOHR5GakWHNrbKwq~gfGedK75acxa5C4OqoAZV8wpjeaGiyPIQWuV8sgn9JdnN3Dtx5OUNcIz~wHingg9TxwsK8G0w__&Key-Pair-Id=APKAJBCGYQYURKHBGCOA"}
+        %section
+          %pre
+            %code.json
+              :preserve
+                [
+                  {
+                    type: 'PUSH_COMMITS'
+                    author: 'braden',
+                    commits: [
+                      {
+                        author: 'braden'
+                        hash: '387283',
+                        repo: 'unstoppable/zns'
+                      },
+                      {
+                        author: 'bogdan'
+                        hash: '87ea8f',
+                        repo: 'unstoppable/zns'
+                      },
+                    ]
+                  },
+                  ....
+                ] 
+        %section
+          %h3 How many queries?
+          %pre
+            %code.js
+              :preserve
+                activities = activityFeedFor(userId)
+                activities.forEach((activity) =&gt; {
+                  activity.commits = findCommitsByActivityId(activity.id);
+                })
+        %section
+          %h2 Optimized Solution
+          %pre.fragment
+            %code.js
+              :preserve
+                activities = activityFeedFor(userId)
+                commits = findCommitsByActivityId(activities.map(a =&gt; a.id));
+                activities.forEach((activity) =&gt; {
+                  activity.commits = commits.filter(c =&gt; c.activityId == activity.id)
+                })
+        %section
+          %h3 Eager loading cave-ats
+          %ul
+            %li Nested associations (like each commit has an author)
+            %li Polymorphic association (comment.targetType = "Post", comment.targetId = 24)
+            %li DB limitation on number of values when finding multiple by ID
+        %section
+          %h1 Javascript 
+          %h1 vs
+          %h1 Object Oriented Design
+        %section
+          %h4 20 years ago:
+          %h3 You don't need classes in Javascript
+          .fragment
+            %h3 10 years ago:
+            %h3 Every non-trivial JS library uses classes
+          .fragment
+            %h3 I mean you can use them if you want
+            %h3 But you don't REALLY need them
+          .fragment
+            %h3 Even C programming language simulates classes
+        %section
+          %h3 You don't need a schema in NoSQL databases
+          %h3 You don't need ORM in nodejs
+          %h3 You don't need migrations in NoSQL database
+
+        %section
+          %h2 Phases
+          %ol
+            %li Ignore experience from other areas
+            %li Share your ideas like a boss
+            %li Ignore the actual successful usage
+            %li Apply "REALLY" word
+        %section
+          %h1 OOP rocks 
+          %h1 for complex projects
+
+        %section
+          %table
+            %tr
+              %td
+                Today
+              %td
+                Near Future
+              %td 
+                Distant Future
+            %tr
+              %td
+                Sell domains
+                %br
+                Release ZNS
+              %td
+                Typecasting
+                %br
+                Validation
+                %br
+                Eager loading
+                %br
+                Migrator
+                %br
+                WWW best practices
+                %br
+                OOP+OOD
+              %td
+                Pleasurable website development
+
+        %section
+          %h3 Speedup the journey
+          
+          %ul
+            %li 
+              WWW best practices on top of Express
+
+            %li SQL database
+            %li 
+              ORM that does:
+              %ul
+                %li Typecasting
+                %li Validation
+                %li Eager Loading
+                %li Allows OOD
+                %li Migrations
+          
+          
+
+          
+
+
+
+
+
+    %script{:src => "https://revealjs.com/js/reveal.js"}
+    -#%script{:src => "https://rawgithub.com/hakimel/reveal.js/3.6.0/js/reveal.js"}
+    :javascript
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+      	controls: true,
+      	progress: true,
+      	history: true,
+      	center: true,
+
+      	theme: Reveal.getQueryHash().theme || 'simple', // available themes are in /css/theme
+      	transition: Reveal.getQueryHash().transition || 'fade', // default/cube/page/concave/zoom/linear/fade/none
+
+      	// Optional libraries used to extend on reveal.js
+      	dependencies: [
+      		// { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+      		{ src: 'http://lab.hakim.se/reveal-js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      		{ src: 'http://lab.hakim.se/reveal-js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      		{ src: 'https://revealjs.com/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+          {src: 'https://mikemiles86.github.io/reveal-line-numbers/plugin/line-numbers/line-numbers.js'},
+          
+          { src: 'https://rawgithub.com/hakimel/reveal.js/3.6.0/plugin/notes/notes.js', async: true }
+      		// { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+      		// { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
+      		// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+      	]
+      });
