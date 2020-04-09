@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang='en'>
+<head>
+<meta charset='utf-8'>
+<title>Unstoppable Website</title>
+<meta content='' name='description'>
+<meta content='Bogdan Gusiev' name='author'>
+<meta content='yes' name='apple-mobile-web-app-capable'>
+<meta content='black-translucent' name='apple-mobile-web-app-status-bar-style'>
+<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' name='viewport'>
+<link href='http://lab.hakim.se/reveal-js/css/reveal.css' rel='stylesheet'>
+<link href='https://rawgithub.com/hakimel/reveal.js/master/css/theme/white.css' rel='stylesheet'>
+<!-- For syntax highlighting -->
+<link href='http://lab.hakim.se/reveal-js/lib/css/zenburn.css' rel='stylesheet'>
+<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+<script>
+  var link = document.createElement( 'link' );
+  link.rel = 'stylesheet';
+  link.type = 'text/css';
+  link.href = "https://revealjs.com/css/print/" + (window.location.search.match( /print-pdf/gi ) ? 'pdf.css' : 'paper.css');
+  document.getElementsByTagName( 'head' )[0].appendChild( link );
+</script>
+<style>
+  body .reveal {
+    font-size: 30px !important; }
+  
+  .yellow {
+    color: yellow; }
+  
+  .reveal section pre code {
+    padding: 20px 5px;
+    font-size: 1.3em;
+    line-height: 1.3em; }
+  .reveal section ul {
+    min-width: 50%; }
+  .reveal section .red {
+    color: #e02c2d; }
+  .reveal section .green {
+    color: #17cc1e; }
+  .reveal section .yellow {
+    color: yellow; }
+  .reveal section .blue {
+    color: #1b91ff; }
+  .reveal section .left {
+    float: left; }
+  .reveal section .right {
+    float: right; }
+  .reveal section .clearfix {
+    overflow: hidden; }
+  .reveal section table.full-border {
+    border-collapse: collapse; }
+    .reveal section table.full-border td {
+      border: 1px solid black !important; }
+  .reveal section img {
+    border: 0px;
+    box-shadow: 0 0 0 0; }
+  .reveal section code.line-numbers {
+    counter-reset: line_numbers; }
+  .reveal section code span.line-number {
+    counter-increment: line_numbers;
+    margin-right: 1em; }
+    .reveal section code span.line-number:before {
+      content: counter(line_numbers,decimal-leading-zero);
+      color: gray; }
+  .reveal section code span.highlight-line:before {
+    color: yellow; }
+</style>
+</head>
+<body>
+<div class='reveal'>
+<div class='slides'>
+<section>
+<h1>
+Blockchain Team
+</h1>
+<h2>
+May 2019
+</h2>
+</section>
+<section>
+<h2>Sections</h2>
+<ul>
+<li>Q1 results</li>
+<li>Q2 plans</li>
+<li>Technical strategy</li>
+</ul>
+</section>
+<section>
+<h2>Q1 results</h2>
+<ul>
+<li>Resolution library</li>
+<li>Transaction processor (TXP)</li>
+<li>My Transactions</li>
+</ul>
+</section>
+<section>
+<h2>TXP</h2>
+<ul>
+<li>Funding issues</li>
+<li>Performance problem</li>
+<li>Rejected Transactions</li>
+<li>Stack transactions</li>
+</ul>
+</section>
+<section>
+<h2>TXP performance</h2>
+<ul>
+<li class='fragment'>Detected peak of 1000 ETH TXs per 20 minutes</li>
+<li class='fragment'>
+Limited by number of worker accounts
+<ul>
+<li>ZIL - 150</li>
+<li>ETH - 299</li>
+</ul>
+</li>
+</ul>
+</section>
+<section>
+<h2>Transactions per day</h2>
+<iframe width="600" height="371" seamless frameborder="0" scrolling="no" src="https://docs.google.com/spreadsheets/d/e/2PACX-1vRVb5gW6d2VN5D94pK_2kpyTFqxUIytIx-umDSlLffdIj8ZRwIz1X1ux03uIrxeEQ8wzC341lBrfzQg/pubchart?oid=943092356&amp;format=image"></iframe>
+</section>
+<section>
+<h2>TXP Usage by users</h2>
+<iframe width="600" height="371" seamless frameborder="0" scrolling="no" src="https://docs.google.com/spreadsheets/d/e/2PACX-1vRVb5gW6d2VN5D94pK_2kpyTFqxUIytIx-umDSlLffdIj8ZRwIz1X1ux03uIrxeEQ8wzC341lBrfzQg/pubchart?oid=288045493&amp;format=image"></iframe>
+</section>
+<section>
+<h2>TX completion time</h2>
+<iframe width="600" height="371" seamless frameborder="0" scrolling="no" src="https://docs.google.com/spreadsheets/d/e/2PACX-1vRVb5gW6d2VN5D94pK_2kpyTFqxUIytIx-umDSlLffdIj8ZRwIz1X1ux03uIrxeEQ8wzC341lBrfzQg/pubchart?oid=2031729989&amp;format=image"></iframe>
+<div class='fragment'>
+<h3>Percentage of TX completed in time frame</h3>
+<img src='https://monosnap.com/file/vsiq3VEMawESs6hFzQ0cKwGHaPtVCh.png'>
+</div>
+</section>
+<section>
+<h2>TXP errors</h2>
+<pre><code class='text' style='font-size: 0.8em'> Type |                     Message                       |  #  | Last seen  | Resolution&#x000A;------+---------------------------------------------------+-----+------------+------------ &#x000A; ETH  | Eth call reverted: ERC721: token already minted   |   5 | 2020-04-07 | ? Fixed&#x000A; ETH  | Unable to estimate gas: Returned error: gas requi |   6 | 2020-04-06 | ? Pending&#x000A; ETH  | Unknown Ethereum network rejection reason         |  20 | 2020-04-05 | ? Unfixable&#x000A; ZIL  | Transaction threw an error event: Sender admin    |   6 | 2020-04-01 | ? Fixed&#x000A; ETH  | Parent transaction was rejected                   |   1 | 2020-03-29 |   Unfixable&#x000A; ZIL  | Rejected by network. Error codes: 7               |  71 | 2020-03-23 |   Fixed&#x000A; ZIL  | The account nonce in signature is incorrect       |   4 | 2020-03-22 |   Fixed&#x000A; ETH  | Unable to estimate gas: Invalid JSON RPC response |   1 | 2020-03-22 |   Fixed&#x000A; ZIL  | Rejected by zilliqa by unknown reason             |  10 | 2020-03-20 |   Fixed&#x000A; ETH  | Eth signature error: Returned error: gas required |  26 | 2020-03-17 |   Fixed&#x000A; ZIL  | Unable to verify transaction                      | 107 | 2020-03-11 |   Fixed&#x000A; ETH  | Unknown                                           |   3 | 2020-03-10 |   Fixed&#x000A; ETH  | Eth signature error: request to https://ethgassta |   1 | 2020-03-05 |   Fixed&#x000A; ZIL  | [{"type":"String","value":"Sender not node owner, |   1 | 2020-03-02 |   Fixed</code></pre>
+</section>
+<section>
+<h2>TXP Stack transactions</h2>
+<ul>
+<li>
+<s>Record update status replication</s>
+</li>
+<li>
+<s>TX group removal</s>
+</li>
+<li>
+<s>Domain owner address update</s>
+</li>
+<li>
+<s>Ignoring errors</s>
+</li>
+<li>
+<s>Registry mirror bugs</s>
+</li>
+</ul>
+<ul>
+<li>TX takes too long to execute</li>
+<li>Bull Queue bug (?)</li>
+</ul>
+</section>
+<section>
+<h3>Questions</h3>
+</section>
+<section>
+<h3>Q2 Priorities</h3>
+<ul>
+<li>Remove UD operator</li>
+<li>Introduce new .crypto resolver</li>
+<li>Protect admin keys</li>
+<li>Stability</li>
+<li>Mozilla domain resolution (?)</li>
+<li>Subdomains support (?)</li>
+</ul>
+</section>
+<section>
+<h2>Remove UD operator</h2>
+<p>
+Hacker attack led us to the conclusions
+</p>
+<div class='fragment'>
+<h4>No domains should be managed</h4>
+<h4>without user singing a transaction</h4>
+</div>
+</section>
+<section>
+<h2>New .crypto resolver</h2>
+<ul>
+<li>Track custom records</li>
+<li>Query all records set for domain</li>
+<li>Reduce number of TXs for certain operations</li>
+</ul>
+</section>
+<section>
+<h2>Protect Admin keys</h2>
+<h4>Current problems</h4>
+<ul>
+<li>Leaking keys problem</li>
+<li>Sneaky bestow premium domains problem</li>
+</ul>
+<div class='fragment'>
+<br>
+<h4>Possible solutions</h4>
+<ol>
+<li>Restrict permission of worker accounts</li>
+<li>Monitor all permission changes on contracts</li>
+<li>Rotate keys periodically</li>
+<li>Limit number of operations one key can do</li>
+<li>Make 3rd party Txs identifiable</li>
+</ol>
+</div>
+</section>
+<section>
+<h2>Stability</h2>
+<h3>99.99% yearly uptime goal</h3>
+<h3>for resolution API</h3>
+<h2>8 hours downtime a year</h2>
+<div class='fragment'>
+<h3>Reasons</h3>
+<ul>
+<li>Hosting downtimes</li>
+<li>Human error</li>
+</ul>
+</div>
+</section>
+<section>
+<h3>Hosting downtimes</h3>
+<ol>
+<li>Servers go down randomly</li>
+<li>Failed deploys</li>
+</ol>
+<br>
+<h3 class='fragment'>Either we switch hosting platform</h3>
+<h3 class='fragment'>Or it will be magically solved</h3>
+</section>
+<section>
+<h3>Human Error</h3>
+<ul>
+<li>Ensure all key endpoints are tested</li>
+<li>Make green CI a must to deploy</li>
+</ul>
+</section>
+<section>
+<h3>Questions</h3>
+</section>
+<section>
+<h3>Technical Strategy:</h3>
+<h2>Inevitable Success</h2>
+<ol class='fragment'>
+<li>Know your customer</li>
+<li>Follow the rules</li>
+</ol>
+</section>
+<section>
+<h3>Know your customer</h3>
+<ol>
+<li>Consumer</li>
+<li>Domain Owner</li>
+<li>Reseller</li>
+<li>UD Employee</li>
+</ol>
+</section>
+<section>
+<h3>Consumer</h3>
+<ul>
+<li>Crypto Payments from wallets</li>
+<li>Unstoppable Browser</li>
+<li>Chrome Extension</li>
+<li>Chat</li>
+</ul>
+</section>
+<section>
+<h3>Domain Owner</h3>
+<ul>
+<li>E-Commerce</li>
+<li>Domain Management</li>
+<li>Mobile Application</li>
+</ul>
+</section>
+<section>
+<h3>Reseller</h3>
+<ul>
+<li>Reseller API</li>
+<li>Reseller admin portal</li>
+</ul>
+</section>
+<section>
+<h3>Employee</h3>
+<ul>
+<li>Admin Panel</li>
+</ul>
+</section>
+<section>
+<h3>How one sees the data?</h3>
+<img class='fragment' src='https://i.pinimg.com/564x/00/38/e0/0038e07550d3b40ed63c127e2ee0df3c.jpg'>
+</section>
+<section>
+<h3>Follow Fundamental Rules</h3>
+<ol>
+<li class='fragment'>Software needs to do whatever it needs to do</li>
+<li class='fragment'>Model the reality</li>
+<li class='fragment'>Build a framework</li>
+</ol>
+</section>
+</div>
+</div>
+<script src='https://revealjs.com/js/reveal.js'></script>
+<script>
+  // https://github.com/hakimel/reveal.js#configuration
+  Reveal.initialize({
+  	controls: true,
+  	progress: true,
+  	history: true,
+  	center: true,
+  
+  	theme: Reveal.getQueryHash().theme || 'simple', // available themes are in /css/theme
+  	transition: Reveal.getQueryHash().transition || 'fade', // default/cube/page/concave/zoom/linear/fade/none
+  
+  	// Optional libraries used to extend on reveal.js
+  	dependencies: [
+  		// { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+  		{ src: 'http://lab.hakim.se/reveal-js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+  		{ src: 'http://lab.hakim.se/reveal-js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+  		{ src: 'https://revealjs.com/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+      {src: 'https://mikemiles86.github.io/reveal-line-numbers/plugin/line-numbers/line-numbers.js'},
+      
+      { src: 'https://rawgithub.com/hakimel/reveal.js/3.6.0/plugin/notes/notes.js', async: true }
+  		// { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+  		// { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
+  		// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+  	]
+  });
+</script>
+</body>
+</html>
