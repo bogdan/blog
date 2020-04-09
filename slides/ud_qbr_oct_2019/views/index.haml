@@ -1,0 +1,204 @@
+<!doctype html>
+%html{:lang => "en"}
+  %head
+    %meta{:charset => "utf-8"}/
+    %title Unstoppable Website
+    %meta{:content => "", :name => "description"}/
+    %meta{:content => "Bogdan Gusiev", :name => "author"}/
+    %meta{:content => "yes", :name => "apple-mobile-web-app-capable"}/
+    %meta{:content => "black-translucent", :name => "apple-mobile-web-app-status-bar-style"}/
+    %meta{:content => "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no", :name => "viewport"}/
+    %link{:href => "http://lab.hakim.se/reveal-js/css/reveal.css", :rel => "stylesheet"}/
+    %link{:href => "https://rawgithub.com/hakimel/reveal.js/master/css/theme/white.css", :rel => "stylesheet"}/
+    / For syntax highlighting
+    %link{:href => "http://lab.hakim.se/reveal-js/lib/css/zenburn.css", :rel => "stylesheet"}/
+    / If the query includes 'print-pdf', use the PDF print sheet
+    :javascript
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = "https://revealjs.com/css/print/" + (window.location.search.match( /print-pdf/gi ) ? 'pdf.css' : 'paper.css');
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    :sass
+      body .reveal
+        font-size: 30px !important
+      .yellow
+        color: yellow
+      .reveal
+        section
+          pre
+            code
+              padding: 20px 5px
+              font-size: 1.30em
+              line-height: 1.3em
+          ul
+            min-width: 50%
+          .red
+            color: #e02c2d
+          .green
+            color: #17cc1e
+          .yellow
+            color: yellow
+          .blue
+            color: #1b91ff
+          .left
+            float: left
+          .right
+            float: right
+          .clearfix
+            overflow: hidden
+          table.full-border
+            border-collapse: collapse
+            td
+              border: 1px solid black !important
+          img
+            border: 0px
+            box-shadow: 0 0 0 0
+      
+          code
+            &.line-numbers
+              counter-reset: line_numbers
+            span
+              &.line-number
+                counter-increment: line_numbers
+                margin-right: 1em
+                &:before
+                  content: counter(line_numbers, decimal-leading-zero)
+                  color: gray
+              &.highlight-line:before
+                color: yellow
+          
+        
+  %body
+    .reveal
+      .slides
+        %section
+          %h1
+            Wallets Team Roadmap
+          %h2
+            May 2019
+        %section
+          %h2 What our customers care about
+          
+          %ol
+            %li 
+              Owner
+              %ol
+                %li Buy Domain
+                %ol
+                  %li Credit card
+                  %li Crypto
+
+                %li Manage Domain
+                %li Deploy IPFS website
+            %li 
+              Consumer
+              %ol
+                %li Resolve Domain
+                %li Browse a website
+        %section
+          %h2 Wallets Roadmap Features
+
+          %ul
+            %li Reseller API
+            %li Stripe
+            %li Coinbase
+            %li Namicorn
+            %li Zns.js
+            %li Kaya
+
+        %section
+          %a{href: "https://www.draw.io/?lightbox=1&highlight=0000ff&edit=_blank&layers=1&nav=1#G1MyIjIdXqpooUepDhy-RDbP8Tl9dzqdkj"} Link
+          %br
+          %iframe{width: '100%', height: '500px', src: "https://www.draw.io/?lightbox=1&highlight=0000ff&edit=_blank&layers=1&nav=1#G1MyIjIdXqpooUepDhy-RDbP8Tl9dzqdkj"}
+        %section
+          %h2 ZNS.js &amp; Namicorn
+
+          %ol
+            %li Doable
+            %li Only for JS
+          %ol
+            %li Dedicate resources to ZNS.js
+
+
+        %section
+          %h2 Google Cloud
+          %ol
+            %li Slow deployment
+            %li Multiple services deployment is even slower
+            %li Lack of documentation
+
+          %ol
+            %li Wait
+            %li Switch to other hosting
+            %li Invest time into deployment script
+            %li Switch to standard env
+        %section
+          %h2 
+            Firebase
+          %ol
+            %li No test suite support
+            %li Lacks features
+            %li Bad data structure
+          %ol
+            %li Migrate to PostgreSQL
+        %section
+          %h2
+            TypeORM
+          %ol
+            %li Buggy
+            %li Lacks features
+          %ol
+            %li Wait
+            %li Fix bugs ourselves
+        %section
+          %h2 
+            Background Jobs
+          %ol
+            %li No retries 
+            %li No error notification
+            %li Dependency between different jobs
+            %li Only high level admin panel
+          %ol
+            %li Use background jobs framework
+              
+        %section
+          %h2
+            Express application
+          %ol
+            %li Minimalistic framework
+            %li Express is unopinionated
+            %li App routes are chaotic
+          %ol
+            %li Use Nest.js
+            %li Unify and inforce data validation process
+            %li Introduce coding strandards
+
+
+    %script{:src => "https://revealjs.com/js/reveal.js"}
+    -#%script{:src => "https://rawgithub.com/hakimel/reveal.js/3.6.0/js/reveal.js"}
+    :javascript
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+      	controls: true,
+      	progress: true,
+      	history: true,
+      	center: true,
+
+      	theme: Reveal.getQueryHash().theme || 'simple', // available themes are in /css/theme
+      	transition: Reveal.getQueryHash().transition || 'fade', // default/cube/page/concave/zoom/linear/fade/none
+
+      	// Optional libraries used to extend on reveal.js
+      	dependencies: [
+      		// { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+      		{ src: 'http://lab.hakim.se/reveal-js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      		{ src: 'http://lab.hakim.se/reveal-js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      		{ src: 'https://revealjs.com/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+          {src: 'https://mikemiles86.github.io/reveal-line-numbers/plugin/line-numbers/line-numbers.js'},
+          
+          { src: 'https://rawgithub.com/hakimel/reveal.js/3.6.0/plugin/notes/notes.js', async: true }
+      		// { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+      		// { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
+      		// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+      	]
+      });

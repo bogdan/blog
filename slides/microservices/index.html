@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang='en'>
+  <head>
+    <meta charset='utf-8'>
+    <title>Sharding How To</title>
+    <meta content='' name='description'>
+    <meta content='Bogdan Gusiev' name='author'>
+    <meta content='yes' name='apple-mobile-web-app-capable'>
+    <meta content='black-translucent' name='apple-mobile-web-app-status-bar-style'>
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' name='viewport'>
+    <link href='http://lab.hakim.se/reveal-js/css/reveal.css' rel='stylesheet'>
+    <link href='https://rawgithub.com/hakimel/reveal.js/master/css/theme/white.css' rel='stylesheet'>
+    <!-- For syntax highlighting -->
+    <link href='http://lab.hakim.se/reveal-js/lib/css/zenburn.css' rel='stylesheet'>
+    <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+    <script>
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = "https://revealjs.com/css/print/" + (window.location.search.match( /print-pdf/gi ) ? 'pdf.css' : 'paper.css');
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+    <style>
+      body .reveal {
+        font-size: 30px !important; }
+      
+      .yellow {
+        color: yellow; }
+      
+      .reveal section pre code {
+        padding: 20px 5px;
+        font-size: 1.3em;
+        line-height: 1.3em; }
+      .reveal section ul {
+        min-width: 50%; }
+      .reveal section .red {
+        color: #e02c2d; }
+      .reveal section .green {
+        color: #17cc1e; }
+      .reveal section .yellow {
+        color: yellow; }
+      .reveal section .blue {
+        color: #1b91ff; }
+      .reveal section .left {
+        float: left; }
+      .reveal section .right {
+        float: right; }
+      .reveal section .clearfix {
+        overflow: hidden; }
+      .reveal section table.full-border {
+        border-collapse: collapse; }
+        .reveal section table.full-border td {
+          border: 1px solid black !important; }
+      .reveal section img {
+        border: 0px;
+        box-shadow: 0 0 0 0; }
+      .reveal section code.line-numbers {
+        counter-reset: line_numbers; }
+      .reveal section code span.line-number {
+        counter-increment: line_numbers;
+        margin-right: 1em; }
+        .reveal section code span.line-number:before {
+          content: counter(line_numbers,decimal-leading-zero);
+          color: gray; }
+      .reveal section code span.highlight-line:before {
+        color: yellow; }
+    </style>
+  </head>
+  <body>
+    <div class='reveal'>
+      <div class='slides'>
+        <section>
+          <h1>
+            Sharding How To
+          </h1>
+          <h2>
+            Talkable March 2018
+          </h2>
+          <h3>
+            Bogdan Gusiev
+          </h3>
+        </section>
+        <section>
+          <h2>Problem:</h2>
+          <h2>
+            Database size is 2TB
+          </h2>
+          <ul>
+            <li>Hard to change schema</li>
+            <li>Hard to copy into test envs</li>
+            <li>Hard to scale</li>
+          </ul>
+        </section>
+        <section>
+          <h2>Perfect solution:</h2>
+          <h3>Store each client in its own database</h3>
+          <div class='fragment'>
+            <h2>Real Solution:</h2>
+            <h3>Create several databases and split some of the clients data between those databases</h3>
+          </div>
+        </section>
+        <section>
+          <h1>Databases</h1>
+          <ol>
+            <li>Primary</li>
+            <li>Shard 1</li>
+            <li>Shard 2</li>
+            <li>Shard 3</li>
+            <li>Shard ...</li>
+          </ol>
+        </section>
+        <section>
+          <h2>Each account with have a shard</h2>
+          <img src='https://monosnap.com/file/1RCKV031ZGykFHyN2BfUZaJmiKjVI8.png'>
+        </section>
+        <section>
+          <h2>Shared Data vs Sharded Data</h2>
+          <h3>Sharded Tables</h3>
+          <div class='clearfix'>
+            <div class='left' style='width: 45%'>
+              <ul>
+                <li>activities</li>
+                <li>checkout_coupons</li>
+                <li>coupons</li>
+                <li>custom_attributes</li>
+                <li>custom_properties</li>
+                <li>customer_emails</li>
+                <li>items</li>
+                <li>incentive_outcomes</li>
+                <li>offers</li>
+                <li>offer_shares</li>
+              </ul>
+            </div>
+            <div class='right' style='width: 45%'>
+              <ul>
+                <li>origins</li>
+                <li>people</li>
+                <li>previous_customers</li>
+                <li>products</li>
+                <li>referrals</li>
+                <li>share_emails</li>
+                <li>split_test_impressions</li>
+                <li>visitors</li>
+                <li>visitor_offers</li>
+                <li>visitor_user_agents</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+        <section>
+          <h3>Conceptual Split</h3>
+          <p>
+            We shard only the referrals data starting from People and Visitors
+            up to Referrals and Rewards
+          </p>
+          <p>
+            Campaign Configurations, Site configurations, View and Fraud settings are not sharded
+          </p>
+        </section>
+        <section>
+          <h3>Is the following data sharded?</h3>
+          <ol>
+            <li>
+              Fraud Policies
+              <span class='fragment red'>- No</span>
+            </li>
+            <li>
+              Purchases
+              <span class='fragment green'>- Yes</span>
+            </li>
+            <li>
+              Offer Shares
+              <span class='fragment green'>- Yes</span>
+            </li>
+            <li>
+              Sharing Channels
+              <span class='fragment red'>- No</span>
+            </li>
+            <li>
+              Traffic Sources
+              <span class='fragment red'>- No</span>
+            </li>
+            <li>
+              Coupons
+              <span class='fragment green'>- Yes</span>
+            </li>
+            <li>
+              Short Urls
+              <span class='fragment red'>- No</span>
+            </li>
+          </ol>
+        </section>
+        <section>
+          <h3>Impact to the system</h3>
+          <ul>
+            <li>Cross site reports need to care about sharding</li>
+            <li>Joines between sharded and not sharded data are impossible</li>
+            <li>Support scripts wouneed to care about sharding</li>
+          </ul>
+        </section>
+        <section>
+          <h3>Sharding Related Bugs</h3>
+          <ul>
+            <li>Sudden zeros and empty tables in reports can appear</li>
+            <li>500 on cross site reports</li>
+            <li>Bug only affects clients on specific shard</li>
+          </ul>
+        </section>
+        <section>
+          <h2>Developers Section</h2>
+          <ul>
+            <li>Avoiding joins</li>
+            <li>Master and Slave</li>
+            <li>Console and Support Scripts</li>
+            <li>Migrations</li>
+            <li>Low level utilities</li>
+            <li>What to be aware of</li>
+          </ul>
+        </section>
+        <section>
+          <h3>Sharded Models inherit <code>ShardedRecord</code></h3>
+          <h3>Not-Sharded Models inherit <code>ApplicationRecord</code></h3>
+          <div class='fragment'>
+            <p>
+              Models are sharded by default that is why
+              models from gems should be manually marked as not sharded
+              <pre><code class='ruby'>FriendlyId::Slug.not_sharded</code></pre>
+            </p>
+          </div>
+        </section>
+        <section>
+          <h2>Avoid Joins</h2>
+          <p>Old</p>
+          <pre><code class='ruby'>Referral.joins(visitor_offer: :sharing_channel).&#x000A;  days(30).ideal.group(:identifier).count&#x000A;# => ShardingJoinFinder::Error: "sharing_channels" can not &#x000A;#    be joined into VisitorOffer because of DB sharding</code></pre>
+          <div class='fragment'>
+            <p>New</p>
+            <pre><code class='ruby'>data = Referral.ideal.joins(:visitor_offer).&#x000A;  group(:sharing_channel_id).days(7).count&#x000A;ApplicationRecord.replace_ids(&#x000A;  data,&#x000A;  SharingChannel.all,&#x000A;  :identifier,&#x000A;  filter: true,&#x000A;  &:sum&#x000A;)</code></pre>
+          </div>
+        </section>
+        <section>
+          <h2>Avoid Joins</h2>
+          <p><code>ActiveRecord::Relation</code> methods</p>
+          <ul>
+            <li>
+              <strike>includes</strike>
+            </li>
+            <li>
+              <strike>eager_load</strike>
+            </li>
+          </ul>
+          <ul>
+            <li>joins</li>
+            <li>preload</li>
+          </ul>
+        </section>
+        <section>
+          <h2>Support Scripts</h2>
+          <pre><code class='ruby'>site.with_shard { site.people.count }&#x000A;with_context &lt;=&gt; with_shard + with_tz&#x000A;site.with_context { site.people.last.created_at }&#x000A;Site.focused.each_with_context do |site|&#x000A;  site.referrals.ideal.count&#x000A;end</code></pre>
+        </section>
+        <section>
+          <h2>Cross Shard Reports</h2>
+          <pre><code class='ruby'>DatabaseUtils.shards_sum { Referral.days(7).count }</code></pre>
+          <pre><code class='ruby'>DatabaseUtils.shards_sum do &#x000A;  Referral.group(:track_method).days(7).count&#x000A;end</code></pre>
+        </section>
+        <section>
+          <pre><code class='ruby'>DatabaseUtils.shards_sum do&#x000A;  data = Referral.ideal.joins(:visitor_offer).&#x000A;    group(:sharing_channel_id).days(7).count&#x000A;  ApplicationRecord.replace_ids(&#x000A;    data,&#x000A;    SharingChannel.all,&#x000A;    :identifier,&#x000A;    filter: true,&#x000A;    &:sum&#x000A;  )&#x000A;end&#x000A;</code></pre>
+        </section>
+        <section>
+          <h2>Console</h2>
+          <pre><code class='ruby'>>> site = Site.find(...)&#x000A;>> site.offers.count&#x000A;=> RuntimeError: Offer can not be queried: shard is not selected</code></pre>
+          <pre class='fragment'><code>>> shard # => nil&#x000A;>> shard(1) # => 1&#x000A;>> shard # => 1&#x000A;>> shard(site) # => 2</code></pre>
+        </section>
+        <section>
+          <h2>Console</h2>
+          <p>
+            Beware of selected shard when performing several operations in the same console for different sites
+          </p>
+          <pre><code class='ruby'>>> site = Site.find('shuterfly')&#x000A;>> shard(site)&#x000A;>> site.referrals.ideal.where(track_method: 'coupon').count</code></pre>
+          <div class='fragment'>
+            <pre><code class='ruby'># 3 Hours later same console&#x000A;site = Site.find('aeo')&#x000A;site.offers.where(campaign_id: [...]).count # => 0&#x000A;</code></pre>
+          </div>
+        </section>
+        <section>
+          <h2>Migrations</h2>
+          <pre><code class='ruby'>class AddWhateverToReferrals &lt; ActiveRecord::Migration[5.1]&#x000A;  shard :all&#x000A;  def change&#x000A;    add_column :referrals, :whatever, :string&#x000A;  end&#x000A;end&#x000A;&#x000A;class AddWhateverToSites &lt; ActiveRecord::Migration[5.1]&#x000A;  shard :none&#x000A;  def change&#x000A;    add_column :sites, :whatever, :string&#x000A;  end&#x000A;end</code></pre>
+        </section>
+        <section>
+          <h2>Sharded Migrations + Ghost</h2>
+          <ul>
+            <li>Each shard would need to be migrated</li>
+            <li>Ghost processes would need to be launched in parallel</li>
+          </ul>
+        </section>
+        <section>
+          <h2>Low Level API</h2>
+          <pre><code class='ruby'>DatabaseUtils.&#x000A;  config_for(slave: true, shard: 1)&#x000A;  connection(slave: true, shard: 1)&#x000A;  sharded_tables&#x000A;  use_shard(nil|1)&#x000A;  use_slave&#x000A;  on_all_shards&#x000A;  on_all_databases&#x000A;  shards_sum&#x000A;  current_shard</code></pre>
+        </section>
+        <section>
+          <h2>Connection Madness: Direct use</h2>
+          <p>returns a connection to the shard or to primary</p>
+          <pre><code class='ruby'>Model.connection&#x000A;</code></pre>
+        </section>
+        <section>
+          <h2>Connection Madness: Transaction</h2>
+          <p>Open transaction on the primary or shard DB</p>
+          <pre><code class='ruby'>Model.transaction do&#x000A;  ...&#x000A;end&#x000A;</code></pre>
+        </section>
+        <section>
+          <h2>Connection Madness: Query Cache</h2>
+          <pre><code class='ruby'>ActiveRecord::Base.connection.query_cache_enabled</code></pre>
+          <h2>Disable the cache for all 4 databases</h2>
+          <pre><code class='ruby'>DatabaseUtils.uncached do&#x000A;  ...&#x000A;end</code></pre>
+        </section>
+        <section>
+          <h2>Upgrading Dev Env</h2>
+          <ol>
+            <li>
+              Upgrade database.yml
+              <ul>
+                <li>MySQL server connection URL</li>
+                <li>Ensure Primary DB name is right</li>
+              </ul>
+            </li>
+            <li>Split extract shard 1 from primary DB</li>
+            <li>Shard 2 will be used for new sites.</li>
+          </ol>
+          <pre><code class='sh'>cp config/deploy/templates/database.yml config&#x000A;edit config/database.yml&#x000A;rake db:create db:migrate&#x000A;rails runner support/2018/20180202160337_db_extraction.rb&#x000A;rake db:drop db:create db:migrate RAILS_ENV=test</code></pre>
+        </section>
+      </div>
+    </div>
+    <script src='http://lab.hakim.se/reveal-js/lib/js/head.min.js'></script>
+    <script src='https://rawgithub.com/hakimel/reveal.js/3.6.0/js/reveal.js'></script>
+    <script>
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+      	controls: true,
+      	progress: true,
+      	history: true,
+      	center: true,
+      
+      	theme: Reveal.getQueryHash().theme || 'simple', // available themes are in /css/theme
+      	transition: Reveal.getQueryHash().transition || 'fade', // default/cube/page/concave/zoom/linear/fade/none
+      
+      	// Optional libraries used to extend on reveal.js
+      	dependencies: [
+      		// { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+      		{ src: 'http://lab.hakim.se/reveal-js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      		{ src: 'http://lab.hakim.se/reveal-js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      		{ src: 'http://lab.hakim.se/reveal-js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+          {src: 'https://mikemiles86.github.io/reveal-line-numbers/plugin/line-numbers/line-numbers.js'},
+          
+          { src: 'https://rawgithub.com/hakimel/reveal.js/3.6.0/plugin/notes/notes.js', async: true }
+      		// { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+      		// { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
+      		// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+      	]
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,162 @@
+<!doctype html>
+%html{:lang => "en"}
+  %head
+    %meta{:charset => "utf-8"}/
+    %title Unstoppable Website
+    %meta{:content => "", :name => "description"}/
+    %meta{:content => "Bogdan Gusiev", :name => "author"}/
+    %meta{:content => "yes", :name => "apple-mobile-web-app-capable"}/
+    %meta{:content => "black-translucent", :name => "apple-mobile-web-app-status-bar-style"}/
+    %meta{:content => "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no", :name => "viewport"}/
+    %link{:href => "http://lab.hakim.se/reveal-js/css/reveal.css", :rel => "stylesheet"}/
+    %link{:href => "https://rawgithub.com/hakimel/reveal.js/master/css/theme/white.css", :rel => "stylesheet"}/
+    / For syntax highlighting
+    %link{:href => "http://lab.hakim.se/reveal-js/lib/css/zenburn.css", :rel => "stylesheet"}/
+    / If the query includes 'print-pdf', use the PDF print sheet
+    :javascript
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = "https://revealjs.com/css/print/" + (window.location.search.match( /print-pdf/gi ) ? 'pdf.css' : 'paper.css');
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    :sass
+      body .reveal
+        font-size: 30px !important
+      .yellow
+        color: yellow
+      .reveal
+        section
+          pre
+            code
+              padding: 20px 5px
+              font-size: 1.30em
+              line-height: 1.3em
+          ul
+            min-width: 50%
+          .red
+            color: #e02c2d
+          .green
+            color: #17cc1e
+          .yellow
+            color: yellow
+          .blue
+            color: #1b91ff
+          .left
+            float: left
+          .right
+            float: right
+          .clearfix
+            overflow: hidden
+          table.full-border
+            border-collapse: collapse
+            td
+              border: 1px solid black !important
+          img
+            border: 0px
+            box-shadow: 0 0 0 0
+      
+          code
+            &.line-numbers
+              counter-reset: line_numbers
+            span
+              &.line-number
+                counter-increment: line_numbers
+                margin-right: 1em
+                &:before
+                  content: counter(line_numbers, decimal-leading-zero)
+                  color: gray
+              &.highlight-line:before
+                color: yellow
+          
+        
+  %body
+    .reveal
+      .slides
+        %section
+          %h1
+            Unstoppable Architecture
+          %h2
+            May 2019
+        %section
+          %h2 Microservices Flow
+          
+          %ol
+            %li.fragment Define the services
+            %li.fragment API Spec
+            %li.fragment Write services + improve API
+            %li.fragment Integration Testing + improve API
+            %li.fragment Deployment
+        %section
+          %h2 Complexities
+
+          %ul
+            %li Strong planning
+            %li Stable Product
+            %li Intense Communication between teams
+            %li Stable deadlines
+        %section
+          %h2 Unstoppable Microservices
+          %ol
+            %li Write Service
+            %li Deploy Service
+            %li Connect to Service
+            %li ?
+        %section
+          
+          %ul
+            %li Make sure API endpoints available for the functionality
+            %li Make sure API endpoints are working according to the spec
+            %li Make sure end user gets what he needs
+            %li Debug problems
+        %section
+          %h2 
+            Our philosophy:
+          %h3 Leave the hardest work for the latest day
+
+
+        %section
+          %h2 Microservices Extraction
+
+          %ol
+            %li Implement Features
+            %li Testing
+            %li Deploy to Production
+            %li Wait X years
+            %li Extract Services
+
+        %section
+
+          %p Microservice First requires you to define architecture first
+          %p Microservice Extraction allows you to iterate on architecture
+
+
+
+
+
+    %script{:src => "https://revealjs.com/js/reveal.js"}
+    -#%script{:src => "https://rawgithub.com/hakimel/reveal.js/3.6.0/js/reveal.js"}
+    :javascript
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+      	controls: true,
+      	progress: true,
+      	history: true,
+      	center: true,
+
+      	theme: Reveal.getQueryHash().theme || 'simple', // available themes are in /css/theme
+      	transition: Reveal.getQueryHash().transition || 'fade', // default/cube/page/concave/zoom/linear/fade/none
+
+      	// Optional libraries used to extend on reveal.js
+      	dependencies: [
+      		// { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+      		{ src: 'http://lab.hakim.se/reveal-js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      		{ src: 'http://lab.hakim.se/reveal-js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      		{ src: 'https://revealjs.com/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+          {src: 'https://mikemiles86.github.io/reveal-line-numbers/plugin/line-numbers/line-numbers.js'},
+          
+          { src: 'https://rawgithub.com/hakimel/reveal.js/3.6.0/plugin/notes/notes.js', async: true }
+      		// { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+      		// { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
+      		// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+      	]
+      });
