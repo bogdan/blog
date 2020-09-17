@@ -1,0 +1,424 @@
+<!doctype html>
+%html{:lang => "en"}
+  %head
+    %meta{:charset => "utf-8"}/
+    %title Unstoppable Website
+    %meta{:content => "", :name => "description"}/
+    %meta{:content => "Bogdan Gusiev", :name => "author"}/
+    %meta{:content => "yes", :name => "apple-mobile-web-app-capable"}/
+    %meta{:content => "black-translucent", :name => "apple-mobile-web-app-status-bar-style"}/
+    %meta{:content => "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no", :name => "viewport"}/
+    %link{rel: "stylesheet", href: "https://cdn.jsdelivr.net/gh/hakimel/reveal.js/plugin/highlight/zenburn.css", id: "highlight-theme"}
+    %link{:href => "https://cdn.jsdelivr.net/gh/hakimel/reveal.js/dist/reveal.css", :rel => "stylesheet"}/
+    %link{:href => "https://cdn.jsdelivr.net/gh/hakimel/reveal.js/dist/theme/white.css", :rel => "stylesheet"}/
+    %script{src: 'https://cdn.jsdelivr.net/gh/hakimel/reveal.js/plugin/highlight/highlight.js'}
+    %script{src: 'https://cdn.jsdelivr.net/gh/highlightjs/highlightjs-solidity/solidity.js'}
+
+    %script
+
+    / If the query includes 'print-pdf', use the PDF print sheet
+    :javascript
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = "https://revealjs.com/css/print/" + (window.location.search.match( /print-pdf/gi ) ? 'pdf.css' : 'paper.css');
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    :sass
+      body .reveal
+        font-size: 30px !important
+      .reveal
+        section
+          pre
+            code
+              padding: 20px 5px
+              font-size: 1.30em
+              line-height: 1.3em
+          ul
+            min-width: 50%
+          .red
+            color: #e02c2d
+          .green
+            color: #17cc1e
+          .yellow
+            color: yellow
+          .orange
+            color: orange
+          .blue
+            color: #1b91ff
+          .left
+            float: left
+          .right
+            float: right
+          .clearfix
+            overflow: hidden
+          table.full-border
+            border-collapse: collapse
+            td
+              border: 1px solid black !important
+          img
+            border: 0px
+            box-shadow: 0 0 0 0
+      
+          code
+            &.line-numbers
+              counter-reset: line_numbers
+            span
+              &.line-number
+                counter-increment: line_numbers
+                margin-right: 1em
+                &:before
+                  content: counter(line_numbers, decimal-leading-zero)
+                  color: gray
+              &.highlight-line:before
+                color: yellow
+          
+        
+  %body
+    .reveal
+      .slides
+        %section
+          %h2
+            Domain Names Registry
+          %h2 Bogdan Gusiev
+          %h3 BlockchainUA 18 Sep 2020
+        %section
+          %h2 Bogdan Gusiev
+
+          %ul
+            %li 
+              10 years of Ruby on Rails
+            %li 
+              6 years CTO of Talkable
+            %li 1.5 years in Unstoppable Domains
+
+        %section
+          %p
+            %img#ud-logo{src: ""}
+          %p
+            %a{href: "https://etherscan.io/tokens-nft"} https://etherscan.io/tokens-nft
+          %p
+            // https://monosnap.com/direct/UQM68p24nkI91buOHYdHRjBJN8IwbP
+            %img{src: "https://api.monosnap.com/file/download?id=UQM68p24nkI91buOHYdHRjBJN8IwbP"}
+            -# %img{src: "https://d3dehtdmp2rwcw.cloudfront.net/ms_8992/UaWmWo3HDcjcddpJmSVmUVkTPjx8eq/Non-Fungible%2B%2528ERC-721%2529%2BTokens%2B%2528NFT%2529%2BToken%2BTracker%2B%2BEtherscan%2B2020-09-14%2B20-17-26.jpg?Expires=1600326000&Signature=TtrWG4NSkIlcFRfOZ5GVu1FQ-2~~wdCGV-vfrd4iipcdQCIP9-T08RQHgAtMOOOe2rluriBJkqMe7dJYayCaO1o2ov2iK1A6IpU5U~V6NvPt9ebePTC4pQ7P-hx5zRItAVIrhVlTnP1nt-Gzkx3PQPyoZVdMupgYNNN3rFwzLGSJDbGEOkQiOzu5EVvU5Ghfu3uYR9vv2Fu8HiVLR1jUwobfmO5aW~iVl6ivPktD4DTLazfP8Zmtj1SUJmU1Pl~mOnBoE1KaZUqug5D4EByw5JFK~okk0HMnsdeMN-s4X0IVPYK-tGV28Yi0QlJ6hUJCD5bqWaoMQfMgWklpaXHQWw__&Key-Pair-Id=APKAJBCGYQYURKHBGCOA"}
+          
+        %section
+          %h2 How did it happen?
+
+          %ul
+            %li UD started as an ENS reseller
+            %li UD decided to build our own registry
+            %li.fragment 
+              I joined the company
+            %li 
+              Strong tech
+              %ul
+                %li Processing Transactions at scale
+                %li Integrate into major browsers and wallets
+        %section
+          %h2 Agenda
+          
+          %ul
+            %li Traditional &amp; Crypto Domains
+            %li Domain Registry Design
+            %li Domain Resolver Design
+
+        %section
+          %h2 Traditional Domains
+
+          %ul
+            %li Bound to TLDs
+            %li Have subdomains
+            %li Have records
+            %li Can be bought for $$
+
+        %section
+          %h2 Crypto Domains
+
+          %ul
+            %li ERC721
+            %li Flexible ownership
+            %li Unstoppable
+
+        %section
+          %h2 How blockchain domain names work?
+
+          %ul
+            %li ERC721 &amp; Namehashing
+            %li Registry and Resolvers
+            %li Resolver Records
+
+        %section
+          %h2 Domain Registry
+          %pre
+            %code.solidity
+              :preserve
+                contract Registry is ERC721Metadata {
+                }
+
+                interface IERC721Metadata is IERC721 {
+                  ...
+                  function tokenURI(uint256 tokenId)
+                }
+
+                interface ERC721 {
+                  function transferFrom(from, to, tokenId)
+                  funciton ownerOf(uint256 tokenId)
+                }
+        %section
+          %h2 Namehashing
+          %pre
+            %code.javascript
+              :preserve
+                tokenId = namehash('example.crypto')
+          .fragment
+            %pre
+              %code.javascript
+                :preserve
+                  import { keccak_256 as sha3 } from 'js-sha3';
+
+                  function(domain) {
+                    const parent = '0000000000000000000000000000000000000000000000000000000000000000';
+                    return [parent].concat(
+                      domain.split('.').reverse().filter((label) => label),
+                    ).reduce((parent, label) => 
+                      sha3(Buffer.from(parent + sha3(label), 'hex'))
+                    );
+                  }
+            %a{href: "https://github.com/unstoppabledomains/resolution/blob/ba203fbc5c9b63a678fce9fd6f53083dac8a3204/src/cns/namehash.ts"} Source code
+        %section
+          %pre
+            %code.solidity
+              :preserve
+                contract Registry {
+                  function mintChild(to, parentTokenId, label) 
+                    external onlyApprovedOrOwner(tokenId);
+                }
+
+          %pre
+            %code
+              :preserve
+                mintChild('0x123...', namehash('crypto'), 'example')
+                mintChild('0x123...', namehash('example.crypto'), 'www')
+                
+        %section
+          %h2 Domain Records
+
+          %ul
+            %li Use a linked resolver contract
+            %li Treat reading and writing separately
+            %li Domain records are key-value store of strings
+
+        %section
+          %h2 Domain Resolver
+          %pre
+            %code.solidity
+              :preserve
+                contract Registry {
+                  function resolverOf(uint256 tokenId) returns (address)
+                  function resolveTo(address to, uint256 tokenId) 
+                    onlyApprovedOrOwner(tokenId)
+                } 
+                contract Resolver is ResolverReader {
+                  ...
+                  function setMany(
+                      string[] memory keys,
+                      string[] memory values,
+                      uint256 tokenId
+                  ) public whenApprovedOrOwner(tokenId) {
+                  modifier whenApprovedOrOwner(uint256 tokenId) {
+                    require(_registry.isApprovedOrOwner(msg.sender, tokenId));
+                    _;
+                  }
+                }
+
+                interface ResolverReader {
+                  ...
+                  function getMany(string[] keys, uint256 tokenId)
+                      view
+                      returns (string[] memory);
+                  }
+                }
+ 
+        %section
+          %h2 Resolver Power Tools
+          %pre
+            %code.solidity
+              :preserve
+                contract Resolver {
+                  function preconfigure(
+                      string[] memory keys,
+                      string[] memory values,
+                      uint256 tokenId
+                  );
+                  function reconfigure(
+                      string[] memory keys,
+                      string[] memory values,
+                      uint256 tokenId
+                  );
+                }
+        %section
+          %h2
+            %a{href: "https://unstoppable-domains.gitbook.io/unstoppable-domains/domain-registry-essentials/reference"} 
+              Records Reference
+          -# https://monosnap.com/direct/6VXcK3CsxzyrLesTBOsie4uK7ew7HS
+          -# %iframe{src: 'https://api.monosnap.com/file/download?id=6VXcK3CsxzyrLesTBOsie4uK7ew7HS'}
+          %img{src: "https://api.monosnap.com/file/download?id=6VXcK3CsxzyrLesTBOsie4uK7ew7HS"}
+        %section
+          %h2 Proxy Reader
+          %pre
+            %code.solidity
+              :preserve
+                contract ProxyReader is ERC165, ResolverReader {
+                  constructor(Registry registry);
+                  function getMany(string[] keys, uint256 tokenId)
+                      external
+                      view
+                      returns (string[] memory)
+                  {
+                    Resolver resolver = 
+                      ResolverReader(_registry.resolverOf(tokenId));
+                    return resolver.getMany(keys, tokenId);
+                  }
+                }
+        %section
+          %h2 Traditional HTTP API
+
+          %a{href: "https://unstoppabledomains.com/api/v1/operadingo4.crypto"}
+            https://unstoppabledomains.com/api/v1/operadingo4.crypto
+          
+          %pre
+            %code.json
+              :preserve
+                 {
+                 ...
+                  meta: {
+                    domain: "operadingo4.crypto",
+                    namehash: "0x70f542f09763d3ab404a6d87f6a2fad7d49f01b09c44064b4227d165ead5cf25",
+                    owner: "0xba37b324fffc8040aec9e5aefb50514a01cf852c",
+                    type: "CNS",
+                    ttl: 0
+                  },
+                  records: {
+                    ipfs.html.value: "QmPD8uEUcqSaUyABj2oGvkRsaMNZJ4Sh1nF9qf21BffdNR",
+                    crypto.ETH.address: "0xba37b324FFfC8040AeC9e5aeFb50514a01CF852c",
+                    ipfs.redirect_domain.value: "https://gateway.pinata.cloud/ipfs/Error creating new replication records"
+                  }
+                }
+
+        %section
+          %h2 Meta transactions
+          %pre
+            %code.solidity
+              :preserve
+                constract Resolver is SignatureUtil {
+                  function setManyFor(
+                    keys, values, tokenId, signature
+                  ) public {
+                    _validate(keccak256(
+                      abi.encodeWithSelector(
+                        this.setMany.selector, keys, values, tokenId)
+                      ), 
+                      tokenId, 
+                      signature
+                    );
+                    _setMany(_tokenPresets[tokenId], keys, values, tokenId);
+                  }
+                }
+        %section
+          %h2 Signature validation
+          %pre
+            %code.solidity
+              :preserve
+                contract SignatureUtil {
+                  mapping (uint256 => uint256) internal _nonces;
+                  function nonceOf(uint256 tokenId) {
+                      return _nonces[tokenId];
+                  }
+                  function _validate(hash, tokenId, signature) internal {
+                      address signer = keccak256(
+                        abi.encodePacked(hash, address(this), _nonces[tokenId])
+                      ).toEthSignedMessageHash().recover(signature);
+
+                      require(_registry.isApprovedOrOwner(signer, tokenId));
+                      _nonces[tokenId] += 1;
+                  }
+                }
+
+                
+        %section
+          %h2 Reading as easy as possible
+          %ul
+            %li Platform agnostic standard
+            %li Single query
+            %li 
+              Resolution Libraries
+              (
+              %a{href: "https://github.com/unstoppabledomains/dot-crypto#resolution-libraries"} Link
+              )
+              %ul
+                %li JavaScript
+                %li Java (Android)
+                %li Swift (iOS)
+        %section
+          %h2 Writing as easy a possible
+          %ul
+            %li Make sure it doesn't complect reading
+            %li Own and manage domain without posessing any ether
+            %li 
+              Nice Documentation (WIP)
+              %a{href: "https://unstoppable-domains.gitbook.io/unstoppable-domains/"} Link
+        %section
+          %h2 Unsolved
+                
+          %ul
+            %li ETH RPC `eth_call` parameters encoding
+            %li Optimization for reading yields higher gas prices
+            %li Invalid data on Regisry and Resolvers
+
+        %section
+          %h2 Future
+
+          %ul
+            %li Integrate to Wallets (WIP)
+            %li 
+              Integrate to Browsers
+              %ul
+                %li Brave (WIP)
+                %li Opera (WIP)
+                %li Firefox
+            %li
+              Decentralized ID
+              %ul
+                %li Authenticate on websites
+                %li Authenticate everywhere
+        %section
+          %h1 Thanks!
+
+            
+    %script{:src => "https://cdn.jsdelivr.net/gh/hakimel/reveal.js/dist/reveal.js"}
+    :javascript
+      // https://github.com/hakimel/reveal.js#configuration
+      document.getElementById('ud-logo').src =  "data:image/svg+xml;base64,PHN2ZyBoZWlnaHQ9IjU4IiB3aWR0aD0iMjU2IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxnIGZpbGw9Im5vbmUiIGZpbGwtcnVsZT0iZXZlbm9kZCI+PHBhdGggZD0iTTg4LjY0NiAyNS4zMDhjLTIuMjg4IDAtNC4wNjYtLjYyMy01LjMzNS0xLjg3cy0xLjkwMy0zLjAxNC0xLjkwMy01LjMwMlY5LjZoNC4zNTZ2OC40MDRjMCAyLjQ2NC45NzUgMy42OTYgMi45MjYgMy42OTYgMS45MzYgMCAyLjkwNC0xLjIzMiAyLjkwNC0zLjY5NlY5LjZoNC4yOXY4LjUzNmMwIDIuMjg4LS42MzQgNC4wNTUtMS45MDMgNS4zMDJzLTMuMDQ3IDEuODctNS4zMzUgMS44N3pNMTEzLjQ4NCA5LjZWMjVoLTMuNTg2bC02Ljc5OC04LjIwNlYyNWgtNC4yNjhWOS42aDMuNTg2bDYuNzk4IDguMjA2VjkuNnptOC40OTIgMTUuNzA4Yy0xLjI0NyAwLTIuNDU3LS4xNTQtMy42My0uNDYycy0yLjEyNy0uNzE5LTIuODYtMS4yMzJsMS40My0zLjIxMmMuNjkuNDU1IDEuNDg5LjgyMSAyLjM5OCAxLjFzMS44MDQuNDE4IDIuNjg0LjQxOGMxLjY3MiAwIDIuNTA4LS40MTggMi41MDgtMS4yNTQgMC0uNDQtLjIzOC0uNzY2LS43MTUtLjk3OXMtMS4yNDMtLjQzNi0yLjI5OS0uNjcxYy0xLjE1OS0uMjUtMi4xMjctLjUxNy0yLjkwNC0uODAzcy0xLjQ0NS0uNzQ0LTIuMDAyLTEuMzc1LS44MzYtMS40ODEtLjgzNi0yLjU1MmMwLS45MzkuMjU3LTEuNzg2Ljc3LTIuNTQxczEuMjgtMS4zNTMgMi4yOTktMS43OTMgMi4yNy0uNjYgMy43NTEtLjY2YzEuMDEyIDAgMi4wMS4xMTQgMi45OTIuMzQxczEuODQ4LjU2MSAyLjU5NiAxLjAwMWwtMS4zNDIgMy4yMzRjLTEuNDY3LS43OTItMi44OS0xLjE4OC00LjI2OC0xLjE4OC0uODY1IDAtMS40OTYuMTI4LTEuODkyLjM4NS0uMzk2LjI1Ny0uNTk0LjU5LS41OTQgMS4wMDFzLjIzNS43MTkuNzA0LjkyNCAxLjIyNS40MTggMi4yNjYuNjM4YzEuMTczLjI1IDIuMTQ1LjUxNyAyLjkxNS44MDNzMS40MzcuNzQgMi4wMDIgMS4zNjRjLjU2NS42MjMuODQ3IDEuNDcuODQ3IDIuNTQxIDAgLjkyNC0uMjU3IDEuNzYtLjc3IDIuNTA4cy0xLjI4MyAxLjM0Ni0yLjMxIDEuNzkzLTIuMjczLjY3MS0zLjc0LjY3MXptMTIuMS0xMi4yNTRoLTQuNzNWOS42aDEzLjc5NHYzLjQ1NGgtNC43MDhWMjVoLTQuMzU2em0xOC40NTggMTIuMjU0Yy0xLjYyOCAwLTMuMDkxLS4zNDUtNC4zODktMS4wMzRzLTIuMzE3LTEuNjQzLTMuMDU4LTIuODYtMS4xMTEtMi41ODktMS4xMTEtNC4xMTQuMzctMi44OTcgMS4xMTEtNC4xMTQgMS43Ni0yLjE3IDMuMDU4LTIuODZjMS4yOTgtLjY5IDIuNzYxLTEuMDM0IDQuMzg5LTEuMDM0czMuMDkxLjM0NSA0LjM4OSAxLjAzNGMxLjI5OC42OSAyLjMxNyAxLjY0MyAzLjA1OCAyLjg2czEuMTExIDIuNTg5IDEuMTExIDQuMTE0LS4zNyAyLjg5Ny0xLjExMSA0LjExNC0xLjc2IDIuMTctMy4wNTggMi44Ni0yLjc2MSAxLjAzNC00LjM4OSAxLjAzNHptMC0zLjYwOGMuNzc3IDAgMS40ODEtLjE4MyAyLjExMi0uNTVzMS4xMy0uODg0IDEuNDk2LTEuNTUxYy4zNjctLjY2Ny41NS0xLjQzNC41NS0yLjI5OXMtLjE4My0xLjYzMi0uNTUtMi4yOTljLS4zNjctLjY2Ny0uODY1LTEuMTg0LTEuNDk2LTEuNTUxcy0xLjMzNS0uNTUtMi4xMTItLjU1LTEuNDgxLjE4My0yLjExMi41NS0xLjEzLjg4NC0xLjQ5NiAxLjU1MS0uNTUgMS40MzQtLjU1IDIuMjk5LjE4MyAxLjYzMi41NSAyLjI5OS44NjUgMS4xODQgMS40OTYgMS41NTEgMS4zMzUuNTUgMi4xMTIuNTV6TTE3MC40MiA5LjZjMS4zOTMgMCAyLjYwMy4yMzEgMy42My42OTMgMS4wMjcuNDYyIDEuODE5IDEuMTIyIDIuMzc2IDEuOThzLjgzNiAxLjg2Ni44MzYgMy4wMjUtLjI3OSAyLjE2My0uODM2IDMuMDE0LTEuMzUgMS41MDctMi4zNzYgMS45NjktMi4yMzcuNjkzLTMuNjMuNjkzaC0yLjY4NFYyNWgtNC4zNTZWOS42em0tLjI2NCA3Ljk0MmMuODk1IDAgMS41Ny0uMTk0IDIuMDI0LS41ODNzLjY4Mi0uOTQyLjY4Mi0xLjY2MS0uMjI3LTEuMjc2LS42ODItMS42NzItMS4xMy0uNTk0LTIuMDI0LS41OTRoLTIuNDJ2NC41MXpNMTg2LjYzNCA5LjZjMS4zOTMgMCAyLjYwMy4yMzEgMy42My42OTMgMS4wMjcuNDYyIDEuODE5IDEuMTIyIDIuMzc2IDEuOThzLjgzNiAxLjg2Ni44MzYgMy4wMjUtLjI3OSAyLjE2My0uODM2IDMuMDE0LTEuMzUgMS41MDctMi4zNzYgMS45NjktMi4yMzcuNjkzLTMuNjMuNjkzaC0yLjY4NFYyNWgtNC4zNTZWOS42em0tLjI2NCA3Ljk0MmMuODk1IDAgMS41Ny0uMTk0IDIuMDI0LS41ODNzLjY4Mi0uOTQyLjY4Mi0xLjY2MS0uMjI3LTEuMjc2LS42ODItMS42NzItMS4xMy0uNTk0LTIuMDI0LS41OTRoLTIuNDJ2NC41MXptMTkuNzU2IDQuNDY2aC02LjUxMkwxOTguNDA0IDI1aC00LjQ0NGw2Ljc5OC0xNS40aDQuMjlsNi44MiAxNS40aC00LjUzMnptLTEuMjc2LTMuMjEybC0xLjk4LTQuOTI4LTEuOTggNC45Mjh6bTIwLjA4Ni0xLjgyNmMuODguMzA4IDEuNTcuNzg4IDIuMDY4IDEuNDQxcy43NDggMS40NDEuNzQ4IDIuMzY1YzAgMS4zNS0uNTQzIDIuMzktMS42MjggMy4xMjRzLTIuNjU1IDEuMS00LjcwOCAxLjFIMjEzLjFWOS42aDcuODc2YzEuOTY1IDAgMy40NjEuMzYzIDQuNDg4IDEuMDg5IDEuMDI3LjcyNiAxLjU0IDEuNzA1IDEuNTQgMi45MzcgMCAuNzMzLS4xOCAxLjM5LS41MzkgMS45NjlzLS44NjkgMS4wMzgtMS41MjkgMS4zNzV6bS03LjUyNC00LjIyNHYyLjk3aDIuOTkyYzEuNDY3IDAgMi4yLS40OTkgMi4yLTEuNDk2IDAtLjk4My0uNzMzLTEuNDc0LTIuMi0xLjQ3NHptMy42NTIgOS4xMDhjMS41MjUgMCAyLjI4OC0uNTIgMi4yODgtMS41NjJzLS43NjMtMS41NjItMi4yODgtMS41NjJoLTMuNjUydjMuMTI0ek0yMzAuMDE4IDkuNmg0LjM1NnYxMS45NDZoNy4zNDhWMjVoLTExLjcwNHptMjUuNzg0IDEyLjAzNFYyNWgtMTIuMzY0VjkuNmgxMi4wNzh2My4zNjZoLTcuNzY2djIuNTk2aDYuODQydjMuMjU2aC02Ljg0MnYyLjgxNnpNODEuNTQgMzMuNmg3LjI4MmMxLjY4NyAwIDMuMTgzLjMxNSA0LjQ4OC45NDZzMi4zMTcgMS41MjUgMy4wMzYgMi42ODQgMS4wNzggMi41MTUgMS4wNzggNC4wNy0uMzYgMi45MTEtMS4wNzggNC4wNy0xLjczIDIuMDUzLTMuMDM2IDIuNjg0LTIuODAxLjk0Ni00LjQ4OC45NDZIODEuNTR6bTcuMTA2IDExLjkyNGMxLjMyIDAgMi4zOC0uMzc0IDMuMTc5LTEuMTIyczEuMTk5LTEuNzgyIDEuMTk5LTMuMTAyLS40LTIuMzU0LTEuMTk5LTMuMTAyLTEuODU5LTEuMTIyLTMuMTc5LTEuMTIyaC0yLjc1djguNDQ4em0xOC44MzIgMy43ODRjLTEuNjI4IDAtMy4wOTEtLjM0NS00LjM4OS0xLjAzNHMtMi4zMTctMS42NDMtMy4wNTgtMi44NmMtLjc0LTEuMjE3LTEuMTExLTIuNTg5LTEuMTExLTQuMTE0cy4zNy0yLjg5NyAxLjExMS00LjExNGMuNzQtMS4yMTcgMS43Ni0yLjE3IDMuMDU4LTIuODZzMi43NjEtMS4wMzQgNC4zODktMS4wMzQgMy4wOTEuMzQ1IDQuMzg5IDEuMDM0IDIuMzE3IDEuNjQzIDMuMDU4IDIuODYgMS4xMTEgMi41ODkgMS4xMTEgNC4xMTQtLjM3IDIuODk3LTEuMTExIDQuMTE0LTEuNzYgMi4xNy0zLjA1OCAyLjg2LTIuNzYxIDEuMDM0LTQuMzg5IDEuMDM0em0wLTMuNjA4Yy43NzcgMCAxLjQ4MS0uMTgzIDIuMTEyLS41NXMxLjEzLS44ODQgMS40OTYtMS41NTFjLjM2Ny0uNjY3LjU1LTEuNDM0LjU1LTIuMjk5cy0uMTgzLTEuNjMyLS41NS0yLjI5OWMtLjM2Ny0uNjY3LS44NjUtMS4xODQtMS40OTYtMS41NTFzLTEuMzM1LS41NS0yLjExMi0uNTUtMS40ODEuMTgzLTIuMTEyLjU1LTEuMTMuODg0LTEuNDk2IDEuNTUxYy0uMzY3LjY2Ny0uNTUgMS40MzQtLjU1IDIuMjk5cy4xODMgMS42MzIuNTUgMi4yOTljLjM2Ny42NjcuODY1IDEuMTg0IDEuNDk2IDEuNTUxczEuMzM1LjU1IDIuMTEyLjU1em0yNC43NSAzLjNsLS4wNDQtOC4xNjItMy45NiA2LjY0NGgtMS45MzZsLTMuOTM4LTYuNDI0VjQ5aC00LjAyNlYzMy42aDMuNTg2bDUuNDEyIDguODg4IDUuMjgtOC44ODhoMy41ODZsLjA0NCAxNS40em0xNy40MDItMi45OTJoLTYuNTEyTDE0MS45MDggNDloLTQuNDQ0bDYuNzk4LTE1LjRoNC4yOWw2LjgyIDE1LjRoLTQuNTMyem0tMS4yNzYtMy4yMTJsLTEuOTgtNC45MjgtMS45OCA0LjkyOHptOC4yNS05LjE5Nmg0LjM1NlY0OWgtNC4zNTZ6bTIyLjExIDBWNDloLTMuNTg2bC02Ljc5OC04LjIwNlY0OWgtNC4yNjhWMzMuNmgzLjU4Nmw2Ljc5OCA4LjIwNlYzMy42em04LjQ5MiAxNS43MDhjLTEuMjQ3IDAtMi40NTctLjE1NC0zLjYzLS40NjJzLTIuMTI3LS43MTktMi44Ni0xLjIzMmwxLjQzLTMuMjEyYy42OS40NTUgMS40ODkuODIxIDIuMzk4IDEuMXMxLjgwNC40MTggMi42ODQuNDE4YzEuNjcyIDAgMi41MDgtLjQxOCAyLjUwOC0xLjI1NCAwLS40NC0uMjM4LS43NjYtLjcxNS0uOTc5cy0xLjI0My0uNDM2LTIuMjk5LS42NzFjLTEuMTU5LS4yNS0yLjEyNy0uNTE3LTIuOTA0LS44MDNzLTEuNDQ1LS43NDQtMi4wMDItMS4zNzUtLjgzNi0xLjQ4MS0uODM2LTIuNTUyYzAtLjkzOS4yNTctMS43ODYuNzctMi41NDFzMS4yOC0xLjM1MyAyLjI5OS0xLjc5MyAyLjI3LS42NiAzLjc1MS0uNjZjMS4wMTIgMCAyLjAxLjExNCAyLjk5Mi4zNDFzMS44NDguNTYxIDIuNTk2IDEuMDAxbC0xLjM0MiAzLjIzNGMtMS40NjctLjc5Mi0yLjg5LTEuMTg4LTQuMjY4LTEuMTg4LS44NjUgMC0xLjQ5Ni4xMjgtMS44OTIuMzg1LS4zOTYuMjU3LS41OTQuNTktLjU5NCAxLjAwMXMuMjM1LjcxOS43MDQuOTI0IDEuMjI1LjQxOCAyLjI2Ni42MzhjMS4xNzMuMjUgMi4xNDUuNTE3IDIuOTE1LjgwM3MxLjQzNy43NCAyLjAwMiAxLjM2NC44NDcgMS40Ny44NDcgMi41NDFjMCAuOTI0LS4yNTcgMS43Ni0uNzcgMi41MDhzLTEuMjgzIDEuMzQ2LTIuMzEgMS43OTMtMi4yNzMuNjcxLTMuNzQuNjcxeiIgZmlsbD0iIzAxMDYxNyIgZmlsbC1ydWxlPSJub256ZXJvIi8+PHBhdGggZD0iTTY0IDF2MjJMMCA0OXoiIGZpbGw9IiMyZmU5ZmYiLz48cGF0aCBkPSJNNTIgMHYzOGMwIDExLjA0Ni04Ljk1NCAyMC0yMCAyMHMtMjAtOC45NTQtMjAtMjBWMjJsMTItNi42VjM4YTcgNyAwIDAwMTQgMFY3Ljd6IiBmaWxsPSIjNGM0N2Y3Ii8+PC9nPjwvc3ZnPg=="
+      Reveal.initialize({
+      	controls: true,
+      	progress: true,
+      	history: true,
+      	center: true,
+        plugins: [RevealHighlight],
+
+      	theme: 'simple', // available themes are in /css/theme
+      	transition: 'fade', // default/cube/page/concave/zoom/linear/fade/none
+
+      	// Optional libraries used to extend on reveal.js
+      	dependencies: [
+      		// { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+          //{ src: 'https://cdn.jsdelivr.net/gh/hakimel/reveal.js/plugin/highlight/highlight.js', async: true},
+          {src: 'https://mikemiles86.github.io/reveal-line-numbers/plugin/line-numbers/line-numbers.js'},
+          
+          { src: 'https://rawgithub.com/hakimel/reveal.js/3.6.0/plugin/notes/notes.js', async: true }
+      		// { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+      		// { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
+      		// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+      	]
+      });
+      Reveal.getPlugin('highlight').hljs.registerLanguage('solidity', window.hljsDefineSolidity);
