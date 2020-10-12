@@ -1,0 +1,302 @@
+<!doctype html>
+%html{:lang => "en"}
+  %head
+    %meta{:charset => "utf-8"}/
+    %title Unstoppable Website
+    %meta{:content => "", :name => "description"}/
+    %meta{:content => "Bogdan Gusiev", :name => "author"}/
+    %meta{:content => "yes", :name => "apple-mobile-web-app-capable"}/
+    %meta{:content => "black-translucent", :name => "apple-mobile-web-app-status-bar-style"}/
+    %meta{:content => "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no", :name => "viewport"}/
+    %link{rel: "stylesheet", href: "https://cdn.jsdelivr.net/gh/hakimel/reveal.js/plugin/highlight/zenburn.css", id: "highlight-theme"}
+    %link{:href => "https://cdn.jsdelivr.net/gh/hakimel/reveal.js/dist/reveal.css", :rel => "stylesheet"}/
+    %link{:href => "https://cdn.jsdelivr.net/gh/hakimel/reveal.js/dist/theme/white.css", :rel => "stylesheet"}/
+    %script{src: 'https://cdn.jsdelivr.net/gh/hakimel/reveal.js/plugin/highlight/highlight.js'}
+    %script{src: 'https://cdn.jsdelivr.net/gh/highlightjs/highlightjs-solidity/solidity.js'}
+
+    %script
+
+    / If the query includes 'print-pdf', use the PDF print sheet
+    :javascript
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = "https://revealjs.com/css/print/" + (window.location.search.match( /print-pdf/gi ) ? 'pdf.css' : 'paper.css');
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    :sass
+      body .reveal
+        font-size: 30px !important
+      .reveal
+        section
+          pre
+            code
+              padding: 20px 5px
+              font-size: 1.30em
+              line-height: 1.3em
+          ul
+            min-width: 50%
+          .grey
+            color: grey
+          .red
+            color: #e02c2d
+          .green
+            color: #17cc1e
+          .yellow
+            color: yellow
+          .orange
+            color: orange
+          .blue
+            color: #1b91ff
+          .left
+            float: left
+          .right
+            float: right
+          .clearfix
+            overflow: hidden
+          table.full-border
+            border-collapse: collapse
+            td
+              border: 1px solid black !important
+          img
+            border: 0px
+            box-shadow: 0 0 0 0
+      
+          code
+            &.line-numbers
+              counter-reset: line_numbers
+            span
+              &.line-number
+                counter-increment: line_numbers
+                margin-right: 1em
+                &:before
+                  content: counter(line_numbers, decimal-leading-zero)
+                  color: gray
+              &.highlight-line:before
+                color: yellow
+          
+        
+  %body
+    .reveal
+      .slides
+        %section
+          %h1
+            Blockchain Team
+          %h2
+            October 2020
+        %section
+          %h2 Sections
+          
+          %ul
+            %li Q3 results
+            %li Analytics
+            %li Q4 plans
+
+        %section
+          %h2 Q3 results
+
+          %ul
+            %li 
+              Crypto Registry Fast Reading 
+              %span.green 100%
+            %li 
+              Stealth Payments
+              %span.grey Deprioritized
+            %li 
+              Brave PR
+              %span.green 100%
+              %ul
+                %li Thought leadership
+                %li Made Brave interested
+                %li Brave will do PR themselves
+            %li 
+              Docs
+              %span.green 100%
+              %ul
+                %li Organize infrastructure
+                %li CNS documented by 80%
+                %li Domain Registry Patent
+            %li 
+              Chainlink integration 
+              %span.red 90%
+            %li
+              Private keys rotation
+              %span.orange 70%
+
+        %section
+          %h1 Analytics
+
+        %section
+          %h2 Transactions per day
+
+          -# <iframe width="600" height="371" seamless frameborder="0" scrolling="no" src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSFw18CCt56WcdN8pnT-ypFYn1-A3VwAdyM6Ew2cEIy_mL58sazoUg_I5eVzLODt0rXC5ay7xQUkDm6/pubchart?oid=288045493&amp;format=interactive"></iframe>
+          <iframe width="600" height="371" seamless frameborder="0" scrolling="no" src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSFw18CCt56WcdN8pnT-ypFYn1-A3VwAdyM6Ew2cEIy_mL58sazoUg_I5eVzLODt0rXC5ay7xQUkDm6/pubchart?oid=943092356&amp;format=interactive"></iframe>
+
+        %section
+          %h2 TXP Usage by users
+
+          <iframe width="600" height="371" seamless frameborder="0" scrolling="no" src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSFw18CCt56WcdN8pnT-ypFYn1-A3VwAdyM6Ew2cEIy_mL58sazoUg_I5eVzLODt0rXC5ay7xQUkDm6/pubchart?oid=288045493&amp;format=interactive"></iframe>
+
+        %section
+          %h2 TX completion time
+
+          <iframe width="600" height="371" seamless frameborder="0" scrolling="no" src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSFw18CCt56WcdN8pnT-ypFYn1-A3VwAdyM6Ew2cEIy_mL58sazoUg_I5eVzLODt0rXC5ay7xQUkDm6/pubchart?oid=2031729989&amp;format=interactive"></iframe>
+
+          .fragment
+            %h3 Percentage of TX completed in time frame
+            %img{src: "https://api.monosnap.com/file/download?id=bCKun7KOmo3oamm84XgF6thKKFfwwc"}
+        %section
+          %h2 Rejection Rate
+          <iframe width="600" height="371" seamless frameborder="0" scrolling="no" src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSFw18CCt56WcdN8pnT-ypFYn1-A3VwAdyM6Ew2cEIy_mL58sazoUg_I5eVzLODt0rXC5ay7xQUkDm6/pubhtml?gid=1711141133&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
+        %section
+          %h2 TXP errors
+          <iframe width="600" height="470" src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSFw18CCt56WcdN8pnT-ypFYn1-A3VwAdyM6Ew2cEIy_mL58sazoUg_I5eVzLODt0rXC5ay7xQUkDm6/pubhtml?gid=1456206588&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
+
+        %section
+          %h2 Tx Gas Prices
+          <iframe width="800" height="230" src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSFw18CCt56WcdN8pnT-ypFYn1-A3VwAdyM6Ew2cEIy_mL58sazoUg_I5eVzLODt0rXC5ay7xQUkDm6/pubhtml?gid=1963826120&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
+        %section
+          %h2 TXs per domain
+          <iframe width="500" height="450" src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSFw18CCt56WcdN8pnT-ypFYn1-A3VwAdyM6Ew2cEIy_mL58sazoUg_I5eVzLODt0rXC5ay7xQUkDm6/pubhtml?gid=1950873006&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
+        %section
+
+          %h3 Q4 Priorities
+
+          %ul
+            %li 
+              Technical Maintainance
+              %ul
+                %li Merge guest manage and wesite manage code bases
+                %li Protect private keys
+            %li 
+              Gas Prices Problem
+              %ul
+                %li Off-chain resolver
+                %li Delegate Claim Domain Tx Fee to user
+                %li Research L2 solutions
+            %li 
+              Product Features
+              %ul
+                %li Chainlink integration
+                %li Developer Tools
+                %li Browser Resolution
+                %li Mobile Application
+                %li TXP dashboard
+                %li FileCoin
+
+        %section
+          %h2 Protect Private Keys
+
+          %ul
+            %li Use secure storage for private keys
+            %li Rotate Keys periodically
+            %li Split Dev and Production keys
+        %section
+          %h2 Merge Guest Manage and Website manage codebases
+
+          %p 
+            They were historically built separated. 
+            %br
+            That is now causing us to build each feature twice:
+            %ul
+              %li Once for guest manage
+              %li Once for website manage
+          .fragment
+            %p
+              And also:
+            %ul
+              %li Once for Ethereum
+              %li Once for Zilliqa
+        %section
+          %h2 Gas Prices issues
+
+          %ul
+            %li Universe is expanding
+            %li Climate Change is comming
+            %li Gas Prices are raising
+          -# %img{src: "https://monosnap.com/direct/NvWQ6vbJXDAQmmhFOwWdtDNkyLGKET.png"}
+          .hello
+            .left
+              %p Crypto Registry Txs
+              <iframe class="left" width="500" height="371" seamless frameborder="0" scrolling="no" src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSFw18CCt56WcdN8pnT-ypFYn1-A3VwAdyM6Ew2cEIy_mL58sazoUg_I5eVzLODt0rXC5ay7xQUkDm6/pubchart?oid=1637381946&amp;format=interactive"></iframe>
+            .right
+              %p All Txs
+              %img.right{style: 'width: 455px', src: "https://api.monosnap.com/file/download?id=NvWQ6vbJXDAQmmhFOwWdtDNkyLGKET"}
+
+        %section
+          %h2 Gas Prices Problem
+          %ul
+            %li Off-chain resolver
+            %li Delegate Claim Domain Tx Fee to user
+            %li Research L2 solutions
+        %section
+          %h2 Developer Tools
+
+          %p Make it easy for a developer to play with domains
+          %ul
+            %li Get free domain on testnet
+            %li 
+              Get free domain on mainnet
+              %ul
+                %li namespace
+                %li subdomain
+        %section
+          %h2 Browser Resolution
+          %ul
+            %li Attach DNS Records
+            %li 
+              Easy intergration in browsers
+              %ul
+                %li DNS gateway
+                %li DWEB gateway
+          .fragment
+            %br
+            %br
+            %h4 Business Goal: 
+            %h4 Resolve domains in Firefox using 2 browser settings
+        %section
+          %h2 Mobile Application
+
+          %p Requires core features of the website
+          %ul
+            %li Claim domain
+            %li Manage Domain Records
+            %li Transfer Domain
+        %section
+          %h2 TXP dashboard
+
+          %p Core features
+          %ul
+            %li See pending transactions
+            %li Restart transaction
+            %li Reports
+        %section
+          %h2 Filecoin
+          %p Deploy a website to filecoin website to your domain
+
+            
+    %script{:src => "https://cdn.jsdelivr.net/gh/hakimel/reveal.js/dist/reveal.js"}
+    :javascript
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+      	controls: true,
+      	progress: true,
+      	history: true,
+      	center: true,
+        plugins: [RevealHighlight],
+
+      	theme: 'simple', // available themes are in /css/theme
+      	transition: 'fade', // default/cube/page/concave/zoom/linear/fade/none
+
+      	// Optional libraries used to extend on reveal.js
+      	dependencies: [
+      		// { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+          //{ src: 'https://cdn.jsdelivr.net/gh/hakimel/reveal.js/plugin/highlight/highlight.js', async: true},
+          {src: 'https://mikemiles86.github.io/reveal-line-numbers/plugin/line-numbers/line-numbers.js'},
+          
+          { src: 'https://rawgithub.com/hakimel/reveal.js/3.6.0/plugin/notes/notes.js', async: true }
+      		// { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+      		// { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
+      		// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+      	]
+      });
+      Reveal.getPlugin('highlight').hljs.registerLanguage('solidity', window.hljsDefineSolidity);
