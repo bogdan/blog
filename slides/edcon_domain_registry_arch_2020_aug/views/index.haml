@@ -112,8 +112,9 @@
             %li 
               Strong tech
               %ul
+                %li Make domains easier to use
                 %li Processing Transactions at scale
-                %li Integrate into major browsers and wallets
+                %li Technical Leadership
         %section
           %h2 Agenda
           
@@ -136,7 +137,7 @@
 
           %ul
             %li ERC721
-            %li Flexible ownership
+            %li Flexible permissions
             %li Unstoppable
 
         %section
@@ -329,7 +330,8 @@
           %pre
             %code.solidity
               :preserve
-                contract SignatureUtil {
+                import '@openzeppelin/contracts/cryptography/ECDSA.sol';
+                contract SignatureUtil is ECDSA {
                   mapping (uint256 => uint256) internal _nonces;
                   function nonceOf(uint256 tokenId) {
                       return _nonces[tokenId];
@@ -371,9 +373,10 @@
           %h2 Unsolved
                 
           %ul
-            %li ETH RPC `eth_call` parameters encoding
+            %li ETH RPC `eth_call` parameters ABI coding
             %li Optimization for reading yields higher gas prices
-            %li Invalid data on Regisry and Resolvers
+            %li Invalid data on Registry and Resolvers
+            %li Single approved address per NFT
 
         %section
           %h2 Future
@@ -393,6 +396,13 @@
                 %li Authenticate everywhere
         %section
           %h1 Thanks!
+
+          %p
+            %a{href: "https://unstoppabledomains.com"} unstoppabledomains.com
+          %p
+            %a{href: "https://github.com/unstoppabledomains"} github.com/unstoppabledomains
+          %p
+            %a{href: "https://app.gitbook.com/@unstoppable-domains/s/unstoppable-domains/"} docs.unstoppabledomains.com
 
             
     %script{:src => "https://cdn.jsdelivr.net/gh/hakimel/reveal.js/dist/reveal.js"}
