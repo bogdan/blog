@@ -1,0 +1,302 @@
+<!doctype html>
+%html{:lang => "en"}
+  %head
+    %meta{:charset => "utf-8"}/
+    %title Unstoppable Website
+    %meta{:content => "", :name => "description"}/
+    %meta{:content => "Bogdan Gusiev", :name => "author"}/
+    %meta{:content => "yes", :name => "apple-mobile-web-app-capable"}/
+    %meta{:content => "black-translucent", :name => "apple-mobile-web-app-status-bar-style"}/
+    %meta{:content => "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no", :name => "viewport"}/
+    %link{rel: "stylesheet", href: "https://cdn.jsdelivr.net/gh/hakimel/reveal.js/plugin/highlight/zenburn.css", id: "highlight-theme"}
+    %link{:href => "https://cdn.jsdelivr.net/gh/hakimel/reveal.js/dist/reveal.css", :rel => "stylesheet"}/
+    %link{:href => "https://cdn.jsdelivr.net/gh/hakimel/reveal.js/dist/theme/white.css", :rel => "stylesheet"}/
+    %script{src: 'https://cdn.jsdelivr.net/gh/hakimel/reveal.js/plugin/highlight/highlight.js'}
+    %script{src: 'https://cdn.jsdelivr.net/gh/highlightjs/highlightjs-solidity/solidity.js'}
+
+    %script
+
+    / If the query includes 'print-pdf', use the PDF print sheet
+    :javascript
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = "https://revealjs.com/css/print/" + (window.location.search.match( /print-pdf/gi ) ? 'pdf.css' : 'paper.css');
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    :sass
+      body .reveal
+        font-size: 30px !important
+      .reveal
+        section
+          pre
+            code
+              padding: 20px 5px
+              font-size: 1.30em
+              line-height: 1.3em
+          ul
+            min-width: 50%
+          .grey
+            color: grey
+          .red
+            color: #e02c2d
+          .green
+            color: #17cc1e
+          .yellow
+            color: yellow
+          .orange
+            color: orange
+          .blue
+            color: #1b91ff
+          .left
+            float: left
+          .right
+            float: right
+          .clearfix
+            overflow: hidden
+          table.full-border
+            border-collapse: collapse
+            td
+              border: 1px solid black !important
+          img
+            border: 0px
+            box-shadow: 0 0 0 0
+      
+          code
+            &.line-numbers
+              counter-reset: line_numbers
+            span
+              &.line-number
+                counter-increment: line_numbers
+                margin-right: 1em
+                &:before
+                  content: counter(line_numbers, decimal-leading-zero)
+                  color: gray
+              &.highlight-line:before
+                color: yellow
+          
+        
+  %body
+    .reveal
+      .slides
+        %section
+          %h1
+            Registry Team Q1 2021
+
+        %section
+          %h3 Q3 Results
+
+          %ul
+            %li 
+              Technical Maintenance
+              %ul
+                %li 
+                  Merge website &amp; guest manage code bases -
+                  %span.grey Deprioritized 
+                %li 
+                  Protect private keys -
+                  %span.green DONE
+            %li 
+              Gas Prices Problem
+              %ul
+                %li 
+                  Off-chain resolver -
+                  %span.grey Deprioritized 
+                %li 
+                  Delegate Claim Domain Tx Fee to user -
+                  %span.green DONE
+                %li 
+                  Research L2 solutions -
+                  %span.green DONE
+            %li 
+              Product Features
+              %ul
+                %li 
+                  Mobile Application - 
+                  %span.green DONE
+                %li 
+                  TXP dashboard -
+                  %span.red NOT DONE
+                %li 
+                  DNS Records Support -
+                  %span.green DONE
+            %li 
+              Extra: Proxy Reader 2.0 -
+              %span.green DONE
+
+        %section
+          %h1 Q1 Goals
+
+          .fragment
+            %h3 Decrease transaction cost by a factor of a 100
+            %h3 Minting from 7 dollars to 7 cents
+
+            
+        %section
+          %h2 Why it is expensive to mint a domain
+
+          %ul
+            %li 
+              Blockchain is sequential in nature
+            %li 
+              Logarithmic growth of performance
+              
+            %li 
+              Transactions perform a lot of operations
+
+        %section
+          %h2 Ethereum performance
+
+          %p 
+            When new block is mined, 
+            all competitive miners are dropping their calculations,
+            receive new block and start from scratch.
+
+        %section
+          %h2 What are L2 solutions?
+          
+          %ul
+            %li L2 is a blockchain on top of L1 blockchain (Ethereum in our case)
+            %li Tokens can be transfered to and from L2 like from or to a contract
+            %li Tokens are transferable within L2
+            %li "L" is for "Level"
+        %section
+          %img{src: "https://api.monosnap.com/file/download?id=sgn4hIs4cyzYQfyakZNhGM6Jh0uByn"}
+
+        %section
+          %h2 Zero Knowledge Proofs
+
+          %ol
+            %li 
+              ZK-Proof - a piece of cryptography that confirms certain operations have happened
+              %ol.fragment
+                %li A Signature - is a proof that someone has a private key and approves a message
+                %li A Proof can be generated from individual signatures for transactions making it a collective signature
+                %li A Proof can contain information that certain permission checks were made
+            %li.fragment 
+              Proofs can be much much longer than a signature
+            %li.fragment 
+              Proof size grows slower than number of operations it confirms or even be fixed length
+            %li.fragment
+              One can verify the proof by only having a merkle root and program hash
+
+
+
+          // https://monosnap.com/direct/sgn4hIs4cyzYQfyakZNhGM6Jh0uByn
+
+
+        %section
+          %h2 Zero Knowledge Rollups
+          
+          %h3 a solution that optimize for:
+
+          %ol
+            %li Gas Usage
+            %li Security
+
+        %section
+          %h3 
+            A Rollup 
+          %h4 a batch of L2 transaction 
+          %h4 stored on L1 in a form of state change + ZK-Proof
+
+        %section
+          %h2 Minimum gas usage
+
+          %ol
+            %li Batch user transactions when submitted to L1
+            %li Only state change is published instead of full state
+            %li Universal "proof" for multiple transactions
+            %li Single contract custom blockchain as L2
+
+        %section
+          %h2 Security
+
+          %ol
+            %li Zero Knowledge Proofs
+            %li L2 inherits security guarantees of L1
+
+        %section
+          %h2 Downsides of rollups
+
+
+          %p Anything outside of gas cost and security becomes more complex
+
+          %ul.fragment
+            %li Read smart contract state
+            %li Generate signature in wallet
+            %li Listen for changes on L1
+            %li Contract on L2 is not upgradable
+            %li Token management with L1 and L2
+            %li Longer mining time (&gt;20 minutes)
+
+
+        %section
+          %h2 Logical Solution
+
+          %ul
+            %li L1: Registry that supports minting from L2
+            %li L1: a list of smart contracts to ensure security of L2
+            %li L2: a single smart-contract blockchain
+            %li L2: Registry Mirror 2.0
+
+        %section
+          %h2 Physical Solution
+
+          -# https://monosnap.com/direct/l3xBFga5774YfsfIbPRLZof8TvDg4E
+          %img{src: "https://api.monosnap.com/file/download?id=l3xBFga5774YfsfIbPRLZof8TvDg4E"}
+                
+        %section
+          %h2 Other Affected Software
+
+          %ol
+            %li 
+              Backend
+              %ol
+                %li TXP 
+                %li Resolution API
+                %li Private Keys Rotation
+                %li Claiming a domain
+                %li Account Funding
+            %li
+              Frontend &amp; Mobile App
+              %ol
+                %li Domain Location - L1 or L2
+                %li Signature Generation
+                %li Additional Transaction Type
+          %section
+            %h2 Q1 Goals
+
+            %ol
+              %li CNS 2.0
+              %li Registry Mirror
+              %li Port management operations to CNS 2.0
+
+
+
+            
+    %script{:src => "https://cdn.jsdelivr.net/gh/hakimel/reveal.js/dist/reveal.js"}
+    :javascript
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+      	controls: true,
+      	progress: true,
+      	history: true,
+      	center: true,
+        plugins: [RevealHighlight],
+
+      	theme: 'simple', // available themes are in /css/theme
+      	transition: 'fade', // default/cube/page/concave/zoom/linear/fade/none
+
+      	// Optional libraries used to extend on reveal.js
+      	dependencies: [
+      		// { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+          //{ src: 'https://cdn.jsdelivr.net/gh/hakimel/reveal.js/plugin/highlight/highlight.js', async: true},
+          {src: 'https://mikemiles86.github.io/reveal-line-numbers/plugin/line-numbers/line-numbers.js'},
+          
+          { src: 'https://rawgithub.com/hakimel/reveal.js/3.6.0/plugin/notes/notes.js', async: true }
+      		// { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+      		// { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
+      		// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+      	]
+      });
+      Reveal.getPlugin('highlight').hljs.registerLanguage('solidity', window.hljsDefineSolidity);
