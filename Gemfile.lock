@@ -53,6 +53,7 @@ GEM
 
 PLATFORMS
   ruby
+  x86_64-darwin-18
 
 DEPENDENCIES
   jekyll
@@ -63,4 +64,4 @@ DEPENDENCIES
   sass
 
 BUNDLED WITH
-   1.16.0
+   2.2.0

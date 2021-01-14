@@ -72,7 +72,7 @@ namespace :build do
   task :init do
     unless File.exists? path("build")
       FileUtils.mkdir_p(path("build"))
-      puts `git clone gh:bogdan/bogdan.github.com build`
+      puts `git clone git@github.com:bogdan/bogdan.github.com.git build`
       if $?.to_i > 0
         raise "git command failed"
       end
