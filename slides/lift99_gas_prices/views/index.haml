@@ -1,0 +1,320 @@
+<!doctype html>
+%html{:lang => "en"}
+  %head
+    %meta{:charset => "utf-8"}/
+    %title Unstoppable Website
+    %meta{:content => "", :name => "description"}/
+    %meta{:content => "Bogdan Gusiev", :name => "author"}/
+    %meta{:content => "yes", :name => "apple-mobile-web-app-capable"}/
+    %meta{:content => "black-translucent", :name => "apple-mobile-web-app-status-bar-style"}/
+    %meta{:content => "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no", :name => "viewport"}/
+    %link{rel: "stylesheet", href: "https://cdn.jsdelivr.net/gh/hakimel/reveal.js/plugin/highlight/zenburn.css", id: "highlight-theme"}
+    %link{:href => "https://cdn.jsdelivr.net/gh/hakimel/reveal.js/dist/reveal.css", :rel => "stylesheet"}/
+    %link{:href => "https://cdn.jsdelivr.net/gh/hakimel/reveal.js/dist/theme/white.css", :rel => "stylesheet"}/
+    %script{src: 'https://cdn.jsdelivr.net/gh/hakimel/reveal.js/plugin/highlight/highlight.js'}
+    %script{src: 'https://cdn.jsdelivr.net/gh/highlightjs/highlightjs-solidity/solidity.js'}
+
+    %script
+
+    / If the query includes 'print-pdf', use the PDF print sheet
+    :javascript
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = "https://revealjs.com/css/print/" + (window.location.search.match( /print-pdf/gi ) ? 'pdf.css' : 'paper.css');
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    :sass
+      body .reveal
+        font-size: 30px !important
+      .reveal
+        section
+          pre
+            code
+              padding: 20px 5px
+              font-size: 1.30em
+              line-height: 1.3em
+          ul
+            min-width: 50%
+          .grey
+            color: grey
+          .red
+            color: #e02c2d
+          .green
+            color: #17cc1e
+          .yellow
+            color: yellow
+          .orange
+            color: orange
+          .blue
+            color: #1b91ff
+          .left
+            float: left
+          .right
+            float: right
+          .clearfix
+            overflow: hidden
+          table.full-border
+            border-collapse: collapse
+            td
+              border: 1px solid black !important
+          img
+            border: 0px
+            box-shadow: 0 0 0 0
+      
+          code
+            &.line-numbers
+              counter-reset: line_numbers
+            span
+              &.line-number
+                counter-increment: line_numbers
+                margin-right: 1em
+                &:before
+                  content: counter(line_numbers, decimal-leading-zero)
+                  color: gray
+              &.highlight-line:before
+                color: yellow
+          
+        
+  %body
+    .reveal
+      .slides
+        %section
+          %h1
+            Gas Efficiency
+          %h2 Unstoppable Domains
+        %section
+          %h2 Bogdan Gusiev
+
+          %ul
+            %li 14 years in commercial programming
+            %li First joined crypto world 2 years ago
+            %li As CTO of Unstoppable Domains
+        %section
+          %h2 Crypto World as I see it
+
+          %ul
+            %li.fragment
+              Good
+              %ul
+                %li Smart Contracts
+                %li Advanced Cryptography
+            %li.fragment
+              Bad
+              %ul
+                %li Crypto Wallets
+                %li Too much hype
+          
+
+        %section
+          %h1 Unstoppable Domains
+
+          %ul
+            %li launched 2 years ago
+            %li raised $5,000,000+ from Draper Associates
+            %li 550,000 domains (NFTs) sold so far
+            %li 40+ integrations
+            %li profitable and growing fast
+        %section
+          %h3 How much does it cost to issue a domain?
+          %img{src: "https://api.monosnap.com/file/download?id=wQ2jsrOviQg82ylsF9BtuDpp4RCcEz"}
+        %section
+          
+          %h1 Gas Prices Issue
+
+          %h3 Agenda
+          %ol
+            %li Ethereum Limitation
+            %li ZK-Proofs - a mathematical solution
+            %li Different approaches
+
+        %section
+          %h2 Ethereum Throughput limits
+
+          %ul
+            %li 
+              Ethereum is sequential
+              %ul
+                %li Block after Block
+                %li Transaction after transaction
+                %li No merges
+            %li 
+              Crytographic calculations unreusable
+              %ul
+                %li When new block appears everyone drops their calculations
+
+        %section
+          %h2 What are L2 solutions?
+          
+          %ul
+            %li L2 is a blockchain on top of L1 blockchain (Ethereum in our case)
+            %li Tokens can be transfered to and from L2 like from or to a contract
+            %li Tokens are transferable within L2
+            %li "L" is for "Level"
+        %section
+          %img{src: "https://api.monosnap.com/file/download?id=sgn4hIs4cyzYQfyakZNhGM6Jh0uByn"}
+        
+        %section
+          %h3 Questions
+          %ul
+            %li.fragment How to move a token from one blockchain to another in a decentralized way?
+            %li.fragment How to avoid "double-spend"?
+            %li.fragment How to make an L2 blockchain as secure as L1?
+
+        %section
+          %h2 Zero Knowledge Proofs
+
+          %ol
+            %li 
+              ZK-Proof - a piece of cryptography that confirms certain operations have happened
+              %ol.fragment
+                %li A Signature - is a proof that someone has a private key and approves a message
+                %li A Proof can be generated from individual signatures for transactions making it a collective signature
+                %li A Proof can contain information that certain permission checks were made
+            %li.fragment 
+              Proofs can be much much longer than a signature
+            %li.fragment 
+              Proof size grows slower than number of operations it confirms or even be fixed length
+        %section
+          %h3 True Power of ZK-Proofs
+          %p 
+            One can verify proof that
+            %br
+            %strong program A 
+            made a transition from 
+            %strong state B 
+            to 
+            %strong state C
+          %p
+            Only by having 
+            a hash of A, 
+            a hash of B and 
+            a hash of C
+          %pre
+            %code
+              :preserve
+                verifyProof(proof, programHash, fromStateHash, toStateHash)
+          %p.fragment
+            What is a "hash of program A"?
+        %section
+          %h2 ZK-Proofs exchange
+
+          %img{src: "https://api.monosnap.com/file/download?id=UgJWiJSTPh8wH43s9uV73L27obC8c4"}
+
+
+        %section
+          %h2 Current implementation of ZK-Proofs
+
+          %ul
+            %li 
+              zkSync by Matter Labs
+            %li 
+              CAIRO by StarkWare
+          .fragment
+            %p Adoption Problems
+            %ul
+              %li Custom elliptic curve
+              %li Proof verification on chain is expensive
+              %li Uses custom programming language
+              %li Signature algorithm is different
+
+        %section
+          %h3 Data availability issue
+
+          %p 
+            If someone updates the state with a proof, 
+            %br
+            the state MUST to be shared with network.
+
+          .fragment
+            %h3 Solutions
+            %ul
+              %li ZK-Rollup
+              %li 
+                Data Availability Committee (DAC)
+
+                %a{href: "https://medium.com/starkware/data-availability-e5564c416424"} 
+                  https://medium.com/starkware/data-availability-e5564c416424
+        %section
+          %h3 ZK-Rollup
+          %p The necessity to publish state update in an "packed" format on chain
+          %ul.fragment
+            %li More expensive any way
+            %li Good for ERC20 bad for NFTs
+
+        %section
+          %h2 ZK-Rollup
+          %h3 10^2-10^3 gas usage reduction
+
+          %ul
+            %li 
+              Off-chain:
+              %ul
+                %li Batch transactions together
+                %li Calculate ZK-Proof
+            %li 
+              On chain:
+              %ul
+                %li Publish Proof 
+                %li Publish state update
+
+        %section
+          %h2 Validium
+          %h3 10^4-10^5 gas usage reduction
+          
+          %ul
+            %li 
+              Off-chain:
+              %ul
+                %li Batch transactions together
+                %li Calculate ZK-Proof
+            %li
+              On-chain:
+              %ul
+                %li Publish Proof 
+                %li Publish Root Hash
+
+
+
+        %section
+          %h2 We are hiring!
+          %ul
+            %li 45 people on the team
+            %li across 14 countries
+            %li 4-5 new team members joining each month 
+          %p Open positions:
+          %ul
+            %li Senior Blockchain Developer
+            %li Senior Android Developer
+            %li Marketing &amp; Visual Designer
+          %br
+          %h4
+            Contact: 
+            %a{href: 'mailto:katerina@unstoppabledomains.com'} katerina@unstoppabledomains.com
+
+            
+    %script{:src => "https://cdn.jsdelivr.net/gh/hakimel/reveal.js/dist/reveal.js"}
+    :javascript
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+      	controls: true,
+      	progress: true,
+      	history: true,
+      	center: true,
+        plugins: [RevealHighlight],
+
+      	theme: 'simple', // available themes are in /css/theme
+      	transition: 'fade', // default/cube/page/concave/zoom/linear/fade/none
+
+      	// Optional libraries used to extend on reveal.js
+      	dependencies: [
+      		// { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+          //{ src: 'https://cdn.jsdelivr.net/gh/hakimel/reveal.js/plugin/highlight/highlight.js', async: true},
+          {src: 'https://mikemiles86.github.io/reveal-line-numbers/plugin/line-numbers/line-numbers.js'},
+          
+          { src: 'https://rawgithub.com/hakimel/reveal.js/3.6.0/plugin/notes/notes.js', async: true }
+      		// { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+      		// { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
+      		// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+      	]
+      });
+      Reveal.getPlugin('highlight').hljs.registerLanguage('solidity', window.hljsDefineSolidity);
