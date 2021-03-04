@@ -89,102 +89,78 @@
 <div class='slides'>
 <section>
 <h1>
-Registry Team Q1 2021
+Gas Efficiency
 </h1>
+<h2>Unstoppable Domains</h2>
 </section>
 <section>
-<h1>Agenda</h1>
+<h2>Bogdan Gusiev</h2>
+<ul>
+<li>14 years in commercial programming</li>
+<li>First joined crypto world 2 years ago</li>
+<li>As CTO of Unstoppable Domains</li>
+</ul>
+</section>
+<section>
+<h2>Crypto World as I see it</h2>
+<ul>
+<li class='fragment'>
+Good
+<ul>
+<li>Smart Contracts</li>
+<li>Advanced Cryptography</li>
+</ul>
+</li>
+<li class='fragment'>
+Bad
+<ul>
+<li>Crypto Wallets</li>
+<li>Too much hype</li>
+</ul>
+</li>
+</ul>
+</section>
+<section>
+<h1>Unstoppable Domains</h1>
+<ul>
+<li>launched 2 years ago</li>
+<li>raised $5,000,000+ from Draper Associates</li>
+<li>550,000 domains (NFTs) sold so far</li>
+<li>40+ integrations</li>
+<li>profitable and growing fast</li>
+</ul>
+</section>
+<section>
+<h3>How much does it cost to issue a domain?</h3>
+<img src='https://api.monosnap.com/file/download?id=wQ2jsrOviQg82ylsF9BtuDpp4RCcEz'>
+</section>
+<section>
+<h1>Gas Prices Issue</h1>
+<h3>Agenda</h3>
 <ol>
-<li>Q4 Results</li>
-<li>L2 Solutions</li>
-<li>Q1 Goals</li>
+<li>Ethereum Limitation</li>
+<li>ZK-Proofs - a mathematical solution</li>
+<li>Different approaches</li>
 </ol>
 </section>
 <section>
-<h3>Q4 Results</h3>
+<h2>Ethereum Throughput limits</h2>
 <ul>
 <li>
-Technical Maintenance
+Ethereum is sequential
 <ul>
-<li>
-Merge website &amp; guest manage code bases -
-<span class='grey'>DEPRIORITIZED</span>
-</li>
-<li>
-Protect private keys -
-<span class='green'>DONE</span>
-</li>
+<li>Block after Block</li>
+<li>Transaction after transaction</li>
+<li>No merges</li>
 </ul>
 </li>
 <li>
-Gas Prices Problem
+Crytographic calculations unreusable
 <ul>
-<li>
-Off-chain resolver -
-<span class='grey'>DEPRIORITIZED</span>
-</li>
-<li>
-Delegate Claim Domain Tx Fee to user -
-<span class='green'>DONE</span>
-</li>
-<li>
-Research L2 solutions -
-<span class='green'>DONE</span>
-</li>
+<li>When new block appears everyone drops their calculations</li>
 </ul>
 </li>
-<li>
-Product Features
-<ul>
-<li>
-Mobile Application -
-<span class='green'>DONE</span>
-</li>
-<li>
-TXP dashboard -
-<span class='red'>NOT DONE</span>
-</li>
-<li>
-DNS Records Support -
-<span class='green'>DONE</span>
-</li>
 </ul>
-</li>
-<li>
-Extra: Proxy Reader 2.0 -
-<span class='green'>DONE</span>
-</li>
-</ul>
-</section>
-<section>
-<h1>Q1</h1>
-<h2>Major Business Goal</h2>
-<div class='fragment'>
-<h3>Decrease transaction cost by a factor of a 100</h3>
-<h3>Minting from 7 dollars to 7 cents</h3>
-</div>
-</section>
-<section>
-<h2>Why it is expensive to mint a domain</h2>
-<ul>
-<li>
-Blockchain is sequential in nature
-</li>
-<li>
-Logarithmic growth of performance
-</li>
-<li>
-Transactions perform a lot of operations
-</li>
-</ul>
-</section>
-<section>
-<h2>Ethereum performance</h2>
-<p>
-When new block is mined,
-all competitive miners are dropping their calculations,
-receive new block and start from scratch.
-</p>
 </section>
 <section>
 <h2>What are L2 solutions?</h2>
@@ -197,6 +173,14 @@ receive new block and start from scratch.
 </section>
 <section>
 <img src='https://api.monosnap.com/file/download?id=sgn4hIs4cyzYQfyakZNhGM6Jh0uByn'>
+</section>
+<section>
+<h3>Questions</h3>
+<ul>
+<li class='fragment'>How to move a token from one blockchain to another in a decentralized way?</li>
+<li class='fragment'>How to avoid "double-spend"?</li>
+<li class='fragment'>How to make an L2 blockchain as secure as L1?</li>
+</ul>
 </section>
 <section>
 <h2>Zero Knowledge Proofs</h2>
@@ -215,99 +199,140 @@ Proofs can be much much longer than a signature
 <li class='fragment'>
 Proof size grows slower than number of operations it confirms or even be fixed length
 </li>
-<li class='fragment'>
-One can verify the proof by only having a merkle root and program hash
-</li>
-</ol>
-<!-- / https://monosnap.com/direct/sgn4hIs4cyzYQfyakZNhGM6Jh0uByn -->
-</section>
-<section>
-<h2>Zero Knowledge Rollups</h2>
-<h3>a solution that optimize for:</h3>
-<ol>
-<li>Gas Usage</li>
-<li>Security</li>
 </ol>
 </section>
 <section>
-<h3>
-A Rollup
-</h3>
-<h4>a batch of L2 transaction</h4>
-<h4>stored on L1 in a form of state change + ZK-Proof</h4>
+<h3>True Power of ZK-Proofs</h3>
+<p>
+One can verify proof that
+<br>
+<strong>program A</strong>
+made a transition from
+<strong>state B</strong>
+to
+<strong>state C</strong>
+</p>
+<p>
+Only by having
+a hash of A,
+a hash of B and
+a hash of C
+</p>
+<pre><code>verifyProof(proof, programHash, fromStateHash, toStateHash)</code></pre>
+<p class='fragment'>
+What is a "hash of program A"?
+</p>
 </section>
 <section>
-<h2>Minimum gas usage</h2>
-<ol>
-<li>Batch user transactions when submitted to L1</li>
-<li>Only state change is published instead of full state</li>
-<li>Universal "proof" for multiple transactions</li>
-<li>Single contract custom blockchain as L2</li>
-</ol>
+<h2>ZK-Proofs exchange</h2>
+<img src='https://api.monosnap.com/file/download?id=UgJWiJSTPh8wH43s9uV73L27obC8c4'>
 </section>
 <section>
-<h2>Security</h2>
-<ol>
-<li>Zero Knowledge Proofs</li>
-<li>L2 inherits security guarantees of L1</li>
-</ol>
-</section>
-<section>
-<h2>Downsides of rollups</h2>
-<p>Anything outside of gas cost and security becomes more complex</p>
-<ul class='fragment'>
-<li>Read smart contract state</li>
-<li>Generate signature in wallet</li>
-<li>Listen for changes on L1</li>
-<li>Contract on L2 is not upgradable</li>
-<li>Token management with L1 and L2</li>
-<li>Longer mining time (&gt;20 minutes)</li>
-</ul>
-</section>
-<section>
-<h2>Logical Solution</h2>
+<h2>Current implementation of ZK-Proofs</h2>
 <ul>
-<li>L1: Registry that supports minting from L2</li>
-<li>L1: a list of smart contracts to ensure security of L2</li>
-<li>L2: a single smart-contract blockchain</li>
-<li>L2: Registry Mirror 2.0</li>
+<li>
+zkSync by Matter Labs
+</li>
+<li>
+CAIRO by StarkWare
+</li>
+</ul>
+<div class='fragment'>
+<p>Adoption Problems</p>
+<ul>
+<li>Custom elliptic curve</li>
+<li>Proof verification on chain is expensive</li>
+<li>Uses custom programming language</li>
+<li>Signature algorithm is different</li>
+</ul>
+</div>
+</section>
+<section>
+<h3>Data availability issue</h3>
+<p>
+If someone updates the state with a proof,
+<br>
+the state MUST to be shared with network.
+</p>
+<div class='fragment'>
+<h3>Solutions</h3>
+<ul>
+<li>ZK-Rollup</li>
+<li>
+Data Availability Committee (DAC)
+<a href='https://medium.com/starkware/data-availability-e5564c416424'>
+https://medium.com/starkware/data-availability-e5564c416424
+</a>
+</li>
+</ul>
+</div>
+</section>
+<section>
+<h3>ZK-Rollup</h3>
+<p>The necessity to publish state update in an "packed" format on chain</p>
+<ul class='fragment'>
+<li>More expensive any way</li>
+<li>Good for ERC20 bad for NFTs</li>
 </ul>
 </section>
 <section>
-<h2>Physical Solution</h2>
-<img src='https://api.monosnap.com/file/download?id=l3xBFga5774YfsfIbPRLZof8TvDg4E'>
-</section>
-<section>
-<h2>Other Affected Software</h2>
-<ol>
+<h2>ZK-Rollup</h2>
+<h3>10^2-10^3 gas usage reduction</h3>
+<ul>
 <li>
-Backend
-<ol>
-<li>TXP</li>
-<li>Resolution API</li>
-<li>Private Keys Rotation</li>
-<li>Claiming a domain</li>
-<li>Account Funding</li>
-</ol>
+Off-chain:
+<ul>
+<li>Batch transactions together</li>
+<li>Calculate ZK-Proof</li>
+</ul>
 </li>
 <li>
-Frontend &amp; Mobile App
-<ol>
-<li>Domain Location - L1 or L2</li>
-<li>Signature Generation</li>
-<li>Additional Transaction Type</li>
-</ol>
+On chain:
+<ul>
+<li>Publish Proof</li>
+<li>Publish state update</li>
+</ul>
 </li>
-</ol>
+</ul>
 </section>
 <section>
-<h2>Q1 Goals</h2>
-<ol>
-<li>CNS 2.0</li>
-<li>Registry Mirror</li>
-<li>Port management operations to CNS 2.0</li>
-<li>Having Gas estimates for all operations</li>
-</ol>
+<h2>Validium</h2>
+<h3>10^4-10^5 gas usage reduction</h3>
+<ul>
+<li>
+Off-chain:
+<ul>
+<li>Batch transactions together</li>
+<li>Calculate ZK-Proof</li>
+</ul>
+</li>
+<li>
+On-chain:
+<ul>
+<li>Publish Proof</li>
+<li>Publish Root Hash</li>
+</ul>
+</li>
+</ul>
+</section>
+<section>
+<h2>We are hiring!</h2>
+<ul>
+<li>45 people on the team</li>
+<li>across 14 countries</li>
+<li>4-5 new team members joining each month</li>
+</ul>
+<p>Open positions:</p>
+<ul>
+<li>Senior Blockchain Developer</li>
+<li>Senior Android Developer</li>
+<li>Marketing &amp; Visual Designer</li>
+</ul>
+<br>
+<h4>
+Contact:
+<a href='mailto:katerina@unstoppabledomains.com'>katerina@unstoppabledomains.com</a>
+</h4>
 </section>
 </div>
 </div>
