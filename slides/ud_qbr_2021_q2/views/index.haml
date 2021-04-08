@@ -1,0 +1,253 @@
+<!doctype html>
+%html{:lang => "en"}
+  %head
+    %meta{:charset => "utf-8"}/
+    %title Unstoppable Website
+    %meta{:content => "", :name => "description"}/
+    %meta{:content => "Bogdan Gusiev", :name => "author"}/
+    %meta{:content => "yes", :name => "apple-mobile-web-app-capable"}/
+    %meta{:content => "black-translucent", :name => "apple-mobile-web-app-status-bar-style"}/
+    %meta{:content => "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no", :name => "viewport"}/
+    %link{rel: "stylesheet", href: "https://cdn.jsdelivr.net/gh/hakimel/reveal.js/plugin/highlight/zenburn.css", id: "highlight-theme"}
+    %link{:href => "https://cdn.jsdelivr.net/gh/hakimel/reveal.js/dist/reveal.css", :rel => "stylesheet"}/
+    %link{:href => "https://cdn.jsdelivr.net/gh/hakimel/reveal.js/dist/theme/white.css", :rel => "stylesheet"}/
+    %script{src: 'https://cdn.jsdelivr.net/gh/hakimel/reveal.js/plugin/highlight/highlight.js'}
+    %script{src: 'https://cdn.jsdelivr.net/gh/highlightjs/highlightjs-solidity/solidity.js'}
+
+    %script
+
+    / If the query includes 'print-pdf', use the PDF print sheet
+    :javascript
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = "https://revealjs.com/css/print/" + (window.location.search.match( /print-pdf/gi ) ? 'pdf.css' : 'paper.css');
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    :sass
+      body .reveal
+        font-size: 30px !important
+      .reveal
+        section
+          pre
+            code
+              padding: 20px 5px
+              font-size: 1.30em
+              line-height: 1.3em
+          ul
+            min-width: 50%
+          .grey
+            color: grey
+          .red
+            color: #e02c2d
+          .green
+            color: #17cc1e
+          .yellow
+            color: yellow
+          .orange
+            color: orange
+          .blue
+            color: #1b91ff
+          .left
+            float: left
+          .right
+            float: right
+          .clearfix
+            overflow: hidden
+          table.full-border
+            border-collapse: collapse
+            td
+              border: 1px solid black !important
+          img
+            border: 0px
+            box-shadow: 0 0 0 0
+      
+          code
+            &.line-numbers
+              counter-reset: line_numbers
+            span
+              &.line-number
+                counter-increment: line_numbers
+                margin-right: 1em
+                &:before
+                  content: counter(line_numbers, decimal-leading-zero)
+                  color: gray
+              &.highlight-line:before
+                color: yellow
+          
+        
+  %body
+    .reveal
+      .slides
+        %section
+          %h1
+            Registry Team 
+          %h1
+            Q2 2021
+        %section
+          
+          %h1 Agenda
+
+          %ol
+            %li Q1 Results
+            %li Q2 Goals
+            %li L2 Solutions
+
+        %section
+          %h3 Q1 Results
+
+          %ul
+            %li 
+              L2 Solutions
+              %ul
+                %li Gas estimation - DONE
+                %li Architecture - DONE
+                %li Deploy ZNS to testnet - DONE
+            %li
+              Maitenance
+              %ul
+                %li Automated Deployment - DONE
+                %li Speedup deploymnet - IN PROGRESS
+                %li Replace Cron Jobs with Bull - DONE
+            %li 
+              TXP Dashboard - DONE
+            %li
+              Other
+              %ul
+                %li TX search API - DONE
+                %li Zil management API - IN PROGRESS
+
+        %section
+          %h2 Q2 Goals
+          %ul
+            %li 
+              L2
+              %ul
+                %li L2 TX processor
+                %li DAC service
+                %li New L1 multi-tld registry
+                %li Proxy Reader Contract
+            %li 
+              TXP Dashboard v2
+              %ul
+                %li Accounts
+                %li Restart with different gas
+                %li Mass Restart
+
+        %section
+          %h2 L2 Strategy Update
+
+          %ul
+            %li 
+              Validium instead of ZK-rollups
+              %ul
+                %li 100x cheaper gas isn't enough
+            %li 
+              User-controlled migration to L2
+              %ul
+                %li User should chose if he wants to upgrade to L2
+
+
+        %section
+          %h1 Old Schema
+          %img{src: "https://api.monosnap.com/file/download?id=sgn4hIs4cyzYQfyakZNhGM6Jh0uByn"}
+
+        %section
+          %h1 New Schema
+          %img{src: "https://lucid.app/publicSegments/view/59da8940-df34-4bb2-9a34-53009e3a31c5/image.png"}
+
+        %section
+          %h2 Validium instead of ZK-Rollup
+
+          %p
+            I publish the hash of the data on chain along with a proof
+            that I have all the required signatures for transactions that changed state of the system
+            from hash A to hash B.
+          %ul
+            %li 100x cheaper than ZK-Rollup
+            %li Causes data availability problem
+        %section
+          %h2 How cheap is the L2 tx?
+          %ul
+            %li Depends on number of txs in batch
+            %li Depends on gas prices on ethereum
+          %img{src: "https://api.monosnap.com/file/download?id=WEep5Qf6VXWNKCQtZONqF9RhvtpjSg"}
+
+        %section
+          %h2 Data Availability Problem
+          %img{src: "https://lucid.app/publicSegments/view/62dfc4c4-5159-4b5e-a79c-be491129a901/image.png"}
+
+        %section
+          %h2 Pros and Cons of domain at L2
+
+          %ul
+            %li 
+              Pros
+              %ul
+                %li Cheap Gas
+            %li 
+              Cons
+              %ul
+                %li Censorship from UD
+                %li DAC Members exploit
+                %li Slow tx mining time
+        %section
+          %h2 L2 is not yet censorship proof
+          %h4
+            Operator can only censor transactions, 
+          %h4 but not execute whatever transaction it wants
+          %h3.fragment Users who don't like that can exit to L1 any time
+          
+        %section
+          %h2 How would someone submit transactions to L2?
+
+          %ol
+            %li.fragment User signs a transaction using metamask
+            %li.fragment User sends transaction to UD
+            %li.fragment UD sends transaction to StarkEx
+            %li.fragment StarkEx puts multiple user trasactions to a batch
+            %li.fragment StarkEx generates cryptographic proof 
+            %li.fragment StarkEx submits the batch and the proof to L1
+
+        %section
+          %h3 How would someone resolve a domain?
+          %ol
+            %li.fragment
+              Resolution Services syncs and aggregates data from multiple places
+              %ul.fragment
+                %li CNS
+                %li ZNS
+                %li New L1 Registry
+                %li L2 Registry
+                %li DAC Service
+
+            %li.fragment Client makes a request to Resolution Service
+            %li.fragment Resolution service resolves a domain and gives cryptographic proof that data is correct
+            %li.fragment Client makes a request to ProxyReader contract to verify the data on L1
+
+            
+    %script{:src => "https://cdn.jsdelivr.net/gh/hakimel/reveal.js/dist/reveal.js"}
+    :javascript
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+      	controls: true,
+      	progress: true,
+      	history: true,
+      	center: true,
+        plugins: [RevealHighlight],
+
+      	theme: 'simple', // available themes are in /css/theme
+      	transition: 'fade', // default/cube/page/concave/zoom/linear/fade/none
+
+      	// Optional libraries used to extend on reveal.js
+      	dependencies: [
+      		// { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+          //{ src: 'https://cdn.jsdelivr.net/gh/hakimel/reveal.js/plugin/highlight/highlight.js', async: true},
+          {src: 'https://mikemiles86.github.io/reveal-line-numbers/plugin/line-numbers/line-numbers.js'},
+          
+          { src: 'https://rawgithub.com/hakimel/reveal.js/3.6.0/plugin/notes/notes.js', async: true }
+      		// { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+      		// { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
+      		// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+      	]
+      });
+      Reveal.getPlugin('highlight').hljs.registerLanguage('solidity', window.hljsDefineSolidity);
