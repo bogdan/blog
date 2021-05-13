@@ -1,9 +1,12 @@
-require "sinatra"
+require "sinatra/base"
 require "sass"
 require "haml"
 
-set :public_folder, Proc.new { File.join(root, "public") }
+class MyApp < Sinatra::Base
+  set :public_folder, Proc.new { File.join(root, "public") }
+  get '/', :provides => 'html' do
+    haml :index
+  end
 
-get '/', :provides => 'html' do
-  haml :index
+  run! if app_file == $0
 end

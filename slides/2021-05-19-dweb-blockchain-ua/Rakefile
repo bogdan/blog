@@ -1,5 +1,17 @@
 require "open-uri"
+require "#{__dir__}/app"
+# load "#{__dir__}/../../Rakefile"
 
-task :build do
-  File.write('index.html',URI.open("http://localhost:4567").read)
+namespace :slides do
+  task :build do
+    html = MyApp.new.call(
+    'REQUEST_METHOD' => 'GET',
+    'PATH_INFO' => '/',
+    'rack.input' => StringIO.new
+  )[2].join('')
+    File.write("#{__dir__}/index.html", html)
+  end
+  task :deploy => ['slides:build'] do
+    `bundle exec --gemfile=../../Gemfile "rake --rakefile ../../Rakefile deploy"`
+  end
 end

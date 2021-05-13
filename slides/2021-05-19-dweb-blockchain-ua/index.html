@@ -28,58 +28,43 @@
   
   .reveal section pre code {
     padding: 20px 5px;
-    font-size: 1.30em;
+    font-size: 1.3em;
     line-height: 1.3em; }
-  
   .reveal section ul {
     min-width: 50%; }
-  
   .reveal section .grey {
     color: grey; }
-  
   .reveal section .red {
     color: #e02c2d; }
-  
   .reveal section .green {
     color: #17cc1e; }
-  
   .reveal section .yellow {
     color: yellow; }
-  
   .reveal section .orange {
     color: orange; }
-  
   .reveal section .blue {
     color: #1b91ff; }
-  
   .reveal section .left {
     float: left; }
-  
   .reveal section .right {
     float: right; }
-  
   .reveal section .clearfix {
     overflow: hidden; }
-  
   .reveal section table.full-border {
     border-collapse: collapse; }
     .reveal section table.full-border td {
       border: 1px solid black !important; }
-  
   .reveal section img {
     border: 0px;
     box-shadow: 0 0 0 0; }
-  
   .reveal section code.line-numbers {
     counter-reset: line_numbers; }
-  
   .reveal section code span.line-number {
     counter-increment: line_numbers;
     margin-right: 1em; }
     .reveal section code span.line-number:before {
-      content: counter(line_numbers, decimal-leading-zero);
+      content: counter(line_numbers,decimal-leading-zero);
       color: gray; }
-  
   .reveal section code span.highlight-line:before {
     color: yellow; }
 </style>
@@ -89,14 +74,14 @@
 <div class='slides'>
 <section>
 <h1>
-The Future of the Decentralized Web
+Будущее децентрализованного Интернета
 </h1>
 <h2>
-Blockchain.ua May 2021
+Blockchain.ua Май 2021
 </h2>
 </section>
 <section>
-<h1>Agenda</h1>
+<h1>План</h1>
 <ol>
 <li>Интернет как есть</li>
 <li>Стадии децентрализации интернета</li>
@@ -104,7 +89,7 @@ Blockchain.ua May 2021
 </ol>
 </section>
 <section>
-<h3>Internet advantages</h3>
+<h3>Чем хорош интернет</h3>
 <ul>
 <li>TCP/IP может выдержать ядерный удар</li>
 <li>Вы можете владеть своим контентом</li>
@@ -113,7 +98,7 @@ Blockchain.ua May 2021
 </ul>
 </section>
 <section>
-<h2>Internet's future</h2>
+<h2>Децентрализованное будущее интернета</h2>
 <ul>
 <li>ID ownership</li>
 <li>Особенности децентразированных технологий</li>
@@ -162,9 +147,9 @@ Internet ID
 <p>Какая мотивация у сети хранить контент вашего сайта?</p>
 <p>Ефир имеет свою мотивационную модель</p>
 <p>Может ли эта модель работать для контента?</p>
-<ul>
+<ul class='fragment'>
 <li>Есть способ мотивировать сеть хранить ваш контент</li>
-<li>Есть подтвердить что ваш контент есть у того, кто хочет получить комиссию</li>
+<li>Есть способ подтвердить, что ваш контент есть у того, кто хочет получить комиссию</li>
 <li>Нет способа убедиться, что тот, кто хранит ваш контент, делает его доступным</li>
 </ul>
 </section>
@@ -217,7 +202,7 @@ Internet ID
 <section>
 <h2>Безусловное владение токеном</h2>
 <ul>
-<li>NFTs</li>
+<li>Чистый ERC-721</li>
 <li>Нет платы за подписку</li>
 <li>Нет администраторов доменных зон</li>
 </ul>
@@ -225,10 +210,10 @@ Internet ID
 <section>
 <h2>Валидация данных on-chain</h2>
 <ol>
-<li>Клиент запрашивает данные у сервиса</li>
-<li>Сервис находит данных</li>
-<li>Сервис выдает необходимую криптографию для подтвердения правильности данных</li>
-<li>Клиент отправляет данные на blockchain для верификации</li>
+<li class='fragment'>Клиент запрашивает данные у сервиса</li>
+<li class='fragment'>Сервис находит данные</li>
+<li class='fragment'>Сервис выдает необходимую криптографию для подтвердения правильности данных</li>
+<li class='fragment'>Клиент отправляет данные на blockchain для верификации</li>
 </ol>
 </section>
 <section>
@@ -242,14 +227,14 @@ Internet ID
 <section>
 <h2>Постепенная децентрализация</h2>
 <ol>
-<li>Домены как NFT</li>
-<li>Дешевый minting и управление</li>
-<li>Интеграция с браузерами и воллетами</li>
-<li>Каждый может получить домен бесплатно</li>
-<li>Традиционные вебсайты на децентрализованных доменах</li>
-<li>Статичные децентрализованные вебсайты</li>
-<li>Использование доменного имени в качестве ID</li>
-<li>Динамический децентрализованные контент</li>
+<li class='fragment'>Домены как NFT</li>
+<li class='fragment'>Дешевый minting и управление</li>
+<li class='fragment'>Интеграция с браузерами и воллетами</li>
+<li class='fragment'>Каждый может получить домен бесплатно</li>
+<li class='fragment'>Традиционные вебсайты на децентрализованных доменах</li>
+<li class='fragment'>Статичные децентрализованные вебсайты</li>
+<li class='fragment'>Использование доменного имени в качестве ID</li>
+<li class='fragment'>Динамический децентрализованные контент</li>
 </ol>
 </section>
 <section>
@@ -263,15 +248,26 @@ Internet ID
 </ul>
 </section>
 <section>
+<h2>Хранение данных on-chain</h2>
+<ol>
+<li>Безопасно?</li>
+<li>Децентрализовано?</li>
+<li>Дешево?</li>
+<li>Удобно?</li>
+<li>Быстро?</li>
+</ol>
+</section>
+<section>
 <h2>Дешевые зоны для управления токенами</h2>
 <img src='https://api.monosnap.com/file/download?id=sgn4hIs4cyzYQfyakZNhGM6Jh0uByn'>
 </section>
 <section>
 <h2>Дешевые обновления on-chain</h2>
-<ol>
+<ul>
 <li>Хранить только хеш данных on-chain</li>
 <li>Коллективные транзакции</li>
-</ol>
+<li>Sparse Merkle Trees для валидации данных</li>
+</ul>
 </section>
 <section>
 <h1>Спасибо!</h1>
