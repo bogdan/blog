@@ -1,0 +1,5 @@
+require "open-uri"
+
+task :build do
+  File.write('index.html',URI.open("http://localhost:4567").read)
+end

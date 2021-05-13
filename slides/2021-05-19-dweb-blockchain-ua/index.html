@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang='en'>
+<head>
+<meta charset='utf-8'>
+<title>Unstoppable Website</title>
+<meta content='' name='description'>
+<meta content='Bogdan Gusiev' name='author'>
+<meta content='yes' name='apple-mobile-web-app-capable'>
+<meta content='black-translucent' name='apple-mobile-web-app-status-bar-style'>
+<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' name='viewport'>
+<link href='https://cdn.jsdelivr.net/gh/hakimel/reveal.js/plugin/highlight/zenburn.css' id='highlight-theme' rel='stylesheet'>
+<link href='https://cdn.jsdelivr.net/gh/hakimel/reveal.js/dist/reveal.css' rel='stylesheet'>
+<link href='https://cdn.jsdelivr.net/gh/hakimel/reveal.js/dist/theme/white.css' rel='stylesheet'>
+<script src='https://cdn.jsdelivr.net/gh/hakimel/reveal.js/plugin/highlight/highlight.js'></script>
+<script src='https://cdn.jsdelivr.net/gh/highlightjs/highlightjs-solidity/solidity.js'></script>
+<script></script>
+<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+<script>
+  var link = document.createElement( 'link' );
+  link.rel = 'stylesheet';
+  link.type = 'text/css';
+  link.href = "https://revealjs.com/css/print/" + (window.location.search.match( /print-pdf/gi ) ? 'pdf.css' : 'paper.css');
+  document.getElementsByTagName( 'head' )[0].appendChild( link );
+</script>
+<style>
+  body .reveal {
+    font-size: 30px !important; }
+  
+  .reveal section pre code {
+    padding: 20px 5px;
+    font-size: 1.30em;
+    line-height: 1.3em; }
+  
+  .reveal section ul {
+    min-width: 50%; }
+  
+  .reveal section .grey {
+    color: grey; }
+  
+  .reveal section .red {
+    color: #e02c2d; }
+  
+  .reveal section .green {
+    color: #17cc1e; }
+  
+  .reveal section .yellow {
+    color: yellow; }
+  
+  .reveal section .orange {
+    color: orange; }
+  
+  .reveal section .blue {
+    color: #1b91ff; }
+  
+  .reveal section .left {
+    float: left; }
+  
+  .reveal section .right {
+    float: right; }
+  
+  .reveal section .clearfix {
+    overflow: hidden; }
+  
+  .reveal section table.full-border {
+    border-collapse: collapse; }
+    .reveal section table.full-border td {
+      border: 1px solid black !important; }
+  
+  .reveal section img {
+    border: 0px;
+    box-shadow: 0 0 0 0; }
+  
+  .reveal section code.line-numbers {
+    counter-reset: line_numbers; }
+  
+  .reveal section code span.line-number {
+    counter-increment: line_numbers;
+    margin-right: 1em; }
+    .reveal section code span.line-number:before {
+      content: counter(line_numbers, decimal-leading-zero);
+      color: gray; }
+  
+  .reveal section code span.highlight-line:before {
+    color: yellow; }
+</style>
+</head>
+<body>
+<div class='reveal'>
+<div class='slides'>
+<section>
+<h1>
+The Future of the Decentralized Web
+</h1>
+<h2>
+Blockchain.ua May 2021
+</h2>
+</section>
+<section>
+<h1>Agenda</h1>
+<ol>
+<li>Интернет как есть</li>
+<li>Стадии децентрализации интернета</li>
+<li>Планы Unstoppable Domains</li>
+</ol>
+</section>
+<section>
+<h3>Internet advantages</h3>
+<ul>
+<li>TCP/IP может выдержать ядерный удар</li>
+<li>Вы можете владеть своим контентом</li>
+<li>Динамичность</li>
+<li>Легко пользоваться</li>
+</ul>
+</section>
+<section>
+<h2>Internet's future</h2>
+<ul>
+<li>ID ownership</li>
+<li>Особенности децентразированных технологий</li>
+<li>Минимум доверия</li>
+</ul>
+</section>
+<section>
+<h3>Internet ID</h3>
+<ul>
+<li>Domain Name</li>
+<li>Facebook Login</li>
+<li>Google Login</li>
+<li>ETC...</li>
+</ul>
+</section>
+<section>
+<h2>Что можно децентраризовать?</h2>
+<ol>
+<li>
+Internet ID
+<ol>
+<li>Владение</li>
+<li>Конфигурация</li>
+</ol>
+</li>
+<li>
+Контент
+<ol>
+<li>Статический</li>
+<li>Динамический</li>
+</ol>
+</li>
+</ol>
+</section>
+<section>
+<h2>Реалистичный децентрализм</h2>
+<ul>
+<li>Хранить данные on-chain дорого</li>
+<li>Проблема мотивации хранения контента не решена</li>
+<li>О динамическом контенте даже никто не говорит</li>
+<li>Децентрализованные технологии медленные</li>
+</ul>
+</section>
+<section>
+<h2>Проблема мотивации хранения контента</h2>
+<p>Какая мотивация у сети хранить контент вашего сайта?</p>
+<p>Ефир имеет свою мотивационную модель</p>
+<p>Может ли эта модель работать для контента?</p>
+<ul>
+<li>Есть способ мотивировать сеть хранить ваш контент</li>
+<li>Есть подтвердить что ваш контент есть у того, кто хочет получить комиссию</li>
+<li>Нет способа убедиться, что тот, кто хранит ваш контент, делает его доступным</li>
+</ul>
+</section>
+<section>
+<h2>Динамический контент</h2>
+<p>
+Каждый раз, когда вы слышите об успехах технологий децентрализованного хранения контента,
+никто не говорит вам, что контент статический.
+</p>
+<p>Никто пока не знает как хранить динамический контент децентрализованно</p>
+</section>
+<section>
+<h2>Скорость децентрализованных технологий</h2>
+<table>
+<tr>
+<td>Decentralized</td>
+<td>&nbsp;</td>
+<td>Centralized</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>IPFS</td>
+<td>3 sec</td>
+<td>CDN</td>
+<td>0.5 sec</td>
+</tr>
+<tr>
+<td>ETH Tx</td>
+<td>2 min - 1 week</td>
+<td>DNS Update</td>
+<td>2 min</td>
+</tr>
+<tr>
+<td>ETH Query</td>
+<td>1 sec</td>
+<td>DNS Query</td>
+<td>0.2 sec</td>
+</tr>
+</table>
+</section>
+<section>
+<h2>Подход Unstoppable Domains</h2>
+<ul>
+<li>Безусловное владение токеном</li>
+<li>Получайте данные откуда угодно, валидируйте их on-chain</li>
+<li>Постепенная переход на децентрализованные технологии</li>
+<li>Доступность на всех этапах перехода</li>
+</ul>
+</section>
+<section>
+<h2>Безусловное владение токеном</h2>
+<ul>
+<li>NFTs</li>
+<li>Нет платы за подписку</li>
+<li>Нет администраторов доменных зон</li>
+</ul>
+</section>
+<section>
+<h2>Валидация данных on-chain</h2>
+<ol>
+<li>Клиент запрашивает данные у сервиса</li>
+<li>Сервис находит данных</li>
+<li>Сервис выдает необходимую криптографию для подтвердения правильности данных</li>
+<li>Клиент отправляет данные на blockchain для верификации</li>
+</ol>
+</section>
+<section>
+<h2>Sparse Merkle Tree</h2>
+<img src='https://miro.medium.com/max/1204/1*Vtvxs-2-aSRVjTMrlpcDPA.png'>
+</section>
+<section>
+<h2>Sparse Merkle Tree</h2>
+<img src='https://miro.medium.com/max/602/1*HkoTv02wqeG3Y625fKLdBw.png'>
+</section>
+<section>
+<h2>Постепенная децентрализация</h2>
+<ol>
+<li>Домены как NFT</li>
+<li>Дешевый minting и управление</li>
+<li>Интеграция с браузерами и воллетами</li>
+<li>Каждый может получить домен бесплатно</li>
+<li>Традиционные вебсайты на децентрализованных доменах</li>
+<li>Статичные децентрализованные вебсайты</li>
+<li>Использование доменного имени в качестве ID</li>
+<li>Динамический децентрализованные контент</li>
+</ol>
+</section>
+<section>
+<h2>
+Доступность децентрализованного интернета
+</h2>
+<ul>
+<li>Обновления достаточно дешевые</li>
+<li>Скорость отображения контента приемлимая</li>
+<li>Минимум знаний о blockchain</li>
+</ul>
+</section>
+<section>
+<h2>Дешевые зоны для управления токенами</h2>
+<img src='https://api.monosnap.com/file/download?id=sgn4hIs4cyzYQfyakZNhGM6Jh0uByn'>
+</section>
+<section>
+<h2>Дешевые обновления on-chain</h2>
+<ol>
+<li>Хранить только хеш данных on-chain</li>
+<li>Коллективные транзакции</li>
+</ol>
+</section>
+<section>
+<h1>Спасибо!</h1>
+<h2>https://unstoppabledomains.com</h2>
+</section>
+</div>
+</div>
+<script src='https://cdn.jsdelivr.net/gh/hakimel/reveal.js/dist/reveal.js'></script>
+<script>
+  // https://github.com/hakimel/reveal.js#configuration
+  Reveal.initialize({
+  	controls: true,
+  	progress: true,
+  	history: true,
+  	center: true,
+    plugins: [RevealHighlight],
+  
+  	theme: 'simple', // available themes are in /css/theme
+  	transition: 'fade', // default/cube/page/concave/zoom/linear/fade/none
+  
+  	// Optional libraries used to extend on reveal.js
+  	dependencies: [
+  		// { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+      //{ src: 'https://cdn.jsdelivr.net/gh/hakimel/reveal.js/plugin/highlight/highlight.js', async: true},
+      {src: 'https://mikemiles86.github.io/reveal-line-numbers/plugin/line-numbers/line-numbers.js'},
+      
+      { src: 'https://rawgithub.com/hakimel/reveal.js/3.6.0/plugin/notes/notes.js', async: true }
+  		// { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+  		// { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
+  		// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+  	]
+  });
+  Reveal.getPlugin('highlight').hljs.registerLanguage('solidity', window.hljsDefineSolidity);
+</script>
+</body>
+</html>
