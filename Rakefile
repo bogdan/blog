@@ -11,7 +11,7 @@ def path(name)
 end
 
 def sass
-  directory = File.dirname(__FILE__) + "/css"
+  directory = path('css')
   Sass::Plugin.options[:template_location] = directory
   Sass::Plugin.options[:css_location] = directory
   Sass::Plugin.check_for_updates
@@ -30,7 +30,10 @@ end
 def site
   @site ||= (
     include Jekyll::Filters
-    options = Jekyll.configuration({source: path('.')})
+    options = Jekyll.configuration(
+      destination: path('build'),
+      source: path('.'),
+    )
     site = Jekyll::Site.new(options)
     site.read
     site
@@ -58,7 +61,10 @@ task :build => [ "build:clean", :tags, :cloud, :sass] do
     FileUtils.mkdir_p(path("tmp"))
     FileUtils.rm_rf(path("tmp/.git"))
     FileUtils.mv(path("build/.git"), path("tmp"))
-    puts `jekyll build --destination #{path("build")}`
+    puts "Building to #{path('build')}"
+    site.process
+    puts "Build complete"
+    # puts `jekyll build --destination #{path("build")}`
   ensure
     unless File.exists?(path("build/.git"))
       FileUtils.mv(path("tmp/.git"), path("build"))
@@ -71,7 +77,7 @@ namespace :build do
   task :init do
     unless File.exists? path("build")
       FileUtils.mkdir_p(path("build"))
-      puts `git clone git@github.com:bogdan/bogdan.github.com.git build`
+      puts `git clone git@github.com:bogdan/bogdan.github.com.git #{path('build')}`
       if $?.to_i > 0
         raise "git command failed"
       end
