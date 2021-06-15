@@ -1,7 +1,6 @@
 require 'rubygems'
 require 'bundler'
 require "yaml"
-#require "syck"
 Bundler.setup
 require 'jekyll'
 require "fileutils"
@@ -24,14 +23,14 @@ def build_git(command)
   output = `#{git}`.strip
   puts output.strip unless output == ""
   if $?.to_i > 0
-    raise "git command failed"
+    raise "git command failed: #{git}"
   end
 end
 
 def site
   @site ||= (
     include Jekyll::Filters
-    options = Jekyll.configuration({})
+    options = Jekyll.configuration({source: path('.')})
     site = Jekyll::Site.new(options)
     site.read
     site
@@ -90,7 +89,7 @@ end
 desc "Deploy build to github hosting"
 task :deploy => [:build] do
   build_git "add -A ."
-  build_git "add -f tags"
+  build_git "add -f #{path('build/tags')}"
   build_git "commit -m 'Build #{DateTime.now.to_s}'"
   build_git "push"
 end
@@ -98,8 +97,8 @@ end
 desc 'Generate tags page'
 task :tags do
 
-  FileUtils.rm_rf("tags")
-  FileUtils.mkdir_p("tags")
+  FileUtils.rm_rf(path("build/tags"))
+  FileUtils.mkdir_p(path("build/tags"))
 
   site.tags.sort.each do |tag, posts|
     html = ''
@@ -124,9 +123,7 @@ title: Posts tagged "#{tag}"
     end
     html << '</ul>'
 
-    File.open("tags/#{tag}.html", 'w+') do |file|
-      file.puts html
-    end
+    File.write(path("build/tags/#{tag}.html"), html)
   end
 
 end
@@ -135,7 +132,7 @@ end
 desc "Generate tag cloud"
 task :cloud do
 
-  FileUtils.mkdir_p("tags")
+  FileUtils.mkdir_p(path("build/tags"))
   html = ''
   keywords = []
 
@@ -149,11 +146,11 @@ task :cloud do
     end
   end
 
-  File.open('_includes/cloud.html', 'w') do |file|
+  File.open(path("/_includes/cloud.html"), 'w') do |file|
     file.puts html
   end
 
-  File.open("_includes/keywords.html", "w") do |file|
+  File.open(path("_includes/keywords.html"), "w") do |file|
     file.write keywords.join(", ")
   end
 
