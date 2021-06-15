@@ -80,150 +80,232 @@
       .slides
         %section
           %h1
-            Registry Team 
+            UNS Registry
           %h1
-            Q2 2021
+            Q3 2021
         %section
+          %h2 High Level Changes
+
+          :markdown
+            * No Resolvers
+            * No Subdomains
+            * Proxy Upgradable
+            * Shared CNS/UNS infrastructure
+              * Minting Manager (TLDs)
+              * Proxy Reader
+            * Owner Multisig
+            * New Meta transactions
+            * Gas Efficiency
+        %section
+          %h2 No Resolvers
           
-          %h1 Agenda
-
-          %ol
-            %li Q1 Results
-            %li Q2 Goals
-            %li L2 Solutions
-
-        %section
-          %h3 Q1 Results
-
-          %ul
-            %li 
-              L2 Solutions
-              %ul
-                %li Gas estimation - DONE
-                %li Architecture - DONE
-                %li Deploy ZNS to testnet - DONE
-            %li
-              Maitenance
-              %ul
-                %li Automated Deployment - DONE
-                %li Speedup deploymnet - IN PROGRESS
-                %li Replace Cron Jobs with Bull - DONE
-            %li 
-              TXP Dashboard - DONE
-            %li
-              Other
-              %ul
-                %li TX search API - DONE
-                %li Zil management API - IN PROGRESS
-
-        %section
-          %h2 Q2 Goals
-          %ul
-            %li 
-              L2
-              %ul
-                %li L2 TX processor
-                %li DAC service
-                %li New L1 multi-tld registry
-                %li Proxy Reader Contract
-            %li 
-              TXP Dashboard v2
-              %ul
-                %li Accounts
-                %li Restart with different gas
-                %li Mass Restart
-
-        %section
-          %h2 L2 Strategy Update
-
-          %ul
-            %li 
-              Validium instead of ZK-rollups
-              %ul
-                %li 100x cheaper gas isn't enough
-            %li 
-              User-controlled migration to L2
-              %ul
-                %li User should chose if he wants to upgrade to L2
-
-
-        %section
-          %h1 Old Schema
-          %img{src: "https://api.monosnap.com/file/download?id=sgn4hIs4cyzYQfyakZNhGM6Jh0uByn"}
-
-        %section
-          %h1 New Schema
-          %img{src: "https://lucid.app/publicSegments/view/59da8940-df34-4bb2-9a34-53009e3a31c5/image.png"}
-
-        %section
-          %h2 Validium instead of ZK-Rollup
-
           %p
-            I publish the hash of the data on chain along with a proof
-            that I have all the required signatures for transactions that changed state of the system
-            from hash A to hash B.
-          %ul
-            %li 100x cheaper than ZK-Rollup
-            %li Causes data availability problem
-        %section
-          %h2 How cheap is the L2 tx?
-          %ul
-            %li Depends on number of txs in batch
-            %li Depends on gas prices on ethereum
-          %img{src: "https://api.monosnap.com/file/download?id=WEep5Qf6VXWNKCQtZONqF9RhvtpjSg"}
-
-        %section
-          %h2 Data Availability Problem
-          %img{src: "https://lucid.app/publicSegments/view/62dfc4c4-5159-4b5e-a79c-be491129a901/image.png"}
-
-        %section
-          %h2 Pros and Cons of domain at L2
-
-          %ul
-            %li 
-              Pros
-              %ul
-                %li Cheap Gas
-            %li 
-              Cons
-              %ul
-                %li Censorship from UD
-                %li DAC Members exploit
-                %li Slow tx mining time
-        %section
-          %h2 L2 is not yet censorship proof
-          %h4
-            Operator can only censor transactions, 
-          %h4 but not execute whatever transaction it wants
-          %h3.fragment Users who don't like that can exit to L1 any time
+            %a{target: '_blank', href: "https://github.com/unstoppabledomains/uns/blob/main/contracts/Registry.sol"} Registry.sol
+          :markdown
+            * Motivation
+              * Any feature can be done via custody contract
+              * Gas Efficincy
+            * Implementation
+              * Registry acts as Resolver
+              * Registry implements records management/reading API
+          
+          %pre
+            %code.solidity
+              :preserve
+                contract Registry {
+                  function resolverOf(uint256 tokenId) {
+                    return _exists(tokenId) ? address(this) : address(0x0);
+                  }
+                }
           
         %section
-          %h2 How would someone submit transactions to L2?
+          %h2 Compatibility
 
-          %ol
-            %li.fragment User signs a transaction using metamask
-            %li.fragment User sends transaction to UD
-            %li.fragment UD sends transaction to StarkEx
-            %li.fragment StarkEx puts multiple user trasactions to a batch
-            %li.fragment StarkEx generates cryptographic proof 
-            %li.fragment StarkEx submits the batch and the proof to L1
+          %pre
+            %code.javascript
+              :preserve
+                const resolverAddress = registry.resolverOf(tokenId)
+                if (resolverAddress === '0x000000') {
+                  registry.resolveTo(tokenId, defaultResolverAddress);
+                }
+
+                resolver = new ResolverContract(
+                  resolverAddress || defaultResolverAddress
+                );
+
+                resolver.getMany(
+                  ['crypto.ETH.address', 'crypto.ZIL.address']
+                );
+                resolver.setMany(['dweb.ipfs.hash', '....']);
+        %section
+          %h2 Merging contract into main contracts
+
+          :markdown
+            * Registry serves as:
+              * Resolver
+              * SignatureController
+            * MintingManager serves as:
+              * MintingController
+              * WhitelistedMinter
+              * FreeMinter
+              * URIPrefixController
 
         %section
-          %h3 How would someone resolve a domain?
+          %h2 Events
+          :markdown
+            * `event Approved ApprovedForAll Transfer NewURI`
+              * Unchanged
+            * `event Resolve Sync`
+              * Removed
+            * `event Set NewKey ResetRecords`
+              * Moved from Resolver to Registry
+              * ResetRecords now fires when records are reset on transfer.
+        %section
+          %h2 No Subdomains
+
           %ol
-            %li.fragment
-              Resolution Services syncs and aggregates data from multiple places
-              %ul.fragment
-                %li CNS
-                %li ZNS
-                %li New L1 Registry
-                %li L2 Registry
-                %li DAC Service
+            %li Subdomains are removed with no replacement
+            %li We can add them later in some form
+        %section
+          %h2 Proxy Upgradable
 
-            %li.fragment Client makes a request to Resolution Service
-            %li.fragment Resolution service resolves a domain and gives cryptographic proof that data is correct
-            %li.fragment Client makes a request to ProxyReader contract to verify the data on L1
+          %ul
+            %li Registry is temporary upgradable
+            %li 
+              We are free to add new features like 
+              %ul
+                %li Reverse Resolution
+                %li Subdomains
+                %li Bulk operations
+        %section
+          %h2 How it works?
 
+          %ul
+            %li It is a mad solidity hack
+            %li It is well adopted by community
+            %li 
+              %a{target: '_blank', href: "https://eips.ethereum.org/EIPS/eip-1822"} EIP-1822
+            %li Etherscan has custom features for it
+
+          %img{src: "https://mvpworkshop.co/wp-content/uploads/2021/03/image.png"}    
+          %p
+            Reading: 
+            %a{target: '_blank', href: 'https://mvpworkshop.co/blog/upgradeable-smart-contracts-proxy-pattern/'} https://mvpworkshop.co/blog/upgradeable-smart-contracts-proxy-pattern/
+
+        %section
+          %h2 Post-Release upgrades for Registry
+          %ul
+            %li 
+              Add features, fix bugs
+              %ul
+                %li Until we deny ourselves this possibility
+
+            %li 
+              24K size limit
+              %ul
+                %li we used 19K ~79%
+        %section
+          %h2 Minting Manager
+
+
+          %p Overcomes WhitelistedMinter
+          %p
+            %a{target: '_blank', href: "https://github.com/unstoppabledomains/uns/blob/main/contracts/MintingManager.sol"} MintingManager.sol
+
+          %ul
+            %li TLDs support
+            %li Mints on CNS or UNS based on TLD
+            %li Same Close/Rotation Interface
+            %li Same Worker Addresses
+            %li Free Minter functionality
+            %li Upgradable
+        %section
+          %h2 Proxy Reader
+          
+          %p
+            %a{target: '_blank', href: "https://github.com/unstoppabledomains/uns/blob/main/contracts/ProxyReader.sol"} ProxyReader.sol
+          %pre
+            %code.solidity
+              :preserve
+                contract ProxyReader {
+                  function balanceOf(address owner) returns (uint256) {
+                    return _unsRegistry.balanceOf(owner) + 
+                      _cnsRegistry.balanceOf(owner);
+                  }     
+
+                  function resolverOf(uint256 tokenId) returns (address) {
+                    if(_unsRegistry.exists(tokenId)) {
+                        return _unsRegistry.resolverOf(tokenId);
+                    } else {
+                        return _cnsRegistry.resolverOf(tokenId);
+                    }
+                  }
+                }
+        %section
+          %h2 New Meta Transactions
+
+          
+          %p
+            %a{target: '_blank', href: "https://github.com/unstoppabledomains/uns/blob/main/contracts/metatx/RegistryForwarder.sol"} RegistryForwarder.sol
+
+          :markdown
+            * Old Metatransactions are still working
+              * SignatureController => Registry
+            * New Metatransactions are comming
+
+          .fragment
+            %pre
+              %code.solidity
+                :preserve
+                  struct ForwardRequest {
+                    address from;
+                    uint256 gas; // gas limit
+                    uint256 tokenId;
+                    uint256 nonce;
+                    // abi.encodeWithSelector(
+                    //  bytes4(keccak256('setMany(string[],string[],uint256)')), 
+                    //  keys, values, tokenId
+                    // )
+                    bytes data;
+                  }
+                  function execute(
+                    ForwardRequest req, bytes signature
+                  ) public returns (bool success, bytes memory returndata);
+
+                
+        %section
+          %h2 Owner Multisig
+
+          %p All maitanance operations are now done by the same multisig wallet
+          %ol
+            %li Upgrade Registry
+            %li 
+              Manage Minting Manager
+              %ol
+                %li Upgrading
+                %li Add TLDs
+                %li Add Worker Accounts
+                %li Set Token URI prefix
+                %li Set Default Resolver Address (only CNS)
+        %section
+          %h2 Bonus: Gas Usage Improvment
+
+          %ul
+            %li 
+              Cheaper gas on critical operations
+              %ul
+                %li.green &#x2193; Set Records
+                %li.green &#x2193; Minting 
+                %li.red &#x2191; Transfer
+                %li.red &#x2191; Burn 
+            %li
+              Estimation comming soon
+
+
+        %section
+          %h2 High Level Design
+          %img{src: "https://api.monosnap.com/file/download?id=vfNJuAYN7ZrR9wTJoidU7GzPnzUgTP"}
+ 
             
     %script{:src => "https://cdn.jsdelivr.net/gh/hakimel/reveal.js/dist/reveal.js"}
     :javascript
