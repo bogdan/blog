@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang='en'>
+<head>
+<meta charset='utf-8'>
+<title>Unstoppable Website</title>
+<meta content='' name='description'>
+<meta content='Bogdan Gusiev' name='author'>
+<meta content='yes' name='apple-mobile-web-app-capable'>
+<meta content='black-translucent' name='apple-mobile-web-app-status-bar-style'>
+<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' name='viewport'>
+<link href='https://cdn.jsdelivr.net/gh/hakimel/reveal.js/plugin/highlight/zenburn.css' id='highlight-theme' rel='stylesheet'>
+<link href='https://cdn.jsdelivr.net/gh/hakimel/reveal.js/dist/reveal.css' rel='stylesheet'>
+<link href='https://cdn.jsdelivr.net/gh/hakimel/reveal.js/dist/theme/white.css' rel='stylesheet'>
+<script src='https://cdn.jsdelivr.net/gh/hakimel/reveal.js/plugin/highlight/highlight.js'></script>
+<script src='https://cdn.jsdelivr.net/gh/highlightjs/highlightjs-solidity/solidity.js'></script>
+<script></script>
+<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+<script>
+  var link = document.createElement( 'link' );
+  link.rel = 'stylesheet';
+  link.type = 'text/css';
+  link.href = "https://revealjs.com/css/print/" + (window.location.search.match( /print-pdf/gi ) ? 'pdf.css' : 'paper.css');
+  document.getElementsByTagName( 'head' )[0].appendChild( link );
+</script>
+<style>
+  body .reveal {
+    font-size: 30px !important; }
+  
+  .reveal section pre code {
+    padding: 20px 5px;
+    font-size: 1.30em;
+    line-height: 1.3em; }
+  
+  .reveal section ul {
+    min-width: 50%; }
+  
+  .reveal section .grey {
+    color: grey; }
+  
+  .reveal section .red {
+    color: #e02c2d; }
+  
+  .reveal section .green {
+    color: #17cc1e; }
+  
+  .reveal section .yellow {
+    color: yellow; }
+  
+  .reveal section .orange {
+    color: orange; }
+  
+  .reveal section .blue {
+    color: #1b91ff; }
+  
+  .reveal section .left {
+    float: left; }
+  
+  .reveal section .right {
+    float: right; }
+  
+  .reveal section .clearfix {
+    overflow: hidden; }
+  
+  .reveal section table.full-border {
+    border-collapse: collapse; }
+    .reveal section table.full-border td {
+      border: 1px solid black !important; }
+  
+  .reveal section img {
+    border: 0px;
+    box-shadow: 0 0 0 0; }
+  
+  .reveal section code.line-numbers {
+    counter-reset: line_numbers; }
+  
+  .reveal section code span.line-number {
+    counter-increment: line_numbers;
+    margin-right: 1em; }
+    .reveal section code span.line-number:before {
+      content: counter(line_numbers, decimal-leading-zero);
+      color: gray; }
+  
+  .reveal section code span.highlight-line:before {
+    color: yellow; }
+</style>
+</head>
+<body>
+<div class='reveal'>
+<div class='slides'>
+<section>
+<h1>
+Registry Team Q3 2021
+</h1>
+</section>
+<section>
+<h1>Agenda</h1>
+<ol>
+<li>Q2 Results</li>
+<li>Q3 Goals</li>
+</ol>
+</section>
+<section></section>
+<section>
+<h2>Q2 Results</h2>
+<ul>
+<li>
+L2
+<ul>
+<li>L2 TX processor - CANCELED</li>
+<li>DAC service - CANCELED</li>
+<li>New L1 multi-tld registry - DONE</li>
+<li>Proxy Reader Contract - DONE</li>
+</ul>
+</li>
+<li>
+TXP Dashboard v2
+<ul>
+<li>Accounts - DEPRIORITIZED</li>
+<li>Restart with different gas - DONE</li>
+<li>Mass Restart - DEPRIORITIZED</li>
+</ul>
+</li>
+</ul>
+</section>
+<section>
+<h2>UNS design</h2>
+<p>
+<a href='http://gusiev.com/slides/2021-06-14-uns-release/#/'>http://gusiev.com/slides/2021-06-14-uns-release</a>
+</p>
+<p>Big Presenation with a lot engineering details</p>
+</section>
+<section>
+<h2>New TLDs Roadmap</h2>
+<ul>
+<li>
+Intial Dev Cycle - DONE
+</li>
+<li>
+Testnet release - DONE
+</li>
+<li>
+Mainnet release - DONE
+</li>
+<li>
+Enable claiming on the website - DONE?
+</li>
+<li>
+Records Management - PENDING
+</li>
+<li>
+Transfer - PENDING
+</li>
+<li>
+Accounts Rotation - PENDING
+</li>
+<li>
+Twitter validation - PENDING
+</li>
+</ul>
+</section>
+<section>
+<h2>Q3 Goals</h2>
+<ul>
+<li>Finalize new TLDs support</li>
+<li>Reverse Resolution</li>
+<li>
+Cheap Gas (L2-Solutions)
+<ul>
+<li>Matic Chain</li>
+</ul>
+</li>
+<li>
+Migrate ZNS/CNS domains to UNS
+</li>
+<li>
+Free domains for wallets
+</li>
+</ul>
+</section>
+<section>
+<h2>Reverse Resolution</h2>
+<pre><code class='solidty'>contract ReverseResolution {&#x000A; 	mapping (address => uint256) reverses;&#x000A;  IERC721 registry;&#x000A;  function reverseOf(address account) returns (uint256);&#x000A;  function registerReverse(uint256 tokenId);&#x000A;}</code></pre>
+</section>
+<section>
+<h2>Reverse Resolution</h2>
+<ol>
+<li>Implement Contract</li>
+<li>Integrate to management</li>
+<li>Integrate to resolution libraries</li>
+</ol>
+</section>
+<section>
+<h2>Cheap Gas</h2>
+<ul>
+<li>The situation changes every month</li>
+<li>Investigate Matic Chain</li>
+</ul>
+</section>
+<section>
+<img src='https://api.monosnap.com/file/download?id=hJArdfPZ3jQElThnla9Q2b3EVgtS3F'>
+</section>
+<section>
+<h2>Migrate ZNS/CNS Domains</h2>
+<ul>
+<li>Migrate domains to UNS</li>
+<li>Decentralized for CNS</li>
+<li>Centralized for ZNS</li>
+</ul>
+</section>
+<section>
+<h2>Free Domains for Wallets</h2>
+<ul>
+<li>Ability to define rules which domains can be given for free</li>
+on per-partner basis.
+<li>Maybe partially implemented on-chain</li>
+</ul>
+</section>
+</div>
+</div>
+<script src='https://cdn.jsdelivr.net/gh/hakimel/reveal.js/dist/reveal.js'></script>
+<script>
+  // https://github.com/hakimel/reveal.js#configuration
+  Reveal.initialize({
+  	controls: true,
+  	progress: true,
+  	history: true,
+  	center: true,
+    plugins: [RevealHighlight],
+  
+  	theme: 'simple', // available themes are in /css/theme
+  	transition: 'fade', // default/cube/page/concave/zoom/linear/fade/none
+  
+  	// Optional libraries used to extend on reveal.js
+  	dependencies: [
+  		// { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+      //{ src: 'https://cdn.jsdelivr.net/gh/hakimel/reveal.js/plugin/highlight/highlight.js', async: true},
+      {src: 'https://mikemiles86.github.io/reveal-line-numbers/plugin/line-numbers/line-numbers.js'},
+      
+      { src: 'https://rawgithub.com/hakimel/reveal.js/3.6.0/plugin/notes/notes.js', async: true }
+  		// { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+  		// { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
+  		// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+  	]
+  });
+  Reveal.getPlugin('highlight').hljs.registerLanguage('solidity', window.hljsDefineSolidity);
+</script>
+</body>
+</html>
