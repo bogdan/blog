@@ -1,0 +1,337 @@
+<!doctype html>
+%html{:lang => "en"}
+  %head
+    %meta{:charset => "utf-8"}/
+    %title Future of decentralized Web
+    %meta{:content => "", :name => "description"}/
+    %meta{:content => "Bogdan Gusiev", :name => "author"}/
+    %meta{:content => "yes", :name => "apple-mobile-web-app-capable"}/
+    %meta{:content => "black-translucent", :name => "apple-mobile-web-app-status-bar-style"}/
+    %meta{:content => "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no", :name => "viewport"}/
+    %link{rel: "stylesheet", href: "https://cdn.jsdelivr.net/gh/hakimel/reveal.js/plugin/highlight/zenburn.css", id: "highlight-theme"}
+    %link{:href => "https://cdn.jsdelivr.net/gh/hakimel/reveal.js/dist/reveal.css", :rel => "stylesheet"}/
+    %link{:href => "https://cdn.jsdelivr.net/gh/hakimel/reveal.js/dist/theme/white.css", :rel => "stylesheet"}/
+    %script{src: 'https://cdn.jsdelivr.net/gh/hakimel/reveal.js/plugin/highlight/highlight.js'}
+    %script{src: 'https://cdn.jsdelivr.net/gh/highlightjs/highlightjs-solidity/solidity.js'}
+
+    %script
+
+    / If the query includes 'print-pdf', use the PDF print sheet
+    :javascript
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = "https://revealjs.com/css/print/" + (window.location.search.match( /print-pdf/gi ) ? 'pdf.css' : 'paper.css');
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    :sass
+      body .reveal
+        font-size: 30px !important
+      .reveal
+        section
+          pre
+            code
+              padding: 20px 5px
+              font-size: 1.30em
+              line-height: 1.3em
+          ul
+            min-width: 50%
+          .grey
+            color: grey
+          .red
+            color: #e02c2d
+          .green
+            color: #17cc1e
+          .yellow
+            color: yellow
+          .orange
+            color: orange
+          .blue
+            color: #1b91ff
+          .grey
+            color: grey
+          .left
+            float: left
+          .right
+            float: right
+          .clearfix
+            overflow: hidden
+          table.full-border
+            border-collapse: collapse
+            td
+              border: 1px solid black !important
+          img
+            border: 0px
+            box-shadow: 0 0 0 0
+      
+          code
+            &.line-numbers
+              counter-reset: line_numbers
+            span
+              &.line-number
+                counter-increment: line_numbers
+                margin-right: 1em
+                &:before
+                  content: counter(line_numbers, decimal-leading-zero)
+                  color: gray
+              &.highlight-line:before
+                color: yellow
+          
+        
+  %body
+    .reveal
+      .slides
+        %section
+          %h1
+            The Future of 
+          %h1 Decentralized Web
+          %h2
+            Liscon October 2021
+        %section
+          
+          %h1 Plan
+
+          %ol
+            %li Internet and its pros and cons
+            %li Decentralization with Blockchain
+            %li Decentralized technologies problems
+            %li Unstoppable Domains's Plans
+
+        %section
+          %h3 What is good about the internet
+
+          %ul
+            %li TCP/IP can survive a nuclear attack
+            %li You can own your content
+            %li Dynamic
+            %li Easy to use
+
+        %section
+          %h2 Decentralized Future 
+          %h2 of the internet
+          %ul
+            %li ID ownership
+            %li Minimize Trust
+            %li Accessibility of the technology
+          
+        %section
+          %h3 Internet ID
+          
+          %ul
+            %li Domain Name
+            %li Facebook Login
+            %li SSO ID
+            %li etc...
+          
+
+        %section
+          %h2 What can be decentralized?
+
+          %ol
+            %li 
+              Internet ID
+              %ol
+                %li Ownership
+                %li Configuration
+            %li 
+              Content
+              %ol
+                %li Static
+                %li Dynamic
+
+        %section
+          %h2 Can blockchain technologies 
+          %h2 help with that?
+          %h1.fragment YES!
+
+          %ul.fragment
+            %li Convert your internet ID into NFT
+            %li Put domain configuration to blockchain
+            %li Build bridges between old software and new technologies
+        %section
+          %h2 Implement it in one day
+
+          %pre
+            %code.solidity
+              :preserve
+                contract IRegistry is IERC721 {
+                  function set(key, value, tokenId);
+                  function get(key, tokenId) returns (string);
+                }
+
+        %section
+          %h2 Resolution Algorithm
+          %img{src: "https://api.monosnap.com/file/download?id=grkQNqNj5powY7GltCNL4eVRJ58LQZ"}
+          %ul
+            %li User puts example.crypto in a browser
+            %li.fragment
+              Browser sends DNS request 
+              %ul
+                %li.grey type: A name: example.crypto
+              
+            %li.fragment
+              The gateway sends request on chain
+              %ul.grey
+                %li Registry.get("dns.A", hash("example.crypto"))
+                %li Registry.get("dns.A.ttl", hash("example.crypto"))
+            %li.fragment
+              Gateway sends response to the browser
+              %ul.grey
+                %li value: 192.168.0.1, ttl: 128
+        
+        %section
+          %h2 Decentralized Content Storage
+          %h3 like IPFS
+
+          %ul
+            %li Put content to network
+            %li Receive ID (hash) of your content
+            %li Configure your domain to have that ID
+          %pre.fragment
+            %code.javascript
+              :preserve
+                Registry.set(
+                  "dweb.IPFS.hash", 
+                  "QmXHHUN57Arn3Lo25qyFV6L52gSb7XgDswfAkxe1KkL8pr",
+                  hash('example.crypto')
+                );
+
+        %section
+          %h2 Realistic Decentralization
+
+          %ul
+            %li Putting data on chain is expensive
+            %li Content storage motivation is not solved
+            %li Dynamic content is not even a thing
+            %li Decentralized technologies are slow
+
+        %section
+          %h2 Content storage problem
+
+          %p What is the motivation of the network to store your content?
+          %p Ethereum has its own content storage motivation
+          %p Can this model be applied to content?
+
+          %ul.fragment
+            %li There is a way to motivate the network to store your content
+            %li There is a way to ask service provider for content storage confirmation
+            %li There is NO WAY to ensure service provider makes your content available
+        %section
+          %h2 Dynamic Content
+
+          %p 
+            Every time you hear about some success in decentralized content storage and deliver
+            no one is even telling you its only for static content
+          %p There is no technology to store dynamic content in a decentralized way in development
+
+
+        %section
+          %h2 Decentralized technologies are slow
+
+          %table
+            %tr
+              %td Decentralized
+              %td &nbsp;
+              %td Centralized
+              %td &nbsp;
+            %tr
+              %td IPFS
+              %td 3 sec
+              %td CDN
+              %td 0.5 sec
+            %tr
+              %td ETH Tx
+              %td 2 min - 1 week
+              %td DNS Update
+              %td 2 min
+            %tr
+              %td ETH Query
+              %td 1 sec
+              %td DNS Query
+              %td 0.2 sec
+
+        %section
+          %h2 Unstoppable Domains Philosophy
+
+          %ul
+            %li Indisputable ownership of your ID
+            %li Get content anywhere, verify it on chain
+            %li Step by step migration to decentralized technologies
+            %li Accessible at every step of migration
+        %section
+          %h2 Indisputable ownership of your ID
+
+          %ul
+            %li Pure ERC-721
+            %li No subscription fee
+            %li No administrative TLDs
+
+        -# %section
+          %h2  On-chain of your data
+          %ol
+            %li.fragment Client asks a server for content
+            %li.fragment Server finds the content
+            %li.fragment Server generates a necessary cryptography for content verification
+            %li.fragment Client calculate the content hash
+            %li.fragment Client sends the content hash to blockchain for verification
+        -# %section
+          %h2 Sparse Merkle Tree
+          %img{src: "https://miro.medium.com/max/1204/1*Vtvxs-2-aSRVjTMrlpcDPA.png"}
+                                
+        -# %section
+          %h2 Sparse Merkle Tree
+          %img{src: "https://miro.medium.com/max/602/1*HkoTv02wqeG3Y625fKLdBw.png"}
+        %section
+          %h2 Step by Step Decentralization
+
+          %ol
+            %li.fragment Domain name as NFT
+            %li.fragment Cheap gas
+            %li.fragment Integration with browsers
+            %li.fragment Anyone can get a domain for free
+            %li.fragment Traditional websites on decentralized domains
+            %li.fragment Static decentralized websites
+            %li.fragment Use domain name as a login ID
+        %section
+          %h2 
+            Accessibility of decentralized internet
+          %ul
+            %li Cheap gas
+            %li Performance is acceptable
+            %li Minimize blockchain knowledge
+
+        -# %section
+          %h2 Cheap token management zones
+          %img{src: "https://api.monosnap.com/file/download?id=sgn4hIs4cyzYQfyakZNhGM6Jh0uByn"}
+
+        %section
+          %h1 Thanks!
+          %h2 https://unstoppabledomains.com
+
+
+            
+    %script{:src => "https://cdn.jsdelivr.net/gh/hakimel/reveal.js/dist/reveal.js"}
+    :javascript
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+      	controls: true,
+      	progress: true,
+      	history: true,
+      	center: true,
+        plugins: [RevealHighlight],
+
+      	theme: 'simple', // available themes are in /css/theme
+      	transition: 'fade', // default/cube/page/concave/zoom/linear/fade/none
+
+      	// Optional libraries used to extend on reveal.js
+      	dependencies: [
+      		// { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+          //{ src: 'https://cdn.jsdelivr.net/gh/hakimel/reveal.js/plugin/highlight/highlight.js', async: true},
+          {src: 'https://mikemiles86.github.io/reveal-line-numbers/plugin/line-numbers/line-numbers.js'},
+          
+          { src: 'https://rawgithub.com/hakimel/reveal.js/3.6.0/plugin/notes/notes.js', async: true }
+      		// { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+      		// { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
+      		// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+      	]
+      });
+      Reveal.getPlugin('highlight').hljs.registerLanguage('solidity', window.hljsDefineSolidity);

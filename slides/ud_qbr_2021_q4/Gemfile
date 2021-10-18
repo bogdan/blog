@@ -1,0 +1,8 @@
+source "http://rubygems.org"
+
+gem 'shotgun'
+gem 'sinatra'
+gem 'haml'
+gem 'sass'
+
+gem "rake", "~> 13.0"

@@ -1,0 +1,195 @@
+<!doctype html>
+%html{:lang => "en"}
+  %head
+    %meta{:charset => "utf-8"}/
+    %title Unstoppable Website
+    %meta{:content => "", :name => "description"}/
+    %meta{:content => "Bogdan Gusiev", :name => "author"}/
+    %meta{:content => "yes", :name => "apple-mobile-web-app-capable"}/
+    %meta{:content => "black-translucent", :name => "apple-mobile-web-app-status-bar-style"}/
+    %meta{:content => "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no", :name => "viewport"}/
+    %link{rel: "stylesheet", href: "https://cdn.jsdelivr.net/gh/hakimel/reveal.js/plugin/highlight/zenburn.css", id: "highlight-theme"}
+    %link{:href => "https://cdn.jsdelivr.net/gh/hakimel/reveal.js/dist/reveal.css", :rel => "stylesheet"}/
+    %link{:href => "https://cdn.jsdelivr.net/gh/hakimel/reveal.js/dist/theme/white.css", :rel => "stylesheet"}/
+    %script{src: 'https://cdn.jsdelivr.net/gh/hakimel/reveal.js/plugin/highlight/highlight.js'}
+    %script{src: 'https://cdn.jsdelivr.net/gh/highlightjs/highlightjs-solidity/solidity.js'}
+
+    %script
+
+    / If the query includes 'print-pdf', use the PDF print sheet
+    :javascript
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = "https://revealjs.com/css/print/" + (window.location.search.match( /print-pdf/gi ) ? 'pdf.css' : 'paper.css');
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    :sass
+      body .reveal
+        font-size: 30px !important
+      .reveal
+        section
+          pre
+            code
+              padding: 20px 5px
+              font-size: 1.30em
+              line-height: 1.3em
+          ul
+            min-width: 50%
+          .grey
+            color: grey
+          .red
+            color: #e02c2d
+          .green
+            color: #17cc1e
+          .yellow
+            color: yellow
+          .orange
+            color: orange
+          .blue
+            color: #1b91ff
+          .left
+            float: left
+          .right
+            float: right
+          .clearfix
+            overflow: hidden
+          table.full-border
+            border-collapse: collapse
+            td
+              border: 1px solid black !important
+          img
+            border: 0px
+            box-shadow: 0 0 0 0
+      
+          code
+            &.line-numbers
+              counter-reset: line_numbers
+            span
+              &.line-number
+                counter-increment: line_numbers
+                margin-right: 1em
+                &:before
+                  content: counter(line_numbers, decimal-leading-zero)
+                  color: gray
+              &.highlight-line:before
+                color: yellow
+          
+        
+  %body
+    .reveal
+      .slides
+        %section
+          %h1
+            Registry Team Q4 2021
+        %section
+          
+          %h1 Agenda
+
+          %ol
+            %li Q3 Results
+            %li Broader Plan
+            %li Q4 Goals
+
+
+        %section
+          %h2 Q3 Results
+
+          %ul
+            %li 
+              Finalize new TLDs support
+              %ul
+                %li.green DONE
+            %li 
+              Reverse Resolution
+              %ul
+                %li.grey PAUSED
+            %li 
+              L2 Claiming Release
+              %ul
+                %li.green PLANNED - 15th of November
+            %li
+              Free domains for wallets
+              %ul
+                %li.grey PAUSED
+
+        %section
+          %h2 Broader Plan
+          %img{src: "https://api.monosnap.com/file/download?id=0Y6vPXzofP1GxVg4U404GF9D398dgJ"}
+        %section
+          %h2 Broader Plan
+
+          %ol
+            %li Q4 - L2 Claiming Release
+            %li Q4 - L2 Management Release 
+            %li Q1 - Deposit from L1 to L2
+            %li Q1 - Deposit from ZIL to L2
+            %li Q2 - Withdrawal from L2 to L1 UNS
+            
+        %section
+          %h2 Conceptual shift in the technology
+
+          %ol
+            %li.fragment You can move tokens between blockchains
+            %li.fragment 
+              ETH becomes WETH (ERC20) when moved to polygon
+              %ul
+                %li ETH may exist in a form of WETH or not on Ethereum
+                %li ETH can only exist in a form of WETH on Polygon
+            %li.fragment 
+              New concept arise: native blockchain token
+              %ul.fragment
+                %li Pay tx fees with ETH for Ethereum
+                %li Pay tx fees with MATIC for Polygon
+            %li.fragment 
+              Polygon bridge doesn't allow to swap addresses when tokens moved between chains
+              %ul.fragment
+                %li Users having different address on different "Ethereum forks" is unlikely
+
+        %section
+          %h2 Q4 Plans
+
+          %ul
+            %li L2 Claiming Release
+            %li L2 Management Release
+            %li Deposit to L2 Development
+
+        %section
+          %h2 L2 Domains Differences
+
+          %ul
+            %li Tx fees are paid in MATIC 
+            %li UD pays all fees if not guest manage
+            %li No gemini custody
+            %li No chainlink and twitter verification
+
+        %section
+          %h2 Thank You!
+            
+
+            
+    %script{:src => "https://cdn.jsdelivr.net/gh/hakimel/reveal.js/dist/reveal.js"}
+    :javascript
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+      	controls: true,
+      	progress: true,
+      	history: true,
+      	center: true,
+        plugins: [RevealHighlight],
+
+      	theme: 'simple', // available themes are in /css/theme
+      	transition: 'fade', // default/cube/page/concave/zoom/linear/fade/none
+
+      	// Optional libraries used to extend on reveal.js
+      	dependencies: [
+      		// { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+          //{ src: 'https://cdn.jsdelivr.net/gh/hakimel/reveal.js/plugin/highlight/highlight.js', async: true},
+          {src: 'https://mikemiles86.github.io/reveal-line-numbers/plugin/line-numbers/line-numbers.js'},
+          
+          { src: 'https://rawgithub.com/hakimel/reveal.js/3.6.0/plugin/notes/notes.js', async: true }
+      		// { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+      		// { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
+      		// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+      	]
+      });
+      Reveal.getPlugin('highlight').hljs.registerLanguage('solidity', window.hljsDefineSolidity);
