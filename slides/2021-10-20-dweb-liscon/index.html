@@ -2,7 +2,7 @@
 <html lang='en'>
 <head>
 <meta charset='utf-8'>
-<title>Unstoppable Website</title>
+<title>Future of decentralized Web</title>
 <meta content='' name='description'>
 <meta content='Bogdan Gusiev' name='author'>
 <meta content='yes' name='apple-mobile-web-app-capable'>
@@ -44,6 +44,8 @@
     color: orange; }
   .reveal section .blue {
     color: #1b91ff; }
+  .reveal section .grey {
+    color: grey; }
   .reveal section .left {
     float: left; }
   .reveal section .right {
@@ -74,35 +76,38 @@
 <div class='slides'>
 <section>
 <h1>
-Будущее децентрализованного Интернета
+The Future of
 </h1>
+<h1>Decentralized Web</h1>
 <h2>
-Blockchain.ua Май 2021
+Liscon October 2021
 </h2>
 </section>
 <section>
-<h1>План</h1>
+<h1>Plan</h1>
 <ol>
-<li>Интернет как есть</li>
-<li>Стадии децентрализации интернета</li>
-<li>Планы Unstoppable Domains</li>
+<li>Internet and its pros and cons</li>
+<li>Decentralization with Blockchain</li>
+<li>Decentralized technologies problems</li>
+<li>Unstoppable Domains's Plans</li>
 </ol>
 </section>
 <section>
-<h3>Чем хорош интернет</h3>
+<h3>What is good about the internet</h3>
 <ul>
-<li>TCP/IP может выдержать ядерный удар</li>
-<li>Вы можете владеть своим контентом</li>
-<li>Динамичность</li>
-<li>Легко пользоваться</li>
+<li class='fragment'>TCP/IP can survive a nuclear attack</li>
+<li class='fragment'>You can own your content</li>
+<li class='fragment'>Dynamic</li>
+<li class='fragment'>Easy to use</li>
 </ul>
 </section>
 <section>
-<h2>Децентрализованное будущее интернета</h2>
+<h2>Decentralized Future</h2>
+<h2>of the internet</h2>
 <ul>
 <li>ID ownership</li>
-<li>Особенности децентразированных технологий</li>
-<li>Минимум доверия</li>
+<li>Minimize Trust</li>
+<li>Accessibility of the technology</li>
 </ul>
 </section>
 <section>
@@ -110,59 +115,109 @@ Blockchain.ua Май 2021
 <ul>
 <li>Domain Name</li>
 <li>Facebook Login</li>
-<li>Google Login</li>
-<li>ETC...</li>
+<li>SSO ID</li>
+<li>etc...</li>
 </ul>
 </section>
 <section>
-<h2>Что можно децентраризовать?</h2>
+<h2>What can be decentralized?</h2>
 <ol>
 <li>
 Internet ID
 <ol>
-<li>Владение</li>
-<li>Конфигурация</li>
+<li>Ownership</li>
+<li>Configuration</li>
 </ol>
 </li>
 <li>
-Контент
+Content
 <ol>
-<li>Статический</li>
-<li>Динамический</li>
+<li>Static</li>
+<li>Dynamic</li>
 </ol>
 </li>
 </ol>
 </section>
 <section>
-<h2>Реалистичный децентрализм</h2>
-<ul>
-<li>Хранить данные on-chain дорого</li>
-<li>Проблема мотивации хранения контента не решена</li>
-<li>О динамическом контенте даже никто не говорит</li>
-<li>Децентрализованные технологии медленные</li>
-</ul>
-</section>
-<section>
-<h2>Проблема мотивации хранения контента</h2>
-<p>Какая мотивация у сети хранить контент вашего сайта?</p>
-<p>Ефир имеет свою мотивационную модель</p>
-<p>Может ли эта модель работать для контента?</p>
+<h2>Can blockchain technologies</h2>
+<h2>help with that?</h2>
+<h1 class='fragment'>YES!</h1>
 <ul class='fragment'>
-<li>Есть способ мотивировать сеть хранить ваш контент</li>
-<li>Есть способ подтвердить, что ваш контент есть у того, кто хочет получить комиссию</li>
-<li>Нет способа убедиться, что тот, кто хранит ваш контент, делает его доступным</li>
+<li>Convert your internet ID into NFT</li>
+<li>Put domain configuration to blockchain</li>
+<li>Build bridges between old software and new technologies</li>
 </ul>
 </section>
 <section>
-<h2>Динамический контент</h2>
-<p>
-Каждый раз, когда вы слышите об успехах технологий децентрализованного хранения контента,
-никто не говорит вам, что контент статический.
-</p>
-<p>Никто пока не знает как хранить динамический контент децентрализованно</p>
+<h2>Implement it in one day</h2>
+<pre><code class='solidity'>contract IRegistry is IERC721 {&#x000A;  function set(key, value, tokenId);&#x000A;  function get(key, tokenId) returns (string);&#x000A;}&#x000A;</code></pre>
 </section>
 <section>
-<h2>Скорость децентрализованных технологий</h2>
+<h2>Resolution Algorithm</h2>
+<img src='https://api.monosnap.com/file/download?id=grkQNqNj5powY7GltCNL4eVRJ58LQZ'>
+<ul>
+<li>User puts example.crypto in a browser</li>
+<li class='fragment'>
+Browser sends DNS request
+<ul>
+<li class='grey'>type: A name: example.crypto</li>
+</ul>
+</li>
+<li class='fragment'>
+The gateway sends request on chain
+<ul class='grey'>
+<li>Registry.get("dns.A", hash("example.crypto"))</li>
+<li>Registry.get("dns.A.ttl", hash("example.crypto"))</li>
+</ul>
+</li>
+<li class='fragment'>
+Gateway sends response to the browser
+<ul class='grey'>
+<li>value: 192.168.0.1, ttl: 128</li>
+</ul>
+</li>
+</ul>
+</section>
+<section>
+<h2>Decentralized Content Storage</h2>
+<h3>like IPFS</h3>
+<ul>
+<li>Put content to network</li>
+<li>Receive ID (hash) of your content</li>
+<li>Configure your domain to have that ID</li>
+</ul>
+<pre class='fragment'><code class='javascript'>Registry.set(&#x000A;  "dweb.IPFS.hash", &#x000A;  "QmXHHUN57Arn3Lo25qyFV6L52gSb7XgDswfAkxe1KkL8pr",&#x000A;  hash('example.crypto')&#x000A;);&#x000A;</code></pre>
+</section>
+<section>
+<h2>Realistic Decentralization</h2>
+<ul>
+<li class='fragment'>Putting data on chain is expensive</li>
+<li class='fragment'>Content storage motivation is not solved</li>
+<li class='fragment'>Dynamic content is not even a thing</li>
+<li class='fragment'>Decentralized technologies are slow</li>
+</ul>
+</section>
+<section>
+<h2>Content storage problem</h2>
+<p>What is the motivation of the network to store your content?</p>
+<p>Ethereum has its own content storage motivation</p>
+<p>Can this model be applied to content?</p>
+<ul>
+<li class='fragment'>There is a way to motivate the network to store your content</li>
+<li class='fragment'>There is a way to ask service provider for content storage confirmation</li>
+<li class='fragment'>There is NO WAY to ensure service provider makes your content available</li>
+</ul>
+</section>
+<section>
+<h2>Dynamic Content</h2>
+<p>
+Every time you hear about some success in decentralized content storage and deliver
+no one is even telling you its only for static content
+</p>
+<p>There is no technology to store dynamic content in a decentralized way in development</p>
+</section>
+<section>
+<h2>Decentralized technologies are slow</h2>
 <table>
 <tr>
 <td>Decentralized</td>
@@ -191,87 +246,52 @@ Internet ID
 </table>
 </section>
 <section>
-<h2>Подход Unstoppable Domains</h2>
+<h2>Unstoppable Domains Philosophy</h2>
 <ul>
-<li>Безусловное владение токеном</li>
-<li>Получайте данные откуда угодно, валидируйте их on-chain</li>
-<li>Постепенная переход на децентрализованные технологии</li>
-<li>Доступность на всех этапах перехода</li>
+<li class='fragment'>Indisputable ownership of your ID</li>
+<li class='fragment'>Get content anywhere, verify it on chain</li>
+<li class='fragment'>Step by step migration to decentralized technologies</li>
+<li class='fragment'>Accessible at every step of migration</li>
 </ul>
 </section>
 <section>
-<h2>Безусловное владение токеном</h2>
+<h2>Indisputable ownership of your ID</h2>
 <ul>
-<li>Чистый ERC-721</li>
-<li>Нет платы за подписку</li>
-<li>Нет администраторов доменных зон</li>
+<li>Pure ERC-721</li>
+<li>No subscription fee</li>
+<li>No administrative TLDs</li>
 </ul>
 </section>
 <section>
-<h2>Валидация данных on-chain</h2>
+<h2>Step by Step Decentralization</h2>
 <ol>
-<li class='fragment'>Клиент запрашивает данные у сервиса</li>
-<li class='fragment'>Сервис находит данные</li>
-<li class='fragment'>Сервис выдает необходимую криптографию для подтвердения правильности данных</li>
-<li class='fragment'>Клиент отправляет данные на blockchain для верификации</li>
-</ol>
-</section>
-<section>
-<h2>Sparse Merkle Tree</h2>
-<img src='https://miro.medium.com/max/1204/1*Vtvxs-2-aSRVjTMrlpcDPA.png'>
-</section>
-<section>
-<h2>Sparse Merkle Tree</h2>
-<img src='https://miro.medium.com/max/602/1*HkoTv02wqeG3Y625fKLdBw.png'>
-</section>
-<section>
-<h2>Постепенная децентрализация</h2>
-<ol>
-<li class='fragment'>Домены как NFT</li>
-<li class='fragment'>Дешевый minting и управление</li>
-<li class='fragment'>Интеграция с браузерами и воллетами</li>
-<li class='fragment'>Каждый может получить домен бесплатно</li>
-<li class='fragment'>Традиционные вебсайты на децентрализованных доменах</li>
-<li class='fragment'>Статичные децентрализованные вебсайты</li>
-<li class='fragment'>Использование доменного имени в качестве ID</li>
-<li class='fragment'>Динамический децентрализованные контент</li>
+<li class='fragment'>Domain name as NFT</li>
+<li class='fragment'>Cheap gas</li>
+<li class='fragment'>Integration with browsers</li>
+<li class='fragment'>Anyone can get a domain for free</li>
+<li class='fragment'>Traditional websites on decentralized domains</li>
+<li class='fragment'>Static decentralized websites</li>
+<li class='fragment'>Use domain name as a login ID</li>
 </ol>
 </section>
 <section>
 <h2>
-Доступность децентрализованного интернета
+Accessibility of decentralized internet
 </h2>
 <ul>
-<li>Обновления достаточно дешевые</li>
-<li>Скорость отображения контента приемлимая</li>
-<li>Минимум знаний о blockchain</li>
+<li>Free to configure</li>
+<li>Performance is acceptable</li>
+<li>Minimize blockchain knowledge</li>
 </ul>
 </section>
 <section>
-<h2>Хранение данных on-chain</h2>
-<ol>
-<li>Безопасно?</li>
-<li>Децентрализовано?</li>
-<li>Дешево?</li>
-<li>Удобно?</li>
-<li>Быстро?</li>
-</ol>
-</section>
-<section>
-<h2>Дешевые зоны для управления токенами</h2>
-<img src='https://api.monosnap.com/file/download?id=sgn4hIs4cyzYQfyakZNhGM6Jh0uByn'>
-</section>
-<section>
-<h2>Дешевые обновления on-chain</h2>
-<ul>
-<li>Хранить только хеш данных on-chain</li>
-<li>Коллективные транзакции</li>
-<li>Sparse Merkle Trees для валидации данных</li>
-</ul>
-</section>
-<section>
-<h1>Спасибо!</h1>
-<h2>https://unstoppabledomains.com</h2>
+<h1>Thanks!</h1>
+<h3>
+<a href='https://unstoppabledomains.com'>https://unstoppabledomains.com</a>
+</h3>
+<h3>
+<a href='https://github.com/bogdan'>https://github.com/bogdan</a>
+</h3>
 </section>
 </div>
 </div>

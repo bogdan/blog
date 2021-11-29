@@ -9,6 +9,7 @@ GEM
     rack (2.0.3)
     rack-protection (2.0.0)
       rack
+    rake (13.0.6)
     rb-fsevent (0.10.2)
     rb-inotify (0.9.10)
       ffi (>= 0.5.0, < 2)
@@ -29,12 +30,14 @@ GEM
 
 PLATFORMS
   ruby
+  x86_64-darwin-18
 
 DEPENDENCIES
   haml
+  rake (~> 13.0)
   sass
   shotgun
   sinatra
 
 BUNDLED WITH
-   1.16.0
+   2.2.0
